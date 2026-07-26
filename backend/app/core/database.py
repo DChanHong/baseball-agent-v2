@@ -1,4 +1,3 @@
-
 # 비동기 제너레이터 함수의 반환 타입을 표현할 때 사용합니다.
 # get_db_session()이 AsyncSession을 하나씩 제공한다는 것을 나타냅니다.
 from collections.abc import AsyncIterator
@@ -25,6 +24,7 @@ class Base(DeclarativeBase):
     이 클래스를 상속하여 데이터베이스 테이블과 연결됩니다.
     """
 
+
 # get_settings()는 캐시된 Settings 객체를 반환합니다.
 # 여기에는 DATABASE_URL, APP_DEBUG 등의 환경변수 값이 들어 있습니다.
 settings = get_settings()
@@ -34,11 +34,9 @@ settings = get_settings()
 engine = create_async_engine(
     # 예: postgresql+asyncpg://postgres:postgres@127.0.0.1:54322/postgres
     settings.database_url,
-
     # True이면 실행되는 SQL을 터미널에 출력합니다.
     # 로컬 개발에서는 유용하지만 운영 환경에서는 보통 False로 설정합니다.
     echo=settings.app_debug,
-
     # 커넥션 풀에서 연결을 꺼낼 때 연결이 유효한지 먼저 검사합니다.
     # 오래되어 끊어진 연결을 재사용하면서 발생하는 오류를 줄여줍니다.
     pool_pre_ping=True,
@@ -49,10 +47,8 @@ engine = create_async_engine(
 async_session_factory = async_sessionmaker(
     # 위에서 만든 비동기 DB 엔진을 사용합니다.
     bind=engine,
-
     # 팩토리가 생성할 세션의 클래스입니다.
     class_=AsyncSession,
-
     # commit 이후에도 ORM 객체의 속성값을 유지합니다.
     # False로 설정하면 응답 객체를 만들 때 불필요한 재조회가 줄어듭니다.
     expire_on_commit=False,
