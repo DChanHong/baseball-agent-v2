@@ -1008,3 +1008,255 @@ FastAPI Infrastructure → Supabase PostgreSQL/pgvector
 ```
 
 이 구조를 프로젝트의 폴더 및 의존성 기준으로 사용한다. 구조를 변경해야 할 때는 먼저 `docs/adr/`에 변경 이유와 영향을 기록한다.
+
+## 21. Conversation 도메인 구현 상세
+
+대화방 생성 API를 기준으로 실제 구현된 구조는 다음과 같다.
+
+```text
+backend/app/
+├── main.py
+├── api/
+│   ├── __init__.py
+│   ├── dependencies.py
+│   ├── router.py
+│   └── v1/
+│       ├── __init__.py
+│       └── router.py
+├── core/
+│   ├── __init__.py
+│   ├── config.py
+│   └── database.py
+└── domains/
+    └── conversation/
+        ├── __init__.py
+        ├── controller/
+        │   ├── __init__.py
+        │   ├── router.py
+        │   └── schemas.py
+        ├── service/
+        │   ├── __init__.py
+        │   ├── dto.py
+        │   └── services.py
+        ├── domain/
+        │   ├── __init__.py
+        │   ├── entities.py
+        │   ├── enums.py
+        │   ├── exceptions.py
+        │   └── repositories.py
+        └── infrastructure/
+            ├── __init__.py
+            ├── models.py
+            ├── mappers.py
+            └── repositories.py
+```
+
+### 21.1 파일별 책임
+
+| 파일 | 책임 |
+|---|---|
+| `app/main.py` | FastAPI 애플리케이션 생성과 최상위 `api_router` 등록 |
+| `app/api/router.py` | `/api/v1` prefix를 적용해 버전별 Router 조합 |
+| `app/api/v1/router.py` | v1에서 공개할 도메인 Router 조합 |
+| `app/api/dependencies.py` | 요청별 Session, Repository 구현체, Service를 수동 조립 |
+| `core/config.py` | `.env`의 `DATABASE_URL` 등 애플리케이션 설정 로드 |
+| `core/database.py` | 비동기 Engine, Session Factory, 요청별 Session 제공 |
+| `controller/schemas.py` | Pydantic 기반 HTTP Request/Response 계약 |
+| `controller/router.py` | HTTP 요청을 Command로 변환하고 Service 실행 |
+| `service/dto.py` | 유스케이스 입력 Command와 출력 Result DTO |
+| `service/services.py` | 대화방 생성 유스케이스와 transaction 경계 |
+| `domain/entities.py` | SQLAlchemy와 무관한 Conversation, Message 상태와 불변조건 |
+| `domain/enums.py` | 대화방 상태, 메시지 역할·형식·처리 상태 |
+| `domain/exceptions.py` | HTTP에 의존하지 않는 대화 도메인 예외 |
+| `domain/repositories.py` | 저장 기술과 무관한 Repository Protocol |
+| `infrastructure/models.py` | PostgreSQL 테이블을 표현하는 SQLAlchemy ORM Model |
+| `infrastructure/mappers.py` | ORM Model과 Domain Entity의 양방향 변환 |
+| `infrastructure/repositories.py` | AsyncSession을 사용하는 Repository 실제 구현 |
+
+### 21.2 대화방 생성 요청 흐름
+
+현재 공개된 대화방 생성 API는 다음과 같다.
+
+```text
+POST /api/v1/conversations
+```
+
+프로젝트 정책에 따라 생성 성공도 `200 OK`를 반환한다.
+
+```text
+HTTP Request
+→ CreateConversationRequest
+→ CreateConversationCommand
+→ CreateConversationService
+→ Conversation Entity
+→ ConversationRepository Protocol
+→ SqlAlchemyConversationRepository
+→ ConversationMapper
+→ ChatConversationModel
+→ Supabase PostgreSQL
+```
+
+응답은 반대 방향으로 변환한다.
+
+```text
+ChatConversationModel
+→ ConversationMapper
+→ Conversation
+→ ConversationResultDto
+→ ConversationResponse
+→ HTTP 200
+```
+
+### 21.3 Repository 추상화와 구현 연결
+
+`domain/repositories.py`는 Service가 필요로 하는 기능의 계약만 선언한다.
+
+```python
+class ConversationRepository(Protocol):
+    async def add(
+        self,
+        conversation: Conversation,
+    ) -> Conversation:
+        ...
+```
+
+`infrastructure/repositories.py`는 같은 메서드 구조를 SQLAlchemy로 구현한다.
+
+```python
+class SqlAlchemyConversationRepository:
+    async def add(
+        self,
+        conversation: Conversation,
+    ) -> Conversation:
+        ...
+```
+
+Python의 `Protocol`은 구조적 타이핑을 사용하므로 구현 클래스가 Protocol을 명시적으로 상속할 필요가 없다. 필요한 메서드의 이름, 매개변수, 반환 타입이 일치하면 구현체로 사용할 수 있다.
+
+실제 구현 객체의 선택과 주입은 `app/api/dependencies.py`에서 명시적으로 수행한다.
+
+```text
+AsyncSession
+→ SqlAlchemyConversationRepository 생성
+→ CreateConversationService에 ConversationRepository로 주입
+→ Controller에 Service 주입
+```
+
+FastAPI 또는 별도 DI Container가 Repository 구현체를 자동 검색하는 구조가 아니다. 작은 프로젝트 단계에서는 수동 조립으로 의존성을 명확하게 유지한다.
+
+### 21.4 DB Schema와 ORM Model의 역할 구분
+
+DB 구조의 source of truth는 SQLAlchemy Model이 아니라 Supabase migration이다.
+
+```text
+supabase/migrations/
+├── *_create_chat_conversations.sql
+├── *_create_chat_messages.sql
+└── *_create_chat_indexes.sql
+```
+
+| 구분 | 담당 |
+|---|---|
+| Supabase migration | 테이블, 컬럼, PK/FK, CHECK, UNIQUE, index, trigger, RLS |
+| SQLAlchemy Model | 이미 존재하는 테이블을 Python 객체로 매핑 |
+| Domain Entity | DB 저장 기술과 무관한 비즈니스 상태와 불변조건 |
+| Pydantic Schema | 외부 HTTP 요청과 응답 검증 |
+
+애플리케이션에서는 `Base.metadata.create_all()`로 운영 테이블을 생성하지 않는다. Schema 변경은 새 migration을 추가해 적용하고, 변경된 컬럼을 ORM Model에 함께 반영한다.
+
+Supabase가 관리하는 `auth.users`는 애플리케이션 ORM Model로 정의하지 않는다. 다만 `user_id` ForeignKey를 SQLAlchemy가 해석할 수 있도록 `infrastructure/models.py`의 `Base.metadata`에 `auth.users.id` 최소 참조 정보만 등록한다.
+
+### 21.5 Transaction 책임
+
+Repository와 Service의 transaction 책임은 다음과 같이 나눈다.
+
+```text
+Repository
+→ add
+→ flush
+→ refresh
+
+Service
+→ 여러 Repository 작업 조율
+→ 성공하면 commit
+→ 실패하면 rollback
+```
+
+- `flush()`는 INSERT 또는 UPDATE SQL을 DB에 보내 제약조건을 확인하지만 transaction을 확정하지 않는다.
+- `refresh()`는 DB default와 trigger가 반영한 최신 값을 ORM 객체에 다시 불러온다.
+- `commit()`은 하나의 유스케이스에 포함된 모든 DB 작업이 성공한 뒤 Service에서 실행한다.
+
+이 구조를 사용하면 대화방 생성, 첫 메시지 저장, 최근 메시지 시각 변경을 하나의 transaction으로 묶고 중간 실패 시 모두 rollback할 수 있다.
+
+### 21.6 메시지 순서 동시성
+
+`chat_messages`는 `(conversation_id, sequence_no)` UNIQUE 제약조건으로 대화방 안의 메시지 순서를 보장한다.
+
+`SqlAlchemyMessageRepository.get_next_sequence_no()`는 다음 순서로 동작한다.
+
+```text
+chat_conversations 행 SELECT FOR UPDATE
+→ 같은 대화방의 동시 쓰기 요청 직렬화
+→ MAX(sequence_no) + 1 계산
+→ 메시지 저장
+→ Service commit
+→ 행 잠금 해제
+```
+
+메시지를 저장하는 모든 유스케이스는 동일한 transaction 안에서 순번 계산과 메시지 저장을 수행해야 한다.
+
+### 21.7 로그인 전 소유권 기준
+
+로그인 도입 전에는 브라우저가 생성한 UUID를 `guest_id`로 사용한다.
+
+```text
+브라우저 최초 접속
+→ guest UUID 생성
+→ Cookie 또는 Local Storage 저장
+→ 대화방 생성 요청에 guest_id 전달
+```
+
+대화방 생성 시 현재 값은 다음과 같다.
+
+```text
+user_id  = NULL
+guest_id = 브라우저 UUID
+```
+
+목록 조회, 단건 조회, 수정, 삭제, 메시지 추가 API에서는 URL의 대화방 ID만 검사해서는 안 된다. 요청의 `guest_id`와 대화방의 `guest_id`가 일치하는지 Service에서 검증해 다른 사용자의 대화에 접근하는 IDOR 문제를 방지한다.
+
+로그인 도입 후에는 guest 대화를 `auth.users.id`에 연결한다.
+
+```text
+UPDATE chat_conversations
+SET user_id = 로그인 사용자 ID
+WHERE guest_id = 현재 브라우저 guest UUID
+```
+
+메시지의 `user_id`도 같은 transaction에서 함께 갱신할 수 있다.
+
+### 21.8 현재 구현 범위
+
+현재 수직 흐름으로 완성되고 로컬 Swagger에서 검증된 API는 다음 하나다.
+
+```text
+POST /api/v1/conversations
+```
+
+아직 구현하지 않은 기능:
+
+- guest별 대화방 목록과 단건 조회
+- 제목 변경, 보관, 소프트 삭제
+- 메시지 생성과 목록 조회
+- guest 소유권 검증
+- 도메인 예외의 HTTP 상태 코드 변환
+- 로그인 후 guest 대화 이전
+- Unit, Integration, API 테스트
+
+Swagger UI는 FastAPI에 기본 포함되어 있어 별도 패키지를 설치하지 않는다.
+
+```text
+Swagger UI  http://127.0.0.1:4000/docs
+ReDoc       http://127.0.0.1:4000/redoc
+OpenAPI     http://127.0.0.1:4000/openapi.json
+```
