@@ -28,7 +28,7 @@ CreateConversationServiceDependency = Annotated[
 @router.post(
     "",
     response_model=ConversationResponse,
-    status_code=status.HTTP_201_CREATED,
+    status_code=status.HTTP_200_OK,
 )
 async def create_conversation(
     request: CreateConversationRequest,

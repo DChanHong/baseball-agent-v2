@@ -2,12 +2,35 @@ from datetime import datetime
 from typing import Any, ClassVar
 from uuid import UUID
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String, Text, func, text
+from sqlalchemy import (
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    String,
+    Table,
+    Text,
+    func,
+    text,
+)
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.dialects.postgresql import UUID as PostgreSQLUUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.database import Base
+
+# auth.users는 Supabase Auth가 관리하므로 애플리케이션 ORM Model을 만들지 않습니다.
+# 다만 user_id ForeignKey를 SQLAlchemy가 해석할 수 있도록 최소 메타데이터만 등록합니다.
+AUTH_USERS_TABLE = Table(
+    "users",
+    Base.metadata,
+    Column(
+        "id",
+        PostgreSQLUUID(as_uuid=True),
+        primary_key=True,
+    ),
+    schema="auth",
+)
 
 
 class ChatConversationModel(Base):
