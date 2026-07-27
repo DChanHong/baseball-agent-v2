@@ -13,6 +13,7 @@
 | 문서 | 목적 | 상태 |
 |---|---|---|
 | [001-service-and-mvp.md](001-service-and-mvp.md) | 서비스, MVP, Tool 및 RAG 범위 정의 | 초안 |
+| [game-schedule/001-data-collection-and-db.md](game-schedule/001-data-collection-and-db.md) | KBO 경기 일정 수집 전략과 Supabase DB 정의 | 초안 |
 
 ## 작업 원칙
 
@@ -24,4 +25,3 @@
 6. 실제 데이터 연결 후 정상·결과 없음·오류 사례를 검증한다.
 7. 완료 조건을 통과한 후 다음 Tool을 추가한다.
 8. 임베딩과 Vector Store는 의미 검색이 필요한 Tool에만 도입한다.
-
