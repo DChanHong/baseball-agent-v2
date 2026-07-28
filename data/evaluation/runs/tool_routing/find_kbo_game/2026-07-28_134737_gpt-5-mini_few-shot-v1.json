@@ -1,0 +1,901 @@
+{
+  "dataset_path": "/Users/root1/Desktop/agent-rebuild/new-baseball/data/evaluation/tool_routing/find_kbo_game_cases.jsonl",
+  "model": "gpt-5-mini",
+  "prompt_version": "few-shot-v1",
+  "run_timestamp": "2026-07-28T13:47:37.866951+00:00",
+  "metrics": {
+    "total": 20,
+    "failed_case_ids": [],
+    "is_in_scope_accuracy": 1.0,
+    "should_call_tool_accuracy": 1.0,
+    "tool_name_accuracy": 1.0,
+    "team_id_accuracy": 1.0,
+    "date_accuracy": 1.0,
+    "date_range_accuracy": 1.0,
+    "clarification_accuracy": 1.0,
+    "unsupported_accuracy": 1.0,
+    "exact_match_accuracy": 1.0
+  },
+  "results": [
+    {
+      "id": "fg_001",
+      "input": "오늘 롯데 경기 있어?",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": null,
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": "LOTTE",
+          "date": "2026-07-28",
+          "date_from": null,
+          "date_to": null
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "actual": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": "LOTTE",
+          "date": "2026-07-28",
+          "date_from": null,
+          "date_to": null
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    },
+    {
+      "id": "fg_002",
+      "input": "롯데 7월 일정 알려줘",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": null,
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": "LOTTE",
+          "date": null,
+          "date_from": "2026-07-01",
+          "date_to": "2026-07-31"
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "actual": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": "LOTTE",
+          "date": null,
+          "date_from": "2026-07-01",
+          "date_to": "2026-07-31"
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    },
+    {
+      "id": "fg_003",
+      "input": "7월 17일 롯데 경기 왜 취소됐어?",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": null,
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": "LOTTE",
+          "date": "2026-07-17",
+          "date_from": null,
+          "date_to": null
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "actual": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": "LOTTE",
+          "date": "2026-07-17",
+          "date_from": null,
+          "date_to": null
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    },
+    {
+      "id": "fg_004",
+      "input": "LG 개막전 어디서 해?",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": null,
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": "LG",
+          "date": "2026-03-28",
+          "date_from": null,
+          "date_to": null
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "actual": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": "LG",
+          "date": "2026-03-28",
+          "date_from": null,
+          "date_to": null
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    },
+    {
+      "id": "fg_005",
+      "input": "이번 주 한화 일정 보여줘",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": null,
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": "HANWHA",
+          "date": null,
+          "date_from": "2026-07-27",
+          "date_to": "2026-08-02"
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "actual": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": "HANWHA",
+          "date": null,
+          "date_from": "2026-07-27",
+          "date_to": "2026-08-02"
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    },
+    {
+      "id": "fg_006",
+      "input": "오늘 경기 있어?",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": "LOTTE",
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": "LOTTE",
+          "date": "2026-07-28",
+          "date_from": null,
+          "date_to": null
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "actual": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": "LOTTE",
+          "date": "2026-07-28",
+          "date_from": null,
+          "date_to": null
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    },
+    {
+      "id": "fg_007",
+      "input": "이번 주 일정 알려줘",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": "LG",
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": "LG",
+          "date": null,
+          "date_from": "2026-07-27",
+          "date_to": "2026-08-02"
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "actual": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": "LG",
+          "date": null,
+          "date_from": "2026-07-27",
+          "date_to": "2026-08-02"
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    },
+    {
+      "id": "fg_008",
+      "input": "LG 오늘 경기 있어?",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": "LOTTE",
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": "LG",
+          "date": "2026-07-28",
+          "date_from": null,
+          "date_to": null
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "actual": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": "LG",
+          "date": "2026-07-28",
+          "date_from": null,
+          "date_to": null
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    },
+    {
+      "id": "fg_009",
+      "input": "오늘 경기 있어?",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": null,
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": true,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": true,
+        "clarification_reason": "team_required_for_schedule_lookup",
+        "unsupported_reason": null
+      },
+      "actual": {
+        "is_in_scope": true,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": true,
+        "clarification_reason": "team_required_for_schedule_lookup",
+        "unsupported_reason": null
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    },
+    {
+      "id": "fg_010",
+      "input": "이번 주 일정 알려줘",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": null,
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": true,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": true,
+        "clarification_reason": "team_required_for_schedule_lookup",
+        "unsupported_reason": null
+      },
+      "actual": {
+        "is_in_scope": true,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": true,
+        "clarification_reason": "team_required_for_schedule_lookup",
+        "unsupported_reason": null
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    },
+    {
+      "id": "fg_011",
+      "input": "내일 고척 경기 있어?",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": null,
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": null,
+          "date": "2026-07-29",
+          "date_from": null,
+          "date_to": null
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "actual": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": null,
+          "date": "2026-07-29",
+          "date_from": null,
+          "date_to": null
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    },
+    {
+      "id": "fg_012",
+      "input": "키움 8월 첫째 주 경기 일정 알려줘",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": null,
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": "KIWOOM",
+          "date": null,
+          "date_from": "2026-08-03",
+          "date_to": "2026-08-09"
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "actual": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": "find_kbo_game",
+        "args": {
+          "team_id": "KIWOOM",
+          "date": null,
+          "date_from": "2026-08-03",
+          "date_to": "2026-08-09"
+        },
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    },
+    {
+      "id": "fg_013",
+      "input": "야구 규칙 알려줘",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": null,
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": true,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "actual": {
+        "is_in_scope": true,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    },
+    {
+      "id": "fg_014",
+      "input": "사직구장 처음 가는데 뭐 챙겨야 해?",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": "LOTTE",
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": true,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "actual": {
+        "is_in_scope": true,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    },
+    {
+      "id": "fg_015",
+      "input": "롯데 자이언츠 역사 알려줘",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": null,
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": true,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "actual": {
+        "is_in_scope": true,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": null
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    },
+    {
+      "id": "fg_016",
+      "input": "오늘 경기 우천 취소될까?",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": "LOTTE",
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": true,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": "weather_or_realtime_cancellation_prediction_required"
+      },
+      "actual": {
+        "is_in_scope": true,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": "weather_or_realtime_cancellation_prediction_required"
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    },
+    {
+      "id": "fg_017",
+      "input": "지금 티켓 남았어?",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": "LG",
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": true,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": "ticket_inventory_tool_required"
+      },
+      "actual": {
+        "is_in_scope": true,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": "ticket_inventory_tool_required"
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    },
+    {
+      "id": "fg_018",
+      "input": "비트코인 전망 알려줘",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": "LOTTE",
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": false,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": "out_of_scope"
+      },
+      "actual": {
+        "is_in_scope": false,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": "out_of_scope"
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    },
+    {
+      "id": "fg_019",
+      "input": "점심 메뉴 추천해줘",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": null,
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": false,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": "out_of_scope"
+      },
+      "actual": {
+        "is_in_scope": false,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": "out_of_scope"
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    },
+    {
+      "id": "fg_020",
+      "input": "두산이랑 LG 언제 해?",
+      "user_context": {
+        "auth_status": "authenticated",
+        "favorite_team_id": null,
+        "today": "2026-07-28",
+        "timezone": "Asia/Seoul"
+      },
+      "expected": {
+        "is_in_scope": true,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": "opponent_team_filter_not_supported_yet"
+      },
+      "actual": {
+        "is_in_scope": true,
+        "should_call_tool": false,
+        "tool_name": null,
+        "args": null,
+        "needs_clarification": false,
+        "clarification_reason": null,
+        "unsupported_reason": "opponent_team_filter_not_supported_yet"
+      },
+      "matches": {
+        "is_in_scope": true,
+        "should_call_tool": true,
+        "tool_name": true,
+        "team_id": true,
+        "date": true,
+        "date_range": true,
+        "clarification": true,
+        "unsupported": true
+      },
+      "error": null
+    }
+  ]
+}

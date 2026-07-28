@@ -209,7 +209,7 @@ backend/app/domains/conversation/agent/
 └── routing_service.py
 ```
 
-### 2.2 Baseline prompt 작성
+### 2.2 Few-shot baseline prompt 작성
 
 정책 문서 기준으로 `gpt-5-mini`에게 다음을 판단하게 한다.
 
@@ -222,10 +222,26 @@ backend/app/domains/conversation/agent/
 기법:
 
 ```text
-Zero-shot baseline + Structured Outputs
+Few-shot baseline + Structured Outputs
 ```
 
-Few-shot은 baseline 평가 후 추가한다.
+판단 변경:
+
+```text
+Zero-shot은 이번 routing 평가에서는 우선순위가 낮다.
+초기 데이터셋 자체가 날짜 해석, 팀 별칭, favorite_team_id fallback, unsupported 분류처럼
+정책 의존성이 큰 케이스를 포함하므로 few-shot부터 시작한다.
+```
+
+Few-shot에 우선 포함할 예:
+
+- 명시 팀이 favorite_team_id보다 우선하는 케이스
+- favorite_team_id를 기본 team_id로 사용하는 케이스
+- 팀이 없어서 되묻는 케이스
+- 오늘/내일/이번 주/월 범위 해석 케이스
+- tool이 불필요한 야구 질문
+- 야구 외 질문
+- 현재 tool 미지원 질문
 
 ### 2.3 Evaluation script 작성
 
