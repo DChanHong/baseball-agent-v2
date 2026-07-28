@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FindKboGameToolRoutingCase",
+  "type": "object",
+  "required": ["id", "input", "user_context", "expected"],
+  "properties": {
+    "id": { "type": "string" },
+    "input": { "type": "string" },
+    "user_context": {
+      "type": "object",
+      "required": ["auth_status", "favorite_team_id", "today", "timezone"],
+      "properties": {
+        "auth_status": { "type": "string", "enum": ["authenticated"] },
+        "favorite_team_id": { "type": ["string", "null"] },
+        "today": { "type": "string", "format": "date" },
+        "timezone": { "type": "string" }
+      }
+    },
+    "expected": {
+      "type": "object",
+      "required": [
+        "is_in_scope",
+        "should_call_tool",
+        "tool_name",
+        "args",
+        "needs_clarification",
+        "clarification_reason",
+        "unsupported_reason"
+      ],
+      "properties": {
+        "is_in_scope": { "type": "boolean" },
+        "should_call_tool": { "type": "boolean" },
+        "tool_name": { "type": ["string", "null"] },
+        "args": {
+          "type": ["object", "null"],
+          "properties": {
+            "team_id": { "type": ["string", "null"] },
+            "date": { "type": ["string", "null"], "format": "date" },
+            "date_from": { "type": ["string", "null"], "format": "date" },
+            "date_to": { "type": ["string", "null"], "format": "date" }
+          }
+        },
+        "needs_clarification": { "type": "boolean" },
+        "clarification_reason": { "type": ["string", "null"] },
+        "unsupported_reason": { "type": ["string", "null"] }
+      }
+    }
+  }
+}
