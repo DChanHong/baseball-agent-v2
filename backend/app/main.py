@@ -6,6 +6,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.router import api_router
 from app.core.database import get_db_session
+from app.core.logging import configure_logging
+
+configure_logging()
 
 app = FastAPI(
     title="New Baseball API",
