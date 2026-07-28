@@ -4,6 +4,12 @@ from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db_session
+from app.domains.baseball.infrastructure.repositories import (
+    SqlAlchemyKboGameRepository,
+)
+from app.domains.baseball.service.services import (
+    ListKboGamesService,
+)
 from app.domains.conversation.infrastructure.repositories import (
     SqlAlchemyConversationRepository,
 )
@@ -29,3 +35,13 @@ def get_create_conversation_service(
         repository=repository,
         session=session,
     )
+
+
+def get_list_kbo_games_service(
+    session: DatabaseSession,
+) -> ListKboGamesService:
+    """KBO 경기 조회 유스케이스에 필요한 의존성을 조립합니다."""
+
+    repository = SqlAlchemyKboGameRepository(session)
+
+    return ListKboGamesService(repository=repository)
