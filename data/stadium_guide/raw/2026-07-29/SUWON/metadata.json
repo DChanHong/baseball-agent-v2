@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0.0",
+  "collected_at": "2026-07-29T00:00:00+09:00",
+  "collector": "manual_curl",
+  "stadium_id": "SUWON",
+  "team_ids": [
+    "KT"
+  ],
+  "files": [
+    {
+      "source_id": "kt_wizpark_intro",
+      "source_url": "https://www.ktwiz.co.kr/wizpark",
+      "source_type": "official_team",
+      "local_file": "kt_wizpark_intro.html",
+      "fetch_status": "success",
+      "byte_size": 2655,
+      "content_hash": "sha256:395bce9eb883b8d7a12f694eec36221ab00ecfe2aad121afc6aac6bf35b7b2b8"
+    },
+    {
+      "source_id": "kt_wizpark_guide",
+      "source_url": "https://www.ktwiz.co.kr/wizpark/guide",
+      "source_type": "official_team",
+      "local_file": "kt_wizpark_guide.html",
+      "fetch_status": "success",
+      "byte_size": 2655,
+      "content_hash": "sha256:395bce9eb883b8d7a12f694eec36221ab00ecfe2aad121afc6aac6bf35b7b2b8"
+    },
+    {
+      "source_id": "kt_wizpark_parking",
+      "source_url": "https://www.ktwiz.co.kr/wizpark/parking",
+      "source_type": "official_team",
+      "local_file": "kt_wizpark_parking.html",
+      "fetch_status": "success",
+      "byte_size": 2655,
+      "content_hash": "sha256:395bce9eb883b8d7a12f694eec36221ab00ecfe2aad121afc6aac6bf35b7b2b8"
+    },
+    {
+      "source_id": "kt_ticket_reservation",
+      "source_url": "https://www.ktwiz.co.kr/ticket/reservation",
+      "source_type": "official_team",
+      "local_file": "kt_ticket_reservation.html",
+      "fetch_status": "success",
+      "byte_size": 2655,
+      "content_hash": "sha256:395bce9eb883b8d7a12f694eec36221ab00ecfe2aad121afc6aac6bf35b7b2b8"
+    },
+    {
+      "source_id": "kt_2026_ticket_policy",
+      "source_url": "https://www.ktwiz.co.kr/media/wiznews/198098",
+      "source_type": "official_team",
+      "local_file": "kt_2026_ticket_policy.html",
+      "fetch_status": "success",
+      "byte_size": 2655,
+      "content_hash": "sha256:395bce9eb883b8d7a12f694eec36221ab00ecfe2aad121afc6aac6bf35b7b2b8"
+    },
+    {
+      "source_id": "suwon_kbo_ticket_map",
+      "source_url": "https://www.koreabaseball.com/kbo/league/map.aspx",
+      "source_type": "official_league",
+      "local_file": "suwon_kbo_ticket_map.html",
+      "fetch_status": "success",
+      "byte_size": 38975,
+      "content_hash": "sha256:e276e592b634870f43725d97bf961a98e6e787dcb41c002d48e04e65ac882d0f"
+    }
+  ]
+}

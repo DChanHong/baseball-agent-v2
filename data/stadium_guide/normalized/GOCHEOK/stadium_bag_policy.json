@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "GOCHEOK_stadium_bag_policy_20260729",
+  "document_type": "stadium_bag_policy",
+  "stadium_id": "GOCHEOK",
+  "team_id": "KIWOOM",
+  "title": "고척스카이돔 stadium_bag_policy 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "heroes_gocheok_ticket_normal",
+    "gocheok_kbo_safe_campaign"
+  ],
+  "content": "키움 공식 일반티켓 안내는 KBO리그 SAFE 캠페인에 따른 주류, 캔, 병, 1L 초과 PET 음료 반입 제한을 안내한다. KBO 공통 안전정책도 함께 적용되며, 1L 이하 미개봉 비알코올성 PET 음료는 1인당 1개 허용 기준으로 안내된다. 현장 판단에 따른 제한 가능성이 있으므로 기준일과 출처를 함께 제공해야 한다.",
+  "metadata": {
+    "stadium_name": "고척스카이돔",
+    "home_team_ids": [
+      "KIWOOM"
+    ],
+    "is_dome": true,
+    "limitations": [
+      "프로야구 경기 시 내부 주차장 이용 제한은 공식 안내 기준이며 경기별 변동은 추가 확인 필요."
+    ]
+  }
+}

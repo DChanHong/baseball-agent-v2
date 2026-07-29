@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "SUWON_stadium_facility_guide_20260729",
+  "document_type": "stadium_facility_guide",
+  "stadium_id": "SUWON",
+  "team_id": "KT",
+  "title": "수원 KT 위즈파크 stadium_facility_guide 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "kt_wizpark_intro",
+    "kt_wizpark_guide"
+  ],
+  "content": "kt 공식 구장 소개는 수원 kt wiz park를 복합 문화공간형 첨단 야구장으로 설명하며, 무선 인터넷, 모바일 기기를 활용한 입장 등록, 실시간 주차 정보, 지정석 찾기, 음식 주문 등 스마트 콘텐츠를 언급한다. 대표번호, 운영시간, 주소도 공식 페이지에 반복 안내된다.",
+  "metadata": {
+    "stadium_name": "수원 KT 위즈파크",
+    "home_team_ids": [
+      "KT"
+    ],
+    "limitations": [
+      "구장 안내도와 티켓정책은 이미지 중심이라 좌석/요금 세부 구조화 추가 필요."
+    ]
+  }
+}

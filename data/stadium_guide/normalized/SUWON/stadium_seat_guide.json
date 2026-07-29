@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "SUWON_stadium_seat_guide_20260729",
+  "document_type": "stadium_seat_guide",
+  "stadium_id": "SUWON",
+  "team_id": "KT",
+  "title": "수원 KT 위즈파크 stadium_seat_guide 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "kt_wizpark_guide",
+    "kt_2026_ticket_policy"
+  ],
+  "content": "kt 공식 구장 소개는 하이파이브존, 익사이팅석, 테이블석, 외야잔디자유석, 장애인석 등 다양한 관람시설을 언급한다. 구장 안내도와 2026 티켓정책 공지는 이미지 중심이라 좌석 구역과 가격을 구조화하려면 추가 검수가 필요하다.",
+  "metadata": {
+    "stadium_name": "수원 KT 위즈파크",
+    "home_team_ids": [
+      "KT"
+    ],
+    "limitations": [
+      "구장 안내도와 티켓정책은 이미지 중심이라 좌석/요금 세부 구조화 추가 필요."
+    ]
+  }
+}

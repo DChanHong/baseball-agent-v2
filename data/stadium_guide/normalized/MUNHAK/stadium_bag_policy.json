@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "MUNHAK_stadium_bag_policy_20260729",
+  "document_type": "stadium_bag_policy",
+  "stadium_id": "MUNHAK",
+  "team_id": "SSG",
+  "title": "인천 SSG 랜더스필드 stadium_bag_policy 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "munhak_kbo_safe_campaign"
+  ],
+  "content": "SSG 구장 전용 반입 정책 페이지는 현재 수집 범위에서 확인되지 않았다. 따라서 KBO SAFE 캠페인의 전 구장 공통 안전 기준을 우선 적용하고, SSG 공식 홈구장 안내 또는 공지에서 구장별 예외를 추가 확인해야 한다.",
+  "metadata": {
+    "stadium_name": "인천 SSG 랜더스필드",
+    "home_team_ids": [
+      "SSG"
+    ],
+    "limitations": [
+      "교통/주차 상세 공식 출처 추가 필요.",
+      "일반 예매 상세 정책 공식 URL 추가 필요."
+    ]
+  }
+}

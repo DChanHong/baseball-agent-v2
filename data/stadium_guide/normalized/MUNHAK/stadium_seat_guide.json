@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "MUNHAK_stadium_seat_guide_20260729",
+  "document_type": "stadium_seat_guide",
+  "stadium_id": "MUNHAK",
+  "team_id": "SSG",
+  "title": "인천 SSG 랜더스필드 stadium_seat_guide 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "ssg_landersfield_stadium",
+    "ssg_landers_group_ticket"
+  ],
+  "content": "SSG 공식 홈구장 안내는 4층 SKY뷰석, 덕아웃 상단석, 내야 필드석, 몰리스 그린존, 외야 필드석, 으쓱이존, 원정응원석, SKY탁자석, 홈런커플존, 미니스카이박스, 스카이박스, 외야패밀리존, 바비큐존, 테이블석 등 다양한 좌석군과 게이트별 가까운 좌석을 안내한다. 좌석명은 스폰서와 시즌 정책에 따라 바뀔 수 있다.",
+  "metadata": {
+    "stadium_name": "인천 SSG 랜더스필드",
+    "home_team_ids": [
+      "SSG"
+    ],
+    "limitations": [
+      "교통/주차 상세 공식 출처 추가 필요.",
+      "일반 예매 상세 정책 공식 URL 추가 필요."
+    ]
+  }
+}

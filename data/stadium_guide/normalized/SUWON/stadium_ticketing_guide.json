@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "SUWON_stadium_ticketing_guide_20260729",
+  "document_type": "stadium_ticketing_guide",
+  "stadium_id": "SUWON",
+  "team_id": "KT",
+  "title": "수원 KT 위즈파크 stadium_ticketing_guide 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "kt_ticket_reservation",
+    "kt_2026_ticket_policy",
+    "suwon_kbo_ticket_map"
+  ],
+  "content": "kt 공식 일반티켓 안내는 wizzap 앱, 티켓링크 콜센터, kt wiz 홈페이지 티켓 예매, 티켓링크, 현장 매표소를 예매/구매 경로로 안내한다. 티켓 정책은 시즌별 변동 가능성이 있으므로 2026 티켓정책 공지를 함께 확인해야 한다.",
+  "metadata": {
+    "stadium_name": "수원 KT 위즈파크",
+    "home_team_ids": [
+      "KT"
+    ],
+    "limitations": [
+      "구장 안내도와 티켓정책은 이미지 중심이라 좌석/요금 세부 구조화 추가 필요."
+    ]
+  }
+}

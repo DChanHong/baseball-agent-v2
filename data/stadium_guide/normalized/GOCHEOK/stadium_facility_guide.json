@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "GOCHEOK_stadium_facility_guide_20260729",
+  "document_type": "stadium_facility_guide",
+  "stadium_id": "GOCHEOK",
+  "team_id": "KIWOOM",
+  "title": "고척스카이돔 stadium_facility_guide 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "seoul_gocheok_skydome"
+  ],
+  "content": "고척스카이돔은 서울시설공단이 운영하는 돔 경기장이다. 운영기관 공식 페이지에서 행사 안내, 시설대관, 주차안내, 찾아오시는 길 등을 확인할 수 있다. 키움 티켓 안내는 돔구장 주차 제한을 관람 유의사항으로 명시한다. 화장실, 수유실, 매점 등 세부 위치는 운영기관 세부 페이지 추가 수집이 필요하다.",
+  "metadata": {
+    "stadium_name": "고척스카이돔",
+    "home_team_ids": [
+      "KIWOOM"
+    ],
+    "is_dome": true,
+    "limitations": [
+      "프로야구 경기 시 내부 주차장 이용 제한은 공식 안내 기준이며 경기별 변동은 추가 확인 필요."
+    ]
+  }
+}

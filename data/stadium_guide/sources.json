@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "as_of": "2026-07-29",
-  "description": "Local source registry for stadium guide RAG data. Initial vertical slice covers SAJIK only.",
+  "description": "Local source registry for stadium guide RAG data. Keeps only official sources with usable raw snapshots or verified official snippets.",
   "sources": [
     {
       "source_id": "lotte_sajik_stadium",
@@ -129,6 +129,433 @@
       "trust_level": "official",
       "local_raw_file": "data/stadium_guide/raw/2026-07-29/SAJIK/kbo_ticket_map.html",
       "notes": "구단별 예매처 매핑의 리그 공식 출처."
+    },
+    {
+      "source_id": "heroes_gocheok_ticket_normal",
+      "title": "키움 히어로즈 일반티켓",
+      "url": "https://heroesbaseball.co.kr/ticket/normal/view.do",
+      "source_type": "official_team",
+      "stadium_id": "GOCHEOK",
+      "team_id": "KIWOOM",
+      "document_types": [
+        "stadium_ticketing_guide",
+        "stadium_seat_guide",
+        "stadium_bag_policy",
+        "stadium_transport_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/GOCHEOK/heroes_gocheok_ticket_normal.html",
+      "notes": "고척스카이돔 입장요금, 좌석, 예매/수령/환불, 반입 및 주차 유의사항 공식 출처."
+    },
+    {
+      "source_id": "heroes_gocheok_ticket_purchase",
+      "title": "키움 히어로즈 일일티켓 구매 안내",
+      "url": "https://heroesbaseball.co.kr/ticket/normal/viewPurchase.do",
+      "source_type": "official_team",
+      "stadium_id": "GOCHEOK",
+      "team_id": "KIWOOM",
+      "document_types": [
+        "stadium_ticketing_guide",
+        "stadium_entry_guide",
+        "stadium_transport_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/GOCHEOK/heroes_gocheok_ticket_purchase.html",
+      "notes": "예매 경로와 티켓 수령, 고척돔 주차 제한 안내 보강 출처."
+    },
+    {
+      "source_id": "seoul_gocheok_skydome",
+      "title": "서울시설공단 고척스카이돔",
+      "url": "https://www.sisul.or.kr/open_content/skydome/",
+      "source_type": "official_venue_or_city",
+      "stadium_id": "GOCHEOK",
+      "team_id": "KIWOOM",
+      "document_types": [
+        "stadium_facility_guide",
+        "stadium_transport_guide"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/GOCHEOK/seoul_gocheok_skydome.html",
+      "notes": "고척스카이돔 운영기관 공식 출처."
+    },
+    {
+      "source_id": "gocheok_kbo_safe_campaign",
+      "title": "고척스카이돔 참고용 KBO 경기장 안전정책 SAFE 캠페인",
+      "url": "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+      "source_type": "official_league",
+      "stadium_id": "GOCHEOK",
+      "team_id": "KIWOOM",
+      "document_types": [
+        "stadium_bag_policy",
+        "stadium_first_visit_tip"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/GOCHEOK/gocheok_kbo_safe_campaign.html",
+      "notes": "고척스카이돔 문서 raw snapshot에 포함한 공통 출처. KBO 전 구장 공통 안전/반입 최소 기준. 구단별 예외 확인 필요."
+    },
+    {
+      "source_id": "gocheok_kbo_ticket_map",
+      "title": "고척스카이돔 참고용 KBO 리그 티켓 안내",
+      "url": "https://www.koreabaseball.com/kbo/league/map.aspx",
+      "source_type": "official_league",
+      "stadium_id": "GOCHEOK",
+      "team_id": "KIWOOM",
+      "document_types": [
+        "stadium_ticketing_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/GOCHEOK/gocheok_kbo_ticket_map.html",
+      "notes": "고척스카이돔 문서 raw snapshot에 포함한 공통 출처. 구단별 예매처 매핑의 리그 공식 출처."
+    },
+    {
+      "source_id": "ssg_landersfield_stadium",
+      "title": "SSG 랜더스 홈구장 안내",
+      "url": "https://app.ssglanders.com/stadium",
+      "source_type": "official_team",
+      "stadium_id": "MUNHAK",
+      "team_id": "SSG",
+      "document_types": [
+        "stadium_seat_guide",
+        "stadium_entry_guide",
+        "stadium_facility_guide"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/MUNHAK/ssg_landersfield_stadium.html",
+      "notes": "좌석, 매점, 화장실, GATE 등 구장 안내 공식 앱 웹 출처."
+    },
+    {
+      "source_id": "ssg_landers_group_ticket",
+      "title": "SSG 랜더스 단체관람 안내",
+      "url": "https://www.ssglanders.com/game/group",
+      "source_type": "official_team",
+      "stadium_id": "MUNHAK",
+      "team_id": "SSG",
+      "document_types": [
+        "stadium_ticketing_guide",
+        "stadium_seat_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/MUNHAK/ssg_landers_group_ticket.html",
+      "notes": "단체관람 구매 가능 경기와 좌석 안내 공식 출처."
+    },
+    {
+      "source_id": "ssg_landers_2026_ticket_notice",
+      "title": "2026 인천SSG랜더스필드 직관 티켓 예매 안내",
+      "url": "https://app.ssglanders.com/noticeView?seq=3077",
+      "source_type": "official_team",
+      "stadium_id": "MUNHAK",
+      "team_id": "SSG",
+      "document_types": [
+        "stadium_ticketing_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/MUNHAK/ssg_landers_2026_ticket_notice.html",
+      "notes": "2026 SSG.COM 티켓 예매 공지."
+    },
+    {
+      "source_id": "munhak_kbo_safe_campaign",
+      "title": "인천 SSG 랜더스필드 참고용 KBO 경기장 안전정책 SAFE 캠페인",
+      "url": "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+      "source_type": "official_league",
+      "stadium_id": "MUNHAK",
+      "team_id": "SSG",
+      "document_types": [
+        "stadium_bag_policy",
+        "stadium_first_visit_tip"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/MUNHAK/munhak_kbo_safe_campaign.html",
+      "notes": "인천 SSG 랜더스필드 문서 raw snapshot에 포함한 공통 출처. KBO 전 구장 공통 안전/반입 최소 기준. 구단별 예외 확인 필요."
+    },
+    {
+      "source_id": "munhak_kbo_ticket_map",
+      "title": "인천 SSG 랜더스필드 참고용 KBO 리그 티켓 안내",
+      "url": "https://www.koreabaseball.com/kbo/league/map.aspx",
+      "source_type": "official_league",
+      "stadium_id": "MUNHAK",
+      "team_id": "SSG",
+      "document_types": [
+        "stadium_ticketing_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/MUNHAK/munhak_kbo_ticket_map.html",
+      "notes": "인천 SSG 랜더스필드 문서 raw snapshot에 포함한 공통 출처. 구단별 예매처 매핑의 리그 공식 출처."
+    },
+    {
+      "source_id": "kia_champions_field_guide",
+      "title": "KIA 타이거즈 광주-기아 챔피언스 필드 안내",
+      "url": "https://tigers.co.kr/tigers/champions-field/team-guide",
+      "source_type": "official_team",
+      "stadium_id": "GWANGJU",
+      "team_id": "KIA",
+      "document_types": [
+        "stadium_facility_guide",
+        "stadium_transport_guide"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/GWANGJU/kia_champions_field_guide.html",
+      "notes": "구장 개요, 주소, 좌석 수, 교통 안내 공식 출처."
+    },
+    {
+      "source_id": "kia_ticket_reservation",
+      "title": "KIA 타이거즈 입장권 안내",
+      "url": "https://tigers.co.kr/ticket/reservation",
+      "source_type": "official_team",
+      "stadium_id": "GWANGJU",
+      "team_id": "KIA",
+      "document_types": [
+        "stadium_ticketing_guide",
+        "stadium_seat_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/GWANGJU/kia_ticket_reservation.html",
+      "notes": "입장권 및 티켓링크 연결 공식 출처."
+    },
+    {
+      "source_id": "kia_smart_ticket_notice",
+      "title": "KIA 타이거즈 스마트티켓 발권 안내",
+      "url": "https://tigers.co.kr/contents/notice/1005665",
+      "source_type": "official_team",
+      "stadium_id": "GWANGJU",
+      "team_id": "KIA",
+      "document_types": [
+        "stadium_entry_guide",
+        "stadium_ticketing_guide"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/GWANGJU/kia_smart_ticket_notice.html",
+      "notes": "모바일앱 스마트티켓 발권 공식 공지."
+    },
+    {
+      "source_id": "gwangju_kbo_safe_campaign",
+      "title": "광주-기아 챔피언스 필드 참고용 KBO 경기장 안전정책 SAFE 캠페인",
+      "url": "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+      "source_type": "official_league",
+      "stadium_id": "GWANGJU",
+      "team_id": "KIA",
+      "document_types": [
+        "stadium_bag_policy",
+        "stadium_first_visit_tip"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/GWANGJU/gwangju_kbo_safe_campaign.html",
+      "notes": "광주-기아 챔피언스 필드 문서 raw snapshot에 포함한 공통 출처. KBO 전 구장 공통 안전/반입 최소 기준. 구단별 예외 확인 필요."
+    },
+    {
+      "source_id": "gwangju_kbo_ticket_map",
+      "title": "광주-기아 챔피언스 필드 참고용 KBO 리그 티켓 안내",
+      "url": "https://www.koreabaseball.com/kbo/league/map.aspx",
+      "source_type": "official_league",
+      "stadium_id": "GWANGJU",
+      "team_id": "KIA",
+      "document_types": [
+        "stadium_ticketing_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/GWANGJU/gwangju_kbo_ticket_map.html",
+      "notes": "광주-기아 챔피언스 필드 문서 raw snapshot에 포함한 공통 출처. 구단별 예매처 매핑의 리그 공식 출처."
+    },
+    {
+      "source_id": "samsung_lapark_ticket_price",
+      "title": "삼성 라이온즈 입장권 종류",
+      "url": "https://www.samsunglions.com/m/ticket/score_4_1.asp",
+      "source_type": "official_team",
+      "stadium_id": "DAEGU",
+      "team_id": "SAMSUNG",
+      "document_types": [
+        "stadium_ticketing_guide",
+        "stadium_seat_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/DAEGU/samsung_lapark_ticket_price.html",
+      "notes": "라팍 및 포항경기 입장요금 공식 모바일 페이지."
+    },
+    {
+      "source_id": "samsung_lapark_ticket_method",
+      "title": "삼성 라이온즈 예매방법",
+      "url": "https://www.samsunglions.com/m/ticket/score_4_1_3.asp",
+      "source_type": "official_team",
+      "stadium_id": "DAEGU",
+      "team_id": "SAMSUNG",
+      "document_types": [
+        "stadium_ticketing_guide",
+        "stadium_entry_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/DAEGU/samsung_lapark_ticket_method.html",
+      "notes": "예매처, 전화예매, 현장판매 안내 공식 출처."
+    },
+    {
+      "source_id": "samsung_lapark_ticket_refund",
+      "title": "삼성 라이온즈 예매취소/환불 안내",
+      "url": "https://www.samsunglions.com/m/ticket/score_4_1_4.asp",
+      "source_type": "official_team",
+      "stadium_id": "DAEGU",
+      "team_id": "SAMSUNG",
+      "document_types": [
+        "stadium_ticketing_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/DAEGU/samsung_lapark_ticket_refund.html",
+      "notes": "예매취소 및 환불 안내 공식 출처."
+    },
+    {
+      "source_id": "daegu_kbo_safe_campaign",
+      "title": "대구 삼성 라이온즈 파크 참고용 KBO 경기장 안전정책 SAFE 캠페인",
+      "url": "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+      "source_type": "official_league",
+      "stadium_id": "DAEGU",
+      "team_id": "SAMSUNG",
+      "document_types": [
+        "stadium_bag_policy",
+        "stadium_first_visit_tip"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/DAEGU/daegu_kbo_safe_campaign.html",
+      "notes": "대구 삼성 라이온즈 파크 문서 raw snapshot에 포함한 공통 출처. KBO 전 구장 공통 안전/반입 최소 기준. 구단별 예외 확인 필요."
+    },
+    {
+      "source_id": "daegu_kbo_ticket_map",
+      "title": "대구 삼성 라이온즈 파크 참고용 KBO 리그 티켓 안내",
+      "url": "https://www.koreabaseball.com/kbo/league/map.aspx",
+      "source_type": "official_league",
+      "stadium_id": "DAEGU",
+      "team_id": "SAMSUNG",
+      "document_types": [
+        "stadium_ticketing_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/DAEGU/daegu_kbo_ticket_map.html",
+      "notes": "대구 삼성 라이온즈 파크 문서 raw snapshot에 포함한 공통 출처. 구단별 예매처 매핑의 리그 공식 출처."
+    },
+    {
+      "source_id": "kt_wizpark_intro",
+      "title": "kt wiz park 구장 소개",
+      "url": "https://www.ktwiz.co.kr/wizpark",
+      "source_type": "official_team",
+      "stadium_id": "SUWON",
+      "team_id": "KT",
+      "document_types": [
+        "stadium_facility_guide",
+        "stadium_transport_guide"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/SUWON/kt_wizpark_intro.html",
+      "notes": "수원 kt wiz park 소개, 주소, 운영시간 공식 출처."
+    },
+    {
+      "source_id": "kt_wizpark_guide",
+      "title": "kt wiz park 구장 안내도",
+      "url": "https://www.ktwiz.co.kr/wizpark/guide",
+      "source_type": "official_team",
+      "stadium_id": "SUWON",
+      "team_id": "KT",
+      "document_types": [
+        "stadium_facility_guide",
+        "stadium_seat_guide"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/SUWON/kt_wizpark_guide.html",
+      "notes": "구장 안내도 공식 출처. 이미지 중심."
+    },
+    {
+      "source_id": "kt_wizpark_parking",
+      "title": "kt wiz park 주차예약 안내",
+      "url": "https://www.ktwiz.co.kr/wizpark/parking",
+      "source_type": "official_team",
+      "stadium_id": "SUWON",
+      "team_id": "KT",
+      "document_types": [
+        "stadium_transport_guide"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/SUWON/kt_wizpark_parking.html",
+      "notes": "수원종합운동장 주차예약제 공식 안내."
+    },
+    {
+      "source_id": "kt_ticket_reservation",
+      "title": "kt wiz 일반티켓 예매",
+      "url": "https://www.ktwiz.co.kr/ticket/reservation",
+      "source_type": "official_team",
+      "stadium_id": "SUWON",
+      "team_id": "KT",
+      "document_types": [
+        "stadium_ticketing_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/SUWON/kt_ticket_reservation.html",
+      "notes": "티켓 예매/구매 방법 공식 출처."
+    },
+    {
+      "source_id": "kt_2026_ticket_policy",
+      "title": "2026시즌 kt wiz park 티켓정책",
+      "url": "https://www.ktwiz.co.kr/media/wiznews/198098",
+      "source_type": "official_team",
+      "stadium_id": "SUWON",
+      "team_id": "KT",
+      "document_types": [
+        "stadium_ticketing_guide",
+        "stadium_seat_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/SUWON/kt_2026_ticket_policy.html",
+      "notes": "2026 티켓정책 공지. 이미지 중심이라 추가 검수 필요."
+    },
+    {
+      "source_id": "suwon_kbo_safe_campaign",
+      "title": "수원 KT 위즈파크 참고용 KBO 경기장 안전정책 SAFE 캠페인",
+      "url": "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+      "source_type": "official_league",
+      "stadium_id": "SUWON",
+      "team_id": "KT",
+      "document_types": [
+        "stadium_bag_policy",
+        "stadium_first_visit_tip"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/SUWON/suwon_kbo_safe_campaign.html",
+      "notes": "수원 KT 위즈파크 문서 raw snapshot에 포함한 공통 출처. KBO 전 구장 공통 안전/반입 최소 기준. 구단별 예외 확인 필요."
+    },
+    {
+      "source_id": "suwon_kbo_ticket_map",
+      "title": "수원 KT 위즈파크 참고용 KBO 리그 티켓 안내",
+      "url": "https://www.koreabaseball.com/kbo/league/map.aspx",
+      "source_type": "official_league",
+      "stadium_id": "SUWON",
+      "team_id": "KT",
+      "document_types": [
+        "stadium_ticketing_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/SUWON/suwon_kbo_ticket_map.html",
+      "notes": "수원 KT 위즈파크 문서 raw snapshot에 포함한 공통 출처. 구단별 예매처 매핑의 리그 공식 출처."
     }
   ]
 }

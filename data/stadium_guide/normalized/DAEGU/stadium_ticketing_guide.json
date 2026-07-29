@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "DAEGU_stadium_ticketing_guide_20260729",
+  "document_type": "stadium_ticketing_guide",
+  "stadium_id": "DAEGU",
+  "team_id": "SAMSUNG",
+  "title": "대구 삼성 라이온즈 파크 stadium_ticketing_guide 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "samsung_lapark_ticket_price",
+    "samsung_lapark_ticket_method",
+    "samsung_lapark_ticket_refund",
+    "daegu_kbo_ticket_map"
+  ],
+  "content": "삼성 홈경기 예매는 티켓링크를 중심으로 안내된다. 삼성 공식 예매방법 페이지는 인터넷 예매, 전화예매, 현장판매, ATM 예매 경로를 안내한다. 예매취소/환불 페이지는 경기 시작 4시간 전, 취소수수료, 우천 취소, 현장 환불 제한 등 조건을 안내하므로 티켓 답변에서 함께 참조해야 한다.",
+  "metadata": {
+    "stadium_name": "대구 삼성 라이온즈 파크",
+    "home_team_ids": [
+      "SAMSUNG"
+    ],
+    "limitations": [
+      "교통/주차/시설 상세 공식 출처 추가 필요."
+    ]
+  }
+}

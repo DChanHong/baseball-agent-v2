@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "MUNHAK_stadium_ticketing_guide_20260729",
+  "document_type": "stadium_ticketing_guide",
+  "stadium_id": "MUNHAK",
+  "team_id": "SSG",
+  "title": "인천 SSG 랜더스필드 stadium_ticketing_guide 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "ssg_landers_group_ticket",
+    "ssg_landers_2026_ticket_notice",
+    "munhak_kbo_ticket_map"
+  ],
+  "content": "SSG는 구단 자체 예매와 SSG.COM 계열 공지를 함께 확인해야 한다. 2026 공식 공지는 인천SSG랜더스필드 직관 티켓 예매가 SSG.COM과 연결됨을 안내한다. 단체관람 공식 페이지는 구매 가능 경기, 신청 일정, 구매 프로세스, 구매 가능 좌석을 안내한다. 일반 예매 세부 정책은 별도 공식 티켓 페이지 추가 확인이 필요하다.",
+  "metadata": {
+    "stadium_name": "인천 SSG 랜더스필드",
+    "home_team_ids": [
+      "SSG"
+    ],
+    "limitations": [
+      "교통/주차 상세 공식 출처 추가 필요.",
+      "일반 예매 상세 정책 공식 URL 추가 필요."
+    ]
+  }
+}

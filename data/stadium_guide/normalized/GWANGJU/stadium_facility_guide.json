@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "GWANGJU_stadium_facility_guide_20260729",
+  "document_type": "stadium_facility_guide",
+  "stadium_id": "GWANGJU",
+  "team_id": "KIA",
+  "title": "광주-기아 챔피언스 필드 stadium_facility_guide 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "kia_champions_field_guide"
+  ],
+  "content": "KIA 공식 구장 안내는 광주-기아 챔피언스 필드의 구장명, 주소, 관람석 수, 총면적, 펜스 규모, 특징, KIA 사무실 정보를 제공한다. 세부 편의시설, 매점, 화장실, 수유실, 흡연구역 위치는 현재 수집 범위에서 충분히 확인되지 않아 추가 공식 출처가 필요하다.",
+  "metadata": {
+    "stadium_name": "광주-기아 챔피언스 필드",
+    "home_team_ids": [
+      "KIA"
+    ],
+    "limitations": [
+      "입장권 상세 좌석/요금은 이미지 중심이라 추가 검수 필요."
+    ]
+  }
+}

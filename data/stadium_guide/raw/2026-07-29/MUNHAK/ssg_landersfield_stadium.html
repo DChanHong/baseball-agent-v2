@@ -1,0 +1,1623 @@
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSG Landers</title>
+    <link rel="stylesheet" type="text/css" href="/css/reset-a6e9f19d8168d91a0cb123dce0278e65.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-f19b0f06bd5e31960045b1644e9f8dbf.css">
+    <link rel="stylesheet" type="text/css" href="/css/icon-4de10559a2ec5fdae22b2b31faa62b3d.css">
+    <link rel="stylesheet" type="text/css" href="/css/common-fc7e43bdfb48f25ad90d801b355df2ca.css">
+    <link rel="stylesheet" type="text/css" href="/css/style-fd857314fcbb737d07583501c28861b5.css">
+    <link rel="icon" type="image/x-icon" href="/img/favicon-ab511e5c60860caba39ef93ba868fc4c.svg">
+    <script src="/libs/jquery-latest.min.js"></script>
+    <script src="/script/script-c671bbdb8dc06074d14e1d1492e2ceb5.js"></script>
+    <script src="/script/common-2bb3c9faf26dc7f5df052a605676f3a1.js"></script>
+    
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NHMVF8B8H4"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-NHMVF8B8H4');
+</script>
+<script src="/script/common-2bb3c9faf26dc7f5df052a605676f3a1.js"></script>
+<script src="/script/flutter-32979c18cd0bc496e9af7354fbe70ed2.js"></script>
+
+<script>
+    (function () {
+        const ajax = $.ajax;
+        $.ajax = (args) => {
+            const err = args.error;
+            args.error = (xhr, status, error) => {
+                if (xhr.status === 401) {
+                    const refreshToken = getCookie("refreshToken");
+                    if (refreshToken) {
+                        tokenRefresh(ajax, () => {
+                            ajax(args);
+                        })
+                    } else {
+                        appLink({
+                            url: '/auth/login',
+                            title: '로그인',
+                            closeButton: true,
+                            waitForResult: true,
+                            callback: function (result) {
+                                flutter({
+                                    handler: 'refresh',
+                                    value: 'all'
+                                });
+                            }
+                        });
+                    }
+                } else {
+                    if (err) {
+                        err(xhr, status, error);
+                    }
+                }
+            }
+            return ajax(args);
+        }
+    })();
+
+    function tokenRefresh(ajax, callback) {
+        const refreshToken = getCookie("refreshToken");
+        if (!refreshToken) {
+            deleteCookie('token');
+            deleteCookie('refreshToken');
+            location.href = "/";
+        }
+
+        const data = {
+            refreshToken: refreshToken,
+        }
+
+        ajax({
+            url: 'https://api.ssglanders.com/auth/refresh',
+            data: JSON.stringify(data),
+            type: 'post',
+            contentType: 'application/json',
+        }).done(function (res) {
+            setCookie('token', res.token, 30);
+            setCookie('refreshToken', res.refreshToken, 30);
+            try {
+                if (window.flutter_inappwebview &&
+                    window.flutter_inappwebview.callHandler) {
+                    window.flutter_inappwebview.callHandler('refresh', res.token, res.refreshToken).then(function (result) {
+                        if (callback) {
+                            callback();
+                        }
+                    });
+                } else {
+                    if (callback) {
+                        callback();
+                    }
+                }
+            } catch (e) {
+            }
+        }).fail(function (xhr, status, errorThrown) {
+            deleteCookie('token');
+            deleteCookie('refreshToken');
+            if (window.flutter_inappwebview &&
+                window.flutter_inappwebview.callHandler) {
+                window.flutter_inappwebview.callHandler('logout');
+            }
+        })
+    }
+
+    
+
+    function setTalkPage(num) {
+        $.ajax({
+            url: "/api/setTalkPage",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                "tabNo": num
+            }),
+            success: function (data) {
+
+            },
+            error: function (request, status, error) {
+                showPopup({
+                    type: 'alert',
+                    title: '알림',
+                    message: '오류가 발생했습니다. 잠시 후 다시 시도해주세요.\n(' + request.status + ')'
+                });
+            }
+        });
+    }
+
+    function getTicketPopUrl(type, channel) {
+        if(type === 'R') {
+            //alert(data.data.url)
+            appLink({url:'/', title:'티켓예매', closeButton: true, type: 'ticket', initialIndex: 0});
+            //appLink({url:data.data.url, title:'티켓예매', closeButton: true});
+        } else if(type === 'M') {
+            appLink({url:'/', title: '예매내역', closeButton: true, type: 'ticket', initialIndex: 1});
+        } else {
+            appLink({url:'/', title:'예매내역', closeButton: true, waitForResult : true, callback : function () {
+                flutter({handler: 'changePage',page: 3});
+            }});
+        }
+    }
+
+    function integratedJoin() {
+        $.ajax({
+            url        : '/api/auth/checkSdmMember',
+            type       : 'post',
+            contentType: 'application/json',
+            success:function(result) {
+                if(result.data.isSdmMember) {
+                    showPopup({type :'alert', title : '알림', message : "통합회원 가입이 완료된 회원입니다."});
+                } else {
+                    appLink({url:'/sdmJoin?type=app', title:'통합회원 가입', closeButton: true, useLoadingSpinner : false});
+                }
+            },
+            error: function (xhr, status, error) {
+                showPopup({type: 'alert', title: '알림', message: xhr.responseJSON.message});
+            }
+        });
+    }
+</script>
+</head>
+<body>
+
+</body>
+
+</head>
+<script>
+    let selectToilet = "1";
+
+    let stadiumIdx = 0;
+
+    let tabIdx = 'sub-tab01';
+    let tabIdx2 = 'sub-tab05';
+    $(document).ready(function(){
+        $('ul.tab-style01 li').click(function(){
+            let tab_id = $(this).attr('data-tab');
+
+            $('ul.tab-style01 li').removeClass('active');
+            $('.tab-cont-wrap').removeClass('active');
+
+            $(this).addClass('active');
+            $('#'+tab_id).addClass('active');
+
+            if(tab_id === 'tab01') {
+                $(".tab-style02 li").removeClass('active');
+
+                $('.tab-style02 li').each(function () {
+                    if($(this).data("tab") === tabIdx) {
+                        $(this).addClass("active")
+                        $('#'+tabIdx).addClass('active');
+                    }
+                })
+
+            } else {
+                $(".tab-style02 li").removeClass('active');
+
+                $('.tab-style02 li').each(function () {
+                    if($(this).data("tab") === tabIdx2) {
+                        $(this).addClass("active")
+                        $('#'+tabIdx2).addClass('active');
+                    }
+                })
+            }
+
+            $(window).scrollTop(0);
+        })
+
+        $('ul.tab-style02 li').click(function(){
+            let tab_id = $(this).attr('data-tab');
+
+            if($("ul.tab-style01 li.active").data("tab") === 'tab01') {
+                tabIdx = tab_id;
+            } else {
+                tabIdx2 = tab_id;
+            }
+
+            if(selectGate !== '') {
+                $(".ic-gate").show();
+                $("#gateDefault").show();
+                $(".gateInfo").hide();
+
+
+                const stadiumGate = document.querySelector('#stadiumGate');
+                const svgGateDoc = stadiumGate.contentDocument;
+                if(selectGate !== $(this).attr('class')) {
+                    const gate = $(svgGateDoc).find('#seat').find('.' + selectGate);
+
+                    for(j in gate) {
+                        if(j === 'length') {
+                            break;
+                        }
+
+                        let element = gate[j];
+                        element.classList.remove('active');
+                    }
+                }
+
+                const totalGate = $(svgGateDoc).find('#gate').children('g');
+                for(j in totalGate) {
+                    if(j === 'length') {
+                        break;
+                    }
+
+                    let element = totalGate[j];
+                    if(!element.classList.contains('gate02') && !element.classList.contains('gate03')) {
+                        element.classList.remove('opacity');
+                    }
+                }
+            }
+
+            if(selectToilet !== '') {
+                $(".ic-toilet").show();
+                $("#toiletDefault").show();
+                $(".toiletInfo").hide();
+
+                if(selectToilet !== $(this).attr('class')) {
+                    stadiumToilet = document.querySelector('#stadiumToilet');
+                    svgToiletDoc = stadiumToilet.contentDocument;
+                    const toilet = $(svgToiletDoc).find('#seat').find('.' + selectToilet);
+                    for(j in toilet) {
+                        if(j === 'length') {
+                            break;
+                        }
+
+                        let element = toilet[j];
+                        element.classList.remove('active');
+                    }
+                }
+
+                let totalToilet = $(svgToiletDoc).find('#toilet').children('g');
+                for(j in totalToilet) {
+                    if(j === 'length') {
+                        break;
+                    }
+
+                    let element = totalToilet[j];
+                    element.classList.remove('opacity');
+                }
+            }
+        });
+
+        $(".stadium-floor-guide li").click(function () {
+            $(".stadium-floor-guide li").removeClass("active");
+            $(this).addClass("active");
+
+            const stadium = document.querySelector('#stadiumToilet');
+            const svgDoc = stadium.contentDocument;
+
+            const toilet = $(svgDoc).find('#seat').find('.' + selectToilet);
+
+            for(j in toilet) {
+                if(j === 'length') {
+                    break;
+                }
+
+                let element = toilet[j];
+                element.classList.remove('active');
+            }
+
+
+            if($(this).index() == 0) {
+                $(svgDoc).find('#toilet').children('.toilet_f1').show();
+                $(svgDoc).find('#toilet').children('.toilet_f2').hide();
+                $(svgDoc).find('#toilet').children('.toilet_f3').hide();
+
+                let tl = $(svgDoc).find('#toilet').children('.toilet_f1');
+                for(j in tl) {
+                    if(j === 'length') {
+                        break;
+                    }
+
+                    let element = tl[j];
+                    element.classList.remove('opacity');
+                    element.classList.add('active');
+                }
+            } else if($(this).index() == 1) {
+                $(svgDoc).find('#toilet').children('.toilet_f1').hide();
+                $(svgDoc).find('#toilet').children('.toilet_f2').show();
+                $(svgDoc).find('#toilet').children('.toilet_f3').hide();
+
+                let tl = $(svgDoc).find('#toilet').children('.toilet_f2');
+                for(j in tl) {
+                    if(j === 'length') {
+                        break;
+                    }
+
+                    let element = tl[j];
+                    element.classList.remove('opacity');
+                    element.classList.add('active');
+                }
+            } else if($(this).index() == 3) {
+                $(svgDoc).find('#toilet').children('.toilet_f1').hide();
+                $(svgDoc).find('#toilet').children('.toilet_f2').hide();
+                $(svgDoc).find('#toilet').children('.toilet_f3').show();
+
+                let tl = $(svgDoc).find('#toilet').children('.toilet_f3');
+                for(j in tl) {
+                    if(j === 'length') {
+                        break;
+                    }
+
+                    let element = tl[j];
+                    element.classList.remove('opacity');
+                    element.classList.add('active');
+                }
+            }
+        });
+    });
+
+
+
+    function openToilet() {
+        stadiumIdx = 3;
+
+        setTimeout(function() {
+            $(".stadium-floor-guide li").removeClass("active");
+            $(".stadium-floor-guide li").eq(0).addClass("active");
+
+            const stadium = document.querySelector('#stadiumToilet');
+            const svgDoc = stadium.contentDocument;
+
+            $(svgDoc).find('#toilet').children('.toilet_f1').show();
+            $(svgDoc).find('#toilet').children('.toilet_f2').hide();
+            $(svgDoc).find('#toilet').children('.toilet_f3').hide();
+
+            let tl = $(svgDoc).find('#toilet').children('.toilet_f1');
+            console.log(tl)
+            for(j in tl) {
+                if(j === 'length') {
+                    break;
+                }
+
+                let element = tl[j];
+                element.classList.remove('opacity');
+                element.classList.add('active');
+            }
+
+            //$(svgDoc).find('#toilet').attr("class", "");
+            //$(svgDoc).find('#gate').attr("class", "none");
+
+            /*if(selectToilet !== '') {
+                if(selectToilet !== $(this).attr('class')) {
+                    const toilet = $(svgDoc).find('#seat').find('.' + selectToilet);
+                    for(j in toilet) {
+                        if(j === 'length') {
+                            break;
+                        }
+
+                        let element = toilet[j];
+                        element.classList.remove('active');
+                    }
+                }
+            }*/
+
+            $(svgDoc).find('#toilet').children('g').on("click", function () {
+                let totalToilet = $(svgDoc).find('#toilet').children('g');
+                for(j in totalToilet) {
+                    if(j === 'length') {
+                        break;
+                    }
+
+                    let element = totalToilet[j];
+                    element.classList.remove('opacity');
+                    element.classList.remove('active');
+                }
+
+                if(selectToilet !== '') {
+                    if(selectToilet !== $(this).attr('class')) {
+                        const toilet = $(svgDoc).find('#seat').find('.' + selectToilet);
+                        for(j in toilet) {
+                            if(j === 'length') {
+                                break;
+                            }
+
+                            let element = toilet[j];
+                            element.classList.remove('active');
+                        }
+                    }
+                }
+
+                let toiletClass = $(this).attr("class");
+                selectToilet = toiletClass.split(' ')[1];
+
+                const toilet = $(svgDoc).find('#seat').find('.' + selectToilet);
+                for(j in toilet) {
+                    let element = toilet[j];
+
+                    if(j === 'length') {
+                        break;
+                    }
+                    element.classList.add('active');
+                }
+
+                $(".ic-toilet").hide();
+                $("#toiletDefault").hide();
+                $(".toiletInfo").hide();
+
+                $("#" + selectToilet).show();
+
+                totalToilet = $(svgDoc).find('#toilet').children('g');
+                for(j in totalToilet) {
+                    if(j === 'length') {
+                        break;
+                    }
+
+                    let element = totalToilet[j];
+                    element.classList.add('opacity');
+                }
+
+                $(svgDoc).find('#toilet').find('.' + selectToilet).attr("class", toiletClass + " active");
+            });
+        }, 300);
+    }
+
+    let stadium;
+    let svgDoc;
+    let gate;
+    let selectGate = "";
+
+    function openGate() {
+        stadiumIdx = 4;
+
+        setTimeout(function() {
+            stadium = document.querySelector('#stadiumGate');
+            svgDoc = stadium.contentDocument;
+
+            let totalGate = $(svgDoc).find('#gate').children('g');
+            for(j in totalGate) {
+                if(j === 'length') {
+                    break;
+                }
+
+                let element = totalGate[j];
+                if(!element.classList.contains('gate02') && !element.classList.contains('gate09 opacity') && !element.classList.contains('gate10 opacity') && !element.classList.contains('gate11 opacity')) {
+                    element.classList.remove('opacity');
+                }
+            }
+
+            $(svgDoc).find('#gate').find('.gate02').attr("class", "gate02 opacity");
+            $(svgDoc).find('#gate').find('.gate03').attr("class", "gate03 none");
+            $(svgDoc).find('#gate').find('.gate09').attr("class", "gate09 opacity");
+            $(svgDoc).find('#gate').find('.gate10').attr("class", "gate10 opacity");
+            $(svgDoc).find('#gate').find('.gate11').attr("class", "gate11 opacity");
+
+            //$(svgDoc).find('#toilet').attr("class", "none");
+            //$(svgDoc).find('#gate').attr("class", "");
+
+            /*if(selectGate !== '') {
+                if(selectGate !== $(this).attr('class')) {
+                    const gate = $(svgDoc).find('#seat').find('.' + selectGate);
+
+                    for(j in gate) {
+                        if(j === 'length') {
+                            break;
+                        }
+
+                        let element = gate[j];
+                        element.classList.remove('active');
+                    }
+                }
+            }*/
+
+            $(svgDoc).find('#gate').children('g').on("click", function () {
+                if($(this).attr('class') !== 'gate02 opacity' && $(this).attr('class') !== 'gate09 opacity' && $(this).attr('class') !== 'gate10 opacity' && $(this).attr('class') !== 'gate11 opacity') {
+                    let totalGate = $(svgDoc).find('#gate').children('g');
+                    for(j in totalGate) {
+                        if(j === 'length') {
+                            break;
+                        }
+
+                        let element = totalGate[j];
+                        if(!element.classList.contains('gate02') && !element.classList.contains('gate09 opacity') && !element.classList.contains('gate10 opacity') && !element.classList.contains('gate11 opacity')) {
+                            element.classList.remove('opacity');
+                            element.classList.remove('active');
+                        }
+                    }
+
+                    if(selectGate !== '') {
+                        if(selectGate !== $(this).attr('class')) {
+                            const gate = $(svgDoc).find('#seat').find('.' + selectGate);
+
+                            for(j in gate) {
+                                if(j === 'length') {
+                                    break;
+                                }
+
+                                let element = gate[j];
+                                element.classList.remove('active');
+                            }
+                        }
+                    }
+
+                    selectGate = $(this).attr("class");
+
+                    const gate = $(svgDoc).find('#seat').find('.' + selectGate);
+                    for(j in gate) {
+                        let element = gate[j];
+
+                        if(j === 'length') {
+                            break;
+                        }
+                        element.classList.add('active');
+                    }
+
+                    $(".ic-gate").hide();
+                    $("#gateDefault").hide();
+                    $(".gateInfo").hide();
+                    $("#" + selectGate).show();
+
+                    totalGate = $(svgDoc).find('#gate').children('g');
+                    for(j in totalGate) {
+                        if(j === 'length') {
+                            break;
+                        }
+
+                        let element = totalGate[j];
+                        if(!element.classList.contains('gate02') && !element.classList.contains('gate09 opacity') && !element.classList.contains('gate10 opacity') && !element.classList.contains('gate11 opacity')) {
+                            element.classList.add('opacity');
+                        }
+                    }
+
+                    $(svgDoc).find('#gate').find('.' + selectGate).attr("class", selectGate + " active");
+                }
+            })
+        }, 300); // You can adjust the delay as per your requirement
+    }
+
+    let zoneIdx = "";
+    let blockGroup = "";
+    let stackBarIdx = "";
+
+    function openStartSeat() {
+        if(blockGroup === "") {
+            $("#zone_" + zoneIdx).removeClass("active");
+        } else {
+            $("#zone_" + zoneIdx + "_block_group_" + blockGroup).removeClass("active");
+        }
+
+        appLink(
+            {
+                url: '/stadium/start', title: '출발 좌석 선택', closeButton: true, waitForResult:true,
+                callback : function (result) {
+                    const obj = JSON.parse(result);
+
+                    $("#zoneIdx").val(obj.idx);
+                    $("#blockGroup").val(obj.blockGroup);
+
+
+                    if(obj.blockName === '') {
+                        $("#zoneName").val(obj.zone);
+                    } else {
+                        let blockName = obj.blockName;
+                        if(blockName === "10B,8B") {
+                            blockName = "8B,10B";
+                        } else if(blockName === "R10~R9") {
+                            blockName = "R8~R14";
+                        }
+
+                        $("#zoneName").val(obj.zone + "(" + blockName + ")");
+                    }
+
+                    let zId = String(parseInt(obj.idx)).padStart(2, "0");
+
+                    zoneIdx = zId;
+                    if(obj.blockGroup === "") {
+                        blockGroup = "";
+                        $("#zone_" + zId).addClass("active");
+                    } else {
+                        let bgId = String(parseInt(obj.blockGroup)).padStart(2, "0");
+                        blockGroup = bgId;
+                        $("#zone_" + zId + "_block_group_" + bgId).addClass("active");
+                    }
+                }
+            }
+        );
+    }
+
+    function openEndSnackBar() {
+        $("#shop_" + stackBarIdx).removeClass("active");
+
+        appLink(
+            {
+                url: '/stadium/end', title: '도착 매장 선택', closeButton: true, waitForResult:true,
+                callback : function (result) {
+                    const obj = JSON.parse(result);
+
+                    $("#snackBarIdx").val(obj.idx);
+
+                    let name = obj.name;
+                    $("#snackBarName").val(name);
+
+                    let id = String(parseInt(obj.idx)).padStart(2, "0");
+
+                    stackBarIdx = id;
+                    $("#shop_" + id).addClass("active");
+                }
+            }
+        );
+    }
+
+    function stadiumChange() {
+        if(stadiumIdx === 3) {
+            openToilet();
+        } else if(stadiumIdx === 4) {
+            openGate();
+        }
+    }
+</script>
+<body>
+
+
+<div class="popup" id="popupAlert" style="display: none;">
+    <div class="pop-wrap">
+        <div class="pop-title">
+            <h2 id="alertTitle"></h2>
+            <i class="ic-delete-24"></i>
+        </div>
+        <div class="pop-cont">
+            <p id="alertContent"></p>
+        </div>
+        <div class="pop-btn">
+            <button>확인</button>
+        </div>
+    </div>
+</div>
+<div class="popup" id="popupConfirm" style="display: none">
+    <div class="pop-wrap">
+        <div class="pop-title">
+            <h2 id="confirmTitle"></h2>
+            <i class="ic-delete-24"></i>
+        </div>
+        <div class="pop-cont">
+            <p id="confirmContent"></p>
+        </div>
+        <div class="pop-btn">
+            <button class="gray" id="confirmNo">취소</button>
+            <button id="confirmYes">확인</button>
+        </div>
+    </div>
+</div>
+<div class="popup" id="popupConfirm2" style="display: none">
+    <div class="pop-wrap">
+        <div class="pop-title">
+            <h2 id="confirmTitle"></h2>
+            <i class="ic-delete-24"></i>
+        </div>
+        <div class="pop-cont">
+            <p id="confirmContent"></p>
+        </div>
+        <div class="pop-btn">
+            <button id="confirmYes">예</button>
+            <button class="gray" id="confirmNo">아니오</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function showPopup(params) {
+        if(!params.title || !params.message) return;
+
+        let title = params.title
+        let msg = params.message.replace(/\r?\n/g, '<br>');
+
+        if(params.type === 'alert') {
+            let alert = $("#popupAlert")
+            alert.find("#alertTitle").html(title)
+            alert.find("#alertContent").html(msg)
+
+            let button = alert.find("button")
+
+            button.unbind("click")
+            button.click(function (e) {
+                alert.hide()
+                if(params.callback) {
+                    params.callback()
+                }
+            })
+
+            let closeButton = alert.find(".ic-delete-24")
+            closeButton.unbind("click")
+            closeButton.click(function (e) {
+                alert.hide()
+            })
+
+            alert.show()
+        } else if(params.type === 'confirm'){
+            let confirm = $("#popupConfirm")
+            confirm.find("#confirmTitle").html(title)
+            confirm.find("#confirmContent").html(msg)
+
+            let noButton = confirm.find("#confirmNo")
+            if(params.buttonNo && params.buttonNo.length > 0) {
+                noButton.text(params.buttonNo)
+            }
+
+            noButton.unbind("click")
+            noButton.click(function (e) {
+                confirm.hide();
+                if(params.callbackNo) {
+                    params.callbackNo();
+                }
+            })
+
+            let yesButton = confirm.find("#confirmYes")
+            if(params.buttonYes && params.buttonYes.length > 0) {
+                yesButton.text(params.buttonYes)
+            }
+
+            yesButton.unbind("click")
+            yesButton.click(function (e) {
+                confirm.hide()
+                if(params.callbackYes) {
+                    params.callbackYes();
+                }
+            });
+
+            let closeButton = confirm.find(".ic-delete-24")
+            closeButton.unbind("click")
+            closeButton.click(function (e) {
+                confirm.hide()
+                if(params.callbackNo) {
+                    params.callbackNo();
+                }
+            })
+
+            confirm.show();
+        } else if(params.type === 'confirm2'){
+            let confirm = $("#popupConfirm2")
+            confirm.find("#confirmTitle").html(title)
+            confirm.find("#confirmContent").html(msg)
+
+            let noButton = confirm.find("#confirmNo")
+            if(params.buttonNo && params.buttonNo.length > 0) {
+                noButton.text(params.buttonNo)
+            }
+
+            noButton.unbind("click")
+            noButton.click(function (e) {
+                confirm.hide();
+                if(params.callbackNo) {
+                    params.callbackNo();
+                }
+            })
+
+            let yesButton = confirm.find("#confirmYes")
+            if(params.buttonYes && params.buttonYes.length > 0) {
+                yesButton.text(params.buttonYes)
+            }
+
+            yesButton.unbind("click")
+            yesButton.click(function (e) {
+                confirm.hide()
+                if(params.callbackYes) {
+                    params.callbackYes();
+                }
+            });
+
+            let closeButton = confirm.find(".ic-delete-24")
+            closeButton.unbind("click")
+            closeButton.click(function (e) {
+                confirm.hide()
+            })
+
+            confirm.show();
+        }
+    }
+
+
+</script>
+    <header>
+        <i class="ic-back-24"></i>
+        <h1>홈구장 안내</h1>
+    </header>
+    <div class="container">
+        <ul class="tab-style01">
+            <li data-tab="tab01" class="active" onclick="stadiumChange();"><p>구장 안내</p></li>
+            <li data-tab="tab02"><p>오시는 길</p></li>
+        </ul>
+        <div id="tab01" class="tab-cont-wrap active">
+            <div class="tab-wrap stadium">
+                <ul class="tab-style02">
+                    <li data-tab="sub-tab01" class="active">좌석</li>
+                    <li data-tab="sub-tab02">매점</li>
+                    <li data-tab="sub-tab03" onclick="openToilet();">화장실</li>
+                    <li data-tab="sub-tab04" onclick="openGate();">GATE</li>
+                </ul>
+            </div>
+            <div id="sub-tab01" class="tab-cont active">
+                <div class="cont-box">
+                    <div class="stadium-wrap">
+                        <div class="stadium-img"></div>
+                    </div>
+                    <div class="box">
+                        <div class="sub-title">
+                            <h4>좌석안내</h4>
+                        </div>
+                        <ul class="stadium-color">
+                            <li><span style="background-color: #96D5D4;"></span><p>4층 SKY뷰석</p></li>
+                            <li><span style="background-color: #B83694;"></span><p>덕아웃 상단석</p></li>
+                            <li><span style="background-color: #07487A;"></span><p>내야 필드석</p></li>
+                            <li><span style="background-color: #82BB40;"></span><p>몰리스 그린존</p></li>
+                            <li><span style="background-color: #E0CF70;"></span><p>외야 필드석</p></li>
+                            <li><span style="background-color: #DB1134;"></span><p>으쓱이존</p></li>
+                            <li><span style="background-color: #E58220;"></span><p>원정응원석</p></li>
+                            <li><span style="background-color: #009D9A;"></span><p>SKY탁자석</p></li>
+                            <li><span style="background-color: #E72474;"></span><p>홈런커플존</p></li>
+                            <li><span style="background-color: #FF653B;"></span><p>미니스카이박스</p></li>
+                            <li><span style="background-color: #17B3E8;"></span><p>스카이박스</p></li>
+                            <li><span style="background-color: #C2996E;"></span><p>외야패밀리존</p></li>
+                            <li><span style="background-color: #623210;"></span><p>도드람한돈 바비큐존</p></li>
+                            <li><span style="background-color: #00829D;"></span><p>이마트 프렌들리존</p></li>
+                            <li><span style="background-color: #99491F;"></span><p>이마트바비큐존</p></li>
+                            <li><span style="background-color: #F875AD;"></span><p>랜더스 라이브존</p></li>
+                            <li><span style="background-color: #FAB827;"></span><p>요기요 내야패밀리존</p></li>
+                            <li><span style="background-color: #573E97;"></span><p>피코크 테이블석(1층)</p></li>
+                            <li><span style="background-color: #00A574;"></span><p>초가정자</p></li>
+                            <li><span style="background-color: #0075AF;"></span><p>노브랜드 테이블석(2층)</p></li>
+                            <li><span style="background-color: #006037;"></span><p>로케트배터리 외야파티덱</p></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="sub-tab02" class="tab-cont ">
+                <div class="cont-box">
+                    <div class="box">
+                        <!-- 출발지 / 도착지 선택 후에만 opacity class 추가 -->
+                        <div class="stadium-wrap opacity">
+                            <div class="stadium-position">
+                                <!-- 좌석별 포인트 이미지-->
+                                <!-- 내야일반석 -->
+                                <img class="" id="zone_01_block_group_01" src="../../img/route/zone_01_block_group_01.png">
+                                <img class="" id="zone_01_block_group_02" src="../../img/route/zone_01_block_group_02.png">
+                                <img class="" id="zone_01_block_group_03" src="../../img/route/zone_01_block_group_03.png">
+                                <img class="" id="zone_01_block_group_04" src="../../img/route/zone_01_block_group_04.png">
+                                <!-- 으쓱이존 -->
+                                <img class="" id="zone_02_block_group_01" src="../../img/route/zone_02_block_group_01.png">
+                                <img class="" id="zone_02_block_group_02" src="../../img/route/zone_02_block_group_02.png">
+
+                                <!-- 의자지정석 -->
+                                <img class="" id="zone_03_block_group_01" src="../../img/route/zone_03_block_group_01.png">
+                                <img class="" id="zone_03_block_group_02" src="../../img/route/zone_03_block_group_02.png">
+                                <!-- 내야패밀리존 -->
+                                <img class="" id="zone_04_block_group_01" src="../../img/route/zone_04_block_group_01.png">
+                                <img class="" id="zone_04_block_group_02" src="../../img/route/zone_04_block_group_02.png">
+                                <!-- 피코크 테이블석(1층) -->
+                                <img class="" id="zone_05_block_group_01" src="../../img/route/zone_05_block_group_01.png">
+                                <img class="" id="zone_05_block_group_02" src="../../img/route/zone_05_block_group_02.png">
+                                <img class="" id="zone_05_block_group_03" src="../../img/route/zone_05_block_group_03.png">
+                                <!-- 노브랜드 테이블석(1층) -->
+                                <img class="" id="zone_06_block_group_01" src="../../img/route/zone_06_block_group_01.png">
+                                <img class="" id="zone_06_block_group_02" src="../../img/route/zone_06_block_group_02.png">
+                                <img class="" id="zone_06_block_group_03" src="../../img/route/zone_06_block_group_03.png">
+                                <!-- 4층 일반석 -->
+                                <img class="" id="zone_07_block_group_01" src="../../img/route/zone_07_block_group_01.png">
+                                <img class="" id="zone_07_block_group_02" src="../../img/route/zone_07_block_group_02.png">
+                                <img class="" id="zone_07_block_group_03" src="../../img/route/zone_07_block_group_03.png">
+                                <img class="" id="zone_07_block_group_04" src="../../img/route/zone_07_block_group_04.png">
+                                <img class="" id="zone_07_block_group_05" src="../../img/route/zone_07_block_group_05.png">
+                                <!-- 스카이 탁자석 -->
+                                <img class="" id="zone_08_block_group_01" src="../../img/route/zone_08_block_group_01.png">
+                                <img class="" id="zone_08_block_group_02" src="../../img/route/zone_08_block_group_02.png">
+                                <img class="" id="zone_08_block_group_03" src="../../img/route/zone_08_block_group_03.png">
+                                <!-- 몰리스그린존 -->
+                                <img class="" id="zone_09" src="../../img/route/zone_09.png">
+                                <!-- 초가정자 -->
+                                <img class="" id="zone_10" src="../../img/route/zone_10.png">
+                                <!-- 로케트배터리 외야파티덱 -->
+                                <img class="" id="zone_11" src="../../img/route/zone_11.png">
+                                <!-- 외야일반석 -->
+                                <img class="" id="zone_12_block_group_01" src="../../img/route/zone_12_block_group_01.png">
+                                <img class="" id="zone_12_block_group_02" src="../../img/route/zone_12_block_group_02.png">
+                                <img class="" id="zone_12_block_group_03" src="../../img/route/zone_12_block_group_03.png">
+                                <!-- 홈런커플존 -->
+                                <img class="" id="zone_13" src="../../img/route/zone_13.png">
+                                <img class="" id="zone_14" src="../../img/route/zone_14.png">
+                                <!-- 트레이더스 오픈 바비큐존 -->
+                                <img class="" id="zone_15" src="../../img/route/zone_15.png">
+                                <img class="" id="zone_16" src="../../img/route/zone_16.png">
+                                <!-- 이마트 바비큐존 -->
+                                <img class="" id="zone_17" src="../../img/route/zone_17.png">
+                                <!-- 외야패밀리존 -->
+                                <img class="" id="zone_18" src="../../img/route/zone_18.png">
+                                <!-- 맘키즈 미니스카이박스 -->
+                                <img class="" id="zone_20_block_group_01" src="../../img/route/zone_20_block_group_01.png">
+                                <img class="" id="zone_20_block_group_02" src="../../img/route/zone_20_block_group_02.png">
+                                <img class="" id="zone_20_block_group_03" src="../../img/route/zone_20_block_group_03.png">
+                                <!-- 랜더스 라이브존 -->
+                                <img class="" id="zone_21_block_group_01" src="../../img/route/zone_21_block_group_01.png">
+                                <img class="" id="zone_21_block_group_02" src="../../img/route/zone_21_block_group_02.png">
+                                <!-- 이마트 프랜들리존 -->
+                                <img class="" id="zone_22" src="../../img/route/zone_22.png">
+                                <img class="" id="zone_23" src="../../img/route/zone_23.png">
+
+                                <!-- 원정응원석 -->
+                                <img class="" id="zone_24_block_group_01" src="../../img/route/zone_24_block_group_01.png">
+
+                                <!-- 매장별 포인트 이미지 -->
+                                <img class="" id="shop_01" src="../../img/route/shop_01.png">
+                                <img class="" id="shop_02" src="../../img/route/shop_02.png">
+                                <img class="" id="shop_03" src="../../img/route/shop_03.png">
+                                <img class="" id="shop_05" src="../../img/route/shop_05_250924.png">
+                                <img class="" id="shop_06" src="../../img/route/shop_06.png">
+                                <img class="" id="shop_07" src="../../img/route/shop_07.png">
+                                <img class="" id="shop_08" src="../../img/route/shop_08.png">
+                                <img class="" id="shop_09" src="../../img/route/shop_09.png">
+                                <img class="" id="shop_10" src="../../img/route/shop_10.png">
+                                <img class="" id="shop_11" src="../../img/route/shop_11.png">
+                                <img class="" id="shop_12" src="../../img/route/shop_12.png">
+                                <img class="" id="shop_13" src="../../img/route/shop_13.png">
+                                <img class="" id="shop_14" src="../../img/route/shop_14.png">
+                                <img class="" id="shop_15" src="../../img/route/shop_15.png">
+                                <img class="" id="shop_16" src="../../img/route/shop_16.png">
+                                <img class="" id="shop_17" src="../../img/route/shop_17.png">
+                                <img class="" id="shop_18" src="../../img/route/shop_18.png">
+                                <img class="" id="shop_19" src="../../img/route/shop_19.png">
+                                <img class="" id="shop_20" src="../../img/route/shop_20_1.png">
+                                <img class="" id="shop_21" src="../../img/route/shop_21.png">
+                                <img class="" id="shop_22" src="../../img/route/shop_22.png">
+                                <img class="" id="shop_23" src="../../img/route/shop_23.png">
+                                <img class="" id="shop_24" src="../../img/route/shop_24_2.png">
+                                <img class="" id="shop_25" src="../../img/route/shop_25.png">
+                                <img class="" id="shop_26" src="../../img/route/shop_26.png">
+                                <img class="" id="shop_28" src="../../img/route/shop_28_1.png">
+                                <img class="" id="shop_29" src="../../img/route/shop_29.png">
+                                <img class="" id="shop_30" src="../../img/route/shop_30.png">
+                                <img class="" id="shop_31" src="../../img/route/shop_31.png">
+                                <img class="" id="shop_32" src="../../img/route/shop_32.png">
+                                <img class="" id="shop_33" src="../../img/route/shop_33.png">
+                                <img class="" id="shop_34" src="../../img/route/shop_34.png">
+                                <img class="" id="shop_35" src="../../img/route/shop_35.png">
+                                <img class="" id="shop_36" src="../../img/route/shop_36_1.png">
+                                <img class="" id="shop_37" src="../../img/route/shop_37.png">
+                                <img class="" id="shop_38" src="../../img/route/shop_38.png">
+                            </div>
+                            <div class="stadium-img"></div>
+                        </div>
+                        <div class="box">
+                            <ul class="route-wrap">
+                                <li>
+                                    <input type="text" id="zoneName" readonly placeholder="출발 좌석을 선택해주세요." onclick="openStartSeat();">
+                                    <input type="hidden" id="blockGroup">
+                                    <input type="hidden" id="zoneIdx">
+                                </li>
+                                <li>
+                                    <input type="text" id="snackBarName" readonly placeholder="도착 매장을 선택해주세요." onclick="openEndSnackBar();">
+                                    <input type="hidden" id="snackBarIdx">
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="btn-wrap">
+                            <button type="button" onclick="checkWay();">경로 확인</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="sub-tab03" class="tab-cont ">
+                <div class="cont-box">
+                    <div class="stadium-wrap">
+                        <ul class="stadium-floor-guide">
+                            <li class="active">1층</li>
+                            <li>2층</li>
+                            <li class="disabled">3층</li>
+                            <li>4층</li>
+                        </ul>
+                        <div class="stadium-svg">
+                            <object id="stadiumToilet" type="image/svg+xml" data="/html/club/toilet-e804daed6cc6796e730e4e4d62426e56.svg"></object>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div class="stadium-guide">
+                            <i class="ic-toilet"></i>
+                            <p id="toiletDefault">층수 선택 후 화장실 아이콘을 클릭하면<br>화장실별 가까운 좌석이 표시됩니다.</p>
+                            
+                                <p id="toilet01" class="toiletInfo" style="display: none;">103 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_01">내야 필드석</span> ,
+                                    
+                                        <span class="zone_02">으쓱이존</span> ,
+                                    
+                                        <span class="zone_23">이마트 프랜들리존</span> ,
+                                    
+                                        <span class="zone_20">미니스카이박스</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet02" class="toiletInfo" style="display: none;">105 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_04">요기요 내야패밀리존</span> ,
+                                    
+                                        <span class="zone_03">덕아웃 상단석</span> ,
+                                    
+                                        <span class="zone_20">미니스카이박스</span> ,
+                                    
+                                        <span class="zone_21">랜더스 라이브존</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet05" class="toiletInfo" style="display: none;">108 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_03">덕아웃 상단석</span> ,
+                                    
+                                        <span class="zone_21">랜더스 라이브존</span> ,
+                                    
+                                        <span class="zone_04">요기요 내야패밀리존</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet06" class="toiletInfo" style="display: none;">110 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_24">원정응원석</span> ,
+                                    
+                                        <span class="zone_01">내야 필드석</span> ,
+                                    
+                                        <span class="zone_23">이마트 프랜들리존</span> ,
+                                    
+                                        <span class="zone_20">미니스카이박스</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet07" class="toiletInfo" style="display: none;">로케트배터리 좌석 뒤 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_09">몰리스그린존</span> ,
+                                    
+                                        <span class="zone_10">초가정자</span> ,
+                                    
+                                        <span class="zone_11">로케트배터리 외야파티덱</span> ,
+                                    
+                                        <span class="zone_12">외야 필드석</span> ,
+                                    
+                                        <span class="zone_14">홈런커플존</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet08" class="toiletInfo" style="display: none;">204 Block 뒤  화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_16">도드람한돈 바비큐존</span> ,
+                                    
+                                        <span class="zone_17">이마트바비큐존</span> ,
+                                    
+                                        <span class="zone_18">외야패밀리존</span> ,
+                                    
+                                        <span class="zone_12">외야 필드석</span> ,
+                                    
+                                        <span class="zone_14">홈런커플존</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet09" class="toiletInfo" style="display: none;">201 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_01">내야 필드석</span> ,
+                                    
+                                        <span class="zone_02">으쓱이존</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet10" class="toiletInfo" style="display: none;">202 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_03">덕아웃 상단석</span> ,
+                                    
+                                        <span class="zone_02">으쓱이존</span> ,
+                                    
+                                        <span class="zone_20">미니스카이박스</span> ,
+                                    
+                                        <span class="zone_04">요기요 내야패밀리존</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet11" class="toiletInfo" style="display: none;">202 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_02">으쓱이존</span> ,
+                                    
+                                        <span class="zone_04">요기요 내야패밀리존</span> ,
+                                    
+                                        <span class="zone_20">미니스카이박스</span> ,
+                                    
+                                        <span class="zone_03">덕아웃 상단석</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet12" class="toiletInfo" style="display: none;">203 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_04">요기요 내야패밀리존</span> ,
+                                    
+                                        <span class="zone_06">노브랜드 테이블석(2층)</span> ,
+                                    
+                                        <span class="zone_20">미니스카이박스</span> ,
+                                    
+                                        <span class="zone_03">덕아웃 상단석</span> ,
+                                    
+                                        <span class="zone_05">피코크 테이블석(1층)</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet13" class="toiletInfo" style="display: none;">노랑통닭 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_06">노브랜드 테이블석(2층)</span> ,
+                                    
+                                        <span class="zone_20">미니스카이박스</span> ,
+                                    
+                                        <span class="zone_05">피코크 테이블석(1층)</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet14" class="toiletInfo" style="display: none;">먹거리스낵코너 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_06">노브랜드 테이블석(2층)</span> ,
+                                    
+                                        <span class="zone_05">피코크 테이블석(1층)</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet15" class="toiletInfo" style="display: none;">204 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_04">요기요 내야패밀리존</span> ,
+                                    
+                                        <span class="zone_03">덕아웃 상단석</span> ,
+                                    
+                                        <span class="zone_05">피코크 테이블석(1층)</span> ,
+                                    
+                                        <span class="zone_06">노브랜드 테이블석(2층)</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet16" class="toiletInfo" style="display: none;">205 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_03">덕아웃 상단석</span> ,
+                                    
+                                        <span class="zone_04">요기요 내야패밀리존</span> ,
+                                    
+                                        <span class="zone_24">원정응원석</span> ,
+                                    
+                                        <span class="zone_20">미니스카이박스</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet17" class="toiletInfo" style="display: none;">205 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_03">덕아웃 상단석</span> ,
+                                    
+                                        <span class="zone_04">요기요 내야패밀리존</span> ,
+                                    
+                                        <span class="zone_24">원정응원석</span> ,
+                                    
+                                        <span class="zone_20">미니스카이박스</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet18" class="toiletInfo" style="display: none;">206 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_24">원정응원석</span> ,
+                                    
+                                        <span class="zone_01">내야 필드석</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet19" class="toiletInfo" style="display: none;">317 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_07">4층 SKY뷰석</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet20" class="toiletInfo" style="display: none;">315 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_07">4층 SKY뷰석</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet21" class="toiletInfo" style="display: none;">314 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_07">4층 SKY뷰석</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet22" class="toiletInfo" style="display: none;">313 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_07">4층 SKY뷰석</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet23" class="toiletInfo" style="display: none;">311 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_07">4층 SKY뷰석</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet24" class="toiletInfo" style="display: none;">308 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_07">4층 SKY뷰석</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet25" class="toiletInfo" style="display: none;">306 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_07">4층 SKY뷰석</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet26" class="toiletInfo" style="display: none;">305 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_07">4층 SKY뷰석</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet27" class="toiletInfo" style="display: none;">304 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_07">4층 SKY뷰석</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet28" class="toiletInfo" style="display: none;">302 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_07">4층 SKY뷰석</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet03" class="toiletInfo" style="display: none;">106 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_05">피코크 테이블석(1층)</span> ,
+                                    
+                                        <span class="zone_06">노브랜드 테이블석(2층)</span> ,
+                                    
+                                        <span class="zone_20">미니스카이박스</span> ,
+                                    
+                                        <span class="zone_21">랜더스 라이브존</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="toilet04" class="toiletInfo" style="display: none;">107 Section 옆 화장실과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_05">피코크 테이블석(1층)</span> ,
+                                    
+                                        <span class="zone_06">노브랜드 테이블석(2층)</span> ,
+                                    
+                                        <span class="zone_21">랜더스 라이브존</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="sub-tab04" class="tab-cont">
+                <div class="cont-box">
+                    <div class="stadium-wrap">
+                        <div class="stadium-svg">
+                            <object id="stadiumGate" type="image/svg+xml" data="/html/club/gate-2a823524e4a5557ac87350054261d587.svg"></object>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div class="stadium-guide">
+                            <i class="ic-gate"></i>
+                            <p id="gateDefault">게이트 아이콘을 클릭하면<br>게이트별 가까운 좌석이 표시됩니다.</p>
+                            
+                                <p id="gate01" class="gateInfo" style="display: none;">도드람GATE과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_01">내야 필드석</span> ,
+                                    
+                                        <span class="zone_02">으쓱이존</span> ,
+                                    
+                                        <span class="zone_07">4층 SKY뷰석</span> ,
+                                    
+                                        <span class="zone_20">미니스카이박스</span> ,
+                                    
+                                        <span class="zone_23">이마트 프랜들리존</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="gate04" class="gateInfo" style="display: none;">GATE3과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_03">덕아웃 상단석</span> ,
+                                    
+                                        <span class="zone_04">요기요 내야패밀리존</span> ,
+                                    
+                                        <span class="zone_05">피코크 테이블석(1층)</span> ,
+                                    
+                                        <span class="zone_06">노브랜드 테이블석(2층)</span> ,
+                                    
+                                        <span class="zone_07">4층 SKY뷰석</span> ,
+                                    
+                                        <span class="zone_08">SKY탁자석</span> ,
+                                    
+                                        <span class="zone_20">미니스카이박스</span> ,
+                                    
+                                        <span class="zone_21">랜더스 라이브존</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="gate05" class="gateInfo" style="display: none;">GATE4(slope)과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_03">덕아웃 상단석</span> ,
+                                    
+                                        <span class="zone_04">요기요 내야패밀리존</span> ,
+                                    
+                                        <span class="zone_05">피코크 테이블석(1층)</span> ,
+                                    
+                                        <span class="zone_06">노브랜드 테이블석(2층)</span> ,
+                                    
+                                        <span class="zone_07">4층 SKY뷰석</span> ,
+                                    
+                                        <span class="zone_08">SKY탁자석</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="gate06" class="gateInfo" style="display: none;">GATE5(slope)과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_01">내야 필드석</span> ,
+                                    
+                                        <span class="zone_24">원정응원석</span> ,
+                                    
+                                        <span class="zone_07">4층 SKY뷰석</span> ,
+                                    
+                                        <span class="zone_20">미니스카이박스</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="gate07" class="gateInfo" style="display: none;">GATE6과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_24">원정응원석</span> ,
+                                    
+                                        <span class="zone_03">덕아웃 상단석</span> ,
+                                    
+                                        <span class="zone_04">요기요 내야패밀리존</span> ,
+                                    
+                                        <span class="zone_07">4층 SKY뷰석</span> ,
+                                    
+                                        <span class="zone_20">미니스카이박스</span> ,
+                                    
+                                        <span class="zone_23">이마트 프랜들리존</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                                <p id="gate08" class="gateInfo" style="display: none;">GATE7과 가까운 좌석은<br>
+                                    
+                                        <span class="zone_09">몰리스그린존</span> ,
+                                    
+                                        <span class="zone_10">초가정자</span> ,
+                                    
+                                        <span class="zone_12">외야 필드석</span> ,
+                                    
+                                        <span class="zone_14">홈런커플존</span> ,
+                                    
+                                        <span class="zone_16">도드람한돈 바비큐존</span> ,
+                                    
+                                        <span class="zone_18">외야패밀리존</span> 
+                                    
+                                    입니다.
+                                </p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <div id="tab02" class="tab-cont-wrap">
+            <div class="cont-box">
+                <div class="box">
+                    <div class="sub-title">
+                        <h4>오시는 길</h4>
+                    </div>
+                    <div class="map-wrap" style="background-image: url(../../img/stadium/map-img01.png);"></div>
+                </div>
+                <ul class="tab-style02 map">
+                    <li data-tab="sub-tab05" class="active">대중교통</li>
+                    <li data-tab="sub-tab06">승용차</li>
+                    <li data-tab="sub-tab07">인천공항</li>
+                </ul>
+                <div id="sub-tab05" class="tab-cont active">
+                    <div class="box">
+                        <div class="sub-title">
+                            <h6>시내버스 이용 시</h6>
+                        </div>
+                        <ul class="directions">
+                            <li>부평역 111-2번 → 문학경기장 하차</li>
+                            <li>주안역 63, 522번 → 문학경기장(박태환수영장) 하차</li>
+                            <li>선학역 63, 522, 523, 754, 780-2번 → 문학경기장(박태환수영장) 하차</li>
+                            <li>동막역 6, 303, 304번 → 문학경기장(박태환수영장) 하차</li>
+                            <li>제물포역 4, 63번 → 문학경기장 하차</li>
+                            <li>인하대역 5, 27, 111-2번 → 문학경기장 하차</li>
+                            <li>석천사거리역 11번 → 문학경기장 하차</li>
+                            <li>인천논현역 27번 → 문학경기장 하차</li>
+                        </ul>
+                    </div>
+                    <div class="box">
+                        <div class="sub-title">
+                            <h6>정류장 안내</h6>
+                        </div>
+                        <ul class="directions">
+                            <li>문학경기장[북문쪽] : 4, 5, 11, 27, 46, 82, 111-2, 515번</li>
+                            <li>문학경기장(박태환수영장)[동문쪽] : 63, 754, 780-2, 522, 523, 303번</li>
+                        </ul>
+                    </div>
+                    <div class="box">
+                        <div class="sub-title">
+                            <h6>고속버스 이용 시</h6>
+                        </div>
+                        <ul class="directions">
+                            <li>인천종합터미널 → 인천터미널 역에서 인천지하철 환승 → 문학경기장 역 하차</li>
+                            <li>인천종합터미널 → 도보(약 10분 소요) → 문학경기장</li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="sub-tab06" class="tab-cont ">
+                    <div class="box">
+                        <div class="sub-title">
+                            <h6>고속도로 이용 시</h6>
+                        </div>
+                        <ul class="directions">
+                            <li>경인고속도로 : 도화 IC → 동양장사거리 → 문학경기장</li>
+                            <li>제2경인고속도로 : 서창IC → 남동IC → 문학IC → 문학경기장</li>
+                            <li>서해안고속도로 : 서창IC → 남동IC → 문학IC → 문학경기장</li>
+                            <li>서울외곽순환고속도로 : 장수IC → 수원방향 → 서창IC → 남동IC → 문학IC → 문학경기장</li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="sub-tab07" class="tab-cont ">
+                    <div class="box">
+                        <div class="sub-title">
+                            <h6>인천 국제공항 이용 시</h6>
+                        </div>
+                        <ul class="directions">
+                            <li>인천공항 → 공항고속도로 → 서울외곽순환고속도로 → 장수IC → 제2경인고속도로 → 남동IC → 문학경기장</li>
+                            <li>인천공항 → 공항고속도로 → 북인천IC → 경인고속도로 서인천IC 진입 → 경인고속도로 종점 → 제2경인고속도로 → 문학IC → 문학경기장</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="cont-box">
+                <div class="title">
+                    <h2>주차안내</h2>
+                </div>
+                <ul class="parking">
+                    <li><h6>형태</h6><p>지상 및 지하주차장(지하1~4층)</p></li>
+                    <li><h6>주차가능</h6><p>4,002대</p></li>
+                </ul>
+                <div>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th rowspan="2">구분</th>
+                            <th colspan="3">전일 주차권</th>
+                            <th rowspan="2">월 정기권</th>
+                        </tr>
+                        <tr>
+                            <th>승용차</th>
+                            <th>승합차</th>
+                            <th>버스</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>요금</td>
+                            <td>2,000원</td>
+                            <td>4,000원</td>
+                            <td>6,000원</td>
+                            <td>40,000원</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 경로안내 팝업 -->
+    <div class="popup" id="wayInfo" style="display: none;">
+        <div class="pop-wrap">
+            <div class="pop-title">
+                <h2>경로 안내</h2>
+                <i class="ic-delete-24" onclick="$('#wayInfo').hide();"></i>
+            </div>
+            <div class="pop-cont">
+                <ul class="route-way">
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    function checkWay() {
+        $(".route-way").empty();
+
+        let zone = $("#zoneName").val();
+        let blockGroup = $("#blockGroup").val();
+        let zoneIdx = $("#zoneIdx").val();
+        let snackBarName = $("#snackBarName").val();
+        let snackBarIdx = $("#snackBarIdx").val();
+
+        if(zone === "") {
+            showPopup({type : 'alert', title : '알림', message : '출발 좌석을 선택해주세요.'});
+            return
+        }
+
+        if(snackBarName === "") {
+            showPopup({type : 'alert', title : '알림', message : '도착 매장을 선택해주세요.'});
+            return
+        }
+
+        $.ajax({
+            url : "/api/findWay",
+            type : "POST",
+            dataType : "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                "blockGroup" : blockGroup,
+                "zoneIdx" : zoneIdx,
+                "snackBarIdx" : snackBarIdx
+            }),
+            success:function(data) {
+                let s = "";
+                let list = data.data.list;
+
+                if(list.length > 0) {
+                    for(i=0;i<list.length;i++) {
+                        s += '<li><i class="ic-' + list[i].icon + '"></i><p>' + list[i].content + '</p></li>';
+                    }
+                } else {
+                    s = '<li><i class="ic-start"></i><p>경로를 찾을 수 없습니다.</p></li>';
+                }
+
+
+                $(".route-way").append(s);
+                $("#wayInfo").show();
+            },
+            error:function(request,status,error){
+                showPopup({type :'alert', title : '알림', message : '오류가 발생했습니다. 잠시 후 다시 시도해주세요.\n(' + request.status + ')'});
+            }
+        });
+    }
+</script>
+</html>

@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "SUWON_stadium_transport_guide_20260729",
+  "document_type": "stadium_transport_guide",
+  "stadium_id": "SUWON",
+  "team_id": "KT",
+  "title": "수원 KT 위즈파크 stadium_transport_guide 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "kt_wizpark_intro",
+    "kt_wizpark_parking"
+  ],
+  "content": "수원 KT 위즈파크는 경기도 수원시 장안구 경수대로 조원동 일대에 있다. kt 공식 주차예약 안내는 수원종합운동장 주차장이 프로야구 경기일에만 주차예약제로 운영되며, 미예약 차량은 주차가 불가하다고 안내한다. 예약 기간은 홈경기 티켓 예매기간과 연결되며 예매번호가 필요하므로, 자가용 방문자는 사전 예약 여부를 반드시 확인해야 한다.",
+  "metadata": {
+    "stadium_name": "수원 KT 위즈파크",
+    "home_team_ids": [
+      "KT"
+    ],
+    "limitations": [
+      "구장 안내도와 티켓정책은 이미지 중심이라 좌석/요금 세부 구조화 추가 필요."
+    ]
+  }
+}

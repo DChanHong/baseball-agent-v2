@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "GOCHEOK_stadium_seat_guide_20260729",
+  "document_type": "stadium_seat_guide",
+  "stadium_id": "GOCHEOK",
+  "team_id": "KIWOOM",
+  "title": "고척스카이돔 stadium_seat_guide 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "heroes_gocheok_ticket_normal"
+  ],
+  "content": "키움 공식 일반티켓 페이지는 고척스카이돔 좌석 구역을 테이블석, 내야, 외야, 기타로 나눠 안내한다. 예시 좌석군으로 재규어 E-PACE석, 써모스석, 로케트배터리석, 스카이블루석, 블루석, 3층 지정석, 4층 지정석, 외야 지정석, 외야 비지정석, 스카이박스 등이 확인된다. 가격과 좌석명은 시즌별로 바뀔 수 있어 기준일을 함께 노출해야 한다.",
+  "metadata": {
+    "stadium_name": "고척스카이돔",
+    "home_team_ids": [
+      "KIWOOM"
+    ],
+    "is_dome": true,
+    "limitations": [
+      "프로야구 경기 시 내부 주차장 이용 제한은 공식 안내 기준이며 경기별 변동은 추가 확인 필요."
+    ]
+  }
+}

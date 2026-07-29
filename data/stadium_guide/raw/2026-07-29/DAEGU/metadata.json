@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "collected_at": "2026-07-29T00:00:00+09:00",
+  "collector": "manual_curl",
+  "stadium_id": "DAEGU",
+  "team_ids": [
+    "SAMSUNG"
+  ],
+  "files": [
+    {
+      "source_id": "samsung_lapark_ticket_price",
+      "source_url": "https://www.samsunglions.com/m/ticket/score_4_1.asp",
+      "source_type": "official_team",
+      "local_file": "samsung_lapark_ticket_price.html",
+      "fetch_status": "success",
+      "byte_size": 14793,
+      "content_hash": "sha256:c4f8506320c2cff5bcdcd940cc84395f59450a9949546681a750b57b662cc564"
+    },
+    {
+      "source_id": "samsung_lapark_ticket_method",
+      "source_url": "https://www.samsunglions.com/m/ticket/score_4_1_3.asp",
+      "source_type": "official_team",
+      "local_file": "samsung_lapark_ticket_method.html",
+      "fetch_status": "success",
+      "byte_size": 10338,
+      "content_hash": "sha256:021cbb40e7bfb2f2516c0b3d9133c009cf93d50cce7a095bc35706e9cd663715"
+    },
+    {
+      "source_id": "samsung_lapark_ticket_refund",
+      "source_url": "https://www.samsunglions.com/m/ticket/score_4_1_4.asp",
+      "source_type": "official_team",
+      "local_file": "samsung_lapark_ticket_refund.html",
+      "fetch_status": "success",
+      "byte_size": 12796,
+      "content_hash": "sha256:656d6392f5d9828d7134bf67133037d09c8f59fc7e780be81e6bf12ce44e06e1"
+    },
+    {
+      "source_id": "daegu_kbo_ticket_map",
+      "source_url": "https://www.koreabaseball.com/kbo/league/map.aspx",
+      "source_type": "official_league",
+      "local_file": "daegu_kbo_ticket_map.html",
+      "fetch_status": "success",
+      "byte_size": 38975,
+      "content_hash": "sha256:e276e592b634870f43725d97bf961a98e6e787dcb41c002d48e04e65ac882d0f"
+    }
+  ]
+}

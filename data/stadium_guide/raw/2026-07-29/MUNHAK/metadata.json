@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0.0",
+  "collected_at": "2026-07-29T00:00:00+09:00",
+  "collector": "manual_curl",
+  "stadium_id": "MUNHAK",
+  "team_ids": [
+    "SSG"
+  ],
+  "files": [
+    {
+      "source_id": "ssg_landersfield_stadium",
+      "source_url": "https://app.ssglanders.com/stadium",
+      "source_type": "official_team",
+      "local_file": "ssg_landersfield_stadium.html",
+      "fetch_status": "success",
+      "byte_size": 78147,
+      "content_hash": "sha256:a3b21fa8588cba23f6a8f44d842ef626862f7bd9b6c17552fc51e5b11a7c89de"
+    },
+    {
+      "source_id": "ssg_landers_group_ticket",
+      "source_url": "https://www.ssglanders.com/game/group",
+      "source_type": "official_team",
+      "local_file": "ssg_landers_group_ticket.html",
+      "fetch_status": "success",
+      "byte_size": 39665,
+      "content_hash": "sha256:14970df3cffa93582aaa46c0221c13ecd681d2b2db8620a4d47e81640ed94999"
+    },
+    {
+      "source_id": "ssg_landers_2026_ticket_notice",
+      "source_url": "https://app.ssglanders.com/noticeView?seq=3077",
+      "source_type": "official_team",
+      "local_file": "ssg_landers_2026_ticket_notice.html",
+      "fetch_status": "success",
+      "byte_size": 14548,
+      "content_hash": "sha256:7f1be45ab0b6a4a0f0e3b1d96cecb2ccd433fcc067468629906033987d57f40c"
+    },
+    {
+      "source_id": "munhak_kbo_safe_campaign",
+      "source_url": "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+      "source_type": "official_league",
+      "local_file": "munhak_kbo_safe_campaign.html",
+      "fetch_status": "success",
+      "byte_size": 53114,
+      "content_hash": "sha256:ee1d020721e2127194799ada6163f1c530775f0fa5b9f55e97c105f2fc33ec8c"
+    },
+    {
+      "source_id": "munhak_kbo_ticket_map",
+      "source_url": "https://www.koreabaseball.com/kbo/league/map.aspx",
+      "source_type": "official_league",
+      "local_file": "munhak_kbo_ticket_map.html",
+      "fetch_status": "success",
+      "byte_size": 38975,
+      "content_hash": "sha256:e276e592b634870f43725d97bf961a98e6e787dcb41c002d48e04e65ac882d0f"
+    }
+  ]
+}

@@ -3,55 +3,82 @@
   "collected_at": "2026-07-29T00:00:00+09:00",
   "collector": "manual_curl",
   "stadium_id": "SAJIK",
-  "team_id": "LOTTE",
+  "team_ids": [
+    "LOTTE"
+  ],
   "files": [
     {
       "source_id": "lotte_sajik_stadium",
       "source_url": "https://www.giantsclub.com/html/?pcode=207",
+      "source_type": "official_team",
       "local_file": "lotte_sajik_stadium.html",
+      "fetch_status": "success",
+      "byte_size": 42678,
       "content_hash": "sha256:cef3256fe44fa71d66540ec890441a33e8139e4bc8f27eecd61754a4c878c0bc"
     },
     {
       "source_id": "lotte_sajik_seat_guide",
       "source_url": "https://www.giantsclub.com/html/?pcode=340",
+      "source_type": "official_team",
       "local_file": "lotte_sajik_seat_guide.html",
+      "fetch_status": "success",
+      "byte_size": 38108,
       "content_hash": "sha256:40fa6cb8b5d8238a5c87cb364d4dc1b9c27a0b8930f354be153a730445ff66c3"
     },
     {
       "source_id": "lotte_sajik_ticket_price",
       "source_url": "https://www.giantsclub.com/html/?pcode=339",
+      "source_type": "official_team",
       "local_file": "lotte_sajik_ticket_price.html",
+      "fetch_status": "success",
+      "byte_size": 73525,
       "content_hash": "sha256:7af3fb70d794b5930bca6298f5075a609ec127d9525ba5a607e85e92a2c0d0ee"
     },
     {
       "source_id": "lotte_ticket_purchase_guide",
       "source_url": "https://www.giantsclub.com/m/?pcode=539",
+      "source_type": "official_team",
       "local_file": "lotte_ticket_purchase_guide.html",
+      "fetch_status": "success",
+      "byte_size": 31954,
       "content_hash": "sha256:860f4c5f3dd99bd507680f9933f2b22dfacd0653452ff692e95552858d4c9264"
     },
     {
       "source_id": "lotte_ticket_discount",
       "source_url": "https://www.giantsclub.com/html/?pcode=341",
+      "source_type": "official_team",
       "local_file": "lotte_ticket_discount.html",
+      "fetch_status": "success",
+      "byte_size": 40613,
       "content_hash": "sha256:44f70b3c2f7c00690f5acca10ecac3db1ef0e2cb0c31713a3b9ba44a99198150"
     },
     {
       "source_id": "lotte_stadium_shop",
       "source_url": "https://www.giantsclub.com/html/?pcode=367",
+      "source_type": "official_team",
       "local_file": "lotte_stadium_shop.html",
+      "fetch_status": "success",
+      "byte_size": 41308,
       "content_hash": "sha256:b7ff88a137c3a429b014f5dd15567d204dcf99895e5078c8f71c2766a855ee46"
     },
     {
       "source_id": "kbo_safe_campaign",
       "source_url": "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+      "source_type": "official_league",
       "local_file": "kbo_safe_campaign.html",
+      "fetch_status": "success",
+      "byte_size": 53114,
       "content_hash": "sha256:ee1d020721e2127194799ada6163f1c530775f0fa5b9f55e97c105f2fc33ec8c"
     },
     {
       "source_id": "kbo_ticket_map",
       "source_url": "https://www.koreabaseball.com/kbo/league/map.aspx",
+      "source_type": "official_league",
       "local_file": "kbo_ticket_map.html",
+      "fetch_status": "success",
+      "byte_size": 38975,
       "content_hash": "sha256:e276e592b634870f43725d97bf961a98e6e787dcb41c002d48e04e65ac882d0f"
     }
-  ]
+  ],
+  "team_id": "LOTTE"
 }

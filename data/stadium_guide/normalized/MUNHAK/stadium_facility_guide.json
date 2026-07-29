@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "MUNHAK_stadium_facility_guide_20260729",
+  "document_type": "stadium_facility_guide",
+  "stadium_id": "MUNHAK",
+  "team_id": "SSG",
+  "title": "인천 SSG 랜더스필드 stadium_facility_guide 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "ssg_landersfield_stadium"
+  ],
+  "content": "SSG 공식 홈구장 안내는 좌석, 매점, 화장실, GATE 탭을 제공한다. 게이트별 가까운 좌석 안내도 포함되어 있어 입장 동선 답변의 출처로 사용할 수 있다. 매점과 화장실의 세부 위치 데이터는 raw 원문 구조를 추가 파싱해 보강해야 한다.",
+  "metadata": {
+    "stadium_name": "인천 SSG 랜더스필드",
+    "home_team_ids": [
+      "SSG"
+    ],
+    "limitations": [
+      "교통/주차 상세 공식 출처 추가 필요.",
+      "일반 예매 상세 정책 공식 URL 추가 필요."
+    ]
+  }
+}

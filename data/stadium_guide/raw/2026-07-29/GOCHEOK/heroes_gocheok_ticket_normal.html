@@ -1,0 +1,1801 @@
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>일반티켓</title>
+	<link href="/html/front/web_2018/css/font.css" rel="stylesheet" type="text/css" />
+	<link href="/html/front/web_2018/css/default.css" rel="stylesheet" type="text/css" />
+	<link href="/html/front/web_2018/css/common.css" rel="stylesheet" type="text/css" />
+	<link href="/html/front/web_2018/css/layout_2023.css" rel="stylesheet" type="text/css" />
+	<link href="/html/front/web_2018/css/ticket.css" rel="stylesheet" type="text/css" />
+	<script src="/html/front/web/js/jquery-1.12.0.min.js" type="text/javascript"></script>
+	<script src="/html/front/web/js/jquery.bxslider.min.js" type="text/javascript"></script>
+	<script src="/html/front/web/js/jquery.backgroundpos.min.js" type="text/javascript"></script>
+	<script src="/html/front/web/js/common.js" type="text/javascript"></script>
+	<!-- <script src="/html/front/web_2018/js/jquery.heroes.ui.js" type="text/javascript"></script> -->
+	<script src="/html/front/web_2018/js/jquery.heroes.ui_2023.js" type="text/javascript"></script>
+	
+	<!-- Google tag (gtag.js) 0509 pc-->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-JPF4S0MFR9"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-JPF4S0MFR9');
+	</script>
+</head>
+<body>
+
+	<div class="headWrap tickets">
+		<div id="header">
+			
+
+
+
+<!-- S : /WEB-INF/views/jsp/layout/top_menu.jsp -->
+		<!-- <h1><a href="/index.do">KIWOOM HEROES</a></h1>-->
+		<div class="innerWrap bgc">
+			<div class="navGlobal">
+				<a href="/user/login.do">로그인</a><a href="/user/signup/agreement.do">회원가입</a>
+				
+				<a href="/fans/qna/list.do">안내 및 Q&amp;A</a>
+				<!-- <a href="http://ticket.interpark.com/contents/Promotion/MDShopList?dispNo=001780002001" target="_blank" title="새 창 열림" class="btnShop">SHOP</a> -->
+				<a href="http://inpk.kr/heroes" target="_blank" title="새 창 열림" class="btnShop">SHOP</a>
+				
+				<!-- <a href="#"><img src="/html/front/web/images/common/linkEnglish.png" alt="English Site" /></a> -->
+				<!-- <a href="/eng/index.do">English</a> -->
+
+				<ul class="sns">
+					<li><a href="https://www.youtube.com/user/heroesbaseballclub/" target="_blank" title="새 창 열림" class="sns01">You tube</a></li>
+					<li><a href="https://www.instagram.com/heroesbaseballclub/" target="_blank" title="새 창 열림" class="sns02">instagram</a></li>
+					<li><a href="https://www.facebook.com/kiwoomheroesbaseballclub" target="_blank" title="새 창 열림" class="sns03">facebook</a></li>
+				</ul>
+
+				
+				
+			</div>
+		</div>
+
+		<div class="nav">
+			<div class="innerWrap">
+				<div id="gnb">
+					<div class="depth1">
+						<h1><a href="/index.do">KIWOOM HEROES</a></h1>
+
+						<!-- <a href="/heroes/introduce/introduce.do" class="current"><span>HEROES</span></a> -->
+						<a href="/heroes/introduce/introduce.do"><span>HEROES</span></a>
+						<a href="/players/all/list.do"><span>PLAYERS</span></a>
+						<a href="/games/schedule/list1st.do"><span>GAMES</span></a>
+						<a href="/stats/team/list1.do"><span>STATS</span></a>
+						<a href="/story/heroesNews/list.do"><span>STORY</span></a>
+						<a href="/fans/heroesBbs/list.do"><span>FANS</span></a>
+						<a href="/ticket/normal/viewCharge.do"><span>TICKET</span></a>
+						<!-- <a href="javascript:alert('준비중입니다.');"><span>TICKET</span></a> -->
+	
+						<!-- <ul>
+							<li></li>
+							<li></li>
+							<li></li>
+							<li></li>
+							<li></li>
+							<li></li>
+							<li></li>
+						</ul> -->
+						
+					</div>
+
+					<div class="depth2">
+
+						<div class="box">
+							<dl>
+								<dt><a href="/heroes/introduce/introduce.do">HEROES</a></dt>
+								<dd>
+									<ul>
+										<li><a href="/heroes/introduce/introduce.do">히어로즈 소개</a></li>
+										<!-- <li><a href="/heroes/people/people.do">구단 사람들</a></li> -->
+										<li><a href="/heroes/bi/bi.do">구단 BI</a></li>
+										<li><a href="/heroes/sponsor/sponsor.do">구단 파트너</a></li>
+										<li><a href="/heroes/stadium/skydome.do">구장안내</a></li>
+									</ul>
+								</dd>
+							</dl>
+							<dl>
+								<dt><a href="/players/all/list.do">PLAYERS</a></dt>
+								<dd>
+									<ul>
+										<li><a href="/players/all/list.do">전체</a></li>
+										<li><a href="/players/coach/list.do">코칭스탭</a></li>
+										<li><a href="/players/pitcher/list.do">투수</a></li>
+										<li><a href="/players/catcher/list.do">포수</a></li>
+										<li><a href="/players/infielder/list.do">내야수</a></li>
+										<li><a href="/players/outfielder/list.do">외야수</a></li>
+										<li><a href="/players/rookie/list.do">신인선수</a></li>
+										<li><a href="/players/military/list.do">군입대선수</a></li>
+									</ul>
+								</dd>
+							</dl>
+							<dl>
+								<dt><a href="/games/schedule/list1st.do">GAMES</a></dt>
+								<dd>
+									<ul>
+										<li><a href="/games/schedule/list1st.do">경기일정 및 결과</a></li>
+										<li><a href="/games/playerHistory/list.do">선수 등록 현황</a></li>
+									</ul>
+								</dd>
+							</dl>
+							<dl>
+								<dt><a href="/stats/team/list1.do">STATS</a></dt>
+								<dd>
+									<ul>
+										<li><a href="/stats/team/list1.do">팀순위</a></li>
+										<li><a href="/stats/pitcher/list.do">투수성적</a></li>
+										<li><a href="/stats/batter/list.do">타자성적</a></li>
+										<li><a href="/stats/allPitcher/list.do">전체투수</a></li>
+										<li><a href="/stats/allBatter/list.do">전체타자</a></li>
+									</ul>
+								</dd>
+							</dl>
+							<dl>
+								<dt><a href="/story/heroesNews/list.do">STORY</a></dt>
+								<dd>
+									<ul>
+										<li><a href="/story/heroesNews/list.do">구단 소식</a></li>
+										<li><a href="/story/webzine/list.do">히어로즈 웹진</a></li>
+										<!-- <li><a href="/story/news/list.do">히어로즈 뉴스</a></li> -->
+										<li><a href="/story/movie/youtube-list.do">히어로즈 영상</a></li>
+										<li><a href="/story/photo/list.do">히어로즈 사진</a></li>
+									</ul>
+								</dd>
+							</dl>
+							<dl>
+								<dt><a href="/fans/heroesBbs/list.do">FANS</a></dt>
+								<dd>
+									<ul>
+										<li><a href="/fans/heroesBbs/list.do">영웅게시판</a></li>
+										 <li><a href="/fans/download/wallPaper-list.do">다운로드</a></li>
+										<li><a href="/fans/cheer/introTeam-list.do">응원단</a></li>
+										<!-- <li><a href="/fans/sns/list.do">SNS</a></li> -->
+										<li><a href="/fans/enterhero/list.do">엔터히어로</a></li>
+										<li><a href="/fans/qna/list.do">안내 및 Q&amp;A</a></li>
+										<li><a href="/fans/LostItems/list.do">유실물</a></li>
+										
+									</ul>
+								</dd>
+							</dl>
+							<dl>
+								<dt><a href="/ticket/normal/viewCharge.do">TICKET</a></dt>
+								<dd>
+									<ul>
+										<li><a href="/ticket/normal/viewCharge.do">일일티켓</a></li>
+										<!-- <li><a href="/ticket/season/view8game.do">8경기 티켓</a></li> -->
+										<!-- <li><a href="/ticket/season/view8game.do">경기권</a></li> -->
+										<li><a href="/ticket/season/viewSeason.do">연간회원</a></li>
+	
+	
+										<li><a href="/ticket/membership/viewMembership.do">멤버십</a></li>
+										<li><a href="/ticket/group/view.do">단체관람</a></li>
+										<li><a href="/ticket/skybox/viewIntroduce.do">스카이박스</a></li>
+										
+										<li><a href="/ticket/season/viewGoyang.do">고양히어로즈 티켓</a></li>
+										
+									</ul>
+								</dd>
+								<!-- <dt><a href="javascript:alert('준비 중 입니다.');">TICKET</a></dt>
+								<dd>
+									<ul>
+										<li><a href="javascript:alert('준비 중 입니다.');">일일티켓</a></li>
+										<li><a href="javascript:alert('준비 중 입니다.');">8경기 티켓</a></li>
+										<li><a href="javascript:alert('준비 중 입니다.');">연간회원</a></li>
+										<li><a href="javascript:alert('준비 중 입니다.');">멤버십</a></li>
+										<li><a href="javascript:alert('준비 중 입니다.');">단체관람</a></li>
+										<li><a href="javascript:alert('준비 중 입니다.');">스카이박스</a></li>
+										<li><a href="javascript:alert('준비 중 입니다.');">고양히어로즈 티켓</a></li>
+									</ul>
+								</dd> -->
+							</dl>
+							<!-- <div class="gotoMain-btn"><a href="/index.do">KIWOOM HEROES</a></div> -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+<!-- E : /WEB-INF/views/jsp/layout/top_menu.jsp -->
+
+		</div>
+	</div>
+
+	<div id="body">
+		<div class="local">
+			<h2>TICKET</h2>
+
+			<ul id="lnb">
+				<li class="hasChild">
+					<a href="#">일일티켓</a>
+					<ul>
+						<li><a href="/ticket/normal/viewCharge.do">입장요금</a></li>
+						<li><a href="/ticket/normal/viewPurchase.do">예매 안내</a></li>
+						<li><a href="/ticket/normal/viewDiscount.do">할인 안내</a></li>
+					</ul>
+				</li>
+				
+				<!-- <li class="hasChild">
+					<a href="#">경기권</a>
+					<ul>
+						<li><a href="/ticket/season/view8game.do">8경기권</a></li> 
+						<li><a href="/ticket/season/view3game.do">주중/주말 3경기권</a></li> 
+					</ul>
+				</li> -->
+				<li><a href="/ticket/season/viewSeason.do">연간회원</a></li>
+				
+				<li class="hasChild">
+					<a href="#">멤버십</a>
+					<ul>
+						<li><a href="/ticket/membership/viewMembership.do">히어로 멤버십(성인 회원)</a></li>
+						<li><a href="/ticket/membership/viewLittleMembership.do">큠린이 멤버십(어린이 회원)</a></li>
+					</ul>
+				</li>
+				<li class="hasChild">
+					<a href="#">단체관람</a>
+					<ul>
+						<li><a href="/ticket/group/view.do">안내</a></li>
+						<!-- <li><a href="/ticket/group/form.do">신청</a></li> -->
+					</ul>
+				</li>
+				<li class="hasChild">
+					<a href="#">스카이박스</a>
+					<ul>
+						<li><a href="/ticket/skybox/viewIntroduce.do">소개</a></li>
+						<!-- <li><a href="javascript:alert('준비 중 입니다.');">소개 / 예약</a></li> -->
+						<!-- <li><a href="/ticket/skybox/viewTeamTicket.do">팀 경기권</a></li> -->
+						<!-- <li><a href="/ticket/skybox/viewSeasonTicket.do">시즌티켓</a></li> -->
+						<!-- <li><a href="javascript:alert('준비 중 입니다.');">시즌티켓</a></li> -->
+					</ul>
+				</li>
+				<li><a href="/ticket/season/viewGoyang.do">고양히어로즈 티켓</a></li>
+			</ul>
+
+		</div>
+
+		<script type="text/javascript">
+$(document).ready(function()
+{
+	location.href="/ticket/normal/viewCharge.do";
+});
+
+function fnTicketBooking(GoodsCode)
+{
+
+	//window.open('http://ticket.interpark.com/Contents/Sports/GoodsInfo?SportsCode=07001&TeamCode=PB003');
+	//return;
+	
+	if(confirm("로그인 후 예매를 하실 수 있습니다.\n로그인 페이지로 이동하시겠습니까?")){
+		location.href="/user/login.do";
+		return;
+	}else{
+		return;
+	}
+	
+        var frmTicketBooking;
+        frmTicketBooking = document.createElement("form");
+        frmTicketBooking.name = "frmBooking";
+        frmTicketBooking.action = "http://ticket.interpark.com/Partner/Certify/BizBooking.asp";
+        frmTicketBooking.target = "wndBooking";
+        frmTicketBooking.method = "post";
+        document.body.appendChild(frmTicketBooking);
+
+        var o;
+        o = document.createElement("input");
+        o.name = "bp1";
+        o.type = "hidden";
+        o.value = "27352";
+        frmTicketBooking.appendChild(o);
+
+        o = document.createElement("input");
+        o.name = "bp2";
+        o.type = "hidden";
+        o.value = GoodsCode;
+        frmTicketBooking.appendChild(o);
+
+        o = document.createElement("input");
+        o.name = "bp3";
+        o.type = "hidden";
+        o.value = "";
+        frmTicketBooking.appendChild(o);
+
+        o = document.createElement("input");
+        o.name = "bpk";
+        o.type = "hidden";
+        o.value = "";
+        frmTicketBooking.appendChild(o);
+        try
+        {
+             var loc = "";
+             win = window.open(loc,"wndBooking","top=10, left=10, width=900, height=590, scrollbars=no");
+             if(win==null) {
+                alert("팝업창이 제한되어 있어서 예매창을 열 수 없습니다.");
+             }
+             else {
+                frmTicketBooking.submit();
+                win.focus();
+              }
+         }
+         catch(e)
+         {
+            alert("팝업창이 제한되어 있어서 예매창을 열 수 없습니다.");
+         }
+
+  }
+
+
+function fnTicketCancel()
+{
+
+	//window.open('http://ticket.interpark.com/cancel/TPTotalBooked.asp');
+	//return;
+
+	
+	if(confirm("로그인 후 예매확인/취소를 하실 수 있습니다.\n로그인 페이지로 이동하시겠습니까?")){
+		location.href="/user/login.do";
+		return;
+	}else{
+		return;
+	}
+	
+        var frmTicketCancel;
+        frmTicketCancel = document.createElement("form");
+        frmTicketCancel.name = "frmCancel";
+        frmTicketCancel.action = "http://ticket.interpark.com/Partner/Certify/BizCancel.asp";
+        frmTicketCancel.target = "wndCancel";
+        frmTicketCancel.method = "post";
+        document.body.appendChild(frmTicketCancel);
+
+        var o;
+        o = document.createElement("input");
+        o.name = "cp1";
+        o.type = "hidden";
+        o.value = "27352";
+        frmTicketCancel.appendChild(o);
+
+        o = document.createElement("input");
+        o.name = "cp2";
+        o.type = "hidden";
+        o.value = "";
+        frmTicketCancel.appendChild(o);
+        /*
+        o = document.createElement("input");
+        o.name = "cp3";
+        o.type = "hidden";
+        o.value = "";
+        frmTicketCancel.appendChild(o);
+		*/
+        o = document.createElement("input");
+        o.name = "cpk";
+        o.type = "hidden";
+        o.value = "";
+        frmTicketCancel.appendChild(o);
+        try {
+            var loc = "";
+            win = window.open(loc,"wndCancel","top=10, left=10, width=770, height=682, scrollbars=yes");
+            if(win==null) {
+               alert("팝업창이 제한되어 있어서 예매창을 열 수 없습니다.");
+            } else {
+               frmTicketCancel.submit();
+               win.focus();
+             }
+        } catch(e) {
+           alert("팝업창이 제한되어 있어서 예매창을 열 수 없습니다.");
+        }
+
+
+ }
+</script>
+
+
+		<div id="content">
+			<ol class="location">
+				<li>Home /</li>
+				<li>Ticket /</li>
+				<li class="here">일반티켓</li>
+			</ol>
+
+			<div class="contentHead">
+				<h3>일반티켓</h3>
+				<p>키움히어로즈는 젊은 패기와 도전으로 꿈을 향해 뛰겠습니다.</p>
+			</div>
+
+			<div class="contentTab">
+				<h4 class="tab01"><a href="#charge">입장요금</a></h4>
+				<div id="charge">
+					<div class="buyTicket">
+						<button type="button" class="cancel" onclick="fnTicketCancel()">온라인 예매확인/취소 &nbsp;&nbsp;&gt;</button>
+						<a href="#safeCampaign" class="purchase">온라인 예매 &nbsp;&nbsp;&gt;</a>
+					</div>
+
+					<div class="seat">
+						<div id="dome" class="dome">
+							<img src="/html/front/web/images/ticket/bgDome01.png" alt="dome 구장 좌석 안내도" />
+							<img src="/html/front/web/images/ticket/imgPointer.png" alt="선택위치" class="pointer" />
+							<a href="/html/front/web/images/ticket/bgDome01Large.png">
+								<img src="/html/front/web/images/ticket/btnMore.png" alt="크게보기" />
+							</a>
+						</div>
+
+						<script src="/html/front/web/js/jquery.prettyPhoto.js" type="text/javascript"></script>
+						<script type="text/javascript">
+						//<![CDATA[
+					 		$(function(){
+					 			var lg = $('div.seat div.dome a').prettyPhoto({
+					 				show_title : false,
+					 				social_tools : false
+					 			});
+					 		});
+						//]]>
+						</script>
+
+						<div class="seat01">
+							<h5>테이블석</h5>
+							<ul>
+								<li><img src="/html/front/web/images/ticket/icoDot01.png" alt="재규어 E-PACE석(R.d-club 로얄 다이아몬드클럽)" /><a href="#dome" data-posX="179" data-posY="355">재규어 E-PACE석<br />(R.d-club 로얄 다이아몬드클럽)</a></li>
+								<!--
+								<li><img src="/html/front/web/images/ticket/icoDot02.png" alt="d-club (다이아몬드 클럽)" /><a href="#dome" data-posX="221" data-posY="330">d-club (다이아몬드 클럽)</a></li>
+								-->
+								<li><img src="/html/front/web/images/ticket/icoDot03.png" alt="써모스석(1층 테이블석)" /><a href="#dome" data-posX="174" data-posY="365">써모스석(1층 테이블석)</a></li>
+								<li><img src="/html/front/web/images/ticket/icoDot04.png" alt="로케트배터리석(2층 테이블석)" /><a href="#dome" data-posX="245" data-posY="350">로케트배터리석(2층 테이블석)</a></li>
+								<li><img src="/html/front/web/images/ticket/icoDot05.png" alt="골드 내야지정석 (미니테이블의 스탠딩의자석)" /><a href="#dome" data-posX="312" data-posY="180">골드 내야지정석 <br />(미니테이블의 스탠딩의자석)</a></li>
+								<li><img src="/html/front/web/images/ticket/icoDot06.png" alt="골드 외야지정석 (미니테이블의 스탠딩의자석)" /><a href="#dome" data-posX="306" data-posY="155">골드 외야지정석 <br />(미니테이블의 스탠딩의자석)</a></li>
+							</ul>
+						</div>
+
+						<div class="seat02">
+							<h5>내야</h5>
+							<ul>
+								<li><img src="/html/front/web/images/ticket/icoDot07.png" alt="스카이블루석" /><a href="#dome" data-posX="264" data-posY="294">스카이블루석</a></li>
+								<li><img src="/html/front/web/images/ticket/icoDot08.png" alt="블루석" /><a href="#dome" data-posX="300" data-posY="240">블루석</a></li>
+								<li><img src="/html/front/web/images/ticket/icoDot09.png" alt="3층 지정석" /><a href="#dome" data-posX="179" data-posY="418">3층 지정석</a></li>
+								<li><img src="/html/front/web/images/ticket/icoDot10.png" alt="4층 지정석" /><a href="#dome" data-posX="179" data-posY="460">4층 지정석</a></li>
+								<li><img src="/html/front/web/images/ticket/icoDot11.png" alt="스카이박스" /><a href="#dome" data-posX="235" data-posY="347">휠체어석</a></li>
+								<!--
+								<li><img src="/html/front/web/images/ticket/icoDot11.png" alt="휠체어석" /><a href="#dome" data-posX="" data-posY="">휠체어석</a></li>
+								-->
+							</ul>
+						</div>
+
+						<div class="seat03">
+							<h5>외야</h5>
+							<ul>
+								<li><img src="/html/front/web/images/ticket/icoDot12.png" alt="외야 지정석 (하단)" /><a href="#dome" data-posX="174" data-posY="69">외야 지정석 (하단)</a></li>
+								<li><img src="/html/front/web/images/ticket/icoDot13.png" alt="외야 비지정석 (상단)" /><a href="#dome" data-posX="174" data-posY="18">외야 비지정석 (상단)</a></li>
+							</ul>
+						</div>
+
+						<div class="seat04">
+							<h5>기타</h5>
+							<ul>
+								<li><img src="/html/front/web/images/ticket/icoDot14.png" alt="스카이박스" /><a href="#dome" data-posX="255" data-posY="360">스카이박스</a></li>
+
+							</ul>
+						</div>
+					</div>
+
+					<script type="text/javascript">
+					//<![CDATA[
+						$('div.seat ul a').bind('click', function(e){
+							e.preventDefault();
+							$('div.seat ul a').removeClass('on');
+							$(this).addClass('on');
+							$('div.dome img.pointer').css({
+								top : $(this).attr('data-posY') + 'px',
+								left : $(this).attr('data-posX') + 'px'
+							});
+						});
+				 	//]]>
+					</script>
+
+					<h5>2017 시즌 입장 요금 안내</h5>
+					<span class="headLink">
+						<a href="/heroes/stadium/skydome.do">구장안내&nbsp;&nbsp;&gt;</a>
+						<!--
+						<a href="#">편의시설&nbsp;&nbsp;&gt;</a>
+						-->
+					</span>
+					<table class="data ticket" summary="2017 시즌 입장 요금 안내  테이블입니다.">
+						<caption>2017 시즌 입장 요금</caption>
+						<colgroup>
+							<col width="80px" />
+							<col width="*" />
+							<col width="120px" />
+							<col width="110px" />
+							<col width="110px" />
+							<col width="70px" />
+						</colgroup>
+						<thead>
+							<tr>
+								<th scope="col" colspan="2">좌석</th>
+								<th scope="col">구분</th>
+								<th scope="col">주중(화/수/목)</th>
+								<th scope="col">주말(금/토/일/공휴일)</th>
+								<th scope="col">사진</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="hr">
+								<th scope="rowgroup" rowspan="7">테이블석</th>
+								<th scope="row"><img src="/html/front/web/images/ticket/icoDot01.png" alt="재규어 E-PACE석(R.d-club 로얄 다이아몬드클럽)" />재규어 E-PACE석<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(R.d-club 로얄 다이아몬드클럽)</th>
+								<td>일반</td>
+								<td>55,000</td>
+								<td>85,000</td>
+								<td><a href="#viewPhoto01" class="openLayer">사진</a></td>
+							</tr>
+							<!--
+							<tr>
+								<th scope="row"><img src="/html/front/web/images/ticket/icoDot02.png" alt="d-club (다이아몬드 클럽)" />d-club (다이아몬드 클럽)</th>
+								<td>일반</td>
+								<td>50,000</td>
+								<td>75,000</td>
+								<td><a href="#viewPhoto02" class="openLayer">사진</a></td>
+							</tr>
+							-->
+							<tr>
+								<th scope="row" rowspan="2"><img src="/html/front/web/images/ticket/icoDot03.png" alt="써모스석(1층 테이블석)" />써모스석(1층 테이블석)</th>
+								<td>일반</td>
+								<td>50,000</td>
+								<td>75,000</td>
+								<td rowspan="2"><a href="#viewPhoto03" class="openLayer">사진</a></td>
+							</tr>
+							<tr>
+								<td>어린이</td>
+								<td>25,000</td>
+								<td>37,000</td>
+							</tr>
+							<tr>
+								<th scope="row" rowspan="2"><img src="/html/front/web/images/ticket/icoDot04.png" alt="로케트배터리석(2층 테이블석)" />로케트배터리석<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2층 테이블석)</th>
+								<td>일반</td>
+								<td>40,000</td>
+								<td>60,000</td>
+								<td rowspan="2"><a href="#viewPhoto04" class="openLayer">사진</a></td>
+							</tr>
+							<tr>
+								<td>어린이</td>
+								<td>20,000</td>
+								<td>30,000</td>
+							</tr>
+							<tr>
+								<th scope="row"><img src="/html/front/web/images/ticket/icoDot05.png" alt="골드 내야지정석 (미니테이블의 스탠딩의자석)" />골드 내야지정석 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(미니테이블의 스탠딩의자석)</th>
+								<td>일반</td>
+								<td>30,000</td>
+								<td>45,000</td>
+								<td><a href="#viewPhoto05" class="openLayer">사진</a></td>
+							</tr>
+							<tr>
+								<th scope="row"><img src="/html/front/web/images/ticket/icoDot06.png" alt="골드 외야지정석 (미니테이블의 스탠딩의자석)" />골드 외야지정석 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(미니테이블의 스탠딩의자석)</th>
+								<td>일반</td>
+								<td>17,000</td>
+								<td>25,000</td>
+								<td><a href="#viewPhoto06" class="openLayer">사진</a></td>
+							</tr>
+							<tr class="hr">
+								<th scope="rowgroup" rowspan="10">내야</th>
+								<th scope="row" rowspan="2"><img src="/html/front/web/images/ticket/icoDot07.png" alt="스카이블루석" />스카이블루석</th>
+								<td>일반</td>
+								<td>17,000</td>
+								<td>25,000</td>
+								<td rowspan="2"><a href="#viewPhoto07" class="openLayer">사진</a></td>
+							</tr>
+							<tr>
+								<td>어린이</td>
+								<td>8,000</td>
+								<td>12,000</td>
+							</tr>
+							<tr>
+								<th scope="row" rowspan="2"><img src="/html/front/web/images/ticket/icoDot08.png" alt="블루석" />블루석</th>
+								<td>일반</td>
+								<td>15,000</td>
+								<td>22,000</td>
+								<td rowspan="2"><a href="#viewPhoto08" class="openLayer">사진</a></td>
+							</tr>
+							<tr>
+								<td>어린이</td>
+								<td>7,000</td>
+								<td>11,000</td>
+							</tr>
+							<tr>
+								<th scope="row" rowspan="2"><img src="/html/front/web/images/ticket/icoDot09.png" alt="3층 지정석" />3층 지정석</th>
+								<td>일반</td>
+								<td>12,000</td>
+								<td>18,000</td>
+								<td rowspan="2"><a href="#viewPhoto09" class="openLayer">사진</a></td>
+							</tr>
+							<tr>
+								<td>어린이</td>
+								<td>6,000</td>
+								<td>9,000</td>
+							</tr>
+							<tr>
+								<th scope="row" rowspan="3"><img src="/html/front/web/images/ticket/icoDot10.png" alt="4층 지정석" />4층 지정석</th>
+								<td>일반</td>
+								<td>9,000</td>
+								<td>13,000</td>
+								<td rowspan="3"><a href="#viewPhoto10" class="openLayer">사진</a></td>
+							</tr>
+							<tr>
+								<td>중,고/대학생</td>
+								<td>7,000</td>
+								<td>10,000</td>
+							</tr>
+							<tr>
+								<td>어린이</td>
+								<td>4,000</td>
+								<td>6,000</td>
+							</tr>
+							<tr>
+								<th scope="row"><img src="/html/front/web/images/ticket/icoDot11.png" alt="휠체어석" />휠체어석</th>
+								<td>휠체어 본인<br/>(동반 1인 동일 요금 적용)</td>
+								<td>10,000</td>
+								<td>15,000</td>
+								<td><a href="#viewPhoto11" class="openLayer">사진</a></td>
+							</tr>
+							<tr class="hr">
+								<th scope="rowgroup" rowspan="5">외야</th>
+								<th scope="row" rowspan="2"><img src="/html/front/web/images/ticket/icoDot12.png" alt="외야 지정석 (하단)" />외야 지정석 (하단)</th>
+								<td>일반</td>
+								<td>12,000</td>
+								<td>18,000</td>
+								<td rowspan="2"><a href="#viewPhoto12" class="openLayer">사진</a></td>
+							</tr>
+							<tr>
+								<td>어린이/장애/유공자/<br />군,경/경로</td>
+								<td>6,000</td>
+								<td>9,000</td>
+							</tr>
+							<tr>
+								<th scope="row" rowspan="3"><img src="/html/front/web/images/ticket/icoDot13.png" alt="외야 비지정석 (상단)" />외야 비지정석 (상단)</th>
+								<td>일반</td>
+								<td>7,000</td>
+								<td>10,000</td>
+								<td rowspan="3"><a href="#viewPhoto13" class="openLayer">사진</a></td>
+							</tr>
+							<tr>
+								<td>어린이/장애/유공자/<br />군,경/경로</td>
+								<td>3,000</td>
+								<td>5,000</td>
+							</tr>
+							<tr>
+								<td>미취학아동, 어린이회원, 리틀야구단</td>
+								<td colspan="2">무료</td>
+							</tr>
+							<tr class="hr">
+								<th scope="row" rowspan="3">기타</th>
+								<th scope="row" rowspan="3"><img src="/html/front/web/images/ticket/icoDot14.png" alt="스카이박스" />스카이박스</th>
+								<td>9 인실</td>
+								<td colspan="2">1,170,000</td>
+								<td rowspan="3"><a href="#viewPhoto14" class="openLayer">사진</a></td>
+							</tr>
+							<tr>
+								<td>14 인실</td>
+								<td colspan="2">1,820,000</td>
+							</tr>
+							<tr>
+								<td>30 인실</td>
+								<td colspan="2">3,900,000</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div class="seasonInfo">
+						<div>
+							<h6>주말 경기는 금,토,일, 공휴일 경기에 적용 (임시 공휴일 포함)</h6>
+							<br/>
+							<h6 style="color:red;">2017시즌부터 재규어 E-PACE석(R.d-club 로얄 다이아몬드클럽)의 돔박스는 제공되지 않습니다.</h6>
+							<br/>
+							<h6>어린이</h6>
+							<ul>
+								<li>· 36개월 이상~ 초등학생 이하 (36개월 미만 무료입장/ 지정좌석 없음)
+</li>
+							</ul>
+							<h6>골드지정석</h6>
+							<ul>
+								<li>· 미니테이블의 스탠딩의자석</li>
+							</ul>
+							<h6>휠체어석</h6>
+							<ul>
+								<li>· 휠체어 장애인을 위한 좌석으로 동반 1인까지 동일한 할인 금액으로 구매 가능 (38세트, 현장구매만 가능)</li>
+							</ul>
+
+							<h6>스카이박스</h6>
+							<ul>
+								<li>· 스카이박스 문의: 02-3660-1040</li>
+								<li>· 스카이박스는 온라인 예매가 불가합니다.</li>
+								<li>· 스카이박스 구매 및 문의 사항은 넥센히어로즈 지원팀 (전화 02-3660-1040 또는 메일 mst@heroesbaseball.co.kr)으로<br />&nbsp;&nbsp;연락주시기 바랍니다.</li>
+							</ul>
+								<h6>티켓 예매 문의: 1544-1555, 스포츠 3번</h6>
+						</div>
+					</div>
+				</div>
+
+				<h4 class="tab02"><a href="#purchase">입장권 구입/할인 안내</a></h4>
+				<div id="purchase">
+					<div class="buyTicket">
+					 	<button type="button" class="cancel" onclick="fnTicketCancel()">온라인 예매확인/취소 &nbsp;&nbsp;&gt;</button>
+						<a href="#safeCampaign" class="purchase">온라인 예매 &nbsp;&nbsp;&gt;</a>
+					</div>
+
+					<h5>구매방법</h5>
+					<table class="data purchase" summary="구매방법 안내  테이블입니다.">
+						<caption>구매방법</caption>
+						<colgroup>
+							<col width="100px" />
+							<col width="120px" />
+							<col width="80px" />
+							<col width="*" />
+						</colgroup>
+						<tr>
+							<th scope="rowgroup" rowspan="2">인터넷 예매</th>
+							<th scope="row">구단 홈페이지</th>
+							<td class="aCenter">수수료 면제</td>
+							<td rowspan="2">
+								· 키움히어로즈 홈페이지 아이디로 예매시 별도의 인터파크 회원 가입 없이 <br />&nbsp;&nbsp;바로 예매 가능 (온라인 예매 바로가기 버튼 클릭)<br />
+								· 경기 7일전 14시~경기시작 4시간 전까지 예매/취소 가능<br />
+								· 1인 10매 이내 구매 가능 <br />
+								<span style="color:#cf0b42; font-weight:bold;">· 웹에서 예매 시 티켓 현장수령만 가능 <br />
+								&nbsp;&nbsp;(모바일 티켓 선택 불가)</span>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">인터파크</th>
+							<td class="aCenter">500원</td>
+						</tr>
+						<tr>
+							<th scope="row">전화예매</th>
+							<th scope="row">인터파크 고객센터<br />(1544-1555)</th>
+							<td class="aCenter">1,000원</td>
+							<td>
+								· 경기 7일전 14시 ~ 경기시작 4시간 전까지 예매 /취소 가능<br />
+								· 월~토 : 오전9시~오후 8시까지<br />
+								· 일요일 및 공휴일 : 오전 9시~오후 6시
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">모바일 예매</th>
+							<th scope="row">인터파크티켓<br />모바일 앱</th>
+							<td class="aCenter">800원</td>
+							<td>
+								· 경기 7일전 14시 ~ 경기시작 4시간 전까지 예매 /취소 가능<br />
+								· 인터파크 티켓 어플에서 예매
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">현장예매</th>
+							<th scope="row">고척스카이돔<br />현장 매표소</th>
+							<td class="aCenter">무료</td>
+							<td>
+								· 경기시작 2시간 전부터 구입 가능<br />
+								· 1인 10매 이내 구매 가능 (11매 이상일 경우 동행과 함께 구매)
+							</td>
+						</tr>
+					</table>
+
+					<h5>예매티켓 수령방법</h5>
+					<table class="data purchase" summary="예매티켓 수령방법 안내  테이블입니다.">
+						<caption>예매티켓 수령방법</caption>
+						<colgroup>
+							<col width="100px" />
+							<col width="305px" />
+							<col width="*" />
+						</colgroup>
+						<tr>
+							<th scope="row">매표소</th>
+							<td rowspan="2">당일 경기시작 2시간 전부터 교환/입장 가능</td>
+							<td rowspan="2">당일 경기 티켓만 발권 가능</td>
+						</tr>
+						<tr>
+							<th scope="row">무인발권기</th>
+						</tr>
+						<tr>
+							<th scope="row">모바일 티켓</th>
+							<td>당일 경기시작 2시간 전부터 입장 가능</td>
+							<td>별도의 입장권 교환 없이 입장 가능</td>
+						</tr>
+					</table>
+
+					<h5>입장권 할인</h5>
+					<table class="data discount" summary="입장권 할인 안내  테이블입니다.">
+						<caption>입장권 할인</caption>
+						<colgroup>
+							<col width="120px" />
+							<col width="*" />
+							<col width="80px" />
+						</colgroup>
+						<thead>
+							<tr>
+								<th scope="col">대상</th>
+								<th scope="col">내용</th>
+								<th scope="col">판매장소</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row">키움히어로즈<br />2017 시즌티켓 회원</th>
+								<td>
+									· 회원 본인 경기당 2매 2,000원 할인<br />
+									· 적용좌석 : 스카이블루석, 블루석, 3·4층 지정석, 외야 하단 지정석, 외야 상단 비지정석 <br />
+									· 온라인 예매 시에만 적용 / 현장 할인 불가 / 중복 할인 불가<br />
+									· 시즌티켓 카드 뒷면 바코드 난수 번호 입력 후 할인 적용<br />
+									· 모바일 예매 시 할인 적용 불가, PC 활용 온라인 예매만 가능
+								</td>
+								<td class="aCenter">온라인</td>
+							</tr>
+							<tr>
+								<th scope="row">국가유공자</th>
+								<td rowspan="4">
+									· 1인 1매 본인에 한해 50% 할인<br />&nbsp;&nbsp;&nbsp;(장애 1~3급/휠체어/정신지체/시각장애 복지카드 제시시, 본인 및 동반 1인까지 할인 적용)<br />
+									· 적용좌석 : 외야 하단 지정석, 외야 상단 비지정석<br />
+									· 현장 매표소에서 신분증, 복지카드, 휴가증/외박증 제시
+								</td>
+								<td rowspan="4" class="aCenter">현장</td>
+							</tr>
+							<tr>
+								<th scope="row">경로우대자<br />(만 65세 이상)</th>
+							</tr>
+							<tr>
+								<th scope="row">장애인</th>
+							</tr>
+							<tr>
+								<th scope="row">군,경</th>
+							</tr>
+							<tr>
+								<th scope="row">중,고 / 대학생</th>
+								<td>
+									· 1인 1매, 20% 할인<br />
+									· 적용좌석: 4층 지정석 <br />
+									· 학생증 소지자에 한함
+								</td>
+								<td class="aCenter">현장/온라인</td>
+							</tr>
+							<tr>
+								<th scope="row">문화누리카드</th>
+								<td>
+									· 1인 6매 40%할인 / 중복할인 불가<br />
+									· 적용좌석: 4층 지정석, 외야 상단 비지정석
+								</td>
+								<td class="aCenter">현장/온라인</td>
+							</tr>
+							<tr>
+								<th scope="row">문화가 있는 날</th>
+								<td>
+									· 매달 마지막 수요일 모든 관람객 50%할인 / 중복할인 불가 <br />
+									· 적용좌석 : 외야 상단 비지정석<br />
+									· 해당 경기일 : 4/26 두산전 , 8/30 SK전
+								</td>
+								<td class="aCenter">현장</td>
+							</tr>
+							<tr>
+								<th scope="row">레이디스데이</th>
+								<td>
+									· 매주 화요일 여성 2,000원 할인 / 1인 1매 / 중복할인 불가<br />
+									· 적용좌석: 3층 지정석, 4층 지정석
+								</td>
+								<td class="aCenter">현장</td>
+							</tr>
+							<tr>
+								<th scope="row">구로주민</th>
+								<td>
+									· 구로주민 2,000원 할인 / 1인 1매 / 본인만 적용<br />
+									· 적용좌석: 3층 지정석, 4층 지정석<br />
+									· 현장 매표소에서 주민등록증 제시
+								</td>
+								<td class="aCenter">현장</td>
+							</tr>
+							<tr>
+								<th rowspan="2">우리카드</th>
+								<td>
+									· 카드당 2,000원 할인 / 1일 1인 1매 / 중복할인 불가<br />
+									· 적용좌석: 외야 상단 비지정석<br />
+									· 현장매표소에서 우리카드 제시<br />&nbsp;&nbsp;&nbsp;(우리카드 개인 신용,체크 고객 /법인카드 및 기프트카드 제외)
+								</td>
+								<td class="aCenter">현장</td>
+							</tr>
+							<tr>
+								<td>
+									· 포인트 결제: 우리카드 모아포인트 100% 사용 가능<br />
+									· 적용좌석: 전 좌석<br />
+									· 포인트 사용금액 결제일 차감 청구<br />
+								</td>
+								<td class="aCenter">현장/온라인</td>
+							</tr>
+							<tr>
+								<th rowspan="2">키자니아</th>
+								<td>
+									· 키자니아 할인권 1장당 2매 할인 적용 (단, 동일 좌석 권종에 한함)<br />
+									· 적용 좌석 및 할인가 안내<br />
+	&nbsp;&nbsp;(주중)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;블루석 : 일반 10,000원  / 어린이  5,000원 <br />
+	<span style="margin-left:44px;">3층 지정석 : 일반   8,000원  / 어린이  4,000원</span> <br />
+	&nbsp;&nbsp;(주말)&nbsp;&nbsp;3층 지정석 : 일반 16,000원 / 어린이 8,000원 <br />
+	<span style="margin-left:40px;">외야 지정석 : 일반 16,000원 / 어린이  8,000원</span>
+								</td>
+								<td class="aCenter" rowspan="2">현장/온라인</td>
+							</tr>
+							<tr>
+								<td>
+									· 할인권 사용 방법 <br />
+	&nbsp;&nbsp;(온라인)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;할인권 내 예매번호 입력 후 할인 적용, 중복할인 불가 <br />
+	<span style="margin-left:76px;">모바일 예매 시 할인 적용 불가, PC 활용 온라인 예매만 가능</span> <br />
+	&nbsp;&nbsp;(현장예매)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;매표소에 할인권 제시 (할인 적용 동시에 수거 예정) <br /><br />
+	※해당 할인권은 키자니아 서울(서울 송파구 소재) 입장 시 배포해드리니 참고 부탁 드립니다.
+								</td>
+						</tbody>
+					</table>
+					<p style="margin-top:5px;">* 교총회원 입장료 할인은 2016.6월부로 종료 되었습니다.</p>
+
+
+					<h5>무료입장</h5>
+					<table class="data purchase" summary="무료입장안내  테이블입니다.">
+						<caption>무료입장</caption>
+						<colgroup>
+							<col width="100px" />
+							<col width="*" />
+							<col width="80px" />
+						</colgroup>
+						<tr>
+							<th scope="row">미취학아동</th>
+							<td rowspan="3">
+								· 1인 1매, 무료 입장<br />
+								· 적용좌석 : 외야 상단 비지정석 <br />
+								· 미취학아동(보호자 동반), 어린이회원(각 구단 회원카드 제시), 리틀야구단(리틀야구 유니폼 착용)<br />
+								· 현장 매표소에서 무료 티켓 발권 후 입장 가능
+							</td>
+							<td rowspan="3" class="aCenter">현장</td>
+						</tr>
+						<tr>
+							<th scope="row">어린이회원</th>
+						</tr>
+						<tr>
+							<th scope="row">리틀야구단</th>
+						</tr>
+					</table>
+
+					<div class="seasonInfo">
+						<div>
+							<ul>
+								<li>· 매진 시 입장권 구입 및 입장불가 합니다</li>
+								<li>· 중복할인은 불가합니다.</li>
+								<li>· 상기의 내용은 구단의 정책에 따라 변경될 수 있습니다.	</li>
+								<li>· KBO리그 SAFE 캠페인 정책에 따라 안전한 관람을 위해 주류 및 캔.병.1L 초과 PET <br />&nbsp;&nbsp; (1L이하 미개봉 비 알코올성 PET 음료에 한해 1인당 1개 허용)음료의 경기장 내 반입이 제한됩니다.</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="cancel" style="margin-top:50px;">
+						<h5>예매취소 및 환불</h5>
+						<ul>
+							<li>· 예매 당일은 취소수수료가 없으며, 예매수수료도 환불됩니다.</li>
+							<li>· 예매 익일 이후로는 티켓금액의 10% 취소수수료 부과되며, 예매수수료도 환불되지 않습니다.</li>
+							<li>· 경기일자 및 좌석변경은 불가합니다.</li>
+							<li>· 부분취소는 불가합니다. 기존 건을 전체 취소 후 재예매하셔야 하며, 취소좌석에 대한 좌석선점은 보장되지 않습니다.</li>
+							<li>· 재예매서비스/예매대기서비스는 불가합니다.</li>
+							<li>· 예매한 입장권은 경기당일 현장에서 취소 및 환불 불가능합니다.</li>
+							<li>· 입장한 후에는 입장권의 교환 및 환불이 되지 않습니다.</li>
+							<li>· 예매한 입장권은 경기시작 4시간 전까지 해당 구입처(인터파크, 1544-1555)에서 환불 가능하며 <br />&nbsp;&nbsp;그 이후에는 환불 불가능 합니다.</li>
+							<li>· 현장 구매한 입장권은 경기시작 전까지 환불 가능하며 경기시작 이후 및 매진 시에는 환불되지 않습니다.</li>
+						</ul>
+					</div>
+
+					<div class="seasonInfo">
+						<h5>티켓수령 및 입장</h5>
+						<div>
+							<ul>
+								<li>· 경기당일 매표소가 혼잡하오니, 가급적 모바일 티켓을 활용하여 편안한 입장을 권장 드립니다.<br />&nbsp;&nbsp; 모바일 티켓 캡쳐 혹은 이미지는 입장 불가 (어플에서 예약번호 혹은 바코드가 실시간으로 움직이는 티켓만 입장 가능)<br />&nbsp;&nbsp; 모바일 티켓으로 티켓선물하기 기능 사용하여 티켓을 선물한 경우 취소 불가 (선물한 티켓이 반납된 이후 취소가능)</li>
+								<li>· 본인확인이 힘들 경우, 입장권 교환이 불가할 수 있습니다.	</li>
+								<li>· 고척교 인근의 교통난과 돔구장 주차시설 부족으로 인해 프로야구 경기 시 고척스카이돔 내부 주차장은 이용 불가합니다.<br />&nbsp;&nbsp; 불편하시더라도 인근 민영주차장을 이용해주시기 바랍니다. 자가용 이용시 혼잡하오니, <br />&nbsp;&nbsp;가급적 대중교통을 이용해주시기 바랍니다.</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="seasonInfo">
+						<h5>예매유의 사항</h5>
+						<div>
+							<ul>
+								<li>· 인터파크는 ‘자동배정’ 예매와 ‘좌석선택’ 예매를 제공합니다.<br />&nbsp;&nbsp;-자동배정 : 좌석을 시스템이 자동으로 지정하는 가장 빠른 예매 방법! <br />&nbsp;&nbsp;-좌석선택 : 지정석 중 희망하는 위치를 예매자가 직접 선택하는 꼼꼼한 예매 방법!</li>
+								<li>· 결제수단'신용카드결제’와 ‘무통장입금결제’가 가능합니다. <br />
+								&nbsp;&nbsp;-TIP1 : 무통장입금으로 예매 시 좀 더 빠르게 예매를 완료할 수 있습니다.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;※ 무통장입금 주의사항<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 무통장입금은 경기일 2일 전까지만 이용 가능<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 무통장입금은 예매 당일 밤 12시 전까지 입금 (미입금 시 자동취소)<br />
+
+								&nbsp;&nbsp;-TIP2 : 신용카드로 결제 시 자동설치파일들을 미리 최신버전으로 받아 두세요. 결제모듈 수동설치<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(크롬 브라우저에서는 신용카드 결제가 안되니, IE등 다른 브라우저를 이용해주세요) </li>
+								<li>· 티켓수령방법 <br />&nbsp;&nbsp;-모바일티켓 : 모바일로 예매 시에만 가능(종이티켓은 제공되지 않음) <br />&nbsp;&nbsp;&nbsp;별도 티켓 수령없이 모바일티켓 APP으로 바로 입장 가능!<br />&nbsp;&nbsp;-현장수령 : 예매 시 부여되는 “예약번호”로 관람일 당일 매표소에서 티켓 수령하여 입장</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="seasonInfo">
+						<h5>모바일 티켓 안내사항</h5>
+						<div>
+							<ul>
+								<li style="color:#cf0b42; font-weight:bold;">· 모바일티켓은 모바일 예매 시에만 선택 가능하며, 웹에서 예매 시 이용할 수 없습니다.</li>
+								<li>· 배송선택을 모바일 티켓으로 하신 분께서만 인터파크 모바일 티켓 APP을 통해 이용 가능합니다.</li>
+								<li>· 경기 4시간 전부터 입장 가능한 바코드가 노출됩니다.</li>
+								<li>· 티켓 취소시 모바일 티켓 선물하기 기능을 통해 티켓을 선물한 경우 티켓 취소가 불가능 하오니 <br />&nbsp;&nbsp;선물하신 분께 선물한 티켓을 등록 해제 요청 하신 후 취소하시기 바랍니다.</li>
+								<li>· 입장 후에도 바코드는 사라지지 않습니다. 외출이 가능하며 경기일 23시59분이 지나면 티켓 APP 에서 사라집니다.</li>
+								<li style="color:#cf0b42;">· 모바일 티켓으로 예매하신 분은 종이 티켓으로 발권이 절대 불가 합니다.</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<script type="text/javascript">
+			//<![CDATA[
+				// 탭
+				$('div.contentTab h4 a').bind('click', function(e){
+					e.preventDefault();
+					$(this).addClass('on').parent().siblings('h4').children().removeClass('on').end().next().hide().end().end().next().show();
+				}).eq(0).trigger('click');
+		 	//]]>
+			</script>
+
+			<span class="toTop">
+				<a href="#header"><img src="/html/front/web/images/common/btnTop.png" alt="Top" /></a>
+			</span>
+		</div>
+	</div>
+
+	<div id="viewPhoto01" class="layer ticket">
+		<h1>재규어 E-PACE석(R.d-club 로얄 다이아몬드클럽)</h1>
+		<button type="button" class="closeLayer"><img src="/html/front/web/images/common/btnLayerClose.png" alt="레이어 닫기" /></button>
+		<div class="body">
+			<img src="/html/front/web/images/ticket/photoSeat01.png" alt="재규어 E-PACE석(R.d-club 로얄 다이아몬드클럽)" />
+			<img src="/html/front/web/images/ticket/photoSeat21.jpg" alt="재규어 E-PACE석(R.d-club 로얄 다이아몬드클럽)" />
+
+			<h2>2017시즌 입장요금</h2>
+			<table class="data ticket" summary="2017 시즌 입장 요금 안내  테이블입니다.">
+				<caption>2017 시즌 입장 요금</caption>
+				<colgroup>
+					<col width="40%" />
+					<col width="30%" />
+					<col width="30%" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">구분</th>
+						<th scope="col">주중</th>
+						<th scope="col">주말</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>일반</td>
+						<td>55,000</td>
+						<td>85,000</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<a href="#safeCampaign" class="closeLayer"><span>예매하기</span></a>
+		</div>
+	</div>
+
+	<div id="viewPhoto02" class="layer ticket">
+		<h1>d-club (다이아몬드 클럽)</h1>
+		<button type="button" class="closeLayer"><img src="/html/front/web/images/common/btnLayerClose.png" alt="레이어 닫기" /></button>
+		<div class="body">
+			<img src="/html/front/web/images/ticket/photoSeat02.png" alt="d-club (다이아몬드 클럽)" />
+			<img src="/html/front/web/images/ticket/photoSeat22.jpg" alt="d-club (다이아몬드 클럽)" />
+
+			<h2>2017시즌 입장요금</h2>
+			<table class="data ticket" summary="2017 시즌 입장 요금 안내  테이블입니다.">
+				<caption>2017 시즌 입장 요금</caption>
+				<colgroup>
+					<col width="40%" />
+					<col width="30%" />
+					<col width="30%" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">구분</th>
+						<th scope="col">주중</th>
+						<th scope="col">주말</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>일반</td>
+						<td>50,000</td>
+						<td>75,000</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<a href="#safeCampaign" class="closeLayer"><span>예매하기</span></a>
+		</div>
+	</div>
+
+	<div id="viewPhoto03" class="layer ticket">
+		<h1>써모스석(1층 테이블석)</h1>
+		<button type="button" class="closeLayer"><img src="/html/front/web/images/common/btnLayerClose.png" alt="레이어 닫기" /></button>
+		<div class="body">
+			<img src="/html/front/web/images/ticket/photoSeat03.png" alt="써모스석(1층 테이블석)" />
+			<img src="/html/front/web/images/ticket/photoSeat23.jpg" alt="써모스석(1층 테이블석)" />
+
+			<h2>2017시즌 입장요금</h2>
+			<table class="data ticket" summary="2017 시즌 입장 요금 안내  테이블입니다.">
+				<caption>2017 시즌 입장 요금</caption>
+				<colgroup>
+					<col width="40%" />
+					<col width="30%" />
+					<col width="30%" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">구분</th>
+						<th scope="col">주중</th>
+						<th scope="col">주말</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>일반</td>
+						<td>50,000</td>
+						<td>75,000</td>
+					</tr>
+					<tr>
+						<td>어린이</td>
+						<td>25,000</td>
+						<td>37,000</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<a href="#safeCampaign" class="closeLayer"><span>예매하기</span></a>
+		</div>
+	</div>
+
+	<div id="viewPhoto04" class="layer ticket">
+		<h1>로케트배터리석(2층 테이블석)</h1>
+		<button type="button" class="closeLayer"><img src="/html/front/web/images/common/btnLayerClose.png" alt="레이어 닫기" /></button>
+		<div class="body">
+			<img src="/html/front/web/images/ticket/photoSeat04.png" alt="로케트배터리석(2층 테이블석)" />
+			<img src="/html/front/web/images/ticket/photoSeat24.jpg" alt="로케트배터리석(2층 테이블석)" />
+
+			<h2>2017시즌 입장요금</h2>
+			<table class="data ticket" summary="2017 시즌 입장 요금 안내  테이블입니다.">
+				<caption>2017 시즌 입장 요금</caption>
+				<colgroup>
+					<col width="40%" />
+					<col width="30%" />
+					<col width="30%" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">구분</th>
+						<th scope="col">주중</th>
+						<th scope="col">주말</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>일반</td>
+						<td>40,000</td>
+						<td>60,000</td>
+					</tr>
+					<tr>
+						<td>어린이</td>
+						<td>20,000</td>
+						<td>30,000</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<a href="#safeCampaign" class="closeLayer"><span>예매하기</span></a>
+		</div>
+	</div>
+
+	<div id="viewPhoto05" class="layer ticket">
+		<h1>골드 내야지정석 (미니테이블의 스탠딩의자석)</h1>
+		<button type="button" class="closeLayer"><img src="/html/front/web/images/common/btnLayerClose.png" alt="레이어 닫기" /></button>
+		<div class="body">
+			<img src="/html/front/web/images/ticket/photoSeat05.png" alt="골드 내야지정석 (미니테이블의 스탠딩의자석)" />
+			<img src="/html/front/web/images/ticket/photoSeat25.jpg" alt="골드 내야지정석 (미니테이블의 스탠딩의자석)" />
+
+			<h2>2017시즌 입장요금</h2>
+			<table class="data ticket" summary="2017 시즌 입장 요금 안내  테이블입니다.">
+				<caption>2017 시즌 입장 요금</caption>
+				<colgroup>
+					<col width="40%" />
+					<col width="30%" />
+					<col width="30%" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">구분</th>
+						<th scope="col">주중</th>
+						<th scope="col">주말</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>일반</td>
+						<td>30,000</td>
+						<td>45,000</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<a href="#safeCampaign" class="closeLayer"><span>예매하기</span></a>
+		</div>
+	</div>
+
+	<div id="viewPhoto06" class="layer ticket">
+		<h1>골드 외야지정석 (미니테이블의 스탠딩의자석)</h1>
+		<button type="button" class="closeLayer"><img src="/html/front/web/images/common/btnLayerClose.png" alt="레이어 닫기" /></button>
+		<div class="body">
+			<img src="/html/front/web/images/ticket/photoSeat06.png" alt="골드 외야지정석 (미니테이블의 스탠딩의자석)" />
+			<img src="/html/front/web/images/ticket/photoSeat26.jpg" alt="골드 외야지정석 (미니테이블의 스탠딩의자석)" />
+
+			<h2>2017시즌 입장요금</h2>
+			<table class="data ticket" summary="2017 시즌 입장 요금 안내  테이블입니다.">
+				<caption>2017 시즌 입장 요금</caption>
+				<colgroup>
+					<col width="40%" />
+					<col width="30%" />
+					<col width="30%" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">구분</th>
+						<th scope="col">주중</th>
+						<th scope="col">주말</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>일반</td>
+						<td>17,000</td>
+						<td>25,000</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<a href="#safeCampaign" class="closeLayer"><span>예매하기</span></a>
+		</div>
+	</div>
+
+	<div id="viewPhoto07" class="layer ticket">
+		<h1>스카이블루석</h1>
+		<button type="button" class="closeLayer"><img src="/html/front/web/images/common/btnLayerClose.png" alt="레이어 닫기" /></button>
+		<div class="body">
+			<img src="/html/front/web/images/ticket/photoSeat07.png" alt="스카이블루석" />
+			<img src="/html/front/web/images/ticket/photoSeat27.jpg" alt="스카이블루석" />
+
+			<h2>2017시즌 입장요금</h2>
+			<table class="data ticket" summary="2017 시즌 입장 요금 안내  테이블입니다.">
+				<caption>2017 시즌 입장 요금</caption>
+				<colgroup>
+					<col width="40%" />
+					<col width="30%" />
+					<col width="30%" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">구분</th>
+						<th scope="col">주중</th>
+						<th scope="col">주말</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>일반</td>
+						<td>17,000</td>
+						<td>25,000</td>
+					</tr>
+					<tr>
+						<td>어린이</td>
+						<td>8,000</td>
+						<td>12,000</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<a href="#safeCampaign" class="closeLayer"><span>예매하기</span></a>
+		</div>
+	</div>
+
+	<div id="viewPhoto08" class="layer ticket">
+		<h1>블루석</h1>
+		<button type="button" class="closeLayer"><img src="/html/front/web/images/common/btnLayerClose.png" alt="레이어 닫기" /></button>
+		<div class="body">
+			<img src="/html/front/web/images/ticket/photoSeat08.png" alt="블루석" />
+			<img src="/html/front/web/images/ticket/photoSeat28.jpg" alt="블루석" />
+
+			<h2>2017시즌 입장요금</h2>
+			<table class="data ticket" summary="2017 시즌 입장 요금 안내  테이블입니다.">
+				<caption>2017 시즌 입장 요금</caption>
+				<colgroup>
+					<col width="40%" />
+					<col width="30%" />
+					<col width="30%" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">구분</th>
+						<th scope="col">주중</th>
+						<th scope="col">주말</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>일반</td>
+						<td>15,000</td>
+						<td>22,000</td>
+					</tr>
+					<tr>
+						<td>어린이</td>
+						<td>7,000</td>
+						<td>11,000</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<a href="#safeCampaign" class="closeLayer"><span>예매하기</span></a>
+		</div>
+	</div>
+
+	<div id="viewPhoto09" class="layer ticket">
+		<h1>3층 지정석</h1>
+		<button type="button" class="closeLayer"><img src="/html/front/web/images/common/btnLayerClose.png" alt="레이어 닫기" /></button>
+		<div class="body">
+			<img src="/html/front/web/images/ticket/photoSeat09.png" alt="3층 지정석" />
+			<img src="/html/front/web/images/ticket/photoSeat29.jpg" alt="3층 지정석" />
+
+			<h2>2017시즌 입장요금</h2>
+			<table class="data ticket" summary="2017 시즌 입장 요금 안내  테이블입니다.">
+				<caption>2017 시즌 입장 요금</caption>
+				<colgroup>
+					<col width="40%" />
+					<col width="30%" />
+					<col width="30%" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">구분</th>
+						<th scope="col">주중</th>
+						<th scope="col">주말</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>일반</td>
+						<td>12,000</td>
+						<td>18,000</td>
+					</tr>
+					<tr>
+						<td>어린이</td>
+						<td>6,000</td>
+						<td>9,000</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<a href="#safeCampaign" class="closeLayer"><span>예매하기</span></a>
+		</div>
+	</div>
+
+	<div id="viewPhoto10" class="layer ticket">
+		<h1>4층 지정석</h1>
+		<button type="button" class="closeLayer"><img src="/html/front/web/images/common/btnLayerClose.png" alt="레이어 닫기" /></button>
+		<div class="body">
+			<img src="/html/front/web/images/ticket/photoSeat10.png" alt="4층 지정석" />
+			<img src="/html/front/web/images/ticket/photoSeat30.jpg" alt="4층 지정석" />
+
+			<h2>2017시즌 입장요금</h2>
+			<table class="data ticket" summary="2017 시즌 입장 요금 안내  테이블입니다.">
+				<caption>2017 시즌 입장 요금</caption>
+				<colgroup>
+					<col width="40%" />
+					<col width="30%" />
+					<col width="30%" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">구분</th>
+						<th scope="col">주중</th>
+						<th scope="col">주말</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>일반</td>
+						<td>9,000</td>
+						<td>13,000</td>
+					</tr>
+					<tr>
+						<td>중,고/대학생</td>
+						<td>7,000</td>
+						<td>10,000</td>
+					</tr>
+					<tr>
+						<td>어린이</td>
+						<td>4,000</td>
+						<td>6,000</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<a href="#safeCampaign" class="closeLayer"><span>예매하기</span></a>
+		</div>
+	</div>
+
+	<div id="viewPhoto11" class="layer ticket">
+		<h1>휠체어석</h1>
+		<button type="button" class="closeLayer"><img src="/html/front/web/images/common/btnLayerClose.png" alt="레이어 닫기" /></button>
+		<div class="body">
+			<img src="/html/front/web/images/ticket/photoSeat11.png" alt="휠체어석" />
+			<img src="/html/front/web/images/ticket/photoSeat31.png" alt="휠체어석" />
+
+			<h2>2017시즌 입장요금</h2>
+			<table class="data ticket" summary="2017 시즌 입장 요금 안내  테이블입니다.">
+				<caption>2017 시즌 입장 요금</caption>
+				<colgroup>
+					<col width="40%" />
+					<col width="30%" />
+					<col width="30%" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">구분</th>
+						<th scope="col">주중</th>
+						<th scope="col">주말</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>휠체어장애인, 동반 1인</td>
+						<td>10,000</td>
+						<td>15,000</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<a href="#safeCampaign" class="closeLayer"><span>예매하기</span></a>
+		</div>
+	</div>
+
+
+	<div id="viewPhoto12" class="layer ticket">
+		<h1>외야 지정석(하단)</h1>
+		<button type="button" class="closeLayer"><img src="/html/front/web/images/common/btnLayerClose.png" alt="레이어 닫기" /></button>
+		<div class="body">
+			<img src="/html/front/web/images/ticket/photoSeat12.jpg" alt="외야 지정석(하단)" />
+			<img src="/html/front/web/images/ticket/photoSeat32.jpg" alt="외야 지정석(하단)" />
+
+			<h2>2017시즌 입장요금</h2>
+			<table class="data ticket" summary="2017 시즌 입장 요금 안내  테이블입니다.">
+				<caption>2017 시즌 입장 요금</caption>
+				<colgroup>
+					<col width="40%" />
+					<col width="30%" />
+					<col width="30%" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">구분</th>
+						<th scope="col">주중</th>
+						<th scope="col">주말</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>일반</td>
+						<td>12,000</td>
+						<td>18,000</td>
+					</tr>
+					<tr>
+						<td>어린이/장애/유공자/군,경/경로</td>
+						<td>6,000</td>
+						<td>9,000</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<a href="#safeCampaign" class="closeLayer"><span>예매하기</span></a>
+		</div>
+	</div>
+
+	<div id="viewPhoto13" class="layer ticket">
+		<h1>외야 지정석(상단)</h1>
+		<button type="button" class="closeLayer"><img src="/html/front/web/images/common/btnLayerClose.png" alt="레이어 닫기" /></button>
+		<div class="body">
+			<img src="/html/front/web/images/ticket/photoSeat13.jpg" alt="외야 지정석(상단)" />
+			<img src="/html/front/web/images/ticket/photoSeat33.jpg" alt="외야 지정석(상단)" />
+
+			<h2>2017시즌 입장요금</h2>
+			<table class="data ticket" summary="2017 시즌 입장 요금 안내  테이블입니다.">
+				<caption>2017 시즌 입장 요금</caption>
+				<colgroup>
+					<col width="40%" />
+					<col width="30%" />
+					<col width="30%" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">구분</th>
+						<th scope="col">주중</th>
+						<th scope="col">주말</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>일반</td>
+						<td>7,000</td>
+						<td>10,000</td>
+					</tr>
+					<tr>
+						<td>어린이/장애/유공자/군,경/경로</td>
+						<td>3,000</td>
+						<td>5,000</td>
+					</tr>
+					<tr>
+						<td>미취학아동, 어린이회원, 리틀야구단</td>
+						<td colspan="2">무료</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<a href="#safeCampaign" class="closeLayer"><span>예매하기</span></a>
+		</div>
+	</div>
+
+	<div id="viewPhoto14" class="layer ticket">
+		<h1>스카이박스</h1>
+		<button type="button" class="closeLayer"><img src="/html/front/web/images/common/btnLayerClose.png" alt="레이어 닫기" /></button>
+		<div class="body">
+			<img src="/html/front/web/images/ticket/photoSeat14.jpg" alt="스카이박스" />
+			<img src="/html/front/web/images/ticket/photoSeat34.jpg" alt="스카이박스" />
+
+			<h2>2017시즌 입장요금</h2>
+			<table class="data ticket" summary="2017 시즌 입장 요금 안내  테이블입니다.">
+				<caption>2017 시즌 입장 요금</caption>
+				<colgroup>
+					<col width="40%" />
+					<col width="30%" />
+					<col width="30%" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">구분</th>
+						<th scope="col">주중</th>
+						<th scope="col">주말</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>9 인실</td>
+						<td colspan="2">1,170,000</td>
+					</tr>
+					<tr>
+						<td>14 인실</td>
+						<td colspan="2">1,820,000</td>
+					</tr>
+					<tr>
+						<td>30 인실</td>
+						<td colspan="2">3,900,000</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<button type="button" onclick="alert('스카이박스 전화예매 : 02-3660-1040');"><span>예매하기</span></button>
+		</div>
+	</div>
+
+	<div id="safeCampaign" class="layer">
+		<h1>SAFE 캠페인</h1>
+		<button type="button" class="closeLayer"><img src="/html/front/web/images/common/btnLayerClose.png" alt="레이어 닫기" /></button>
+		<div class="body">
+			<img src="/html/front/web/images/ticket/imgTicketNotice_2.jpg" alt="safe 캠페인 - 주류반입금지, 인근 주차장 이용 권고" />
+			<button type="button" onclick="fnTicketBooking('11111111');" title="새 창 열림"><img src="/html/front/web/images/ticket/imgTicketNotice3.jpg" alt="예매하기" class="closeLayer" /></button>
+		</div>
+	</div>
+
+	<div class="layerBG"></div>
+
+
+	<script type="text/javascript">
+	//<![CDATA[
+	    
+ 		
+ 		$('a[href="#safeCampaign"]').bind('click', function(e){
+ 			fnTicketBooking('11111111');
+ 		});
+ 		
+	//]]>
+	</script>
+
+	</div>
+
+	
+
+
+
+<!-- footer -->
+<!-- S : /WEB-INF/views/jsp/layout/footer.jsp -->
+<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<!-- <script src="/html/front/web/js/grayscale.js" type="text/javascript"></script>
+<script src="/html/front/web/js/functions.js" type="text/javascript"></script> -->
+
+	
+	<!-- quick -->
+	<div id="quick">
+		<ul>
+			
+			<li><a href="http://inpk.kr/heroes " target="_blank" title="새 창 열림"><img src="/files/main.1//2018/12/04/6486c9ee-019f-484a-a3e9-15ac3f48ce61.jpg" alt="히어로즈샵" /></a></li>
+			
+			<li><a href="https://ticket.interpark.com/Contents/Sports/GoodsInfo?SportsCode=07001&TeamCode=PB003" target="_blank" title="새 창 열림"><img src="/files/main.1//2018/03/20/43cda900-32c6-466b-91d4-1a72429cc017.png" alt="티켓예매하기" /></a></li>
+			
+		</ul>
+	</div>
+	<!--// quick -->
+	
+	
+	<div class="footerWrap">
+		<div id="footer">
+			
+			<div class="sponsors-box">
+				<div class="mainSponsor">
+					<h2>MAIN SPONSOR</h2>
+					<a href="http://www.kiwoom.com" target="_blank" title="새 창 열림">키움증권</a>
+				</div>
+			
+				<h2>SPONSORS</h2>
+				
+				<div class="sponsorBanner">
+			      <ul>
+			        
+			          <li><a href="http://www.sgc.co.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2021/04/01/0183a2cf-e12d-45d8-9e4d-a2b60293ae42.png" alt="SGC" /></a></li>
+			        
+			          <li><a href="http://www.nike.co.kr" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2016/03/30/d0f609ed-b245-4859-845f-953d376a5ae1.png" alt="나이키" /></a></li>
+			        
+			          <li><a href="https://www.saramin.co.kr/zf_user/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2021/09/03/c5e4d0f9-e4b9-4ba6-982f-516c339f3b12.png" alt="사람인" /></a></li>
+			        
+			          <li><a href="http://www.baekjosink.com/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2022/04/01/5fed0284-ad3b-498b-9a6d-0167ebcf3ddd.png" alt="백조씽크" /></a></li>
+			        
+			          <li><a href="https://www.lexus.co.kr/?utm_campaign=kiwoom&utm_source=digital&utm_medium=1&utm_content=1" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/04/01/6ed128a8-5e87-4dc1-8c44-89101063ac7e.png" alt="LEXUS" /></a></li>
+			        
+			          <li><a href="https://nol-universe.com/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/04/15/9bb6718c-92d3-4552-aa07-4e46d87e2be1.png" alt="놀유니버스" /></a></li>
+			        
+			          <li><a href="https://www.verygoodtour.com/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/f07d8fe3-569c-41bd-83f8-31dea5c519b7.png" alt="참좋은여행" /></a></li>
+			        
+			          <li><a href="https://healthhelper.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/20e8ac9e-e285-4541-a868-3a8ff80f6dab.png" alt="맥스컷" /></a></li>
+			        
+			          <li><a href="https://www.tving.com" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2024/03/26/2742c9af-70ec-4ebd-bf11-52ecec2f1705.png" alt="티빙" /></a></li>
+			        
+			          <li><a href="http://www.dkpco.co.kr" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2020/04/17/0a1f7ea5-43cc-4f78-a77c-131ac7ce782c.png" alt="동광제약" /></a></li>
+			        
+			          <li><a href="https://www.wesang.com/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/06/09/562ac94a-aa71-4065-ae11-31f75d0bfb9b.png" alt="요기요" /></a></li>
+			        
+			          <li><a href="https://www.mirae-n.com/main/mn-main-01.frm" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2024/04/13/f7620e78-9828-4ddd-8f69-d8e918a8cfdc.png" alt="미래엔" /></a></li>
+			        
+			          <li><a href="https://www.herbalife.com/ko-kr" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/03/17/9ec4bdbe-54e7-4fac-aac7-361c625431e5.png" alt="허벌라이프" /></a></li>
+			        
+			          <li><a href="https://www.panasonic.co.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2020/04/17/afaccacb-364c-4ddf-a232-d746cd92a821.png" alt="파나소닉" /></a></li>
+			        
+			          <li><a href="https://www.naver.com/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/03/14/f0a4f908-e79e-4a4d-9e13-d616d62db255.png" alt="네이버" /></a></li>
+			        
+			          <li><a href="https://www.hitejinro.com/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2022/04/14/5f671889-f215-4a81-9da8-1751e67a2d75.png" alt="하이트진로" /></a></li>
+			        
+			          <li><a href="https://flex.team/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2023/10/16/01e83640-a08f-4d77-9d92-9eabe59d0bcd.png" alt="flex" /></a></li>
+			        
+			          <li><a href="https://ganongbio.com/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/19ca5b0d-21da-455d-bcb1-2bab5766a2c1.png" alt="가농바이오" /></a></li>
+			        
+			          <li><a href="https://shop.drleo.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/48e6be2c-d149-4aed-a309-7f87f9811553.png" alt="래오이경제" /></a></li>
+			        
+			          <li><a href="https://wonangsink.com/kor/main/0000_home.php" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/82f26300-db5f-4f36-9519-8afdb71919e0.png" alt="원앙" /></a></li>
+			        
+			          <li><a href="https://www.mexicana.co.kr/intro.asp" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/30/d288e812-aef9-4f23-b027-597cd0f5e492.png" alt="멕시카나" /></a></li>
+			        
+			          <li><a href="https://preedlife.com/pc/main" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/07/09/13377d2a-de1f-4963-8633-988d70329528.png" alt="웅진프리드라이프" /></a></li>
+			        
+			          <li><a href="https://greenfoodmaker.co.kr/default/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/24/9b288e7d-5ca3-4ecc-91cd-f10609852aef.png" alt="그린푸드메이커" /></a></li>
+			        
+			          <li><a href="http://www.teianmotors.com" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2023/03/23/1cbf0598-d199-4d1a-9f11-a765851d7366.png" alt="태안모터스" /></a></li>
+			        
+			          <li><a href="https://www.lh.or.kr" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2023/04/06/e3649c2d-df6d-4b76-92ad-053b99bbd610.png" alt="한국토지주택공사" /></a></li>
+			        
+			          <li><a href="https://www.bhc.co.kr" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/03/17/0fc975ba-c94a-447f-b17a-3fabdf358437.png" alt="BHC" /></a></li>
+			        
+			          <li><a href="yby.co.kr" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/30/65df0f1a-4129-4378-83f2-195a190e22e9.png" alt="육회바른연어" /></a></li>
+			        
+			          <li><a href="https://www.emetlife.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/35e5c3dd-5dd9-438e-9ac0-4fc5d488420c.png" alt="메트라이프" /></a></li>
+			        
+			          <li><a href="https://www.deepo.co.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/131e48f1-6b56-423d-b37b-48f6ec7c58cc.png" alt="디에포" /></a></li>
+			        
+			          <li><a href="ttangttang.co.kr" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/76827b21-7abd-4250-936f-ff0f155b86b3.png" alt="땅땅치킨" /></a></li>
+			        
+			          <li><a href="http://www.hyundaipharm.co.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2018/03/20/ddf5589a-b0a7-44cf-8d9a-eff25716911c.png" alt="현대약품" /></a></li>
+			        
+			          <li><a href="http://www.ht.co.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2018/03/20/497c980e-6049-4dc8-98d2-88536731dd11.png" alt="해태제과" /></a></li>
+			        
+			          <li><a href="http://www.songlimga.com/index.do" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/736c1fdc-eea7-4f9f-8c98-cb8bcdc934ab.png" alt="송림가" /></a></li>
+			        
+			          <li><a href="https://aju.volvocars.co.kr/?lead_source=ETC_P" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/03/17/d28e41d6-a6b5-4917-b472-d640af2b9492.png" alt="아주오토리움" /></a></li>
+			        
+			          <li><a href="https://www.ejadam.co.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/03/17/5f0a7152-2465-4129-8de5-264a8a97230f.png" alt="자담치킨" /></a></li>
+			        
+			          <li><a href="http://www.kimeye.com" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2018/03/20/125fbe9c-a7c4-4501-8be2-5e2e6bfab730.png" alt="김안과병원" /></a></li>
+			        
+			          <li><a href="https://mawangpork.com/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/03/14/9016772b-ad2c-48a9-b37c-10f417af0fd7.png" alt="마왕족발" /></a></li>
+			        
+			          <li><a href="https://smartstore.naver.com/mzkorea " target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2023/05/10/dade689c-77cb-4217-83b8-28e6957eb4dc.png" alt="앰지코리아" /></a></li>
+			        
+			          <li><a href="https://myungranghotdog.com" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/a5806446-ca28-41d9-9f30-2947679e6cee.png" alt="명랑핫도그" /></a></li>
+			        
+			          <li><a href="https://www.gurohope.or.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2024/03/26/3aea018c-cbd4-4b6c-af44-212c4db81fd3.png" alt="구로희망복지재단" /></a></li>
+			        
+			          <li><a href="http://www.goyang.go.kr " target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2020/04/17/81f71f17-e277-438b-a95e-014b243971d2.png" alt="고양시청" /></a></li>
+			        
+			          <li><a href="https://www.bumin.co.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/04/15/49ab00bb-b96f-4317-9463-fea5beb414f2.png" alt="부민병원" /></a></li>
+			        
+			          <li><a href="http://www.hanaromf.com/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2018/03/20/ec067faa-fdb1-4365-8f02-3772df785b92.png" alt="하나로의료재단" /></a></li>
+			        
+			          <li><a href="https://www.pic.co.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/03/21/12f02972-a952-4287-a990-86fc96b9b761.png" alt="PIC 리조트" /></a></li>
+			        
+			          <li><a href="http://www.pulmuonewater.com" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2022/04/01/ae3c016f-de5f-4660-bcc8-242076d7976f.png" alt="풀무원샘물" /></a></li>
+			        
+			          <li><a href="https://www.freshdelmonte.co.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/03/14/5fc8bc9f-b106-42fb-aaee-f26bc25c8f70.png" alt="델몬트코리아" /></a></li>
+			        
+			      </ul>
+			    </div>
+			</div>
+		
+			<div class="footer-list-box">
+	
+				<div class="item-box">
+					<ul class="link-list">
+						<li><a href="/site/privacyStatement.do">개인정보처리방침</a></li>
+						<li><a href="/site/termsOfUse.do">이용약관</a></li>
+						<li><a href="/site/refuseEmail.do">이메일무단수집거부</a></li>
+						<li><a href="/fans/qna/list.do">안내 및 Q&amp;A</a></li>
+						<li><a href="/site/sitemap.do">사이트맵</a></li>
+						<!-- <li><a href="/fans/link/list.do">관련사이트</a></li> -->
+					</ul>
+					<div class="txt-add">
+						서울특별시 구로구 경인로 430(고척동, 고척스카이돔구장내) T.02-3660-1000 F.02-3660-1099<br />
+						Copyright (C) Heroes, All Rights Reserved.
+					</div>
+				</div>
+				<div class="item-box">
+					<img src="/html/front/web_2018/images/common/txt_footer.png" alt="키움히어로즈 프로야구단 KIWOON HEROES BASEBALL CLUB" />
+				</div>
+				
+			</div>	
+		</div>
+	</div>
+	
+    <script type="text/javascript">
+    //<![CDATA[
+    $('div.sponsorBanner ul').bxSlider({
+      auto : true,
+      autoDelay : 1,
+      pause : 5000,
+      speed : 1000,
+      pager : false,
+      controls : false,
+      minSlides : 8,
+      maxSlides : 8,
+      moveSlides : 1,
+      slideWidth : 115
+    });
+    //]]>
+    </script>
+	
+	<!-- E : /WEB-INF/views/jsp/layout/footer.jsp -->
+	<!--// footer -->
+
+
+</body>
+</html>

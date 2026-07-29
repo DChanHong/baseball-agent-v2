@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "GWANGJU_stadium_transport_guide_20260729",
+  "document_type": "stadium_transport_guide",
+  "stadium_id": "GWANGJU",
+  "team_id": "KIA",
+  "title": "광주-기아 챔피언스 필드 stadium_transport_guide 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "kia_champions_field_guide"
+  ],
+  "content": "광주-기아 챔피언스 필드는 광주광역시 북구 서림로 10에 있다. KIA 공식 구장 안내는 유스퀘어 광주종합버스터미널, 광주송정역, 광주공항에서 구장으로 이동하는 버스, 지하철, 택시 경로를 안내한다. 대중교통 경로는 기준일 이후 운행 변경 가능성이 있으므로 답변 시 공식 출처 기준임을 함께 표시한다.",
+  "metadata": {
+    "stadium_name": "광주-기아 챔피언스 필드",
+    "home_team_ids": [
+      "KIA"
+    ],
+    "limitations": [
+      "입장권 상세 좌석/요금은 이미지 중심이라 추가 검수 필요."
+    ]
+  }
+}

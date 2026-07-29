@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "DAEGU_stadium_seat_guide_20260729",
+  "document_type": "stadium_seat_guide",
+  "stadium_id": "DAEGU",
+  "team_id": "SAMSUNG",
+  "title": "대구 삼성 라이온즈 파크 stadium_seat_guide 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "samsung_lapark_ticket_price"
+  ],
+  "content": "삼성 공식 입장권 종류 페이지는 특별석, 커플석, 내야 테이블석, 외야 테이블석, 블루존, 3루 지정석, 내야 지정석, 외야 미니 테이블석, 외야 지정석, 외야 자유석, 입석 등 좌석군과 요금을 안내한다. 포항경기 입장요금표도 같은 페이지에서 확인된다. 좌석명과 가격은 시즌별 변경 가능성이 있으므로 기준일을 함께 노출한다.",
+  "metadata": {
+    "stadium_name": "대구 삼성 라이온즈 파크",
+    "home_team_ids": [
+      "SAMSUNG"
+    ],
+    "limitations": [
+      "교통/주차/시설 상세 공식 출처 추가 필요."
+    ]
+  }
+}

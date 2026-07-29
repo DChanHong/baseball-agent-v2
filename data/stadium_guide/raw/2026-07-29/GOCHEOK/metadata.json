@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0.0",
+  "collected_at": "2026-07-29T00:00:00+09:00",
+  "collector": "manual_curl",
+  "stadium_id": "GOCHEOK",
+  "team_ids": [
+    "KIWOOM"
+  ],
+  "files": [
+    {
+      "source_id": "heroes_gocheok_ticket_normal",
+      "source_url": "https://heroesbaseball.co.kr/ticket/normal/view.do",
+      "source_type": "official_team",
+      "local_file": "heroes_gocheok_ticket_normal.html",
+      "fetch_status": "success",
+      "byte_size": 76806,
+      "content_hash": "sha256:134061b61647abb850f3d58c9bdaf7d0db19b752124faa8cba85921dd98801a4"
+    },
+    {
+      "source_id": "heroes_gocheok_ticket_purchase",
+      "source_url": "https://heroesbaseball.co.kr/ticket/normal/viewPurchase.do",
+      "source_type": "official_team",
+      "local_file": "heroes_gocheok_ticket_purchase.html",
+      "fetch_status": "success",
+      "byte_size": 40350,
+      "content_hash": "sha256:5fbe42b631f25926d1a811f8a9b7704e286b83ec0ff793131ca0513f33f2c3af"
+    },
+    {
+      "source_id": "seoul_gocheok_skydome",
+      "source_url": "https://www.sisul.or.kr/open_content/skydome/",
+      "source_type": "official_venue_or_city",
+      "local_file": "seoul_gocheok_skydome.html",
+      "fetch_status": "success",
+      "byte_size": 26689,
+      "content_hash": "sha256:26169ffb29b2d851819280220ef9383456b455ea1c6fc53f3eaa8e2251316401"
+    },
+    {
+      "source_id": "gocheok_kbo_safe_campaign",
+      "source_url": "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+      "source_type": "official_league",
+      "local_file": "gocheok_kbo_safe_campaign.html",
+      "fetch_status": "success",
+      "byte_size": 53114,
+      "content_hash": "sha256:ee1d020721e2127194799ada6163f1c530775f0fa5b9f55e97c105f2fc33ec8c"
+    },
+    {
+      "source_id": "gocheok_kbo_ticket_map",
+      "source_url": "https://www.koreabaseball.com/kbo/league/map.aspx",
+      "source_type": "official_league",
+      "local_file": "gocheok_kbo_ticket_map.html",
+      "fetch_status": "success",
+      "byte_size": 38975,
+      "content_hash": "sha256:e276e592b634870f43725d97bf961a98e6e787dcb41c002d48e04e65ac882d0f"
+    }
+  ]
+}
