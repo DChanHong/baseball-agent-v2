@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "SAJIK_stadium_bag_policy_20260729",
+  "document_type": "stadium_bag_policy",
+  "stadium_id": "SAJIK",
+  "team_id": "LOTTE",
+  "title": "사직야구장 반입 및 안전 정책 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "kbo_safe_campaign"
+  ],
+  "content": "KBO SAFE 캠페인은 전 구장 공통 최소 안전 기준으로 유리병, 총량 1L 초과 PET, 알루미늄 캔 용기 음료, 얼린 생수 등의 반입 제한을 안내한다. 미개봉 음료는 1인당 PET 1개와 캔 2개까지 허용되는 기준이 제시되어 있다. 관람객은 가방 1개와 쇼핑백류 1개까지 지참할 수 있으며, 가방은 가로 45cm, 세로 45cm, 폭 20cm 이내 기준이 안내되어 있다. 음식물은 반입 금지 품목이 아니라면 가능하지만, 뜨거운 국물류나 냄새가 심한 음식처럼 안전과 관람 환경을 저해할 수 있는 경우 제한될 수 있다. KBO는 구단별 예외가 있을 수 있으므로 방문 전 구단 홈페이지 확인이 필요하다고 안내한다.",
+  "metadata": {
+    "limitations": [
+      "롯데자이언츠 구장별 반입 예외 규정은 별도 공식 페이지 확인이 필요하다.",
+      "이 문서는 KBO 공통 정책 기반 초안이며, 사직구장 전용 세부 정책은 추가 수집 대상이다."
+    ]
+  }
+}

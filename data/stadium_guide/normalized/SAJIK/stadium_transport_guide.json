@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "SAJIK_stadium_transport_guide_20260729",
+  "document_type": "stadium_transport_guide",
+  "stadium_id": "SAJIK",
+  "team_id": "LOTTE",
+  "title": "사직야구장 교통 안내 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "lotte_sajik_stadium",
+    "lotte_stadium_shop"
+  ],
+  "content": "롯데자이언츠 공식 사직야구장 안내는 주소를 부산광역시 동래구 사직로 45로 안내한다. 대중교통은 부산 지하철 3호선 사직역과 종합운동장역을 기준으로 안내되어 있으며, 버스는 10, 44, 50, 57, 80, 111, 131, 189, 1002번 심야버스와 마을버스 17번이 안내되어 있다. 자가용 경로는 경부고속도로, 남해고속도로, 공항 방향 경로가 공식 페이지에 안내되어 있다. 실시간 교통 상황이나 주차 가능 대수는 이 문서의 범위가 아니며, 경기일 혼잡 여부는 별도 실시간 도구나 최신 공지 확인이 필요하다.",
+  "metadata": {
+    "nearest_subway_lines": [
+      "부산 3호선"
+    ],
+    "nearest_subway_stations": [
+      "사직역",
+      "종합운동장역"
+    ],
+    "limitations": [
+      "공식 페이지의 주차장 수용 규모와 실시간 주차 가능 대수는 확인되지 않았다."
+    ]
+  }
+}

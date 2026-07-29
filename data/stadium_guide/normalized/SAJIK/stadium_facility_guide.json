@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "SAJIK_stadium_facility_guide_20260729",
+  "document_type": "stadium_facility_guide",
+  "stadium_id": "SAJIK",
+  "team_id": "LOTTE",
+  "title": "사직야구장 시설 안내 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "lotte_sajik_stadium",
+    "lotte_stadium_shop"
+  ],
+  "content": "롯데자이언츠 공식 사직야구장 소개는 구장 위치, 면적, 관람석 규모 등 기본 시설 정보를 안내한다. 구장샵 안내는 자이언츠샵 운영시간과 프로페셔널샵, 유니폼샵 위치를 제공한다. 프로페셔널샵은 사직야구장 1층 중앙출입구 오른편, 유니폼샵은 사직야구장 광장 내 1루측 컨테이너 1층으로 안내되어 있다. 화장실, 수유실, 물품보관함, 흡연구역, 의무실 등 세부 편의시설은 현재 수집 원문만으로 충분히 확인되지 않아 추가 공식 출처가 필요하다.",
+  "metadata": {
+    "known_facilities": [
+      "자이언츠샵",
+      "프로페셔널샵",
+      "유니폼샵"
+    ],
+    "limitations": [
+      "화장실, 수유실, 물품보관함, 흡연구역, 의무실 위치는 추가 출처 확인 필요."
+    ]
+  }
+}

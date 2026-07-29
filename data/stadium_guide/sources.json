@@ -1,0 +1,134 @@
+{
+  "schema_version": "1.0.0",
+  "as_of": "2026-07-29",
+  "description": "Local source registry for stadium guide RAG data. Initial vertical slice covers SAJIK only.",
+  "sources": [
+    {
+      "source_id": "lotte_sajik_stadium",
+      "title": "롯데자이언츠 사직야구장 안내",
+      "url": "https://www.giantsclub.com/html/?pcode=207",
+      "source_type": "official_team",
+      "stadium_id": "SAJIK",
+      "team_id": "LOTTE",
+      "document_types": [
+        "stadium_facility_guide",
+        "stadium_transport_guide",
+        "stadium_seat_guide"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/SAJIK/lotte_sajik_stadium.html",
+      "notes": "사직구장 위치, 기본 시설, 좌석 수, 교통 안내의 팀 공식 출처."
+    },
+    {
+      "source_id": "lotte_sajik_seat_guide",
+      "title": "롯데자이언츠 일반티켓 좌석안내",
+      "url": "https://www.giantsclub.com/html/?pcode=340",
+      "source_type": "official_team",
+      "stadium_id": "SAJIK",
+      "team_id": "LOTTE",
+      "document_types": [
+        "stadium_seat_guide",
+        "stadium_ticketing_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/SAJIK/lotte_sajik_seat_guide.html",
+      "notes": "좌석 구역 안내. 시즌별 좌석 구성이 바뀔 수 있어 개막 전 확인 필요."
+    },
+    {
+      "source_id": "lotte_sajik_ticket_price",
+      "title": "롯데자이언츠 사직구장 요금안내",
+      "url": "https://www.giantsclub.com/html/?pcode=339",
+      "source_type": "official_team",
+      "stadium_id": "SAJIK",
+      "team_id": "LOTTE",
+      "document_types": [
+        "stadium_ticketing_guide",
+        "stadium_seat_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/SAJIK/lotte_sajik_ticket_price.html",
+      "notes": "사직구장 좌석별 요금 안내. 가격 자체는 RAG 답변에서 as_of와 함께 노출해야 한다."
+    },
+    {
+      "source_id": "lotte_ticket_purchase_guide",
+      "title": "롯데자이언츠 예매 및 예매티켓 수령 안내",
+      "url": "https://www.giantsclub.com/m/?pcode=539",
+      "source_type": "official_team",
+      "stadium_id": "SAJIK",
+      "team_id": "LOTTE",
+      "document_types": [
+        "stadium_entry_guide",
+        "stadium_ticketing_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/SAJIK/lotte_ticket_purchase_guide.html",
+      "notes": "예매 방법, 티켓 수령, 모바일 티켓 등 입장 전 준비 안내."
+    },
+    {
+      "source_id": "lotte_ticket_discount",
+      "title": "롯데자이언츠 일반티켓 할인안내",
+      "url": "https://www.giantsclub.com/html/?pcode=341",
+      "source_type": "official_team",
+      "stadium_id": "SAJIK",
+      "team_id": "LOTTE",
+      "document_types": [
+        "stadium_ticketing_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/SAJIK/lotte_ticket_discount.html",
+      "notes": "할인 대상과 적용 좌석 안내. 증빙 조건이 바뀔 수 있어 시즌 전 확인 필요."
+    },
+    {
+      "source_id": "lotte_stadium_shop",
+      "title": "롯데자이언츠 사직야구장 구장샵 안내",
+      "url": "https://www.giantsclub.com/html/?pcode=367",
+      "source_type": "official_team",
+      "stadium_id": "SAJIK",
+      "team_id": "LOTTE",
+      "document_types": [
+        "stadium_facility_guide",
+        "stadium_transport_guide"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/SAJIK/lotte_stadium_shop.html",
+      "notes": "자이언츠샵 운영시간, 위치, 교통 요약."
+    },
+    {
+      "source_id": "kbo_safe_campaign",
+      "title": "KBO 경기장 안전정책 SAFE 캠페인",
+      "url": "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+      "source_type": "official_league",
+      "stadium_id": null,
+      "team_id": null,
+      "document_types": [
+        "stadium_bag_policy",
+        "stadium_first_visit_tip"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/SAJIK/kbo_safe_campaign.html",
+      "notes": "KBO 전 구장 공통 안전/반입 최소 기준. 구단별 예외 확인 필요."
+    },
+    {
+      "source_id": "kbo_ticket_map",
+      "title": "KBO 리그 티켓 안내",
+      "url": "https://www.koreabaseball.com/kbo/league/map.aspx",
+      "source_type": "official_league",
+      "stadium_id": null,
+      "team_id": null,
+      "document_types": [
+        "stadium_ticketing_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/SAJIK/kbo_ticket_map.html",
+      "notes": "구단별 예매처 매핑의 리그 공식 출처."
+    }
+  ]
+}

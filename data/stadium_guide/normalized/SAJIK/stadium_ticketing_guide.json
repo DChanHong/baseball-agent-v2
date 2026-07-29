@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "SAJIK_stadium_ticketing_guide_20260729",
+  "document_type": "stadium_ticketing_guide",
+  "stadium_id": "SAJIK",
+  "team_id": "LOTTE",
+  "title": "사직야구장 티켓 및 예매 안내 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "kbo_ticket_map",
+    "lotte_ticket_purchase_guide",
+    "lotte_sajik_ticket_price",
+    "lotte_ticket_discount"
+  ],
+  "content": "KBO 티켓 안내와 롯데자이언츠 공식 안내 기준으로 롯데 홈경기는 구단 자체 예매 시스템을 확인해야 한다. 롯데 공식 안내는 인터넷 예매 경로로 giantsclub.com과 ticket.giantsclub.com을 안내하며, 모바일 앱을 통한 예매도 안내한다. 사직구장 요금안내와 할인안내는 좌석, 관람 등급, 컬러프라이스, 할인 대상에 따라 조건이 달라질 수 있으므로 답변 시 기준일을 함께 제공해야 한다. 현장 수령, 모바일 티켓, 취소 및 환불 조건은 롯데 공식 예매 안내 원문을 추가 검수한 뒤 세부 항목으로 보강한다.",
+  "metadata": {
+    "ticket_provider": "team_site",
+    "ticket_urls": [
+      "https://www.giantsclub.com",
+      "https://ticket.giantsclub.com"
+    ],
+    "limitations": [
+      "예매 오픈 시간과 취소/환불 조건은 원문 추가 파싱 후 구조화가 필요하다.",
+      "당일 잔여석은 RAG가 아니라 실시간 예매처 확인 대상이다."
+    ]
+  }
+}

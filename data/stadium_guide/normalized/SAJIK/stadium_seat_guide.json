@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "SAJIK_stadium_seat_guide_20260729",
+  "document_type": "stadium_seat_guide",
+  "stadium_id": "SAJIK",
+  "team_id": "LOTTE",
+  "title": "사직야구장 좌석 안내 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "lotte_sajik_stadium",
+    "lotte_sajik_seat_guide",
+    "lotte_sajik_ticket_price"
+  ],
+  "content": "롯데자이언츠 공식 좌석안내는 사직야구장 좌석 구역으로 프리미엄, 중앙지정석, 1루 및 3루 커플석, 1루 및 3루 내야지정석, 스탠딩석, 외야석, 휠체어석 등을 안내한다. 바베큐석은 외야에 있다고 안내되어 있다. 사직구장 소개 페이지는 관람석 정보를 제공하며, 좌석도와 요금은 시즌 기준이 붙어 있어 답변 시 기준일과 시즌을 함께 노출해야 한다. 좌석별 시야, 응원석 분위기, 원정팬 체감 정보는 공식 출처만으로는 부족하므로 별도 curated 문서 후보로 분리한다.",
+  "metadata": {
+    "seat_groups": [
+      "프리미엄",
+      "중앙지정석",
+      "1,3루 커플석",
+      "1,3루 내야지정석",
+      "스탠딩석",
+      "외야석",
+      "휠체어석"
+    ],
+    "limitations": [
+      "좌석별 시야 후기는 공식 출처에 없으므로 이 문서에 포함하지 않는다.",
+      "요금 정보는 시즌별 변동 가능성이 높아 별도 ticketing 문서와 함께 확인한다."
+    ]
+  }
+}
