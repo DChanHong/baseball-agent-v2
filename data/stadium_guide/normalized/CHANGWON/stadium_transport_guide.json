@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "CHANGWON_stadium_transport_guide_20260729",
+  "document_type": "stadium_transport_guide",
+  "stadium_id": "CHANGWON",
+  "team_id": "NC",
+  "title": "창원NC파크 교통 및 주차 안내 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "changwon_tour_ncpark",
+    "nc_dinos_notice_alternate_home",
+    "changwon_ncpark_safety_reopen"
+  ],
+  "content": "창원NC파크 마산구장은 경남 창원시 마산회원구 양덕동 477 일대에 있으며, NC 공식 페이지 하단 주소는 경상남도 창원시 마산회원구 상호로 63, 창원NC파크(양덕동)다. 창원관광 공식 페이지는 주차장 1,240면과 함께 경기장 주차가 제한적일 수 있어 대중교통 이용을 권장한다고 안내한다. 2025년 안전점검 및 재개장 관련 창원시 공식 보도자료는 홈경기 재개를 위한 시설 보수와 안전 점검 완료, 관람객 동선 안내, 안전관리 인력 확대 등을 안내한다. 다만 현재 수집된 공식 출처만으로는 버스 노선, 셔틀 운영의 최신 지속 여부, 주차 요금, 만차 대응을 확정하기 어렵다.",
+  "metadata": {
+    "stadium_name": "창원NC파크 마산구장",
+    "home_team_ids": [
+      "NC"
+    ],
+    "address": "경상남도 창원시 마산회원구 상호로 63, 창원NC파크(양덕동)",
+    "parking_spaces": 1240,
+    "topic_summary": "창원관광/NC 공식 주소와 주차 가능 규모, 대중교통 권장 안내",
+    "search_keywords": [
+      "창원NC파크 가는 길",
+      "창원NC파크 주차",
+      "창원NC파크 주차장",
+      "창원NC파크 주소",
+      "창원NC파크 대중교통",
+      "창원NC파크 셔틀"
+    ],
+    "limitations": [
+      "버스 노선, 셔틀 운영, 주차 요금, 만차 대안은 최신 공식 출처 확인이 필요하다.",
+      "2025년 재개장 이후 경기일 교통 운영은 시즌과 경기일별로 달라질 수 있다."
+    ]
+  }
+}

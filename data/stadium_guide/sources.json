@@ -780,6 +780,104 @@
       "trust_level": "official",
       "local_raw_file": "data/stadium_guide/raw/2026-07-29/JAMSIL/jamsil_kbo_ticket_map.html",
       "notes": "LG/두산 구단별 예매처 매핑의 리그 공식 출처."
+    },
+    {
+      "source_id": "changwon_tour_ncpark",
+      "title": "창원관광 창원NC파크 마산구장",
+      "url": "https://www.changwon.go.kr/tour/index.do?menuCode=001_003000000000&page.pageNo=1&search.searchKeyword=%EC%B0%BD%EC%9B%90NC%ED%8C%8C%ED%81%AC&tourProgramNo=135",
+      "source_type": "official_public",
+      "stadium_id": "CHANGWON",
+      "team_id": "NC",
+      "document_types": [
+        "stadium_facility_guide",
+        "stadium_seat_guide",
+        "stadium_transport_guide"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/CHANGWON/changwon_tour_ncpark.html",
+      "notes": "창원NC파크 마산구장 주소, 편의시설, 주차장, 수용 규모, 일반석/프리미엄석/스카이박스 정보의 창원시 공식 관광 출처. raw HTML은 API 호출 구조라 상세 본문 단독 재현성은 약하다."
+    },
+    {
+      "source_id": "changwon_ncpark_safety_reopen",
+      "title": "창원시 창원NC파크 재개장 시설 보수 및 안전 점검 완료 보도자료",
+      "url": "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&cpage=3&gcode=1011&idx=857954",
+      "source_type": "official_public",
+      "stadium_id": "CHANGWON",
+      "team_id": "NC",
+      "document_types": [
+        "stadium_facility_guide",
+        "stadium_bag_policy",
+        "stadium_transport_guide"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/CHANGWON/changwon_ncpark_safety_reopen.html",
+      "notes": "2025년 창원NC파크 재개장 전 시설 보수, 안전 점검, 안전관리 인력 확대, 동선 안내 등 공식 보도자료."
+    },
+    {
+      "source_id": "nc_dinos_notice_alternate_home",
+      "title": "NC 다이노스 임시 대체 홈구장 검토 착수 공지",
+      "url": "https://www.ncdinos.com/dinos/notice/view.do?newsType=all&pageNo=1&seq=541766",
+      "source_type": "official_team",
+      "stadium_id": "CHANGWON",
+      "team_id": "NC",
+      "document_types": [
+        "stadium_bag_policy",
+        "stadium_facility_guide",
+        "stadium_transport_guide"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/CHANGWON/nc_dinos_notice_alternate_home.html",
+      "notes": "2025년 창원NC파크 안전점검 지적사항과 임시 대체 홈구장 검토 관련 NC 공식 공지. 구단 주소와 대표번호도 raw 하단에서 확인 가능."
+    },
+    {
+      "source_id": "nc_dinos_app_store",
+      "title": "NC DINOS 공식 앱 App Store",
+      "url": "https://apps.apple.com/kr/app/nc-dinos/id1495745743",
+      "source_type": "official_app_store",
+      "stadium_id": "CHANGWON",
+      "team_id": "NC",
+      "document_types": [
+        "stadium_ticketing_guide",
+        "stadium_seat_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/CHANGWON/nc_dinos_app_store.html",
+      "notes": "NC Dinos Baseball Club이 배포한 공식 앱 페이지. 티켓 예매, 스마트 티켓, 다이나믹 프라이싱, 발권/입장 기능 근거."
+    },
+    {
+      "source_id": "changwon_kbo_safe_campaign",
+      "title": "창원NC파크 참고용 KBO 경기장 안전정책 SAFE 캠페인",
+      "url": "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+      "source_type": "official_league",
+      "stadium_id": "CHANGWON",
+      "team_id": "NC",
+      "document_types": [
+        "stadium_bag_policy",
+        "stadium_first_visit_tip"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/CHANGWON/changwon_kbo_safe_campaign.html",
+      "notes": "창원NC파크 문서 raw snapshot에 포함한 공통 출처. KBO 전 구장 공통 안전/반입 최소 기준. 구단별 예외 확인 필요."
+    },
+    {
+      "source_id": "changwon_kbo_ticket_map",
+      "title": "창원NC파크 참고용 KBO 리그 티켓 안내",
+      "url": "https://www.koreabaseball.com/kbo/league/map.aspx",
+      "source_type": "official_league",
+      "stadium_id": "CHANGWON",
+      "team_id": "NC",
+      "document_types": [
+        "stadium_ticketing_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/CHANGWON/changwon_kbo_ticket_map.html",
+      "notes": "NC 구단 예매처 매핑의 리그 공식 출처."
     }
   ]
 }

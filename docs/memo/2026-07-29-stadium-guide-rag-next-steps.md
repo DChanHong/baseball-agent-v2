@@ -53,7 +53,7 @@ data/stadium_guide/raw/2026-07-29/{STADIUM_ID}/metadata.json
 
 ## 3. 현재 유지 중인 구장
 
-현재 normalized 문서가 유지되는 구장은 8개다.
+현재 normalized 문서가 유지되는 구장은 9개다.
 
 ```text
 SAJIK
@@ -64,12 +64,13 @@ DAEGU
 SUWON
 DAEJEON
 JAMSIL
+CHANGWON
 ```
 
 문서 수:
 
 ```text
-총 40개 normalized JSON
+총 45개 normalized JSON
 ```
 
 대략적인 상태:
@@ -84,6 +85,7 @@ JAMSIL
 | `SUWON` | 주차예약/구장/티켓 출처가 비교적 좋음 |
 | `DAEJEON` | 좌석/시설/주소 중심으로 유지. 티켓/교통 상세는 추가 검수 필요 |
 | `JAMSIL` | 서울시 시설/주차, LG 공식 티켓 중심으로 유지. 두산 좌석/요금은 추가 검수 필요 |
+| `CHANGWON` | 창원관광/창원시 보도자료/NC 공식 앱 중심으로 유지. 좌석/교통 상세는 추가 검수 필요 |
 
 자세한 현재 상태는 아래 파일을 먼저 확인한다.
 
@@ -93,10 +95,10 @@ data/stadium_guide/collection_summary.md
 
 ## 4. 남은 수집 및 보강 작업
 
-아래 구장은 아직 normalized 문서를 유지하지 않는다.
+정규 홈구장 기준 초기 수집 대상은 모두 normalized 문서로 생성했다.
 
 ```text
-CHANGWON
+미수집 정규 홈구장 없음
 ```
 
 ### 4.1 JAMSIL
@@ -132,19 +134,21 @@ DOOSAN
 NC
 ```
 
-보류 이유:
+수집 상태:
 
-- NC 공식 구장/티켓/좌석 최신 페이지가 충분히 확보되지 않았다.
-- 다이노스몰 후보 출처는 fetch timeout이 발생했다.
-- 창원NC파크는 운영 상태/안전점검 관련 이슈가 있어 최신 공식 공지 확인이 중요하다.
+- 2026-07-30 기준 공식 출처 기반 normalized 5개 문서 생성 완료.
+- 창원관광 공식 페이지에서 주소, 편의시설, 주차장 1,240면, 약 2만 명 수용, 좌석 큰 범주를 확인했다.
+- NC 공식 앱 페이지에서 다이나믹 프라이싱 기반 자체 티켓 시스템, 스마트 티켓, 예매/발권/입장 기능을 확인했다.
+- 창원시 공식 보도자료와 NC 공식 공지로 2025년 안전점검/재개장 맥락을 함께 남겼다.
+- 창원관광 raw HTML은 API 호출 구조라 상세 본문 단독 재현성이 약하다.
 
-다음에 찾아야 할 출처:
+추가 보강 후보:
 
 ```text
-NC 공식 티켓/좌석 안내
-창원NC파크 공식 시설/교통/주차 안내
-NC 공식 최신 운영 상태 공지
-다이노스몰/매장 안내의 현재 운영 출처
+좌석 구역명, 좌석별 가격, 응원석/원정석 공식 예매 화면 검수
+버스 노선, 셔틀 운영, 주차 요금, 만차 대안 공식 출처
+게이트, 화장실, 수유실, 팬샵, 매점 상세 위치 공식 출처
+경기일별 안전/운영 공지 확인
 ```
 
 ### 4.3 DAEJEON
@@ -371,7 +375,8 @@ find data/stadium_guide/normalized -mindepth 2 -maxdepth 2 -name '*.json'
 그 다음 우선순위:
 
 ```text
-1. CHANGWON 최신 운영/티켓 공식 출처 확인
-2. approved 문서 검수 기준 작성
-3. chunk JSONL 생성 스크립트 작성
+1. approved 문서 검수 기준 작성
+2. 45개 normalized 문서 기준 chunk JSONL 재생성
+3. SAJIK 외 구장까지 embedding/upsert 범위 확장
+4. stadium_id metadata filter가 전체 구장에서 잘 동작하는지 평가셋 추가
 ```

@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "CHANGWON_stadium_seat_guide_20260729",
+  "document_type": "stadium_seat_guide",
+  "stadium_id": "CHANGWON",
+  "team_id": "NC",
+  "title": "창원NC파크 좌석 안내 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "changwon_tour_ncpark",
+    "nc_dinos_app_store"
+  ],
+  "content": "창원관광 공식 페이지는 창원NC파크 마산구장을 약 2만 명 수용 규모의 야구장으로 소개하고, 관람석은 일반석, 프리미엄석, 스카이박스 등으로 운영된다고 안내한다. 또한 외야를 따라 전 구역을 순환할 수 있는 콘코스 구조와 다양한 프리미엄 좌석, 스카이박스가 특징으로 언급된다. NC DINOS 공식 앱 설명은 다이나믹 프라이싱을 적용한 자체 티켓 시스템을 제공한다고 안내하므로, 창원NC파크의 좌석별 가격은 고정 표로 단정하기보다 경기별 예매 화면에서 확인해야 한다. 현재 수집 단계에서는 좌석 종류의 큰 범주만 유지하고, 좌석 구역명과 가격 상세는 공식 앱/예매 화면 수동 검수 후 보강한다.",
+  "metadata": {
+    "stadium_name": "창원NC파크 마산구장",
+    "home_team_ids": [
+      "NC"
+    ],
+    "capacity": 20000,
+    "topic_summary": "창원NC파크 좌석 규모와 일반석/프리미엄석/스카이박스 중심의 최소 좌석 안내",
+    "search_keywords": [
+      "창원NC파크 좌석",
+      "NC 다이노스 좌석",
+      "창원NC파크 스카이박스",
+      "창원NC파크 프리미엄석",
+      "NC 다이노스 다이나믹 프라이싱",
+      "창원NC파크 좌석 가격"
+    ],
+    "limitations": [
+      "좌석 구역명, 응원석, 원정석, 좌석별 가격은 공식 앱 또는 예매 화면 수동 검수가 필요하다.",
+      "다이나믹 프라이싱 적용 가능성이 있어 좌석 가격은 경기별로 달라질 수 있다."
+    ]
+  }
+}

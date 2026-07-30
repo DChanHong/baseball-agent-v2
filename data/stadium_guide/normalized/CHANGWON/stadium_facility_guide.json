@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "CHANGWON_stadium_facility_guide_20260729",
+  "document_type": "stadium_facility_guide",
+  "stadium_id": "CHANGWON",
+  "team_id": "NC",
+  "title": "창원NC파크 시설 안내 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "changwon_tour_ncpark",
+    "changwon_ncpark_safety_reopen",
+    "nc_dinos_notice_alternate_home"
+  ],
+  "content": "창원NC파크 마산구장은 경남 창원시 마산회원구 양덕동 477 일대에 있는 NC 다이노스 홈구장이다. NC 공식 페이지 하단에는 주소가 경상남도 창원시 마산회원구 상호로 63, 창원NC파크(양덕동)로 안내되어 있고 대표번호는 1644-9112다. 창원관광 공식 페이지는 창원NC파크를 2019년 문을 연 KBO 리그 NC 다이노스 홈구장이자 창원의 대표 복합문화공간으로 소개하며, 약 2만 명 수용, 지하 1층과 지상 4층 규모, 무장애 친화 설계, 외야를 따라 전 구역을 순환할 수 있는 콘코스 구조, 프리미엄 좌석과 스카이박스, LED 조명 등을 안내한다. 편의시설 후보로 가족화장실, 야구 전시관, 다이노스 팬숍, 가족공원, 유아휴게실, 자전거대여, 휠체어대여, 유모차대여, 놀이시설, 와이파이 정보가 확인된다. 창원시는 2025년 5월 시설 보수와 안전 점검 완료를 공지했으며, 외부 루버 철거, 관중석 상부 간판/조명 고정 보완, 난간·계단·대피도·균열 보수, 안전관리 인력 확대 등을 안내했다.",
+  "metadata": {
+    "stadium_name": "창원NC파크 마산구장",
+    "home_team_ids": [
+      "NC"
+    ],
+    "address": "경상남도 창원시 마산회원구 상호로 63, 창원NC파크(양덕동)",
+    "capacity": 20000,
+    "topic_summary": "창원관광/NC/창원시 공식 출처 기반 창원NC파크 시설 개요",
+    "search_keywords": [
+      "창원NC파크 시설",
+      "창원NC파크 마산구장",
+      "창원NC파크 수용인원",
+      "창원NC파크 가족화장실",
+      "창원NC파크 팬숍",
+      "창원NC파크 스카이박스",
+      "창원NC파크 안전점검"
+    ],
+    "limitations": [
+      "창원관광 raw HTML은 상세 본문이 API 호출 구조라 raw snapshot 단독 재현성이 약하다.",
+      "게이트, 층별 화장실, 수유실, 흡연구역, 매점 상세 위치는 추가 공식 출처 확인이 필요하다.",
+      "안전 보수와 재개장 관련 내용은 2025년 보도자료 기준이므로 최신 운영 공지를 함께 확인해야 한다."
+    ]
+  }
+}

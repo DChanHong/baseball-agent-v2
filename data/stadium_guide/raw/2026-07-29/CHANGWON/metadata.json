@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0.0",
+  "collected_at": "2026-07-30T00:00:00+09:00",
+  "collector": "manual_curl",
+  "stadium_id": "CHANGWON",
+  "team_ids": [
+    "NC"
+  ],
+  "files": [
+    {
+      "source_id": "changwon_tour_ncpark",
+      "source_url": "https://www.changwon.go.kr/tour/index.do?menuCode=001_003000000000&page.pageNo=1&search.searchKeyword=%EC%B0%BD%EC%9B%90NC%ED%8C%8C%ED%81%AC&tourProgramNo=135",
+      "source_type": "official_public",
+      "local_file": "changwon_tour_ncpark.html",
+      "fetch_status": "success_dynamic_shell",
+      "byte_size": 59645,
+      "content_hash": "sha256:71490010fb8d7f9f778cfda016de6a2dd692d77d440b4a74a9fb9ddebeec812f",
+      "notes": "창원관광 공식 페이지. 검색 인덱스와 브라우저에서는 주소, 편의시설, 주차장 1,240면, 약 2만 명 수용, 프리미엄 좌석/스카이박스 정보를 확인할 수 있으나 raw HTML 본문은 API 호출 구조라 상세 텍스트가 제한적이다."
+    },
+    {
+      "source_id": "changwon_ncpark_safety_reopen",
+      "source_url": "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&cpage=3&gcode=1011&idx=857954",
+      "source_type": "official_public",
+      "local_file": "changwon_ncpark_safety_reopen.html",
+      "fetch_status": "success",
+      "byte_size": 155124,
+      "content_hash": "sha256:accaf2e79e138791a48d200f90adadc9db95f24196bc078278236caa5b90be9d"
+    },
+    {
+      "source_id": "nc_dinos_notice_alternate_home",
+      "source_url": "https://www.ncdinos.com/dinos/notice/view.do?newsType=all&pageNo=1&seq=541766",
+      "source_type": "official_team",
+      "local_file": "nc_dinos_notice_alternate_home.html",
+      "fetch_status": "success",
+      "byte_size": 21405,
+      "content_hash": "sha256:f8b221ac471240f406d70d24529a1a2f7162660068c2364acd13c6525d729c98"
+    },
+    {
+      "source_id": "nc_dinos_app_store",
+      "source_url": "https://apps.apple.com/kr/app/nc-dinos/id1495745743",
+      "source_type": "official_app_store",
+      "local_file": "nc_dinos_app_store.html",
+      "fetch_status": "success",
+      "byte_size": 467099,
+      "content_hash": "sha256:2403079079c88b110960e5b34c39fa43ec522ddc4ae1d1de4b99107909b7f28d"
+    },
+    {
+      "source_id": "changwon_kbo_safe_campaign",
+      "source_url": "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+      "source_type": "official_league",
+      "local_file": "changwon_kbo_safe_campaign.html",
+      "fetch_status": "success",
+      "byte_size": 53039,
+      "content_hash": "sha256:27c926ff8bcce3d1fdb883dbe7f9c137a496b80615b11a9822c7cefbfd1891ed"
+    },
+    {
+      "source_id": "changwon_kbo_ticket_map",
+      "source_url": "https://www.koreabaseball.com/kbo/league/map.aspx",
+      "source_type": "official_league",
+      "local_file": "changwon_kbo_ticket_map.html",
+      "fetch_status": "success",
+      "byte_size": 37631,
+      "content_hash": "sha256:314a241482c3b4e920e58a49afff544c41b7e8b968508723dd6590b7b0551a96"
+    }
+  ]
+}

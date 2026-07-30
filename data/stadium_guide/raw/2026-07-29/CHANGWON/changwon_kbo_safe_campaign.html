@@ -1,0 +1,845 @@
+
+
+<!DOCTYPE html>
+<html lang="ko">
+<head><title>
+	SAFE 캠페인 | KBO 경기장 안전정책 | 주요 사업/행사 | KBO
+</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta http-equiv="Content-Script-Type" content="text/javascript" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta http-equiv="X-UA-Compatible" content="IE=edge, Chrome" /><meta name="title" content="KBO" /><meta name="author" content="스포츠투아이" /><meta name="keywords" content="KBO, 한국야구위원회, 프로야구, KBO 리그, 퓨처스리그, 프로야구순위, 프로야구 일정" /><meta name="viewport" content="width=1200" />
+    <!-- OG -->
+    <meta property="og:type" content="website" /><meta property="og:title" content="KBO 홈페이지" /><meta property="og:description" content="KBO, 한국야구위원회, 프로야구, KBO 리그, 퓨처스리그, 프로야구순위, 프로야구 일정" /><meta property="og:image" content="https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/common/open_graph_kbo_2022.png" /><meta property="og:url" content="https://www.koreabaseball.com/" />
+
+	<link rel="shortcut icon" type="image/x-icon" href="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/common/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/css/font.min.css?version=20260702" crossorigin="anonymous"/>
+	<link rel="stylesheet" type="text/css" href="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/css/reset.min.css?version=20260702" />
+	<link rel="stylesheet" type="text/css" href="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/css/common.min.css?version=20260702" />
+	<link rel="stylesheet" type="text/css" href="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/css/layout.min.css?version=20260702" />
+	<link rel="stylesheet" type="text/css" href="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/css/contents.min.css?version=20260702" />
+    <link rel="stylesheet" type="text/css" href="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/css/jquery-ui.min.css?version=20260702" />
+    <link rel="stylesheet" type="text/css" href="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/css/jquery-ui-theme.min.css?version=20260702" />
+	<link rel="stylesheet" type="text/css" href="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/css/jquery.bxslider.min.css?version=20260702" />
+
+	<script type="text/javascript" charset="utf-8" src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/js/jquery-1.12.4.min.js?version=20260724"></script>
+    <script type="text/javascript" charset="utf-8" src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/js/jquery-migrate-1.1.1.min.js?version=20260724"></script>
+    <script type="text/javascript" charset="utf-8" src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/js/jquery-ui.min.js?version=20260724"></script>
+	<script type="text/javascript" charset="utf-8" src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/js/jquery.bxslider.min.js?version=20260724"></script>
+    <script type="text/javascript" charset="utf-8" src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/js/jquery.ui.datepicker-ko.min.js?version=20260724"></script>
+    <script type="text/javascript" charset="utf-8" src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/js/S2i.Common-1.0.1.min.js?version=20260724"></script>
+    <script type="text/javascript" charset="utf-8" src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/js/S2i.Paging-1.0.8.min.js?version=20260724"></script>
+	<script type="text/javascript" charset="utf-8" src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/js/common.min.js?version=20260724"></script>
+    <script type="text/javascript" charset="utf-8" src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/js/S2i.MakeTable-1.0.3.min.js?version=20260724"></script>
+    <script type="text/javascript" charset="utf-8" src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/js/bTogether.min.js?version=20260724"></script>
+    
+	<!—[if lt IE 9]>
+		<script src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/js/html5shiv.min.js?version=20260724"></script>
+	<![endif]—>
+	<!-- Google Tag Manager -->
+	<script>
+        $.ajaxSetup({
+            timeout: 10000 // 전역 타임아웃 설정
+        });
+
+        $(document).ajaxError(function (event, jqxhr, settings, thrownError) {
+			// 호출 지연 10초
+            if (thrownError === 'timeout') {
+                console.warn(`timeout: ${settings.url}`);
+				if(settings.url == "https://www.kborc.com/getKboRCList.ajax"){
+					$("#KBOMovie").remove();
+				}
+				if(settings.url == "https://www.kborc.com/getKboRCList2.ajax"){
+					$("#KBOCheckedSwing").remove();
+				}
+
+            } 
+			// 호출 오류
+			else {
+                console.warn(`error: ${settings.url}`, thrownError);
+				if(settings.url == "https://www.kborc.com/getKboRCList.ajax"){
+					$("#KBOMovie").remove();
+				}
+				if(settings.url == "https://www.kborc.com/getKboRCList2.ajax"){
+					$("#KBOCheckedSwing").remove();
+				}
+            }
+        });
+
+
+		(function (w, d, s, l, i) {
+			w[l] = w[l] || []; w[l].push({
+				'gtm.start':
+					new Date().getTime(), event: 'gtm.js'
+			}); var f = d.getElementsByTagName(s)[0],
+				j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+					'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+		})(window, document, 'script', 'dataLayer', 'GTM-K3BL64Q');
+
+        $(document).ready(function () {
+            var jbOffset = $('.lnb-wrap').offset();
+            $(window).scroll(function () {
+                if ($(document).scrollTop() > jbOffset.top) {
+                    $('.lnb-wrap').addClass('fixed');
+                }
+                else {
+                    $('.lnb-wrap').removeClass('fixed');
+                }
+            });
+        });
+    </script>
+	<!-- End Google Tag Manager -->
+    
+    <link rel="stylesheet" type="text/css" href="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/css/sub.min.css?version=20260702" />
+    
+	<link type="text/css" rel="stylesheet" href="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/css/event.min.css?version=20260702"/>
+    
+    <link type="text/css" rel="stylesheet" href="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/css/about.min.css?version=20260702"/>
+    <link type="text/css" rel="stylesheet" href="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/min/css/etc.min.css?version=20260702"/>
+
+
+</head>
+<body>
+	<!-- Google Tag Manager (noscript) -->
+	<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K3BL64Q"
+	height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	<!-- End Google Tag Manager (noscript) -->
+    <form method="post" action="./Safe.aspx" id="mainForm">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTE3MjU5OTQzNTVkZAVny37z+3ZEoCcSPj+FS/Dl7Zf+" />
+
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="146BB0F7" />
+	    <!-- wrap -->
+	    <div id="wrap">
+		    <!-- header -->
+		    <header>	
+			    <div id="gnb" class="bgf3">
+				    <div class="gnb-wrap">
+						
+						
+					    <ul class="menu">
+                            
+						    <li><a href="/Member/Login.aspx">로그인</a></li>
+                            <li><a href="/Member/Join/Accessterms.aspx">회원가입</a></li>
+                            
+						    <li><a href="http://eng.koreabaseball.com/">ENGLISH</a></li>						
+					    </ul>
+					    <div class="search-area">
+						    <div class="search-box">
+							    <input class="ipt-search" type="text" id="txtTopPlayerWord" placeholder="선수 검색하기" />
+							    <a href="#none;" id="btnTopPlayerSearch" class="btn-search"><img src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/common/btn_search.png" alt="검색" /></a>
+						    </div>
+						    <div id="player_search_area" class="search-result">
+							    <!-- <p class="null">검색 결과가 없습니다.</p> -->
+							    
+						    </div>
+					    </div>
+				    </div>
+			    </div>
+			    <div class="wrapping lnb-wrap">
+                    <div class="lnb-box">
+						<h1 class="logo"><a href="/Default.aspx"><img src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/common/h1_logo.png" alt="" /></a></h1>
+						<nav>
+					    <ul id="lnb">
+						    <li>
+							    <a href="/Schedule/Schedule.aspx">일정・결과</a>
+							    <div class="lnb-sub">
+								    <ul class="lnb01">
+                                        <li><a href="/Schedule/Schedule.aspx">경기일정・결과</a></li>
+									    
+									    <li><a href="/Schedule/GameCenter/Main.aspx">게임센터</a></li>
+									    <li><a href="/Schedule/ScoreBoard.aspx">스코어보드</a></li>
+                                        <li><a href="/Schedule/Allstar/Game/Main2026.aspx">올스타전</a></li>
+									    <li><a href="/Schedule/International/Wbc/Main2026.aspx">국제대회</a></li>
+                                        <li><a href="/Schedule/Weather.aspx">야구장 날씨</a></li>
+								    </ul>
+							    </div>
+						    </li>
+						    <li>
+							    <a href="/Record/Player/HitterBasic/Basic1.aspx?sort=HRA_RT">기록・순위</a>
+							    <div class="lnb-sub">
+								    <ul class="lnb02">
+									    <li><a href="/Record/Player/HitterBasic/Basic1.aspx?sort=HRA_RT">기록실</a></li>
+									    <li><a href="/Record/TeamRank/TeamRankDaily.aspx">팀 순위</a></li>
+									    <li><a href="/Record/Ranking/Top5.aspx">선수 순위</a></li>
+									    <li><a href="/Record/History/Top/Hitter.aspx">역대 기록</a></li>
+                                        <li><a href="/Record/Expectation/WeekList.aspx">예상 달성 기록</a></li>
+										<li><a href="/Record/RecordCorrect/RecordCorrect.aspx">기록 정정 현황</a></li>
+										<li><a href="/Record/Crowd/GraphTeam.aspx">관중 현황</a></li>
+			                            
+								    </ul>
+							    </div>
+						    </li>
+						    <li>
+							    <a href="/Player/Search.aspx">선수</a>
+							    <div class="lnb-sub">
+								    <ul class="lnb04">
+									    <li><a href="/Player/Search.aspx">선수 조회</a></li>
+									    <li><a href="/Player/Register.aspx">선수 등록 현황</a></li>
+										<li><a href="/Player/Trade.aspx">선수 이동 현황</a></li>
+										<li><a href="/Player/Awards/PlayerPrize.aspx">수상 현황</a></li>
+										<li><a href="/Player/Legend40.aspx">레전드 40</a></li>
+									    <li><a href="/Player/CareerCertificate.aspx">경력증명서 신청</a></li>
+
+									    
+										
+										
+								    </ul>
+							    </div>
+						    </li>						    
+						    <li>
+							    <a href="/MediaNews/Highlight/List.aspx">미디어・뉴스</a>
+							    <div class="lnb-sub">
+								    <ul class="lnb05">
+										<li><a href="/MediaNews/Highlight/List.aspx">하이라이트</a></li>
+										<li><a href="/MediaNews/News/BreakingNews/List.aspx">뉴스</a></li>
+										<li><a href="/MediaNews/Notice/List.aspx">KBO 보도자료</a></li>
+										
+										<li><a href="/MediaNews/UbivMarketer/VideoList.aspx">Z-CREW</a></li>
+										
+										
+										
+                                        
+									</ul>
+							    </div>
+						    </li>
+						    <li>
+							    <a href="javascript:;">KBO</a>
+							    <div class="lnb-sub lnb-style-all">
+								    <div class="wrapping lnb-all-wrap" style="width:713px;">
+									    <h3>KBO</h3>
+									    <div class="lnb-all kbo01">
+										    <h4>KBO 리그</h4>
+										    <ul>
+											    <li><a href="/Kbo/League/GameManage2026.aspx">2026 주요 규정∙규칙</a></li>
+											    <li><a href="/Kbo/League/GameManageRule/GameManage.aspx">경기운영제도</a></li>
+												<li><a href="/Kbo/League/TeamInfo.aspx">구단 소개</a></li>
+											    <li><a href="/Kbo/League/TeamHistory.aspx">구단 변천사</a></li>
+												<li><a href="/Kbo/League/Map.aspx">티켓 안내</a></li>
+										    </ul>
+									    </div>
+									    <div class="lnb-all kbo02">
+										    <h4>게시판</h4>
+										    <ul>
+											    <li><a href="/Kbo/Board/Notice/List.aspx">NOTICE</a></li>
+											    <li><a href="/Kbo/Board/Faqs/List.aspx">자주 하는 질문</a></li>
+												<li><a href="/Kbo/Board/Ebook/EbookPublication.aspx">규정・자료실</a></li>
+
+											    
+											    
+											    
+												
+												
+												
+												
+												
+												
+											    
+											    
+											    
+											    
+											    
+										    </ul>
+									    </div>	
+									    <div class="lnb-all kbo03">
+										    <h4>ABOUT KBO</h4>
+										    <ul>
+												<li><a href="/Kbo/AboutKbo/GroupAndActivity.aspx">조직・활동</a></li>
+												<li><a href="/Kbo/AboutKbo/Logo/Logo.aspx">KBO 로고</a></li>
+												<li><a href="/Kbo/AboutKbo/Committee/OrganizationChart.aspx">기록위원회</a></li>
+												<li><a href="/Kbo/AboutKbo/MedicalCommittee/MedicalOrganization.aspx">의무위원회</a></li>
+                                                
+											    
+                                                
+										    </ul>
+									    </div>	
+									    <div class="lnb-all kbo04">
+										    <h4>주요 사업・행사</h4>
+										    <ul>
+												
+												<li data-tab="MvpApplication"><a href="/Kbo/BusinessAndEvent/Mvp.aspx">2025 KBO 시상식</a></li>
+												<li data-tab="DraftApplication"><a href="/Kbo/BusinessAndEvent/Draft.aspx">2026 신인 드래프트</a></li>
+												
+												 
+												<li><a href="/Kbo/BusinessAndEvent/SafeGuide.aspx">KBO 경기장 안전정책</a></li>
+												<li><a href="/Kbo/BusinessAndEvent/KboArchive/PurchaseGuide.aspx">KBO 리그 영상 구매</a></li>
+												<li><a href="/Kbo/BusinessAndEvent/OnSiteViewingSupport.aspx">시각장애인 관람 지원</a></li>
+												 
+											                                                    
+											    
+											    
+												
+
+												
+				                                
+				                                
+										    </ul>
+									    </div>	
+									    	
+									    
+								    </div>
+								    
+							    </div>
+						    </li>
+							<li class="futures">
+							    <a href="/Futures/Main.aspx">퓨처스리그</a>
+							    <div class="lnb-sub">
+								    <ul class="lnb06">
+									    <li><a href="/Futures/Schedule/GameList.aspx">경기일정・결과</a></li>
+									    <li><a href="/Futures/TeamRank/North.aspx">팀 순위</a></li>
+									    <li><a href="/Futures/Top/Main.aspx">TOP5</a></li>
+									    <li><a href="/Futures/Player/Hitter.aspx">기록실</a></li>
+										<li><a href="/Futures/Player/Register.aspx">선수 등록 현황</a></li>
+									    
+                                        
+                                        
+									    
+									    										
+								    </ul>
+							    </div>					
+						    </li>
+							<li id="market" class="market"><a href="https://www.kbomarket.com/" target="_blank">KBO 마켓</a></li>
+							
+							<li id="" class="kbofont" data-tab="KboFont"><a href="/Reference/etc/KboFont.aspx">KBO 폰트</a></li>
+						    <li id="lnbAll">
+							    <a href="javascript:;">전체 메뉴</a>
+							    <div class="lnb-sub lnb-style-all">
+								    <div class="wrapping lnb-all-wrap">
+									    <div class="line line01">
+										    <h3>전체 메뉴</h3>
+										    <div class="lnb-all menu01">
+											    <h4>일정・결과</h4>
+											    <ul>
+												    <li><a href="/Schedule/Schedule.aspx">경기일정・결과</a></li>
+													
+													<li><a href="/Schedule/GameCenter/Main.aspx">게임센터</a></li>
+													<li><a href="/Schedule/ScoreBoard.aspx">스코어보드</a></li>
+													<li><a href="/Schedule/Allstar/Game/Main2026.aspx">올스타전</a></li>
+													<li><a href="/Schedule/International/Wbc/Main2026.aspx">국제대회</a></li>
+													<li><a href="/Schedule/Weather.aspx">야구장 날씨</a></li>
+											    </ul>
+										    </div>
+										    <div class="lnb-all menu02">
+											    <h4>기록・순위</h4>
+											    <ul>
+													<li><a href="/Record/Player/HitterBasic/BasicOld.aspx?sort=HRA_RT">기록실</a></li>
+													<li><a href="/Record/TeamRank/TeamRankDaily.aspx">팀 순위</a></li>
+													<li><a href="/Record/Ranking/Top5.aspx">선수 순위</a></li>
+													<li><a href="/Record/History/Top/Hitter.aspx">역대 기록</a></li>
+													<li><a href="/Record/Expectation/WeekList.aspx">예상 달성 기록</a></li>
+													<li><a href="/Record/RecordCorrect/RecordCorrect.aspx">기록 정정 현황</a></li>
+													<li><a href="/Record/Crowd/GraphTeam.aspx">관중 현황</a></li>
+													
+											    </ul>
+										    </div>	
+										    <div class="lnb-all menu03">
+											    <h4>선수</h4>
+											    <ul>
+													<li><a href="/Player/Search.aspx">선수 조회</a></li>
+													<li><a href="/Player/Register.aspx">선수 등록 현황</a></li>
+													<li><a href="/Player/Trade.aspx">선수 이동 현황</a></li>
+													<li><a href="/Player/Awards/PlayerPrize.aspx">수상 현황</a></li>
+													<li><a href="/Player/Legend40.aspx">레전드 40</a></li>
+													<li><a href="/Player/CareerCertificate.aspx">경력증명서 신청</a></li>
+											    </ul>
+										    </div>	
+										    <div class="lnb-all menu04">
+											    <h4>미디어・뉴스</h4>
+											    <ul>
+												    <li><a href="/MediaNews/Highlight/List.aspx">하이라이트</a></li>
+													<li><a href="/MediaNews/News/BreakingNews/List.aspx">뉴스</a></li>
+													<li><a href="/MediaNews/Notice/List.aspx">KBO 보도자료</a></li>
+													
+													<li><a href="/MediaNews/UbivMarketer/VideoList.aspx">Z-CREW</a></li>
+													
+													
+													
+													
+											    </ul>
+										    </div>	
+										    <div class="lnb-all menu05">
+											    <h4>퓨처스리그</h4>
+											    <ul>
+												    <li><a href="/Futures/Schedule/GameList.aspx">경기일정・결과</a></li>
+												    <li><a href="/Futures/TeamRank/North.aspx">팀 순위</a></li>
+												    <li><a href="/Futures/Top/Main.aspx">TOP5</a></li>
+												    <li><a href="/Futures/Player/Hitter.aspx">기록실</a></li>
+													<li><a href="/Futures/Player/Register.aspx">선수 등록 현황</a></li>
+												    												
+											    </ul>
+										    </div>
+									    </div>
+									    <div class="line line02">
+										    <h3>KBO</h3>
+										    <div class="lnb-all menu07">
+											    <h4>KBO 리그</h4>
+											    <ul>
+													<li><a href="/Kbo/League/GameManage2026.aspx">2026 주요 규정∙규칙</a></li>
+                                                    <li><a href="/Kbo/League/GameManageRule/GameManage.aspx">경기운영제도</a></li>
+													<li><a href="/Kbo/League/TeamInfo.aspx">구단 소개</a></li>
+													<li><a href="/Kbo/League/TeamHistory.aspx">구단 변천사</a></li>
+													<li><a href="/Kbo/League/Map.aspx">티켓 안내</a></li>
+											    </ul>
+										    </div>
+										    <div class="lnb-all menu08">
+											    <h4>게시판</h4>
+											    <ul>
+												    <li><a href="/Kbo/Board/Notice/List.aspx">NOTICE</a></li>
+													<li><a href="/Kbo/Board/Faqs/List.aspx">자주 하는 질문</a></li>
+													<li><a href="/Kbo/Board/Ebook/EbookPublication.aspx">규정・자료실</a></li>
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+													
+											    </ul>
+										    </div>	
+										    <div class="lnb-all menu09">
+											    <h4>ABOUT KBO</h4>
+											    <ul>
+													<li><a href="/Kbo/AboutKbo/GroupAndActivity.aspx">조직・활동</a></li>
+													<li><a href="/Kbo/AboutKbo/Logo/Logo.aspx">KBO 로고</a></li>
+													<li><a href="/Kbo/AboutKbo/Committee/OrganizationChart.aspx">기록위원회</a></li>
+													<li><a href="/Kbo/AboutKbo/MedicalCommittee/MedicalOrganization.aspx">의무위원회</a></li>
+													
+													
+													
+											    </ul>
+										    </div>	
+										    <div class="lnb-all menu10 ">
+											    <h4>주요 사업・행사</h4>
+											    <ul>
+												    <li data-tab="MvpApplication"><a href="/Kbo/BusinessAndEvent/Mvp.aspx">2025 KBO 시상식</a></li>
+													<li data-tab="DraftApplication"><a href="/Kbo/BusinessAndEvent/Draft.aspx">2026 신인 드래프트</a></li>
+													
+												    
+												    
+													<li><a href="/Kbo/BusinessAndEvent/SafeGuide.aspx">KBO 경기장 안전정책</a></li>
+													<li><a href="/Kbo/BusinessAndEvent/KboArchive/PurchaseGuide.aspx">KBO 리그 영상 구매</a></li>
+													<li><a href="/Kbo/BusinessAndEvent/OnSiteViewingSupport.aspx">시각장애인 관람 지원</a></li>
+													 
+													
+											    </ul>
+										    </div>
+									    </div>
+								    </div>
+								    <div class="btn-close">
+									    <a href="javascript:;">
+										    <img src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/common/btn_close_fff.png" alt="" />
+										    <span>닫기</span>
+									    </a>									
+								    </div>
+							    </div>
+						    </li>
+					    </ul>
+				    </nav>
+					</div>
+			    </div>
+		    </header>
+		    <!-- // header -->
+		    <hr />
+		    <!-- container -->
+		    
+    
+<section id="container">
+	<div class="wrapping container-wrap">			
+		<aside>
+			<h3 style="font-size:17px;">주요 사업・행사</h3>
+			<ul id="snb">
+				<li data-tab="DraftApplication"><a href="/Kbo/BusinessAndEvent/Draft.aspx" id="lnbDraft">2026 신인 드래프트</a></li>
+				<li data-tab="MvpApplication"><a href="/Kbo/BusinessAndEvent/Mvp.aspx" id="lnbMvp">2025 KBO 시상식</a></li>
+				
+				
+				<li><a href="/Kbo/BusinessAndEvent/SafeGuide.aspx" id="lnbSafe">KBO 경기장 안전정책</a></li>
+				<li><a href="/Kbo/BusinessAndEvent/KboArchive/PurchaseGuide.aspx" id="lnbArchive">KBO 리그 영상 구매</a></li>
+				
+				
+				<li><a href="/Kbo/BusinessAndEvent/OnSiteViewingSupport.aspx" id="lnbOnSiteViewing">시각장애인 관람 지원</a></li>
+			</ul>
+			
+		</aside>
+		
+<div id="contents" class="content01">
+	<!--sub title & location -->
+	<div class="location">
+		<span class="home"><a href="/Default.aspx"><img src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/common/ico_home.gif" alt="홈으로" /></a></span> &gt;
+		<span class="depth1"><a href="/Kbo/BusinessAndEvent/MediaDay.aspx">주요 사업・행사</a></span> &gt;
+		<span class="depth2">KBO 경기장 안전정책</span>
+	</div>
+	<h4 class="tit-page">KBO 경기장 안전정책</h4>
+	<!-- // sub title & location -->
+	<div class="sub-content">
+        <div class="tab-depth1">
+            <ul class="tab tab2">
+                <li><a href="/Kbo/BusinessAndEvent/SafeGuide.aspx">KBO 경기장 안전가이드라인</a></li>
+                <li class="on"><a href="javascript:;">SAFE 캠페인</a></li>
+            </ul>
+        </div>
+		<div class="aboutBiz">
+			<p style="margin-bottom:22px;"><img src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/about/safe_img.jpg" alt="" /></p>
+			
+            
+			 
+			
+			<div class="contSocialCtrb contRedCross contFirst">
+				<div class="safe">
+					<h4 class="bul">SAFE 캠페인이란? </h4> 
+					<p>SAFE 캠페인이란 안전하고 쾌적한 야구장 환경을 조성하고, 성숙한 관람 문화의 정착을 돕기 위해 <span class="red1">S</span>ecurity(안전), <span class="red1">A</span>ttention(주의), <span class="red1">F</span>resh(쾌적), <span class="red1">E</span>mergency(응급상황) 등 다양한 안전관람수칙을 공유하는 한편 2015 시즌부터 적용되는 경기장 안전 ∙ 보안 강화 규정을 팬 여러분께 알리기 위한 야구 관람 안전 캠페인입니다.</p>					
+				</div>
+					<div class="safe">
+					<h4 class="bul">안전 • 보안 규정의 주요 내용은 무엇인가요?</h4> 
+					<ul class="safetxt1">
+						<li class="ic">
+                            선수와 관람객의 안전을 위협할 수 있는 <span class="sfont1">모든 유리병, 총량 1L 초과 PET 및 알루미늄 캔 용기에 담긴 음료(미개봉 상태의 음료에 한해 1인당 PET 1개, 캔 2개까지 허용)</span>, 
+                            얼린 생수의 경기장 내 반입이 제한됩니다.
+						</li>
+						<li class="ic" style="padding-top:5px;">
+                            과도한 물품의 반입으로 인해 관람객의 이동과 통행을 방해하고 경기장 내 시설물(좌석∙컵홀더 등)을 활용하여 거치하는 등 타인의 경기장 이용에 지장을 초래하거나, 
+                            유사시 원활한 대피를 어렵게 하는 일이 발생하지 않도록 반입 가능한 소지품의 품목, 크기와 개수가 제한됩니다.
+                        </li>
+                        <li class="ic" style="padding-top:5px;">
+                            <span class="sfont1">관람객 1인당 가방 1개(가로 45cm x 세로 45cm x 폭 20cm)와 쇼핑백류 1개(가로 30cm x 손잡이 포함 세로 50cm x 폭 12cm)</span>까지 지참이 가능하며, 
+                            그 외의 가방, 상자 • 아이스박스를 비롯한 돗자리, 휴대용 의자, 휴대용 간이테이블과 같은 물품들은 반입이 허용되지 않습니다.
+                        </li>
+					</ul>
+					<p>이와 같은 조치들은 최소한의 경기장 안전수칙으로서, 보다 더 안전하고 쾌적한 야구 관람 환경을 만들어 나가는데 중요한 역할을 할 것으로 기대하고 있습니다. 안전한 관람 문화 정착을 위하여 야구팬 여러분의 동참과 협조를 부탁 드립니다.</p>
+				</div>
+				 <div class="safe">
+					<h4 class="bul">SAFE 캠페인 FAQ</h4> 
+					<ul class="safetit">
+                        <li onclick="javascript:clickshow(1);" style="cursor:pointer;">
+                            <h4>1. SAFE 캠페인이란?  <a> <span class="ic"><img src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/about/safe_ic.gif" /></span></a></h4> 
+                            <ul id="block1" style="padding:0;display:none;">
+                                <li>SAFE 캠페인이란 안전하고 쾌적한 야구장 환경을 조성하고, 성숙한 관람 문화의 정착을 돕기 위해 Security(안전), Attention(주의), Fresh(쾌적), Emergency(응급상황) 등 다양한 안전관람수칙을 공유하는 한편 2015 시즌부터 적용되는 경기장 안전 ∙ 보안 강화 규정을 팬 여러분께 알리기 위한 야구 관람 안전 캠페인입니다.</li>  
+                            </ul>
+                        </li>
+                        <li onclick="javascript:clickshow(2);" style="cursor:pointer;">
+                            <h4>2. 안전 – 보안 규정의 주요내용은 무엇인가요?  <a> <span class="ic"><img src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/about/safe_ic.gif" /></span></a></h4> 
+                            <ul id="block2" style="padding:0;display:none;">
+                                <li>선수와 관람객의 안전을 위협할 수 있는 모든 유리병, 총량 1L 초과 PET 및 알루미늄 캔 용기에 담긴 음료(미개봉 상태의 음료에 한해 1인당 PET 1개, 캔 2개까지 허용), 얼린 생수의 경기장 내 반입이 제한됩니다.</li>
+                                <li>과도한 물품의 반입으로 인해 관람객의 이동과 통행을 방해하고 경기장 내 시설물(좌석∙컵홀더 등)을 활용하여 거치하는 등 타인의 경기장 이용에 지장을 초래하거나, 유사시 원활한 대피를 어렵게 하는 일이 발생하지 않도록 반입 가능한 소지품의 품목, 크기와 개수가 제한됩니다.</li>
+                                <li>관람객 1인당 가방 1개(가로 45cm x 세로 45cm x 폭 20cm)와 쇼핑백류 1개(가로 30cm x 손잡이 포함 세로 50cm x 폭 12cm)까지 지참이 가능하며, 그 외의 가방, 상자 • 아이스박스를 비롯한 돗자리, 휴대용 의자, 휴대용 간이테이블과 같은 물품들은 반입이 허용되지 않습니다.</li>
+                                <li>이와 같은 조치들은 최소한의 경기장 안전수칙으로서, 보다 더 안전하고 쾌적한 야구 관람 환경을 만들어 나가는데 중요한 역할을 할 것으로 기대하고 있습니다. 안전한 관람 문화 정착을 위하여 야구팬 여러분의 동참과 협조를 부탁 드립니다.</li>
+                            </ul>
+                        </li>
+                        <li onclick="javascript:clickshow(3);" style="cursor:pointer;">
+                            <h4>3. 경기장 안전 강화의 배경은 무엇인가요?  <a> <span class="ic"><img src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/about/safe_ic.gif" /></span></a></h4> 
+                            <ul id="block3" style="padding:0;display:none;">
+                                <li>1982년 개막한 KBO 리그는 팬 여러분의 뜨거운 관심과 사랑을 바탕으로 2011년부터 6년 연속 600만 관중, 2016년 최초로 800만 관중을 돌파하는 등 대한민국을 대표하는 프로스포츠로서 자리를 잡아가고 있습니다. 그러나 리그가 한 단계 더 도약하기 위해서는 보다 더 안전하고 쾌적한 관람 환경을 마련하여 팬 여러분들이 더욱 편안하고 재미있게 야구를 즐길 수 있도록 지속적인 개선이 필요한 상황입니다.</li>
+                                <li>지난 2014년, 국민적 아픔을 불러일으킨 대형사고들이 연이어 발생하며 안전문제가 사회적 이슈로 떠올랐고, KBO와 10개 구단 또한 야구장의 안전 현황을 점검하는 한편 사고 예방을 위한 부분들에 대한 논의를 지속 진행하였습니다. 그 결과 관람객의 안전이 무엇보다도 우선시되어야 하며, 더욱 안전한 경기장 환경이 구축되어야 한다는 공감대가 형성되었습니다. 그리고 이를 위해 최소한의 안전가이드라인을 마련하여 2015 시즌부터 안전 강화 규정을 KBO 리그 전 구장에 점차 확대 적용시키는 것으로 결정하게 되었습니다.</li>
+                            </ul>
+                        </li>
+                        <li onclick="javascript:clickshow(4);" style="cursor:pointer;">
+                            <h4>4. 경기장 내 주류 반입이 금지되나요?  <a> <span class="ic"><img src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/about/safe_ic.gif" /></span></a></h4> 
+                            <ul id="block4" style="padding:0;display:none;">
+                                <li>모든 유리병, 총량 1L 초과 PET 및 알루미늄 캔 용기에 담긴 음료(미개봉 상태의 음료에 한해 1인당 PET 1개, 캔 2개까지 허용), 음료 및 얼린 생수는 경기장 내 반입이 제한됩니다. 이에 따라 해당 제품은 경기장 내 매점에서도 판매가 제한될 예정이며 특히 경기장 내 주류 판매의 경우 안전사고의 주 원인인 과음을 방지하기 위해 한 경기당 구매할 수 있는 주류의 양이 1인당 최대 2리터 이하로 제한되며 8회 말 종료 이후 판매가 중단될 수 있습니다.</li>
+                            </ul>
+                        </li>
+                        <li onclick="javascript:clickshow(5);" style="cursor:pointer;">
+                            <h4>5. 소지품의 품목, 크기와 개수를 제한하는 이유가 무엇인가요?  <a> <span class="ic"><img src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/about/safe_ic.gif" /></span></a></h4> 
+                            <ul id="block5" style="padding:0;display:none;">
+                                <li>KBO가 지속적인 보안검색 규정 강화를 통해 반입 가능한 소지품의 품목, 크기와 개수를 제한하고 확대하는 이유는 역시 야구팬 여러분에게 안전하고 쾌적한 관람 환경을 제공하기 위함입니다. 안전한 경기 관람 환경에 직접적인 위협이 되는 위험 물품(칼, 가위 등 뾰족하거나 날카로운 물품, 취사도구 등)을 포함, 경기 진행을 적극 저해할 수 있는 물품(소음이 심한 응원 도구, 투척 가능성이 있는 물품, 레이저 포인터, 반려동물 등)의 반입을 전면 제한하고 있습니다.</li>
+                                <li>또한 과도한 소지품을 가지고 경기장에 입장하게 되면 결국 해당 물품들을 통행로나 타인의 객석에 둘 수 밖에 없으며, 이는 관람객들의 이동과 통행에 지장을 주어 관람 환경을 저해하고 비상시에는 안전을 위협하는 요소로도 작용할 수 있습니다. 안전하고 쾌적한 경기장 환경 유지를 위해 관람객 여러분의 적극적인 동참과 협조를 부탁 드립니다.</li>
+                            </ul>
+                        </li>
+                        <li onclick="javascript:clickshow(6);" style="cursor:pointer;">
+                            <h4>6. 휴대용 간이테이블의 반입이 제한되는 이유는 무엇인가요?  <a> <span class="ic"><img src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/about/safe_ic.gif" /></span></a></h4> 
+                            <ul id="block6" style="padding:0;display:none;">
+                                <li>현재 돗자리, 휴대용 의자, 휴대용 간이테이블 등 관람객들의 관람과 통행에 방해가 될 가능성이 있는 물품 및 경기장 내 시설물(좌석, 컵홀더 등)을 활용하여 거치하는 방식의 물품은 반입을 제한하는 것을 원칙으로 두고 있습니다. 휴대용 간이테이블의 반입이 제한되는 것은 관람객의 통행을 방해할 가능성이 높으며, 이용자의 움직임에 제한을 주어 파울 타구가 날아들 시 안전 위험이 있고, 컵홀더 거치방식의 경우 경기장 시설물을 훼손할 우려도 있기 때문입니다.</li>
+                                <li>* 단, 구장별로 잔디석 등 구단이 특별히 허용하는 구역은 예외로 두는 경우도 있습니다. 세부 운영에 대한 확인은 구단에 문의 부탁드립니다.</li>
+                            </ul>
+                        </li>
+                        <li onclick="javascript:clickshow(7);" style="cursor:pointer;">
+                            <h4>7. 음식물의 반입도 제한되나요?  <a> <span class="ic"><img src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/about/safe_ic.gif" /></span></a></h4> 
+                            <ul id="block7" style="padding:0;display:none;">
+                                <li>반입금지 품목에 해당하지 않는 음식물이라면 반입을 특별히 제한하지는 않습니다. 따라서 소지품의 크기와 개수 허용범위 내에서의 음식물 반입은 가능합니다. 그러나 타인의 안전과 쾌적한 관람환경을 저해할 수 있는 음식물(뜨거운 국물류나 냄새가 심한 음식물류)이라고 판단될 경우에는 반입이 제한될 수 있으니 유의하시기 바랍니다.</li>
+                            </ul>
+                        </li>
+                        <li onclick="javascript:clickshow(8);" style="cursor:pointer;">
+                            <h4>8. 구장에서 흡연도 가능한가요?  <a> <span class="ic"><img src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/about/safe_ic.gif" /></span></a></h4> 
+                            <ul id="block8" style="padding:0;display:none;">
+                                <li>KBO 리그 전 구장은 국민건강증진법에 따라 금연 시설에 해당되며, 경기장 내외에 별도 지정된 흡연 구역에서만 흡연이 허용됩니다. 지정된 구역 외 복도, 계단 등의 시설 공간에서 흡연은 전면 제한하고 있으니 관람객 여러분은 각 구장의 흡연 구역 안내를 참고 부탁드립니다.</li>
+                            </ul>
+                        </li>
+                        <li onclick="javascript:clickshow(9);" style="cursor:pointer;">
+                            <h4>9. 모든 구장에서 동일한 규정이 적용되나요?  <a> <span class="ic"><img src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/about/safe_ic.gif" /></span></a></h4> 
+                            <ul id="block9" style="padding:0;display:none;">
+                                <li>구단별 예외 규정이 존재합니다. 2015 시즌부터 적용되는 안전 강화 규정은 보다 더 안전한 경기장 환경을 만들기 위해 전 구단이 함께 논의를 거쳐 마련한 최소한의 안전 수칙으로서, KBO 리그 전 구장에 공통적으로 적용되고 있습니다. 그러나 각 경기장 별 특이 사정 등을 고려하여 유연한 운영을 위해 일부 예외 규정이 있을 수 있습니다. 팬 여러분께서는 경기장 이용에 예상치 못한 불편을 겪지 않도록 방문 전 구단 홈페이지 등을 통해 해당 구장의 안전 규정을 확인하여 주시기 바랍니다.</li>
+                            </ul>
+                        </li>
+                        <li onclick="javascript:clickshow(10);" style="cursor:pointer;">
+                            <h4>10. 다른 프로스포츠의 안전 규정은 어떤가요?  <a> <span class="ic"><img src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/about/safe_ic.gif" /></span></a></h4> 
+                            <ul id="block10" style="padding:0;display:none;">
+                                <li>미국 메이저리그를 비롯하여 잉글랜드 프리미어리그 등 대부분의 해외 프로스포츠에서는 안전사고 방지를 위해 캔 · 병 · PET 용기 등 경기장 내 안전을 위협할 수 있는 물품들에 대한 반입을 전면적으로 금지하고 있습니다. 이러한 물품들의 소지 여부를 검사하기 위해 입장 게이트에서 철저한 보안검색을 실시하고 있으며, 관람객들도 이에 협조하여 보안검색 시간을 줄이기 위해 소지품 없이 경기장에 오거나, 속이 잘 보이는 투명한 비닐백에 물건을 담아오는 방식으로 안전한 관람 환경 유지에 동참하고 있습니다. NFL의 경우 지난 2013년부터 새로운 경기장 안전 규정을 도입하여 밖에서 내용물이 보이는 투명가방 이외의 모든 가방의 경기장 반입 금지를 실시하는 등 경기장 안전을 위해 총력을 기울이고 있습니다.</li>
+                                <li>또한 해외 스포츠리그의 경우 과음을 경기장 내 안전사고 발생의 주 원인으로 지적하여 주류 반입은 물론 판매에 대해서도 엄격한 제한 규정을 두고 있습니다. 메이저리그의 경우 모든 주류의 반입을 금지하고 주류 구매 수량에 제한을 두거나 7회말 종료 이후에는 판매를 중단하는 등 다양한 방법으로 관람객의 주류 섭취량을 관리하고 있으며, 힐즈버러 참사와 헤이젤 참사의 아픔을 겪은 유럽 축구는 UEFA 챔피언스리그에서 주류의 반입은 물론 판매까지 철저하게 금지하고 있습니다. 지난 리우 하계 올림픽의 경우 경기장 내 주류 반입∙판매 금지와 더불어, 특정 경기장의 경우 주변 50m 내에서도 판매를 금지하는 등 과음으로 인한 안전사고에 철저히 대비한 바 있습니다.</li>
+                                <li>‘SAFE 캠페인’은 안전한 야구장 관람 문화 정착을 위한 초석입니다. KBO와 10개 구단은 2015시즌부터 도입된 SAFE 캠페인을 전 구장에 통일된 보안검색 기준을 적용하는데 그치는 것이 아니라, 이로 인해 발생할 수 있는 불편을 줄이기 위해 지속적으로 최선의 노력을 기울여 야구팬들의 눈높이에 맞는 안전하고 쾌적한 경기장을 만들어 나가겠습니다.</li>
+                            </ul>
+                        </li>
+                        <li onclick="javascript:clickshow(11);" style="cursor:pointer;">
+                            <h4>11. 관람객이 퇴장 조치를 받을 수도 있나요?  <a> <span class="ic"><img src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/about/safe_ic.gif" /></span></a></h4> 
+                            <ul id="block11" style="padding:0;display:none;">
+                                <li>경기장 내 다음과 같은 금지행위 기도자는 사안에 따라 ① 경고, ② 입장거부 또는 퇴장, ③ 입장금지, ④ 경찰인계의 절차에 따라 조치될 수 있습니다. 또한 홈 구단은 관련법에 의거하여 해당기관에 처벌을 요구할 수 있습니다.</li>
+                                <li>
+                                    <img src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/about/safe_img_table.png" alt="경기장 안전 가이드라인 내 금지 행위" width="777px"/>
+                                </li>
+                            </ul>
+                        </li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+	</div>
+</section>
+
+
+		    <!-- // container -->	
+		    <hr />
+		    <!-- footer -->
+		    <footer>
+			    <div id="fnb">
+				    <div class="wrapping fnb-wrap">
+					    <ul class="fnb-list">
+						    <li class="privacy"><a href="/Etc/Privacy.aspx">개인정보 처리방침</a></li>
+						    <li><a href="/Schedule/ScoreBoard.aspx">문자중계</a></li>
+						    <li><a href="/Kbo/Board/Faqs/List.aspx">고객질문</a></li>
+						    <li><a href="/Etc/SiteMap.aspx">사이트맵</a></li>
+						    
+					    </ul>
+				    </div>
+			    </div>
+			    <div id="kboInfo" class="wrapping">
+				    <h2><a href="/Etc/PressRelease.aspx"><img src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/common/h2_logo.png" alt="KBO" /></a></h2>
+				    <address class="kbo-info">
+					    <div class="address01">
+						    <p>(사)한국야구위원회 | 서울시 강남구 강남대로 278 | 02)3460-4600</p>					
+					    </div>
+					    
+				    </address>
+				    <div class="copyright">
+					    <span>Copyrightⓒ KBO, All Rights Reserved.</span>
+				    </div>
+					<div class="certification">
+						<img src="//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/main/img_certification.png" alt="w3c xhtml 3.0, Verisign" />
+					</div>
+			    </div>
+		    </footer>
+		    <!-- // footer -->
+	    </div>
+	    <!-- // wrap -->
+    </form>
+    
+    
+
+    
+    
+    
+<script type="text/javascript">
+    currentLnb("Safe");
+    //Menu Open/Close
+    function clickshow(num) {
+        menu = document.getElementById("block" + num);
+        if (menu != null && typeof menu != "undefined") {
+            if (menu.style.display == "block") {
+                menu.style.display = "none"; //Close
+            }
+            else {
+                menu.style.display = "block"; //Sub Menu Open
+            }
+        }
+    }
+</script>
+
+
+
+    <script type="text/javascript">
+		$(document).ready(function () {
+
+            const ua = navigator.userAgent.toLowerCase();
+
+            // 모바일 체크
+            const isMobile = /iphone|android/i.test(ua) && ua.includes("mobile");
+
+            // 아이패드(iPadOS 포함) 체크
+            const isPad = /ipad/i.test(ua) || (ua.includes("macintosh") && navigator.maxTouchPoints > 1);
+
+            if ((isMobile && !isPad) && window.location.host.includes("www.koreabaseball.com")) {
+                window.location.href = "https://m.koreabaseball.com";
+            }
+
+
+            // 선수 검색
+            $(document).on("click", "#btnTopPlayerSearch", function (e) {
+                getPlayerSearch();
+                e.preventDefault();
+            });
+
+            // 선수 검색 엔터
+            $(document).on("keypress", "#txtTopPlayerWord", function (e) {
+                if (event.keyCode == 13) {
+                    getPlayerSearch();
+                    e.preventDefault();
+                }
+			});
+
+            //// 선수 검색 마우스 아웃
+            //$("body").click(function (e) {
+            //    var container = $("#player_search_area");
+
+            //    if (container.css("display") == "block") {
+            //        if (!container.has(e.target).length) {
+            //            container.hide();
+            //        }
+            //    }
+            //});
+
+			// 21.06.29 | veron | 나중에 탭들 다 지우고 배너 다시 원복 후 이부분 삭제해야함
+			// 8월 15일 00시 지나가면 삭제
+            //if (new Date().getTime() > new Date("2021/08/15 00:00:00").getTime()) {
+			//	// 위에 탭 삭제
+            //    $(".menu04 li:last").remove();
+            //    $(".lnb-sub ul.lnb04 li:last").remove();
+			//	// Player.master 삭제
+            //    $("#liRookie").remove();
+			//	// 메인 배너 교체
+            //    $("#imgGijang").attr("href", "http://gijangcmc.or.kr/baseball/main/main.asp");
+            //    $("#imgGijang img").attr("src", "//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/main/img_banner01.jpg");
+			//}
+
+			// 2026 미디어데이
+            if (new Date().getTime() < new Date("2026/03/18 11:00:00"))
+				$('.lnbMedia').hide();
+			// SaveSacrifice
+			if (new Date().getTime() < new Date("2023/04/01 09:00:00"))
+				$('[data-tab=SaveSacrifice]').hide();
+			// draft 
+			// 2025.09.09 11시 이전 또는 2025.09.10 00:30 이후로는 표출 숨김
+            if (new Date().getTime() < new Date("2025/09/09 11:00:00") || new Date().getTime() > new Date("2025/09/10 00:30:00"))
+				$('[data-tab=DraftApplication]').hide();
+			// KBO 시상식
+            if (new Date().getTime() < new Date("2025/11/19 11:00:00") || new Date().getTime() > new Date("2025/11/20 00:30:00"))
+				$('[data-tab=MvpApplication]').hide();
+            // KBO 골든글러브
+            if (new Date().getTime() < new Date("2024/12/09 10:00:00") || new Date().getTime() > new Date("2024/12/09 15:30:00"))
+                $('[data-tab=GGApplication]').hide();
+        });
+
+        // 선수 검색
+        function getPlayerSearch() {
+            if ($("#txtTopPlayerWord").val() == "") {
+                alert("선수명은 필수 입니다.");
+                $("#txtTopPlayerWord").focus();
+                return false;
+            } else {
+                //var searchWord = encodeURI($("#txtTopPlayerWord").val());
+
+                //if (searchWord != "") {
+                //    location.href = "/Player/Search.aspx?searchWord=" + searchWord;
+                //}
+                var request = $.ajax({
+                    type: "post"
+                    , url: "/ws/Controls.asmx/GetSearchPlayer"
+                    , dataType: "json"
+                    , data: {
+                        name: $("#txtTopPlayerWord").val()
+                    }
+                    , error: ajaxFailed
+                    , async: true
+                });
+
+                request.done(function (data) {
+                    if (data.code == "100") {
+                        var container = $(".search-result");
+                        container.children().remove();
+
+                        container.hide();
+
+                        if (data.now.length > 0 || data.retire.length > 0) {
+                            // 2017-05-22 yeeun, 홍지희 사원 요청, 결과가 1명일 경우 바로 페이지 연결
+                            if (data.now.length + data.retire.length == 1) {
+                                var link = "";
+
+                                if (data.now.length == 1) {
+                                    link = data.now[0]["P_LINK"];
+                                } else {
+                                    link = data.retire[0]["P_LINK"];
+                                }
+
+                                location.href = link;
+                            } else {
+                                if (data.now.length > 0) {
+                                    container.append($("<h4>등록 선수</h4>"));
+
+                                    var div = $("<div class='active' />");
+                                    div.children().remove();
+
+                                    setPlayerDiv(data.now, div, true);
+
+                                    container.append(div);
+                                }
+
+                                if (data.retire.length > 0) {
+                                    container.append($("<h4>역대 선수</h4>"));
+
+                                    var div = $("<div class='retire'/>");
+                                    div.children().remove();
+
+                                    setPlayerDiv(data.retire, div, false);
+
+                                    container.append(div);
+                                }
+
+                                //container.append($(String.format("<p><a href='/Player/Search.aspx?searchWord={0}''>'{0}' 검색결과 모두 보기</a></p>", $("#txtTopPlayerWord").val())));
+                                container.append($("<p><a href='/Player/Search.aspx?searchWord=" + $("#txtTopPlayerWord").val() + "''>'" + $("#txtTopPlayerWord").val() + "' 검색결과 모두 보기</a></p>"));
+                                container.show();
+                            }
+                        } else {
+                            container.append($("<p class='null'>검색 결과가 없습니다.</p>"));
+                            container.show();
+                        }
+                    }
+                });
+            }
+        }
+
+        // 선수 검색 div 
+        function setPlayerDiv(list, div, isActive) {
+            $.each(list, function (index, player) {
+                var aLink = $("<a />");
+                aLink.attr("href", player["P_LINK"]);
+
+                var dl = $("<dl />");
+                var dt = $("<dt />");
+                var backNo = "";
+
+                if (isActive) {
+                    //backNo = String.format("No.{0}", player["BACK_NO"]);
+                    backNo = "No." + player["BACK_NO"];
+                }
+
+                //dt.text(String.format("{0} {1}", player["P_NM"], backNo));
+                dt.text(player["P_NM"] + " " + backNo);
+                dl.append(dt);
+
+                var dd = $("<dd />");
+                //dd.text(String.format("{0} {1}({2})", player["T_NM"], player["POS_NO"], player["P_TYPE"]));
+                dd.text(player["T_NM"] + " " + player["POS_NO"] + "(" + player["P_TYPE"] + ")");
+                dl.append(dd);
+
+                var ddImg = $(String.format("<dd class='btn-arrow'><img src='{0}/resources/images/common/btn_arrow_search.png' alt='' /></dd>", "//6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome"));
+                dl.append(ddImg);
+
+                aLink.append(dl);
+                div.append(aLink);
+            });
+        }
+    </script>
+</body>
+</html>
