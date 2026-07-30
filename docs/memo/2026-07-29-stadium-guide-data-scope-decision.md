@@ -93,17 +93,22 @@ ticketing_summary
 
 구장별 상세 안내는 RAG 문서로 관리한다.
 
-초기 문서 유형 후보:
+초기 RAG 문서 유형은 아래 5개를 우선 지원한다.
+
+```text
+stadium_bag_policy
+stadium_facility_guide
+stadium_seat_guide
+stadium_ticketing_guide
+stadium_transport_guide
+```
+
+아래 3개는 현재 범위에서는 만들지 않고 추후 보강 후보로 보류한다.
 
 ```text
 stadium_entry_guide
-stadium_bag_policy
-stadium_facility_guide
-stadium_transport_guide
 stadium_first_visit_tip
 stadium_weather_tip
-stadium_ticketing_guide
-stadium_seat_guide
 ```
 
 RAG 문서가 가져야 할 핵심 metadata:
@@ -228,4 +233,3 @@ data/processed/stadium_guide/stadium_guide_documents.json
 - 공식 출처가 부족한 설명은 `curated`로 표시하고 한계를 남긴다.
 - 실시간 값은 초기 수집 대상에서 제외한다.
 - 좌석 잔여석, 당일 이벤트, 실시간 주차 가능 대수, 실시간 교통 상황, 날씨 예보는 별도 Tool 또는 외부 API 영역으로 둔다.
-

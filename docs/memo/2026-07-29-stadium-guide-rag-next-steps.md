@@ -201,7 +201,7 @@ SAMSUNG 보조 구장
 6. collection_summary.md 갱신
 ```
 
-normalized 문서 유형 후보:
+normalized 문서 유형은 초기에는 아래 5개를 우선 지원한다.
 
 ```text
 stadium_bag_policy
@@ -209,6 +209,11 @@ stadium_facility_guide
 stadium_seat_guide
 stadium_ticketing_guide
 stadium_transport_guide
+```
+
+아래 3개는 현재 normalized 문서로 만들지 않고, 추후 공식 출처와 질문 수요가 충분할 때 보강한다.
+
+```text
 stadium_entry_guide
 stadium_first_visit_tip
 stadium_weather_tip

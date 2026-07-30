@@ -90,14 +90,21 @@ Agent에게 노출할 최종 Tool을 하나로 둘지 둘로 나눌지는 evalua
 
 ### 3.2 설명형 구장 가이드 문서
 
-문서 유형:
+초기 우선 지원 문서 유형:
+
+| `document_type` | 내용 |
+|---|---|
+| `stadium_bag_policy` | 반입 가능/금지 물품, 음식물, 병/캔, 보안 검색 |
+| `stadium_facility_guide` | 화장실, 매점, 수유실, 물품보관, 흡연구역, 장애인 편의 |
+| `stadium_seat_guide` | 좌석 구역, 좌석 종류, 휠체어석, 공식 좌석도 기준 안내 |
+| `stadium_ticketing_guide` | 예매처, 예매 절차, 요금/할인/취소 안내 |
+| `stadium_transport_guide` | 대중교통, 주차, 교통 혼잡, 귀가 팁 |
+
+추후 보강 후보:
 
 | `document_type` | 내용 |
 |---|---|
 | `stadium_entry_guide` | 입장 게이트, 매표소, 재입장, 현장 동선 |
-| `stadium_bag_policy` | 반입 가능/금지 물품, 음식물, 병/캔, 보안 검색 |
-| `stadium_facility_guide` | 화장실, 매점, 수유실, 물품보관, 흡연구역, 장애인 편의 |
-| `stadium_transport_guide` | 대중교통, 주차, 교통 혼잡, 귀가 팁 |
 | `stadium_first_visit_tip` | 초행 관람 준비물, 시간 여유, 계절별 주의점 |
 | `stadium_weather_tip` | 돔/야외 구장 차이, 우천 시 일반 안내 |
 
@@ -290,13 +297,20 @@ rag_documents
 rag_chunks
 ```
 
-`rag_documents.document_type`은 다음 값을 우선 지원한다.
+`rag_documents.document_type`은 다음 5개 값을 우선 지원한다.
+
+```text
+stadium_bag_policy
+stadium_facility_guide
+stadium_seat_guide
+stadium_ticketing_guide
+stadium_transport_guide
+```
+
+다음 값은 현재 테이블 enum으로 강제하지 않고, 추후 공식 출처와 질문 수요가 충분할 때 보강한다.
 
 ```text
 stadium_entry_guide
-stadium_bag_policy
-stadium_facility_guide
-stadium_transport_guide
 stadium_first_visit_tip
 stadium_weather_tip
 ```
