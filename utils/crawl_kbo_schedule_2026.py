@@ -41,8 +41,10 @@ def fetch_month(month: int) -> dict:
 
 
 def main() -> None:
-    raw_dir = Path(f"new-baseball/data/raw/kbo/{YEAR}")
-    processed_path = Path(f"new-baseball/data/processed/kbo_schedule_{YEAR}_normalized.json")
+    raw_dir = Path(f"new-baseball/data/kbo_schedule/raw/{YEAR}")
+    processed_path = Path(
+        f"new-baseball/data/kbo_schedule/processed/kbo_schedule_{YEAR}_normalized.json"
+    )
     raw_dir.mkdir(parents=True, exist_ok=True)
     processed_path.parent.mkdir(parents=True, exist_ok=True)
 

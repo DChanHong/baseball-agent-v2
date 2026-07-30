@@ -1,5 +1,5 @@
 {
-  "dataset_path": "/Users/root1/Desktop/agent-rebuild/new-baseball/data/evaluation/tool_routing/find_kbo_game_cases.jsonl",
+  "dataset_path": "data/kbo_schedule/evaluation/cases/find_kbo_game_cases.jsonl",
   "model": "gpt-5-mini",
   "prompt_version": "few-shot-v1",
   "run_timestamp": "2026-07-28T13:47:37.866951+00:00",

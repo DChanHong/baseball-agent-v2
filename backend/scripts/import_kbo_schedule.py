@@ -25,7 +25,7 @@ def parse_args() -> argparse.Namespace:
         "--file",
         type=Path,
         required=True,
-        help="Path to data/processed/kbo_schedule_<year>_normalized.json.",
+        help="Path to data/kbo_schedule/processed/kbo_schedule_<year>_normalized.json.",
     )
     parser.add_argument(
         "--dry-run",

@@ -25,10 +25,10 @@ from app.agent.routing_service import ToolRoutingService
 from app.core.config import get_settings
 
 DEFAULT_DATASET_PATH = (
-    REPOSITORY_ROOT / "data/evaluation/tool_routing/find_kbo_game_cases.jsonl"
+    REPOSITORY_ROOT / "data/kbo_schedule/evaluation/cases/find_kbo_game_cases.jsonl"
 )
 DEFAULT_OUTPUT_DIR = (
-    REPOSITORY_ROOT / "data/evaluation/runs/tool_routing/find_kbo_game"
+    REPOSITORY_ROOT / "data/kbo_schedule/evaluation/runs/tool_routing/find_kbo_game"
 )
 DEFAULT_PROMPT_VERSION = "few-shot-v1"
 

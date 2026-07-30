@@ -135,8 +135,10 @@ def normalize(raw: dict) -> list[dict]:
 
 
 def main() -> None:
-    raw_path = Path("new-baseball/data/raw/kbo_schedule_2026_07_raw.json")
-    out_path = Path("new-baseball/data/processed/kbo_schedule_2026_07_normalized_sample.json")
+    raw_path = Path("new-baseball/data/kbo_schedule/raw/kbo_schedule_2026_07_raw.json")
+    out_path = Path(
+        "new-baseball/data/kbo_schedule/processed/kbo_schedule_2026_07_normalized_sample.json"
+    )
 
     raw = json.loads(raw_path.read_text(encoding="utf-8-sig"))
     games = normalize(raw)

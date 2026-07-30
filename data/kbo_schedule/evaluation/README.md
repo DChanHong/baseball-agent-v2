@@ -1,11 +1,21 @@
-# Tool Routing Evaluation
+# KBO Schedule Evaluation
 
-이 폴더는 LLM이 사용자 질문을 보고 tool 호출 여부와 tool 입력 파라미터를 올바르게 결정하는지 평가하기 위한 데이터셋을 보관한다.
+이 폴더는 KBO 일정 조회와 관련된 평가 데이터셋과 실행 결과를 보관한다.
+
+## 구조
+
+```text
+data/kbo_schedule/evaluation/
+├── cases/
+│   ├── find_kbo_game_cases.jsonl
+│   └── schemas/
+└── runs/
+```
 
 ## 현재 데이터셋
 
 ```text
-find_kbo_game_cases.jsonl
+cases/find_kbo_game_cases.jsonl
 ```
 
 평가 대상:

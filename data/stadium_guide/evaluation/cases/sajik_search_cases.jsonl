@@ -1,0 +1,10 @@
+{"id":"sajik_001","query":"사직구장 지하철로 어떻게 가?","stadium_id":"SAJIK","expected_document_type":"stadium_transport_guide","case_type":"positive","note":"대중교통 질문은 교통 안내 문서가 상위에 와야 한다."}
+{"id":"sajik_002","query":"사직구장 반입 금지 물품 알려줘","stadium_id":"SAJIK","expected_document_type":"stadium_bag_policy","case_type":"positive","note":"반입 제한과 안전 정책 질문은 반입 정책 문서가 상위에 와야 한다."}
+{"id":"sajik_003","query":"사직구장에 캔 음료 들고 가도 돼?","stadium_id":"SAJIK","expected_document_type":"stadium_bag_policy","case_type":"positive","note":"캔 음료 반입 가능 여부는 KBO SAFE 기반 반입 정책 문서가 검색되어야 한다."}
+{"id":"sajik_004","query":"사직구장 좌석 종류 알려줘","stadium_id":"SAJIK","expected_document_type":"stadium_seat_guide","case_type":"positive","note":"좌석 구역 종류 질문은 좌석 안내 문서가 상위에 와야 한다."}
+{"id":"sajik_005","query":"사직구장 바베큐석은 어디야?","stadium_id":"SAJIK","expected_document_type":"stadium_seat_guide","case_type":"positive","note":"바베큐석은 좌석 안내 문서 content에 포함되어 있으므로 좌석 안내 문서가 검색되어야 한다."}
+{"id":"sajik_006","query":"롯데 홈경기 예매는 어디서 해?","stadium_id":"SAJIK","expected_document_type":"stadium_ticketing_guide","case_type":"positive","note":"예매처와 티켓 안내 질문은 티켓 안내 문서가 상위에 와야 한다."}
+{"id":"sajik_007","query":"사직구장 자이언츠샵 위치 알려줘","stadium_id":"SAJIK","expected_document_type":"stadium_facility_guide","case_type":"positive","note":"구장샵 위치 질문은 시설 안내 문서가 상위에 와야 한다."}
+{"id":"sajik_008","query":"잠실야구장 주차 알려줘","stadium_id":"SAJIK","expected_document_type":null,"case_type":"negative","note":"SAJIK 필터를 걸면 억지 검색될 수 있다. 실제 Tool 앞단에서는 잠실과 SAJIK 불일치를 처리해야 한다."}
+{"id":"sajik_009","query":"고척돔은 비 와도 경기해?","stadium_id":"SAJIK","expected_document_type":null,"case_type":"negative","note":"다른 구장/돔 관련 질문이다. 실제 Tool 앞단에서는 stadium_id를 GOCHEOK으로 추출하거나 구장 확인을 요청해야 한다."}
+{"id":"sajik_010","query":"한화생명 볼파크 좌석 알려줘","stadium_id":"SAJIK","expected_document_type":null,"case_type":"negative","note":"다른 구장 좌석 질문이다. SAJIK RAG 검색으로 답변하면 안 된다."}
