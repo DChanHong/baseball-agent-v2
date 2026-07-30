@@ -42,6 +42,15 @@
       "fetch_status": "success",
       "byte_size": 38975,
       "content_hash": "sha256:e276e592b634870f43725d97bf961a98e6e787dcb41c002d48e04e65ac882d0f"
+    },
+    {
+      "source_id": "gwangju_kbo_safe_campaign",
+      "source_url": "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+      "source_type": "official_league",
+      "local_file": "gwangju_kbo_safe_campaign.html",
+      "fetch_status": "success",
+      "byte_size": 53039,
+      "content_hash": "sha256:27c926ff8bcce3d1fdb883dbe7f9c137a496b80615b11a9822c7cefbfd1891ed"
     }
   ]
 }

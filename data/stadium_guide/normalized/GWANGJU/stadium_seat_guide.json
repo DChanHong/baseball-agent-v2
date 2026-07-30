@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "GWANGJU_stadium_seat_guide_20260729",
+  "document_type": "stadium_seat_guide",
+  "stadium_id": "GWANGJU",
+  "team_id": "KIA",
+  "title": "광주-기아 챔피언스 필드 좌석 안내 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "kia_champions_field_guide",
+    "kia_ticket_reservation"
+  ],
+  "content": "KIA 공식 구장 안내는 광주-기아 챔피언스 필드의 관람석 수를 20,500석으로 안내한다. KIA 공식 입장권 페이지는 입장권 안내와 티켓링크 바로가기를 제공하지만, 현재 수집된 raw snapshot에서는 상세 좌석 구역과 요금 정보가 이미지 중심으로 제공되어 텍스트 근거가 충분하지 않다. 따라서 이 문서는 좌석 수와 공식 입장권 안내 페이지의 존재만 최소 근거로 유지하고, 좌석 구역명, 좌석별 요금, 응원석/원정석 위치, 좌석별 시야 정보는 추가 공식 출처 또는 이미지 수동 검수가 필요하다.",
+  "metadata": {
+    "stadium_name": "광주-기아 챔피언스 필드",
+    "home_team_ids": [
+      "KIA"
+    ],
+    "topic_summary": "광주-기아 챔피언스 필드 좌석 수, 공식 입장권 페이지, 좌석 상세 추가 검수 필요 안내",
+    "search_keywords": [
+      "광주 챔피언스 필드 좌석",
+      "광주 기아 챔피언스 필드 좌석수",
+      "KIA 타이거즈 좌석",
+      "KIA 챔피언스 필드 입장권",
+      "관람석 20500석",
+      "챔피언스 필드 좌석도",
+      "챔피언스 필드 응원석",
+      "챔피언스 필드 원정석"
+    ],
+    "capacity": 20500,
+    "limitations": [
+      "상세 좌석 구역과 요금은 공식 입장권 페이지의 이미지 중심 정보라 텍스트 추출 근거가 부족하다.",
+      "좌석별 시야, 응원 분위기, 원정팬 체감 정보는 공식 출처만으로는 부족하므로 이 문서에 포함하지 않는다."
+    ]
+  }
+}

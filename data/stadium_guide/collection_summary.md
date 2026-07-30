@@ -6,13 +6,13 @@
 
 ## 현재 상태
 
-현재 유지 중인 normalized 문서는 6개 구장, 25개 문서다.
+현재 유지 중인 normalized 문서는 6개 구장, 27개 문서다.
 
 ```text
 SAJIK   5 docs
 GOCHEOK 5 docs
 MUNHAK  5 docs
-GWANGJU 3 docs
+GWANGJU 5 docs
 DAEGU   2 docs
 SUWON   5 docs
 ```
@@ -94,12 +94,14 @@ SUWON   5 docs
 | `stadium_facility_guide` | 수집 | KIA 챔피언스필드 안내 |
 | `stadium_ticketing_guide` | 수집 | KIA 입장권, 스마트티켓 공지, KBO 티켓 안내 |
 | `stadium_transport_guide` | 수집 | KIA 챔피언스필드 안내 |
+| `stadium_bag_policy` | 수집 | KBO SAFE 캠페인 |
+| `stadium_seat_guide` | 수집 | KIA 챔피언스필드 안내, KIA 입장권 |
 
 메모:
 
 - 구장 안내와 교통 안내는 공식 출처가 좋다.
-- 좌석/요금 상세는 이미지 중심이라 normalized 문서에서 제외했다.
-- 반입 정책은 KBO 공통만으로는 구장별 문서로 만들기 약해 제외했다.
+- 반입/안전 정책은 KBO SAFE 공통 기준으로 보강했으며, KIA 전용 예외는 추가 공식 출처 확인이 필요하다.
+- 좌석 문서는 관람석 수와 공식 입장권 페이지 존재를 최소 근거로 만들었다. 좌석/요금 상세는 이미지 중심이라 추가 수동 검수가 필요하다.
 
 ### DAEGU
 
