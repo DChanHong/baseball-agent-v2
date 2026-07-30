@@ -28,6 +28,7 @@ KboStadiumId = Literal[
     "DAEJEON",
     "JAMSIL",
     "CHANGWON",
+    "POHANG",
 ]
 
 StadiumGuideType = Literal[
@@ -117,6 +118,25 @@ class SearchStadiumGuideRoutingArgs(BaseModel):
     )
 
 
+class GetStadiumInfoRoutingArgs(BaseModel):
+    """Arguments for the get_stadium_info routing decision."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    stadium_id: KboStadiumId | None = Field(
+        description="KBO stadium id. Null when resolving by team_id."
+    )
+    team_id: KboTeamId | None = Field(
+        description="KBO team id. Null when the stadium is directly known."
+    )
+
+    @model_validator(mode="after")
+    def validate_lookup_key(self) -> GetStadiumInfoRoutingArgs:
+        if self.stadium_id is None and self.team_id is None:
+            raise ValueError("stadium_id or team_id is required")
+        return self
+
+
 class ToolRoutingDecision(BaseModel):
     """Structured decision returned by the LLM before final answer generation."""
 
@@ -128,10 +148,17 @@ class ToolRoutingDecision(BaseModel):
     should_call_tool: bool = Field(
         description="Whether the system should call a backend tool before answering."
     )
-    tool_name: Literal["find_kbo_game", "search_stadium_guide"] | None = Field(
+    tool_name: (
+        Literal["find_kbo_game", "get_stadium_info", "search_stadium_guide"] | None
+    ) = Field(
         description="Tool to call. Null when should_call_tool is false."
     )
-    args: FindKboGameRoutingArgs | SearchStadiumGuideRoutingArgs | None = Field(
+    args: (
+        FindKboGameRoutingArgs
+        | GetStadiumInfoRoutingArgs
+        | SearchStadiumGuideRoutingArgs
+        | None
+    ) = Field(
         description="Tool arguments. Null when should_call_tool is false."
     )
     needs_clarification: bool = Field(
@@ -157,7 +184,11 @@ class ToolRoutingDecision(BaseModel):
     @model_validator(mode="after")
     def validate_decision_shape(self) -> ToolRoutingDecision:
         if self.should_call_tool:
-            if self.tool_name not in {"find_kbo_game", "search_stadium_guide"}:
+            if self.tool_name not in {
+                "find_kbo_game",
+                "get_stadium_info",
+                "search_stadium_guide",
+            }:
                 raise ValueError("tool_name must be a supported tool when calling a tool")
             if self.args is None:
                 raise ValueError("args are required when calling a tool")
@@ -165,6 +196,10 @@ class ToolRoutingDecision(BaseModel):
                 self.args, FindKboGameRoutingArgs
             ):
                 raise ValueError("args must match find_kbo_game")
+            if self.tool_name == "get_stadium_info" and not isinstance(
+                self.args, GetStadiumInfoRoutingArgs
+            ):
+                raise ValueError("args must match get_stadium_info")
             if self.tool_name == "search_stadium_guide" and not isinstance(
                 self.args, SearchStadiumGuideRoutingArgs
             ):

@@ -30,6 +30,30 @@ FIND_KBO_GAME_TOOL_CARD = """
 """.strip()
 
 
+GET_STADIUM_INFO_TOOL_CARD = """
+도구명: get_stadium_info
+
+역할:
+- KBO 구장의 정형 기본 정보를 DB에서 조회한다.
+- 구장명, 짧은 이름, 별칭, 도시/지역, 주소, 돔 여부, 홈팀, 공식/출처 URL, 기준 시점을 반환한다.
+
+입력:
+- stadium_id: KBO 구장 ID. 구장을 직접 알 수 있으면 사용한다.
+- team_id: KBO 팀 ID. "롯데 홈구장", "우리 팀 홈구장"처럼 팀 기준이면 사용한다.
+
+호출해야 하는 경우:
+- "사직구장 주소 알려줘"
+- "고척돔은 돔구장이야?"
+- "롯데 홈구장 어디야?"
+- "잠실야구장은 어느 팀 홈구장이야?"
+- "문학구장 기본 정보 알려줘"
+
+호출하지 않는 경우:
+- 경기 일정, 경기 유무, 경기 상태 질문은 find_kbo_game을 사용한다.
+- 예매 방법, 좌석 종류, 반입 정책, 교통/주차 세부 안내, 편의시설 설명은 search_stadium_guide를 사용한다.
+""".strip()
+
+
 SEARCH_STADIUM_GUIDE_TOOL_CARD = """
 도구명: search_stadium_guide
 
@@ -79,5 +103,6 @@ guide_types:
 
 TOOL_ROUTING_TOOL_CARDS = [
     FIND_KBO_GAME_TOOL_CARD,
+    GET_STADIUM_INFO_TOOL_CARD,
     SEARCH_STADIUM_GUIDE_TOOL_CARD,
 ]

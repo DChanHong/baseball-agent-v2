@@ -24,6 +24,7 @@ TOOL_ROUTING_POLICY_PROMPT = """
 공통 판단 정책:
 - 경기 일정, 경기 유무, 특정 경기 장소, 경기 상태, 취소 사유, 점수 질문이면
   가능한 도구를 호출한다.
+- 구장 주소, 돔 여부, 홈팀, 지역, 기본 식별 정보 질문이면 get_stadium_info를 호출한다.
 - 구장별 예매, 좌석, 반입 정책, 교통, 주차, 편의시설, 직관 준비 질문이면
   search_stadium_guide를 호출한다.
 - 일반 야구 규칙, 팀 역사, 선수 정보, KBO 일반 상식 질문은 도구를 호출하지 않는다.
@@ -51,7 +52,7 @@ TOOL_ROUTING_POLICY_PROMPT = """
 
 출력 값 주의:
 - 설명은 한국어로 이해하되 출력 enum 값은 스키마의 영문 값을 그대로 사용한다.
-- tool_name은 호출할 때만 "find_kbo_game" 또는 "search_stadium_guide"이고, 호출하지 않으면 null이다.
+- tool_name은 호출할 때만 "find_kbo_game", "get_stadium_info", "search_stadium_guide" 중 하나이고, 호출하지 않으면 null이다.
 - args는 도구를 호출할 때만 채우고, 호출하지 않으면 null이다.
 """.strip()
 
@@ -98,6 +99,16 @@ TOOL_ROUTING_FEW_SHOT_PROMPT = """
 {"message":"지금 티켓 남았어?","user_context":{"auth_status":"authenticated","favorite_team_id":"LG","today":"2026-07-28","timezone":"Asia/Seoul"}}
 출력:
 {"is_in_scope":true,"should_call_tool":false,"tool_name":null,"args":null,"needs_clarification":false,"clarification_reason":null,"unsupported_reason":"ticket_inventory_tool_required"}
+
+입력:
+{"message":"사직구장 주소 알려줘","user_context":{"auth_status":"authenticated","favorite_team_id":null,"today":"2026-07-28","timezone":"Asia/Seoul"}}
+출력:
+{"is_in_scope":true,"should_call_tool":true,"tool_name":"get_stadium_info","args":{"stadium_id":"SAJIK","team_id":null},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
+
+입력:
+{"message":"롯데 홈구장 어디야?","user_context":{"auth_status":"authenticated","favorite_team_id":null,"today":"2026-07-28","timezone":"Asia/Seoul"}}
+출력:
+{"is_in_scope":true,"should_call_tool":true,"tool_name":"get_stadium_info","args":{"stadium_id":null,"team_id":"LOTTE"},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
 
 입력:
 {"message":"사직구장 처음 가는데 뭐 챙겨야 해?","user_context":{"auth_status":"authenticated","favorite_team_id":"LOTTE","today":"2026-07-28","timezone":"Asia/Seoul"}}

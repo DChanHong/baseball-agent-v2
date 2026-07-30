@@ -15,6 +15,7 @@ from sqlalchemy import (
     text,
 )
 from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.dialects.postgresql import UUID as PostgreSQLUUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -45,6 +46,20 @@ class KboTeamModel(Base):
         Boolean,
         nullable=False,
         server_default=text("true"),
+    )
+    region: Mapped[str | None] = mapped_column(Text, nullable=True)
+    office_address: Mapped[str | None] = mapped_column(Text, nullable=True)
+    founded_year: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    official_url: Mapped[str | None] = mapped_column(Text, nullable=True)
+    ticket_provider: Mapped[str | None] = mapped_column(Text, nullable=True)
+    ticket_url: Mapped[str | None] = mapped_column(Text, nullable=True)
+    source_url: Mapped[str | None] = mapped_column(Text, nullable=True)
+    as_of: Mapped[date | None] = mapped_column(Date, nullable=True)
+    metadata_: Mapped[dict[str, object]] = mapped_column(
+        "metadata",
+        JSONB,
+        nullable=False,
+        server_default=text("'{}'::jsonb"),
     )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
@@ -82,6 +97,20 @@ class KboStadiumModel(Base):
         Boolean,
         nullable=False,
         server_default=text("true"),
+    )
+    region: Mapped[str | None] = mapped_column(Text, nullable=True)
+    address: Mapped[str | None] = mapped_column(Text, nullable=True)
+    latitude: Mapped[float | None] = mapped_column(nullable=True)
+    longitude: Mapped[float | None] = mapped_column(nullable=True)
+    is_dome: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    official_url: Mapped[str | None] = mapped_column(Text, nullable=True)
+    source_url: Mapped[str | None] = mapped_column(Text, nullable=True)
+    as_of: Mapped[date | None] = mapped_column(Date, nullable=True)
+    metadata_: Mapped[dict[str, object]] = mapped_column(
+        "metadata",
+        JSONB,
+        nullable=False,
+        server_default=text("'{}'::jsonb"),
     )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

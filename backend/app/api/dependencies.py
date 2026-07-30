@@ -13,6 +13,9 @@ from app.domains.baseball.service.services import (
     ListKboGamesService,
 )
 from app.domains.baseball.tool.find_kbo_game.handler import FindKboGameToolHandler
+from app.domains.baseball.tool.get_stadium_info.handler import (
+    GetStadiumInfoToolHandler,
+)
 from app.domains.baseball.tool.search_stadium_guide.handler import (
     SearchStadiumGuideToolHandler,
 )
@@ -78,6 +81,14 @@ def get_search_stadium_guide_tool_handler(
     )
 
 
+def get_stadium_info_tool_handler(
+    session: DatabaseSession,
+) -> GetStadiumInfoToolHandler:
+    """정형 구장 정보 Tool 실행에 필요한 의존성을 조립합니다."""
+
+    return GetStadiumInfoToolHandler(session=session)
+
+
 def get_agent_tool_executor(
     session: DatabaseSession,
 ) -> AgentToolExecutor:
@@ -85,5 +96,6 @@ def get_agent_tool_executor(
 
     return AgentToolExecutor(
         find_kbo_game_handler=get_find_kbo_game_tool_handler(session),
+        get_stadium_info_handler=get_stadium_info_tool_handler(session),
         search_stadium_guide_handler=get_search_stadium_guide_tool_handler(session),
     )
