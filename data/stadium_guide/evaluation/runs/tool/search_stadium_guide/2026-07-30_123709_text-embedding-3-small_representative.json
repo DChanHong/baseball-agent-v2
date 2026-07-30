@@ -1,0 +1,676 @@
+{
+  "dataset_path": "/Users/root1/Desktop/agent-rebuild/new-baseball/data/stadium_guide/evaluation/cases/search_stadium_guide_tool_cases.jsonl",
+  "embedding_model": "text-embedding-3-small",
+  "run_timestamp": "2026-07-30T12:37:09.843113+00:00",
+  "metrics": {
+    "total": 10,
+    "passed": 10,
+    "failed_case_ids": [],
+    "pass_rate": 1.0
+  },
+  "results": [
+    {
+      "id": "tool_sajik_transport_001",
+      "input": {
+        "stadium_id": "SAJIK",
+        "team_id": null,
+        "query": "사직구장 지하철로 어떻게 가?",
+        "guide_types": [
+          "stadium_transport_guide"
+        ],
+        "top_k": 3
+      },
+      "expected": {
+        "answerable": true,
+        "top1_document_type": "stadium_transport_guide",
+        "required_source_urls": true
+      },
+      "actual": {
+        "stadium_id": "SAJIK",
+        "team_id": null,
+        "query": "사직구장 지하철로 어떻게 가?",
+        "answerable": true,
+        "items": [
+          {
+            "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+            "document_id": "SAJIK_stadium_transport_guide_20260729",
+            "document_type": "stadium_transport_guide",
+            "stadium_id": "SAJIK",
+            "team_id": "LOTTE",
+            "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+            "content": "이 문서는 사직야구장에 지하철, 도시철도, 버스, 자가용으로 가는 방법을 다룬 교통 안내다. FAQ: 사직야구장 몇 호선 타고 가? 사직구장 몇 호선으로 가? 답변은 부산 도시철도 3호선이다. 롯데자이언츠 공식 사직야구장 안내는 주소를 부산광역시 동래구 사직로 45로 안내한다. 대중교통은 부산 도시철도 3호선 사직역과 종합운동장역을 기준으로 안내되어 있다. 사직구장 가까운 지하철역은 사직역과 종합운동장역으로 정리한다. 지하철로 사직구장에 가려는 사용자는 부산 3호선을 기준으로 사직역 또는 종합운동장역 하차 정보를 확인해야 한다. 버스로 가는 법은 10, 44, 50, 57, 80, 111, 131, 189, 1002번 심야버스와 마을버스 17번을 기준으로 안내한다. 자가용 경로는 경부고속도로, 남해고속도로, 공항 방향 경로가 공식 페이지에 안내되어 있다. 주차 가능 여부, 주차장 이용 가능성, 주차 가능 대수는 경기일과 현장 상황에 따라 달라질 수 있다. 실시간 교통 상황이나 주차 가능 대수는 이 문서의 범위가 아니며, 경기일 혼잡 여부는 별도 실시간 도구나 최신 공지 확인이 필요하다.",
+            "similarity": 0.13521504256595906,
+            "distance": 0.5621102223321266,
+            "source_urls": [
+              "https://www.giantsclub.com/html/?pcode=207",
+              "https://www.giantsclub.com/html/?pcode=367"
+            ],
+            "as_of": "2026-07-29",
+            "trust_level": "official",
+            "review_status": "needs_review",
+            "metadata": {
+              "language": "ko",
+              "limitations": [
+                "공식 페이지의 주차장 수용 규모와 실시간 주차 가능 대수는 확인되지 않았다."
+              ],
+              "topic_summary": "사직야구장 지하철, 도시철도, 버스, 자가용, 주차 관련 교통 안내",
+              "search_keywords": [
+                "사직구장 가는 법",
+                "사직야구장 가는 방법",
+                "사직구장 지하철",
+                "사직야구장 지하철",
+                "사직야구장 몇 호선",
+                "사직구장 몇 호선",
+                "몇 호선 타고 가",
+                "3호선 타고 가",
+                "가까운 지하철역",
+                "부산 도시철도 3호선",
+                "부산 지하철 3호선",
+                "사직역",
+                "종합운동장역",
+                "사직구장 버스",
+                "사직야구장 대중교통",
+                "사직구장 주차",
+                "주차 가능 여부",
+                "주차장",
+                "자가용"
+              ],
+              "nearest_subway_lines": [
+                "부산 3호선"
+              ],
+              "nearest_subway_stations": [
+                "사직역",
+                "종합운동장역"
+              ]
+            }
+          }
+        ],
+        "limitations": []
+      },
+      "matches": {
+        "answerable": true,
+        "top1_document_type": true,
+        "source_urls": true,
+        "no_rejected_results": true
+      },
+      "error": null
+    },
+    {
+      "id": "tool_sajik_bag_001",
+      "input": {
+        "stadium_id": "SAJIK",
+        "team_id": null,
+        "query": "사직구장 캔 음료 들고 가도 돼?",
+        "guide_types": [
+          "stadium_bag_policy"
+        ],
+        "top_k": 3
+      },
+      "expected": {
+        "answerable": true,
+        "top1_document_type": "stadium_bag_policy",
+        "required_source_urls": true
+      },
+      "actual": {
+        "stadium_id": "SAJIK",
+        "team_id": null,
+        "query": "사직구장 캔 음료 들고 가도 돼?",
+        "answerable": true,
+        "items": [
+          {
+            "chunk_id": "SAJIK_stadium_bag_policy_20260729_chunk_000",
+            "document_id": "SAJIK_stadium_bag_policy_20260729",
+            "document_type": "stadium_bag_policy",
+            "stadium_id": "SAJIK",
+            "team_id": "LOTTE",
+            "title": "사직야구장 반입 및 안전 정책 초안",
+            "content": "KBO SAFE 캠페인은 전 구장 공통 최소 안전 기준으로 유리병, 총량 1L 초과 PET, 알루미늄 캔 용기 음료, 얼린 생수 등의 반입 제한을 안내한다. 미개봉 음료는 1인당 PET 1개와 캔 2개까지 허용되는 기준이 제시되어 있다. 관람객은 가방 1개와 쇼핑백류 1개까지 지참할 수 있으며, 가방은 가로 45cm, 세로 45cm, 폭 20cm 이내 기준이 안내되어 있다. 음식물은 반입 금지 품목이 아니라면 가능하지만, 뜨거운 국물류나 냄새가 심한 음식처럼 안전과 관람 환경을 저해할 수 있는 경우 제한될 수 있다. KBO는 구단별 예외가 있을 수 있으므로 방문 전 구단 홈페이지 확인이 필요하다고 안내한다.",
+            "similarity": 0.05209422510225681,
+            "distance": 0.6161387536835331,
+            "source_urls": [
+              "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+            ],
+            "as_of": "2026-07-29",
+            "trust_level": "official",
+            "review_status": "needs_review",
+            "metadata": {
+              "language": "ko",
+              "limitations": [
+                "롯데자이언츠 구장별 반입 예외 규정은 별도 공식 페이지 확인이 필요하다.",
+                "이 문서는 KBO 공통 정책 기반 초안이며, 사직구장 전용 세부 정책은 추가 수집 대상이다."
+              ]
+            }
+          }
+        ],
+        "limitations": []
+      },
+      "matches": {
+        "answerable": true,
+        "top1_document_type": true,
+        "source_urls": true,
+        "no_rejected_results": true
+      },
+      "error": null
+    },
+    {
+      "id": "tool_jamsil_ticket_001",
+      "input": {
+        "stadium_id": "JAMSIL",
+        "team_id": null,
+        "query": "잠실야구장 홈경기 예매는 어디서 해?",
+        "guide_types": [
+          "stadium_ticketing_guide"
+        ],
+        "top_k": 3
+      },
+      "expected": {
+        "answerable": true,
+        "top1_document_type": "stadium_ticketing_guide",
+        "required_source_urls": true
+      },
+      "actual": {
+        "stadium_id": "JAMSIL",
+        "team_id": null,
+        "query": "잠실야구장 홈경기 예매는 어디서 해?",
+        "answerable": true,
+        "items": [
+          {
+            "chunk_id": "JAMSIL_stadium_ticketing_guide_20260729_chunk_000",
+            "document_id": "JAMSIL_stadium_ticketing_guide_20260729",
+            "document_type": "stadium_ticketing_guide",
+            "stadium_id": "JAMSIL",
+            "team_id": null,
+            "title": "잠실야구장 티켓 및 예매 안내 초안",
+            "content": "잠실야구장은 LG 트윈스와 두산 베어스가 함께 홈으로 사용하는 구장이므로 예매 안내는 홈팀별로 분리해야 한다. LG 트윈스 공식 티켓 안내는 홈경기 관람 7일 전 11시부터 당일 경기 시작 후 1시간까지 예매 가능하다고 안내한다. LG 기준 예매 수수료는 장당 1,000원, 예매 한도는 경기당 1인 8매이며, 예매 취소는 경기 시작 4시간 전까지 가능하다. LG 현장 매표소와 무인발권기는 주중에는 경기 시작 1시간 30분 전부터 7회 초까지, 주말에는 현장 매표소가 경기 시작 2시간 전부터 7회 초까지 운영되고 무인발권기는 경기 시작 2시간 30분 전부터 7회 초까지 운영된다. 두산 홈경기는 NOL 스포츠 두산베어스 페이지에서 잠실야구장 경기 일정, 예매 오픈 시간, 예매 종료 시간을 확인할 수 있다. KBO 리그 티켓 안내는 구단별 예매처 매핑의 리그 공식 출처로 함께 사용한다.",
+            "similarity": 0.350280064950539,
+            "distance": 0.42231795778214964,
+            "source_urls": [
+              "https://www.lgtwins.com/ticket/general",
+              "https://nol.yanolja.com/ticket/genre/sports/bears",
+              "https://www.koreabaseball.com/kbo/league/map.aspx"
+            ],
+            "as_of": "2026-07-29",
+            "trust_level": "official",
+            "review_status": "needs_review",
+            "metadata": {
+              "language": "ko",
+              "limitations": [
+                "LG 상세 예매 규정은 공식 텍스트로 확인했지만, 두산 상세 취소/수수료/매수 제한은 추가 공식 검수가 필요하다.",
+                "잠실 답변은 경기 홈팀을 먼저 확인해야 한다."
+              ],
+              "stadium_name": "잠실야구장",
+              "home_team_ids": [
+                "LG",
+                "DOOSAN"
+              ],
+              "topic_summary": "잠실야구장 LG/두산 홈팀별 예매 안내와 KBO 티켓맵 기준",
+              "search_keywords": [
+                "잠실야구장 예매",
+                "LG 트윈스 예매",
+                "두산 베어스 예매",
+                "잠실야구장 티켓",
+                "LG 티켓링크",
+                "두산 NOL 티켓",
+                "잠실야구장 현장 매표소"
+              ]
+            }
+          }
+        ],
+        "limitations": []
+      },
+      "matches": {
+        "answerable": true,
+        "top1_document_type": true,
+        "source_urls": true,
+        "no_rejected_results": true
+      },
+      "error": null
+    },
+    {
+      "id": "tool_changwon_seat_001",
+      "input": {
+        "stadium_id": "CHANGWON",
+        "team_id": null,
+        "query": "창원NC파크 좌석 종류 알려줘",
+        "guide_types": [
+          "stadium_seat_guide"
+        ],
+        "top_k": 3
+      },
+      "expected": {
+        "answerable": true,
+        "top1_document_type": "stadium_seat_guide",
+        "required_source_urls": true
+      },
+      "actual": {
+        "stadium_id": "CHANGWON",
+        "team_id": null,
+        "query": "창원NC파크 좌석 종류 알려줘",
+        "answerable": true,
+        "items": [
+          {
+            "chunk_id": "CHANGWON_stadium_seat_guide_20260729_chunk_000",
+            "document_id": "CHANGWON_stadium_seat_guide_20260729",
+            "document_type": "stadium_seat_guide",
+            "stadium_id": "CHANGWON",
+            "team_id": "NC",
+            "title": "창원NC파크 좌석 안내 초안",
+            "content": "창원관광 공식 페이지는 창원NC파크 마산구장을 약 2만 명 수용 규모의 야구장으로 소개하고, 관람석은 일반석, 프리미엄석, 스카이박스 등으로 운영된다고 안내한다. 또한 외야를 따라 전 구역을 순환할 수 있는 콘코스 구조와 다양한 프리미엄 좌석, 스카이박스가 특징으로 언급된다. NC DINOS 공식 앱 설명은 다이나믹 프라이싱을 적용한 자체 티켓 시스템을 제공한다고 안내하므로, 창원NC파크의 좌석별 가격은 고정 표로 단정하기보다 경기별 예매 화면에서 확인해야 한다. 현재 수집 단계에서는 좌석 종류의 큰 범주만 유지하고, 좌석 구역명과 가격 상세는 공식 앱/예매 화면 수동 검수 후 보강한다.",
+            "similarity": 0.40401718694490885,
+            "distance": 0.38738882848580924,
+            "source_urls": [
+              "https://www.changwon.go.kr/tour/index.do?menuCode=001_003000000000&page.pageNo=1&search.searchKeyword=%EC%B0%BD%EC%9B%90NC%ED%8C%8C%ED%81%AC&tourProgramNo=135",
+              "https://apps.apple.com/kr/app/nc-dinos/id1495745743"
+            ],
+            "as_of": "2026-07-29",
+            "trust_level": "official",
+            "review_status": "needs_review",
+            "metadata": {
+              "capacity": 20000,
+              "language": "ko",
+              "limitations": [
+                "좌석 구역명, 응원석, 원정석, 좌석별 가격은 공식 앱 또는 예매 화면 수동 검수가 필요하다.",
+                "다이나믹 프라이싱 적용 가능성이 있어 좌석 가격은 경기별로 달라질 수 있다."
+              ],
+              "stadium_name": "창원NC파크 마산구장",
+              "home_team_ids": [
+                "NC"
+              ],
+              "topic_summary": "창원NC파크 좌석 규모와 일반석/프리미엄석/스카이박스 중심의 최소 좌석 안내",
+              "search_keywords": [
+                "창원NC파크 좌석",
+                "NC 다이노스 좌석",
+                "창원NC파크 스카이박스",
+                "창원NC파크 프리미엄석",
+                "NC 다이노스 다이나믹 프라이싱",
+                "창원NC파크 좌석 가격"
+              ]
+            }
+          }
+        ],
+        "limitations": []
+      },
+      "matches": {
+        "answerable": true,
+        "top1_document_type": true,
+        "source_urls": true,
+        "no_rejected_results": true
+      },
+      "error": null
+    },
+    {
+      "id": "tool_daejeon_facility_001",
+      "input": {
+        "stadium_id": "DAEJEON",
+        "team_id": null,
+        "query": "대전 한화생명 볼파크 편의시설 알려줘",
+        "guide_types": [
+          "stadium_facility_guide"
+        ],
+        "top_k": 3
+      },
+      "expected": {
+        "answerable": true,
+        "top1_document_type": "stadium_facility_guide",
+        "required_source_urls": true
+      },
+      "actual": {
+        "stadium_id": "DAEJEON",
+        "team_id": null,
+        "query": "대전 한화생명 볼파크 편의시설 알려줘",
+        "answerable": true,
+        "items": [
+          {
+            "chunk_id": "DAEJEON_stadium_facility_guide_20260729_chunk_000",
+            "document_id": "DAEJEON_stadium_facility_guide_20260729",
+            "document_type": "stadium_facility_guide",
+            "stadium_id": "DAEJEON",
+            "team_id": "HANWHA",
+            "title": "대전 한화생명 볼파크 시설 안내 초안",
+            "content": "한화이글스 공식 대전 한화생명 볼파크 안내는 편의시설 항목으로 사회적 배려 관람객 전용 엘리베이터, 화장실, 장애인 화장실, 수유실, 복지카드/65세 이상 전용 창구, 티켓부스, 팬샵/마킹샵, 인피니티풀, 샤워실, 탈의실을 안내한다. 한국관광공사 공식 관광정보는 구장 내 식음 매장이 3루 및 외야, 중앙, 1루 및 외야에 위치한다고 안내한다. 주소는 대전광역시 중구 대종로 373으로 확인된다.",
+            "similarity": 0.34343826268513244,
+            "distance": 0.4267651292546639,
+            "source_urls": [
+              "https://www.hanwhaeagles.co.kr/MN/EP/MNEPPI01.do",
+              "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=248219"
+            ],
+            "as_of": "2026-07-29",
+            "trust_level": "official",
+            "review_status": "needs_review",
+            "metadata": {
+              "language": "ko",
+              "limitations": [
+                "편의시설의 층별 상세 위치는 공식 페이지의 이미지/인터랙션 중심 정보라 추가 수동 검수가 필요하다.",
+                "식음 매장명과 개별 운영시간은 현재 수집 원문만으로 충분히 확인되지 않았다."
+              ],
+              "stadium_name": "대전 한화생명 볼파크",
+              "home_team_ids": [
+                "HANWHA"
+              ],
+              "topic_summary": "대전 한화생명 볼파크 엘리베이터, 화장실, 수유실, 티켓부스, 팬샵, 인피니티풀, 식음 매장 안내",
+              "search_keywords": [
+                "대전 한화생명 볼파크 시설",
+                "한화생명 볼파크 편의시설",
+                "한화생명 볼파크 화장실",
+                "한화생명 볼파크 수유실",
+                "한화생명 볼파크 팬샵",
+                "한화생명 볼파크 마킹샵",
+                "한화생명 볼파크 인피니티풀",
+                "한화생명 볼파크 티켓부스"
+              ],
+              "known_facilities": [
+                "사회적 배려 관람객 전용 엘리베이터",
+                "화장실",
+                "장애인 화장실",
+                "수유실",
+                "티켓부스",
+                "팬샵/마킹샵",
+                "인피니티풀",
+                "샤워실",
+                "탈의실"
+              ]
+            }
+          }
+        ],
+        "limitations": []
+      },
+      "matches": {
+        "answerable": true,
+        "top1_document_type": true,
+        "source_urls": true,
+        "no_rejected_results": true
+      },
+      "error": null
+    },
+    {
+      "id": "tool_gwangju_bag_001",
+      "input": {
+        "stadium_id": "GWANGJU",
+        "team_id": null,
+        "query": "광주 챔피언스필드 반입 금지 물품 알려줘",
+        "guide_types": [
+          "stadium_bag_policy"
+        ],
+        "top_k": 3
+      },
+      "expected": {
+        "answerable": true,
+        "top1_document_type": "stadium_bag_policy",
+        "required_source_urls": true
+      },
+      "actual": {
+        "stadium_id": "GWANGJU",
+        "team_id": null,
+        "query": "광주 챔피언스필드 반입 금지 물품 알려줘",
+        "answerable": true,
+        "items": [
+          {
+            "chunk_id": "GWANGJU_stadium_bag_policy_20260729_chunk_000",
+            "document_id": "GWANGJU_stadium_bag_policy_20260729",
+            "document_type": "stadium_bag_policy",
+            "stadium_id": "GWANGJU",
+            "team_id": "KIA",
+            "title": "광주-기아 챔피언스 필드 반입 및 안전 정책 초안",
+            "content": "KBO SAFE 캠페인은 전 구장 공통 최소 안전 기준으로 유리병, 총량 1L 초과 PET, 알루미늄 캔 용기 음료, 얼린 생수 등의 반입 제한을 안내한다. 미개봉 음료는 1인당 PET 1개와 캔 2개까지 허용되는 기준이 제시되어 있다. 관람객은 가방 1개와 쇼핑백류 1개까지 지참할 수 있으며, 가방은 가로 45cm, 세로 45cm, 폭 20cm 이내 기준이 안내되어 있다. 음식물은 반입 금지 품목이 아니라면 가능하지만, 뜨거운 국물류나 냄새가 심한 음식처럼 안전과 관람 환경을 저해할 수 있는 경우 제한될 수 있다. KBO는 구단별 예외가 있을 수 있으므로 광주-기아 챔피언스 필드 방문 전 KIA 타이거즈 공식 안내 확인이 필요하다고 안내한다.",
+            "similarity": 0.3998761334194868,
+            "distance": 0.3900805132773336,
+            "source_urls": [
+              "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+            ],
+            "as_of": "2026-07-29",
+            "trust_level": "official",
+            "review_status": "needs_review",
+            "metadata": {
+              "language": "ko",
+              "limitations": [
+                "이 문서는 KBO 공통 정책 기반 초안이며, 광주-기아 챔피언스 필드 전용 반입 예외 규정은 추가 공식 출처 확인이 필요하다.",
+                "구장별 특정 좌석/구역 예외는 KIA 타이거즈 공식 안내 확인이 필요하다."
+              ],
+              "stadium_name": "광주-기아 챔피언스 필드",
+              "home_team_ids": [
+                "KIA"
+              ],
+              "topic_summary": "광주-기아 챔피언스 필드 반입 가능 물품, 반입 금지 물품, 가방 크기, 음식물, 병/캔/PET 기준 안내",
+              "search_keywords": [
+                "광주 챔피언스 필드 반입",
+                "광주 기아 챔피언스 필드 반입 금지",
+                "챔피언스 필드 가방",
+                "챔피언스 필드 캔 음료",
+                "챔피언스 필드 음식물",
+                "KBO SAFE 캠페인",
+                "유리병 반입 금지",
+                "PET 1L",
+                "가방 45cm"
+              ]
+            }
+          }
+        ],
+        "limitations": []
+      },
+      "matches": {
+        "answerable": true,
+        "top1_document_type": true,
+        "source_urls": true,
+        "no_rejected_results": true
+      },
+      "error": null
+    },
+    {
+      "id": "tool_gocheok_facility_001",
+      "input": {
+        "stadium_id": "GOCHEOK",
+        "team_id": null,
+        "query": "고척돔 편의시설 알려줘",
+        "guide_types": [
+          "stadium_facility_guide"
+        ],
+        "top_k": 3
+      },
+      "expected": {
+        "answerable": true,
+        "top1_document_type": "stadium_facility_guide",
+        "required_source_urls": true
+      },
+      "actual": {
+        "stadium_id": "GOCHEOK",
+        "team_id": null,
+        "query": "고척돔 편의시설 알려줘",
+        "answerable": true,
+        "items": [
+          {
+            "chunk_id": "GOCHEOK_stadium_facility_guide_20260729_chunk_000",
+            "document_id": "GOCHEOK_stadium_facility_guide_20260729",
+            "document_type": "stadium_facility_guide",
+            "stadium_id": "GOCHEOK",
+            "team_id": "KIWOOM",
+            "title": "고척스카이돔 stadium_facility_guide 초안",
+            "content": "고척스카이돔은 서울시설공단이 운영하는 돔 경기장이다. 운영기관 공식 페이지에서 행사 안내, 시설대관, 주차안내, 찾아오시는 길 등을 확인할 수 있다. 키움 티켓 안내는 돔구장 주차 제한을 관람 유의사항으로 명시한다. 화장실, 수유실, 매점 등 세부 위치는 운영기관 세부 페이지 추가 수집이 필요하다.",
+            "similarity": 0.2610808534405671,
+            "distance": 0.4802974452636314,
+            "source_urls": [
+              "https://www.sisul.or.kr/open_content/skydome/"
+            ],
+            "as_of": "2026-07-29",
+            "trust_level": "official",
+            "review_status": "needs_review",
+            "metadata": {
+              "is_dome": true,
+              "language": "ko",
+              "limitations": [
+                "프로야구 경기 시 내부 주차장 이용 제한은 공식 안내 기준이며 경기별 변동은 추가 확인 필요."
+              ],
+              "stadium_name": "고척스카이돔",
+              "home_team_ids": [
+                "KIWOOM"
+              ]
+            }
+          }
+        ],
+        "limitations": []
+      },
+      "matches": {
+        "answerable": true,
+        "top1_document_type": true,
+        "source_urls": true,
+        "no_rejected_results": true
+      },
+      "error": null
+    },
+    {
+      "id": "tool_daegu_ticket_001",
+      "input": {
+        "stadium_id": "DAEGU",
+        "team_id": null,
+        "query": "삼성 홈경기 예매 취소 어떻게 해?",
+        "guide_types": [
+          "stadium_ticketing_guide"
+        ],
+        "top_k": 3
+      },
+      "expected": {
+        "answerable": true,
+        "top1_document_type": "stadium_ticketing_guide",
+        "required_source_urls": true
+      },
+      "actual": {
+        "stadium_id": "DAEGU",
+        "team_id": null,
+        "query": "삼성 홈경기 예매 취소 어떻게 해?",
+        "answerable": true,
+        "items": [
+          {
+            "chunk_id": "DAEGU_stadium_ticketing_guide_20260729_chunk_000",
+            "document_id": "DAEGU_stadium_ticketing_guide_20260729",
+            "document_type": "stadium_ticketing_guide",
+            "stadium_id": "DAEGU",
+            "team_id": "SAMSUNG",
+            "title": "대구 삼성 라이온즈 파크 stadium_ticketing_guide 초안",
+            "content": "삼성 홈경기 예매는 티켓링크를 중심으로 안내된다. 삼성 공식 예매방법 페이지는 인터넷 예매, 전화예매, 현장판매, ATM 예매 경로를 안내한다. 예매취소/환불 페이지는 경기 시작 4시간 전, 취소수수료, 우천 취소, 현장 환불 제한 등 조건을 안내하므로 티켓 답변에서 함께 참조해야 한다.",
+            "similarity": 0.2237624272774401,
+            "distance": 0.504554422269664,
+            "source_urls": [
+              "https://www.samsunglions.com/m/ticket/score_4_1.asp",
+              "https://www.samsunglions.com/m/ticket/score_4_1_3.asp",
+              "https://www.samsunglions.com/m/ticket/score_4_1_4.asp",
+              "https://www.koreabaseball.com/kbo/league/map.aspx"
+            ],
+            "as_of": "2026-07-29",
+            "trust_level": "official",
+            "review_status": "needs_review",
+            "metadata": {
+              "language": "ko",
+              "limitations": [
+                "교통/주차/시설 상세 공식 출처 추가 필요."
+              ],
+              "stadium_name": "대구 삼성 라이온즈 파크",
+              "home_team_ids": [
+                "SAMSUNG"
+              ]
+            }
+          }
+        ],
+        "limitations": []
+      },
+      "matches": {
+        "answerable": true,
+        "top1_document_type": true,
+        "source_urls": true,
+        "no_rejected_results": true
+      },
+      "error": null
+    },
+    {
+      "id": "tool_suwon_transport_001",
+      "input": {
+        "stadium_id": "SUWON",
+        "team_id": null,
+        "query": "수원 위즈파크 지하철로 어떻게 가?",
+        "guide_types": [
+          "stadium_transport_guide"
+        ],
+        "top_k": 3
+      },
+      "expected": {
+        "answerable": true,
+        "top1_document_type": "stadium_transport_guide",
+        "required_source_urls": true
+      },
+      "actual": {
+        "stadium_id": "SUWON",
+        "team_id": null,
+        "query": "수원 위즈파크 지하철로 어떻게 가?",
+        "answerable": true,
+        "items": [
+          {
+            "chunk_id": "SUWON_stadium_transport_guide_20260729_chunk_000",
+            "document_id": "SUWON_stadium_transport_guide_20260729",
+            "document_type": "stadium_transport_guide",
+            "stadium_id": "SUWON",
+            "team_id": "KT",
+            "title": "수원 KT 위즈파크 stadium_transport_guide 초안",
+            "content": "수원 KT 위즈파크는 경기도 수원시 장안구 경수대로 조원동 일대에 있다. kt 공식 주차예약 안내는 수원종합운동장 주차장이 프로야구 경기일에만 주차예약제로 운영되며, 미예약 차량은 주차가 불가하다고 안내한다. 예약 기간은 홈경기 티켓 예매기간과 연결되며 예매번호가 필요하므로, 자가용 방문자는 사전 예약 여부를 반드시 확인해야 한다.",
+            "similarity": 0.18846866386992678,
+            "distance": 0.5274953684845476,
+            "source_urls": [
+              "https://www.ktwiz.co.kr/wizpark",
+              "https://www.ktwiz.co.kr/wizpark/parking"
+            ],
+            "as_of": "2026-07-29",
+            "trust_level": "official",
+            "review_status": "needs_review",
+            "metadata": {
+              "language": "ko",
+              "limitations": [
+                "구장 안내도와 티켓정책은 이미지 중심이라 좌석/요금 세부 구조화 추가 필요."
+              ],
+              "stadium_name": "수원 KT 위즈파크",
+              "home_team_ids": [
+                "KT"
+              ]
+            }
+          }
+        ],
+        "limitations": []
+      },
+      "matches": {
+        "answerable": true,
+        "top1_document_type": true,
+        "source_urls": true,
+        "no_rejected_results": true
+      },
+      "error": null
+    },
+    {
+      "id": "tool_negative_foreign_001",
+      "input": {
+        "stadium_id": "GOCHEOK",
+        "team_id": null,
+        "query": "도쿄돔 원정석 어디야?",
+        "guide_types": null,
+        "top_k": 3
+      },
+      "expected": {
+        "answerable": false,
+        "top1_document_type": null,
+        "required_source_urls": false
+      },
+      "actual": {
+        "stadium_id": "GOCHEOK",
+        "team_id": null,
+        "query": "도쿄돔 원정석 어디야?",
+        "answerable": false,
+        "items": [],
+        "limitations": [
+          "no_relevant_stadium_guide_found"
+        ]
+      },
+      "matches": {
+        "answerable": true,
+        "top1_document_type": true,
+        "source_urls": true,
+        "no_rejected_results": true
+      },
+      "error": null
+    }
+  ]
+}
