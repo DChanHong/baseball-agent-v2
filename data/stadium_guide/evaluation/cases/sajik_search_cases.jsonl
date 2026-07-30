@@ -8,3 +8,8 @@
 {"id":"sajik_008","query":"잠실야구장 주차 알려줘","stadium_id":"SAJIK","expected_document_type":null,"case_type":"negative","note":"SAJIK 필터를 걸면 억지 검색될 수 있다. 실제 Tool 앞단에서는 잠실과 SAJIK 불일치를 처리해야 한다."}
 {"id":"sajik_009","query":"고척돔은 비 와도 경기해?","stadium_id":"SAJIK","expected_document_type":null,"case_type":"negative","note":"다른 구장/돔 관련 질문이다. 실제 Tool 앞단에서는 stadium_id를 GOCHEOK으로 추출하거나 구장 확인을 요청해야 한다."}
 {"id":"sajik_010","query":"한화생명 볼파크 좌석 알려줘","stadium_id":"SAJIK","expected_document_type":null,"case_type":"negative","note":"다른 구장 좌석 질문이다. SAJIK RAG 검색으로 답변하면 안 된다."}
+{"id":"sajik_011","query":"사직야구장 몇 호선 타고 가?","stadium_id":"SAJIK","expected_document_type":"stadium_transport_guide","case_type":"positive","note":"지하철 노선 질문은 교통 안내 문서가 상위에 와야 한다."}
+{"id":"sajik_012","query":"사직구장 가까운 지하철역 어디야?","stadium_id":"SAJIK","expected_document_type":"stadium_transport_guide","case_type":"positive","note":"가까운 지하철역 질문은 교통 안내 문서가 상위에 와야 한다."}
+{"id":"sajik_013","query":"사직구장 버스로 가는 법 알려줘","stadium_id":"SAJIK","expected_document_type":"stadium_transport_guide","case_type":"positive","note":"버스 노선과 대중교통 질문은 교통 안내 문서가 상위에 와야 한다."}
+{"id":"sajik_014","query":"사직구장 주차 가능해?","stadium_id":"SAJIK","expected_document_type":"stadium_transport_guide","case_type":"positive","note":"주차 가능 여부와 자가용 접근 질문은 교통 안내 문서가 상위에 와야 한다."}
+{"id":"sajik_015","query":"사직야구장 대중교통 추천해줘","stadium_id":"SAJIK","expected_document_type":"stadium_transport_guide","case_type":"positive","note":"대중교통 추천 질문은 교통 안내 문서가 상위에 와야 한다."}

@@ -55,12 +55,24 @@ def build_source_url_index(sources_path: Path) -> dict[str, str]:
 
 def build_embedding_text(document: dict[str, Any]) -> str:
     team_id = document.get("team_id") or "공통"
+    metadata = document.get("metadata", {})
+    topic_summary = metadata.get("topic_summary")
+    search_keywords = metadata.get("search_keywords", [])
+    keyword_text = ", ".join(search_keywords) if search_keywords else None
+    header_lines = [
+        f"제목: {document['title']}",
+        f"문서유형: {document['document_type']}",
+        f"구장: {document['stadium_id']}",
+        f"팀: {team_id}",
+    ]
+    if topic_summary:
+        header_lines.append(f"핵심주제: {topic_summary}")
+    if keyword_text:
+        header_lines.append(f"검색키워드: {keyword_text}")
+
     return "\n".join(
-        [
-            f"제목: {document['title']}",
-            f"문서유형: {document['document_type']}",
-            f"구장: {document['stadium_id']}",
-            f"팀: {team_id}",
+        header_lines
+        + [
             "본문:",
             document["content"],
         ]

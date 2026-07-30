@@ -1,0 +1,1017 @@
+{
+  "dataset_path": "/Users/hong/Desktop/baseball-agent-v2/data/stadium_guide/evaluation/cases/sajik_search_cases.jsonl",
+  "embedding_model": "text-embedding-3-small",
+  "top_k": 3,
+  "relevance_threshold": 0.65,
+  "run_name": "transport-boost-v2",
+  "run_timestamp": "2026-07-30T07:23:36.852269+00:00",
+  "summary": {
+    "total_cases": 15,
+    "positive_cases": 12,
+    "negative_cases": 3,
+    "top1_hits": 11,
+    "top3_hits": 11,
+    "top1_accuracy": 0.9166666666666666,
+    "top3_accuracy": 0.9166666666666666,
+    "negative_cases_over_threshold": [
+      "sajik_008"
+    ],
+    "failed_top1_case_ids": [
+      "sajik_011"
+    ],
+    "failed_top3_case_ids": [
+      "sajik_011"
+    ]
+  },
+  "cases": [
+    {
+      "id": "sajik_001",
+      "query": "사직구장 지하철로 어떻게 가?",
+      "case_type": "positive",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_transport_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.5632809850656006,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_facility_guide",
+        "stadium_seat_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+          "distance": 0.5632809850656006,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "사직야구장 시설 안내 초안",
+          "distance": 0.5704255097850957,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "사직야구장 좌석 안내 초안",
+          "distance": 0.6349520616035493,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=340",
+            "https://www.giantsclub.com/html/?pcode=339"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "대중교통 질문은 교통 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "sajik_002",
+      "query": "사직구장 반입 금지 물품 알려줘",
+      "case_type": "positive",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_bag_policy",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.507141195432316,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_bag_policy",
+        "stadium_facility_guide",
+        "stadium_seat_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "사직야구장 반입 및 안전 정책 초안",
+          "distance": 0.507141195432316,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "사직야구장 시설 안내 초안",
+          "distance": 0.6104806129888511,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "사직야구장 좌석 안내 초안",
+          "distance": 0.6768158327376186,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=340",
+            "https://www.giantsclub.com/html/?pcode=339"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "반입 제한과 안전 정책 질문은 반입 정책 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "sajik_003",
+      "query": "사직구장에 캔 음료 들고 가도 돼?",
+      "case_type": "positive",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_bag_policy",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.6244585131119762,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_bag_policy",
+        "stadium_facility_guide",
+        "stadium_seat_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "사직야구장 반입 및 안전 정책 초안",
+          "distance": 0.6244585131119762,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "사직야구장 시설 안내 초안",
+          "distance": 0.6826382639836357,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "사직야구장 좌석 안내 초안",
+          "distance": 0.7383240188862557,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=340",
+            "https://www.giantsclub.com/html/?pcode=339"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "캔 음료 반입 가능 여부는 KBO SAFE 기반 반입 정책 문서가 검색되어야 한다."
+    },
+    {
+      "id": "sajik_004",
+      "query": "사직구장 좌석 종류 알려줘",
+      "case_type": "positive",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_seat_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.4698870257440324,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_seat_guide",
+        "stadium_facility_guide",
+        "stadium_bag_policy"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "사직야구장 좌석 안내 초안",
+          "distance": 0.4698870257440324,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=340",
+            "https://www.giantsclub.com/html/?pcode=339"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "사직야구장 시설 안내 초안",
+          "distance": 0.5552297405612052,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "사직야구장 반입 및 안전 정책 초안",
+          "distance": 0.5878734648922579,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "좌석 구역 종류 질문은 좌석 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "sajik_005",
+      "query": "사직구장 바베큐석은 어디야?",
+      "case_type": "positive",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_seat_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.6048145017145184,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_seat_guide",
+        "stadium_facility_guide",
+        "stadium_bag_policy"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "사직야구장 좌석 안내 초안",
+          "distance": 0.6048145017145184,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=340",
+            "https://www.giantsclub.com/html/?pcode=339"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "사직야구장 시설 안내 초안",
+          "distance": 0.6315085632651001,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "사직야구장 반입 및 안전 정책 초안",
+          "distance": 0.6405025623816181,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "바베큐석은 좌석 안내 문서 content에 포함되어 있으므로 좌석 안내 문서가 검색되어야 한다."
+    },
+    {
+      "id": "sajik_006",
+      "query": "롯데 홈경기 예매는 어디서 해?",
+      "case_type": "positive",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_ticketing_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.6324428202164549,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_ticketing_guide",
+        "stadium_transport_guide",
+        "stadium_facility_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "사직야구장 티켓 및 예매 안내 초안",
+          "distance": 0.6324428202164549,
+          "source_urls": [
+            "https://www.koreabaseball.com/kbo/league/map.aspx",
+            "https://www.giantsclub.com/m/?pcode=539",
+            "https://www.giantsclub.com/html/?pcode=339",
+            "https://www.giantsclub.com/html/?pcode=341"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+          "distance": 0.7273087004380088,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "사직야구장 시설 안내 초안",
+          "distance": 0.7447531674504515,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "예매처와 티켓 안내 질문은 티켓 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "sajik_007",
+      "query": "사직구장 자이언츠샵 위치 알려줘",
+      "case_type": "positive",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_facility_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.4766951594604877,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_facility_guide",
+        "stadium_seat_guide",
+        "stadium_ticketing_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "사직야구장 시설 안내 초안",
+          "distance": 0.4766951594604877,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "사직야구장 좌석 안내 초안",
+          "distance": 0.6007441201566098,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=340",
+            "https://www.giantsclub.com/html/?pcode=339"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "사직야구장 티켓 및 예매 안내 초안",
+          "distance": 0.6012631152143586,
+          "source_urls": [
+            "https://www.koreabaseball.com/kbo/league/map.aspx",
+            "https://www.giantsclub.com/m/?pcode=539",
+            "https://www.giantsclub.com/html/?pcode=339",
+            "https://www.giantsclub.com/html/?pcode=341"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "구장샵 위치 질문은 시설 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "sajik_008",
+      "query": "잠실야구장 주차 알려줘",
+      "case_type": "negative",
+      "stadium_id": "SAJIK",
+      "expected_document_type": null,
+      "top1_hit": null,
+      "top3_hit": null,
+      "top_distance": 0.49719204079643864,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_ticketing_guide",
+        "stadium_facility_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+          "distance": 0.49719204079643864,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "사직야구장 티켓 및 예매 안내 초안",
+          "distance": 0.5626995081097257,
+          "source_urls": [
+            "https://www.koreabaseball.com/kbo/league/map.aspx",
+            "https://www.giantsclub.com/m/?pcode=539",
+            "https://www.giantsclub.com/html/?pcode=339",
+            "https://www.giantsclub.com/html/?pcode=341"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "사직야구장 시설 안내 초안",
+          "distance": 0.5636854770212893,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "SAJIK 필터를 걸면 억지 검색될 수 있다. 실제 Tool 앞단에서는 잠실과 SAJIK 불일치를 처리해야 한다."
+    },
+    {
+      "id": "sajik_009",
+      "query": "고척돔은 비 와도 경기해?",
+      "case_type": "negative",
+      "stadium_id": "SAJIK",
+      "expected_document_type": null,
+      "top1_hit": null,
+      "top3_hit": null,
+      "top_distance": 0.6683928649372061,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": false,
+      "retrieved_document_types": [
+        "stadium_bag_policy",
+        "stadium_ticketing_guide",
+        "stadium_transport_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "사직야구장 반입 및 안전 정책 초안",
+          "distance": 0.6683928649372061,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "사직야구장 티켓 및 예매 안내 초안",
+          "distance": 0.7055983050591669,
+          "source_urls": [
+            "https://www.koreabaseball.com/kbo/league/map.aspx",
+            "https://www.giantsclub.com/m/?pcode=539",
+            "https://www.giantsclub.com/html/?pcode=339",
+            "https://www.giantsclub.com/html/?pcode=341"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+          "distance": 0.7175577969666875,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "다른 구장/돔 관련 질문이다. 실제 Tool 앞단에서는 stadium_id를 GOCHEOK으로 추출하거나 구장 확인을 요청해야 한다."
+    },
+    {
+      "id": "sajik_010",
+      "query": "한화생명 볼파크 좌석 알려줘",
+      "case_type": "negative",
+      "stadium_id": "SAJIK",
+      "expected_document_type": null,
+      "top1_hit": null,
+      "top3_hit": null,
+      "top_distance": 0.7080437362616346,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": false,
+      "retrieved_document_types": [
+        "stadium_seat_guide",
+        "stadium_bag_policy",
+        "stadium_ticketing_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "사직야구장 좌석 안내 초안",
+          "distance": 0.7080437362616346,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=340",
+            "https://www.giantsclub.com/html/?pcode=339"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "사직야구장 반입 및 안전 정책 초안",
+          "distance": 0.7828018925861981,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "사직야구장 티켓 및 예매 안내 초안",
+          "distance": 0.8053173520187799,
+          "source_urls": [
+            "https://www.koreabaseball.com/kbo/league/map.aspx",
+            "https://www.giantsclub.com/m/?pcode=539",
+            "https://www.giantsclub.com/html/?pcode=339",
+            "https://www.giantsclub.com/html/?pcode=341"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "다른 구장 좌석 질문이다. SAJIK RAG 검색으로 답변하면 안 된다."
+    },
+    {
+      "id": "sajik_011",
+      "query": "사직야구장 몇 호선 타고 가?",
+      "case_type": "positive",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_transport_guide",
+      "top1_hit": false,
+      "top3_hit": false,
+      "top_distance": 0.4594685293184442,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_facility_guide",
+        "stadium_seat_guide",
+        "stadium_ticketing_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "사직야구장 시설 안내 초안",
+          "distance": 0.4594685293184442,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "사직야구장 좌석 안내 초안",
+          "distance": 0.47434273957475126,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=340",
+            "https://www.giantsclub.com/html/?pcode=339"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "사직야구장 티켓 및 예매 안내 초안",
+          "distance": 0.5318070422632899,
+          "source_urls": [
+            "https://www.koreabaseball.com/kbo/league/map.aspx",
+            "https://www.giantsclub.com/m/?pcode=539",
+            "https://www.giantsclub.com/html/?pcode=339",
+            "https://www.giantsclub.com/html/?pcode=341"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "지하철 노선 질문은 교통 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "sajik_012",
+      "query": "사직구장 가까운 지하철역 어디야?",
+      "case_type": "positive",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_transport_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.5585848573839929,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_facility_guide",
+        "stadium_seat_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+          "distance": 0.5585848573839929,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "사직야구장 시설 안내 초안",
+          "distance": 0.5981514030753725,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "사직야구장 좌석 안내 초안",
+          "distance": 0.6308043213625578,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=340",
+            "https://www.giantsclub.com/html/?pcode=339"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "가까운 지하철역 질문은 교통 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "sajik_013",
+      "query": "사직구장 버스로 가는 법 알려줘",
+      "case_type": "positive",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_transport_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.49940270697529776,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_bag_policy",
+        "stadium_facility_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+          "distance": 0.49940270697529776,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "사직야구장 반입 및 안전 정책 초안",
+          "distance": 0.6365226187840705,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "사직야구장 시설 안내 초안",
+          "distance": 0.6453656309742867,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "버스 노선과 대중교통 질문은 교통 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "sajik_014",
+      "query": "사직구장 주차 가능해?",
+      "case_type": "positive",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_transport_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.5293598410932028,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_facility_guide",
+        "stadium_bag_policy"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+          "distance": 0.5293598410932028,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "사직야구장 시설 안내 초안",
+          "distance": 0.581719561930749,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "사직야구장 반입 및 안전 정책 초안",
+          "distance": 0.5972082447574805,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "주차 가능 여부와 자가용 접근 질문은 교통 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "sajik_015",
+      "query": "사직야구장 대중교통 추천해줘",
+      "case_type": "positive",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_transport_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.4925685454633021,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_facility_guide",
+        "stadium_seat_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+          "distance": 0.4925685454633021,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "사직야구장 시설 안내 초안",
+          "distance": 0.50009553760396,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "사직야구장 좌석 안내 초안",
+          "distance": 0.5414454966213078,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=340",
+            "https://www.giantsclub.com/html/?pcode=339"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "대중교통 추천 질문은 교통 안내 문서가 상위에 와야 한다."
+    }
+  ]
+}
