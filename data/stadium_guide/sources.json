@@ -222,12 +222,28 @@
       "document_types": [
         "stadium_seat_guide",
         "stadium_entry_guide",
-        "stadium_facility_guide"
+        "stadium_facility_guide",
+        "stadium_transport_guide"
       ],
       "refresh_policy": "monthly",
       "trust_level": "official",
       "local_raw_file": "data/stadium_guide/raw/2026-07-29/MUNHAK/ssg_landersfield_stadium.html",
       "notes": "좌석, 매점, 화장실, GATE 등 구장 안내 공식 앱 웹 출처."
+    },
+    {
+      "source_id": "ssg_landersfield_parking",
+      "title": "SSG 랜더스필드 주차안내",
+      "url": "https://www.ssglanders.com/stadium/parking",
+      "source_type": "official_team",
+      "stadium_id": "MUNHAK",
+      "team_id": "SSG",
+      "document_types": [
+        "stadium_transport_guide"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/MUNHAK/ssg_landersfield_parking.html",
+      "notes": "인천 SSG 랜더스필드 주차장 형태, 요금, 주차대수 공식 출처."
     },
     {
       "source_id": "ssg_landers_group_ticket",

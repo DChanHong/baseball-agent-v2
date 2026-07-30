@@ -17,6 +17,15 @@
       "content_hash": "sha256:a3b21fa8588cba23f6a8f44d842ef626862f7bd9b6c17552fc51e5b11a7c89de"
     },
     {
+      "source_id": "ssg_landersfield_parking",
+      "source_url": "https://www.ssglanders.com/stadium/parking",
+      "source_type": "official_team",
+      "local_file": "ssg_landersfield_parking.html",
+      "fetch_status": "success",
+      "byte_size": 38363,
+      "content_hash": "sha256:00bfb4e8ea37dfd8a6a23b98711d796188bf5e4d4a616aef79aa08cbcbaa9908"
+    },
+    {
       "source_id": "ssg_landers_group_ticket",
       "source_url": "https://www.ssglanders.com/game/group",
       "source_type": "official_team",

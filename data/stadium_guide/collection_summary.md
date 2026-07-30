@@ -6,15 +6,15 @@
 
 ## 현재 상태
 
-현재 유지 중인 normalized 문서는 6개 구장, 23개 문서다.
+현재 유지 중인 normalized 문서는 6개 구장, 25개 문서다.
 
 ```text
 SAJIK   5 docs
 GOCHEOK 5 docs
-MUNHAK  4 docs
+MUNHAK  5 docs
 GWANGJU 3 docs
 DAEGU   2 docs
-SUWON   4 docs
+SUWON   5 docs
 ```
 
 공통 공식 출처:
@@ -76,11 +76,12 @@ SUWON   4 docs
 | `stadium_facility_guide` | 수집 | SSG 홈구장 안내 |
 | `stadium_seat_guide` | 수집 | SSG 홈구장 안내, 단체관람 안내 |
 | `stadium_ticketing_guide` | 수집 | SSG 단체관람 안내, 2026 티켓 예매 공지, KBO 티켓 안내 |
+| `stadium_transport_guide` | 수집 | SSG 홈구장 안내, SSG 주차안내 |
 
 메모:
 
 - SSG 공식 홈구장 안내가 좌석, 매점, 화장실, GATE 정보를 제공한다.
-- 교통/주차 문서는 공식 출처가 부족해 제외했다.
+- SSG 공식 홈구장 안내에서 오시는 길을 확인했고, 별도 공식 주차안내 페이지에서 주차장 형태, 요금, 총 주차대수를 보강했다.
 
 ### GWANGJU
 
@@ -128,11 +129,13 @@ SUWON   4 docs
 | `stadium_seat_guide` | 수집 | kt wiz park 구장 안내도, 2026 티켓정책 |
 | `stadium_ticketing_guide` | 수집 | kt 일반티켓 예매, 2026 티켓정책, KBO 티켓 안내 |
 | `stadium_transport_guide` | 수집 | kt wiz park 구장 소개, 주차예약 안내 |
+| `stadium_bag_policy` | 수집 | KBO SAFE 캠페인 |
 
 메모:
 
 - 사전 주차 예약제가 공식 출처에 명확히 안내되어 있어 transport 문서 품질이 좋다.
 - 구장 안내도와 티켓정책은 이미지 중심일 수 있어 좌석/요금 세부 구조화는 추가 검수 대상이다.
+- 반입/안전 정책은 KBO SAFE 공통 기준으로 보강했으며, KT 위즈파크 전용 예외는 추가 공식 출처 확인이 필요하다.
 
 ## 아직 수집하지 못했거나 제외한 구장
 
