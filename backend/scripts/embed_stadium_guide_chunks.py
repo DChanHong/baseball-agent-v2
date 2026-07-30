@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+# 구장 가이드 chunk JSONL을 OpenAI embedding으로 변환해 pgvector 테이블에 upsert한다.
+# DB metadata에는 repo 내부 `source_file`을 제외하고, citation에는 source URL을 사용한다.
+
 import argparse
 import asyncio
 import json

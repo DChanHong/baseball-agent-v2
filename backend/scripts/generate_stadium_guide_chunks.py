@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+# 정규화된 구장 가이드 JSON 문서를 RAG chunk JSONL 입력으로 변환한다.
+# 생성된 chunk에는 source URL과 embedding text가 포함되며 vector 값은 포함하지 않는다.
+
 import argparse
 import hashlib
 import json

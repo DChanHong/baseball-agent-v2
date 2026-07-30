@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+# LLM Tool Router 오프라인 평가 케이스를 실행하고 결과 JSON을 저장한다.
+# 사용자 메시지가 기대한 Agent Tool로 라우팅되는지 측정할 때 사용한다.
+
 import argparse
 import asyncio
 import json

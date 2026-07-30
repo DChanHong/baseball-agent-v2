@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+# 정규화된 KBO 일정 JSON을 로컬 Supabase `kbo_games` 테이블에 적재한다.
+# 일정 raw 데이터를 수집하고 normalized JSON을 만든 뒤 실행하는 스크립트다.
+
 import argparse
 import asyncio
 import sys
