@@ -1,0 +1,382 @@
+
+
+
+
+
+
+
+    
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>두드리소_민원사례</title>
+
+<!-- 영상민원 재생  -->
+<link rel="stylesheet" href="/js/vod_upload/javascript/video/css/video-js.css" type="text/css"/>
+<link rel="stylesheet" href="/js/vod_upload/javascript/video/css/video-speed.css" type="text/css"/>
+<script type="text/javaScript" src="/js/vod_upload/javascript/video/stream/embed_patch.js"></script>
+<script type="text/javascript" src="/js/vod_upload/javascript/video/player/swfobject.js"></script>
+<script type="text/javascript" src="/js/vod_upload/javascript/video/player/video/video.js"></script>                  
+<script type="text/javascript" src="/js/vod_upload/javascript/video/player/video/video-speed.js"></script>    
+<script type="text/javascript" src="/js/vod_upload/javascript/video/player/video/videoHandlers.js"></script>
+<!-- 영상민원 재생 -->
+
+
+
+	
+	
+	<meta name="viewport" content="initial-scale=1, user-scalable=no, maximum-scale=0.5, minimum-scale=0.5, width=device-width, target-densitydpi=device-dpi" />
+    <link rel="stylesheet" type="text/css" href="/css/bbs.css">
+    <link rel="stylesheet" type="text/css" href="/css/mobile.css">
+    <link rel="stylesheet" type="text/css" href="/css/calendar.css">
+
+
+	<!-- jQuery -->
+<script src="/js/jquery/jquery-1.11.3.js"></script>
+<script src="/js/jquery/jquery-ui-1.11.4.js"></script>
+<script src="/js/jquery/jquery.common.js"></script>
+<script src="/js/jquery/jquery.validate-1.14.0.js"></script>
+<script src="/js/dcc-common.js"></script>
+<script src="/js/dss-common.js"></script>
+
+<script type="text/javascript">
+	    var userAgent = navigator.userAgent.toLowerCase(); // 접속 핸드폰 정보 
+		   
+		// 모바일 홈페이지 바로가기 링크 생성 
+		if(userAgent.indexOf("chrome") != -1){
+			document.write('<link rel="shortcut icon" sizes="196x196" href="https://smart.daegu.go.kr/homeLink-196.png" />');
+		} else {
+			if(userAgent.match('iphone')) { 
+			    document.write('<link rel="apple-touch-icon" href="https://smart.daegu.go.kr/homeLink.png" />'); 
+			} else if(userAgent.match('ipad')) { 
+			    document.write('<link rel="apple-touch-icon" sizes="72*72" href="https://smart.daegu.go.kr/homeLink.png" />'); 
+			} else if(userAgent.match('ipod')) { 
+			    document.write('<link rel="apple-touch-icon" href="https://smart.daegu.go.kr/homeLink.png" />');
+			} else if(userAgent.match('android')) { 
+			    document.write('<link rel="shortcut icon" href="https://smart.daegu.go.kr/homeLink.png" />');
+			} else{
+			    document.write('<link rel="shortcut icon" href="https://smart.daegu.go.kr/homeLink.png" />');
+			}
+		}
+	    
+// 		if (document.location.protocol == 'http:') {
+// 	        document.location.href = document.location.href.replace('http:', 'https:');
+// 	    }
+
+	</script>
+    
+    
+
+
+</head>
+<body>
+<!-- 상단 -->
+
+
+
+<!-- 상단 -->
+<style>
+
+.nav_wrap dl dd > a {
+	font-size: 30px;
+	padding: 10px 30px;
+}
+
+.nav_wrap dl .active ul li a {
+	font-size: 27px;
+	margin-top: 20px;
+	padding-left: 5px;
+}
+
+</style>
+
+<header>
+	<div id="header">
+		<h1>
+			<a href="/index.do" class="nlogo">두드리소</a>
+		</h1>
+		<p class="btn_nav">
+			<a href="javascript:menuBtnCallShow()">메뉴버튼</a>
+		</p>
+		<!-- 펼침메뉴 -->
+		<nav id="navi" class="nav_wrap" style="display:none;">
+			<a class="btn_cld" href="javascript:menuBtnCallHide()">닫기</a>
+			<h2>전체메뉴보기</h2>
+			<dl>
+				<!-- 로그인/본인인증 안했을때에만 보여준다. -->
+				
+					<dd>
+						<a href="javascript:mbrLogin()">로그인</a>
+					</dd>						
+				
+				
+				<dd class="active">
+					<a href="#">두드리소란?</a>
+					<ul>
+						<li>
+							<a href="/hpySt/hpyStInfo.do">두드리소란?</a>
+						</li>
+						<li>
+							<a href="/hpySt/help.do">이용안내</a>
+						</li>
+					</ul>
+
+<!-- 					<span class="ico_minus">-</span> -->
+				</dd>
+				<dd class="active">
+					<a href="#">민원신청</a>
+					<ul>
+						<li>
+							<a href="/vocRqs/normalSmgRqs.do">민원신청</a>
+						</li>
+						<li>
+							<a href="/vocRqs/vocMayorRqs.do?rqsType=10&mayorYn=Y">시장에게 바란다</a>
+						</li>
+						<li>
+							<a href="/vocRqs/obsm.do?rqsType=12&obsmYn=Y">복지 및 인권옴부즈만</a>
+						</li>
+						<li>
+<!--							<a href="/vocRqs/lifeSmgRqs.do">생활불편신고</a>
+						</li>
+ 						<li> -->
+
+<!-- 						</li> -->
+					</ul>
+				</dd>
+				<dd  class="active">
+					<a href="#">120달구벌콜센터</a>
+					<ul>
+						<li>
+							<a href="https://daegu.go.kr/120/guide/main.do">콜센터 이용안내</a>
+						</li>
+						<li>
+							<a href="https://daegu.go.kr/120/athorization/authStep.do?type=1">콜센터 상담예약</a>
+						</li>
+						<li>
+							<a href="https://daegu.go.kr/120/guide/message.do">콜센터 문자상담</a>
+						</li>
+						<li>
+							<a href="tel:053-120">콜센터 즉시상담</a>
+						</li>
+					</ul>
+				</dd>
+				<dd  class="active">
+					<a href="#">찾아가는 민원</a>
+					<ul>
+						<li>
+							<a href="/gdRqr/stl/guide.do">시민사랑방</a>
+						</li>
+						<li>
+							<a href="/gdRqr/cja/guide.do">민원배심원제</a>
+						</li>
+						<li>
+							<a href="/gdRqr/lfcns/view.do">시민생활상담</a>
+						</li>
+					</ul>
+				</dd>
+				<dd  class="active">
+					<a href="#">커뮤니티</a>
+					<ul>
+						<li>
+							<a href="/hpyNs/ntc/list.do">공지사항</a>
+						</li>
+						<li>
+							<a href="/search/search.do">자주하는 질문</a>
+						</li>
+					
+					</ul>
+				</dd>
+				<dd class="active">
+					<a href="#">나의 민원보기</a>
+					<ul>
+						<li>
+							<a href="/vocRqs/myResult.do">민원</a>
+						</li>
+					
+						<li>
+							<a href="/login/chkLogin.do?rqsType=8">시민생활상담</a>
+						</li>
+						<!-- 로그인/본인인증 안했을때에만 보여준다. -->
+						
+							<li>
+								<a href="/login/chkLogin.do?rqsType=rqra">민원간략보기</a>
+							</li>						
+						
+					</ul>
+				</dd>
+<!-- 				<dd class="active"> -->
+
+<!-- 				</dd> -->
+			</dl>
+		</nav>
+		<!-- 펼침메뉴 -->
+		<div id="close_background" onclick="menuBtnCallHide()"></div>
+	</div>
+	<!-- p class="fam_bg">행복한 가족의 모습</p-->
+</header>
+<script type="text/javascript">
+	if (document.location.protocol == 'http:') {
+// 	    document.location.href = document.location.href.replace('http:', 'https:');
+	}
+	menuBtnCallShow = function() {
+		$("#close_background").show();
+       		$("#navi").show("slide",{direction:"right"},300,null);
+	}
+	menuBtnCallHide = function() {
+		$("#close_background").hide();
+       		$("#navi").hide("slide",{direction:"right"},300,null);
+	}
+	
+	function mbrLogout(url) {
+		var rtnUrl		= encodeUrl('https://smart.daegu.go.kr/login/logout.do');
+		var uri			= 'http://www.daegu.go.kr/smartLogout.do?ref=' + rtnUrl;
+		location.href	= uri;
+	}
+	
+	function mbrLogin(url) {
+		var rtnUrl		= encodeUrl('https://smart.daegu.go.kr/login/login.do?rtnUrl=' + base64Encode(url != null ? url : location.href));
+		var uri			= 'https://www.daegu.go.kr/icms/login/IcmsLoginUsr.do?ref=' + rtnUrl;
+		location.href	= uri;
+	}
+</script>
+<!-- //상단 -->
+
+<!-- //상단 -->
+<!-- 본문 -->
+<section>
+	<!-- 서브메뉴 -->
+	<div class="page_header">
+		<header>
+			<h2>민원사례</h2>
+		</header>
+		
+
+<nav class="page_navi">
+	
+	
+	
+	
+	
+	
+	
+		<ul class="depth3">
+			<li><a href="/hpyNs/ntc/list.do" id="hpyNs1">공지사항</a>
+			</li>
+			<li><a href="/search/search.do" id="hpyNs2">자주하는
+					질문</a></li>
+		
+		</ul>
+		<script>
+			for (var i = 1; i <= 3; i++) {
+				if (i == "3") {
+					$("#hpyNs" + i).addClass("active");
+				}
+			}
+		</script>
+	
+</nav>
+
+	</div>
+	<!-- //서브메뉴 -->
+	<!-- 컨텐츠 -->
+	<div id="sub_container">
+		<div class="view_type01">
+			<table class="view_tbl_v01" summary=" 상세보기 게시물의 제목,내용,첨부파일에 대한 내용을 보여줍니다.">
+				<caption>민원사례 게시물 상세보기</caption>
+				<colgroup>
+					<col width="15%" />
+					<col width="*%" />
+				</colgroup>
+				<tbody>
+					<tr>
+						<th scope="row">제목</th>
+						<td>[당직실]야구경기 전,후 지하철 증편 요구</td>
+					</tr>
+					<tr>
+						<th scope="row">답변일</th>
+						<td>2016-05-11</td>
+					</tr>
+					<tr>
+						<th scope="row">내용</th>
+						<td>
+							
+							
+							
+							
+							야구&nbsp;시합&nbsp;전.&nbsp;후&nbsp;지하철이&nbsp;너무&nbsp;복잡하여&nbsp;불편함.<br/>지하철노선을&nbsp;증편&nbsp;요구함.
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">답변</th>
+						<td>
+							
+								
+								
+									
+									
+									
+									
+									
+									
+									대구도시철도에&nbsp;많은&nbsp;관심을&nbsp;가져주셔서&nbsp;감사드리며,&nbsp;&nbsp;&nbsp;문의하신&nbsp;내용에&nbsp;답변드리겠습니다.&nbsp;<br/><br/>우리공사에서는&nbsp;대공원역&nbsp;인근&nbsp;대구야구장(대구삼성라이온즈파크)을<br/>&nbsp;&nbsp;<br/>&nbsp;&nbsp;&nbsp;이용하는&nbsp;관람객&nbsp;및&nbsp;도시철도&nbsp;이용고객의&nbsp;안전하고&nbsp;편리한&nbsp;대중교통&nbsp;서비스&nbsp;제공을&nbsp;위해&nbsp;<br/>&nbsp;&nbsp;<br/>&nbsp;&nbsp;&nbsp;열차증편&nbsp;운행,&nbsp;안전요원&nbsp;배치&nbsp;등&nbsp;특별교통대책을&nbsp;수립하여&nbsp;시행하고&nbsp;있습니다.<br/><br/>특히,&nbsp;야구장&nbsp;관람객이&nbsp;많았던&nbsp;개장식(3.19),&nbsp;개막경기(4.1~4.3),<br/>&nbsp;&nbsp;&nbsp;<br/>&nbsp;&nbsp;&nbsp;&nbsp;5월&nbsp;연휴기간(5.5~5.6)에&nbsp;열차를&nbsp;증편운행&nbsp;하였으며,<br/>&nbsp;&nbsp;&nbsp;<br/>&nbsp;&nbsp;&nbsp;야구경기가&nbsp;있는&nbsp;날에는&nbsp;대공원역에&nbsp;안전요원을&nbsp;배치하고&nbsp;있습니다.<br/><br/>야구경기에&nbsp;따른&nbsp;열차증편&nbsp;운행은&nbsp;도시철도를&nbsp;이용하여&nbsp;야구를&nbsp;관람<br/>&nbsp;&nbsp;<br/>&nbsp;&nbsp;&nbsp;하는&nbsp;관람객에&nbsp;따른&nbsp;도시철도&nbsp;수송능력&nbsp;및&nbsp;경기종료&nbsp;시간&nbsp;등&nbsp;다양한<br/>&nbsp;&nbsp;<br/>&nbsp;&nbsp;&nbsp;&nbsp;사항을&nbsp;고려하여&nbsp;결정하고&nbsp;있음을&nbsp;이해바랍니다.<br/><br/>앞으로&nbsp;야구장&nbsp;관람객이&nbsp;많을&nbsp;것으로&nbsp;예상되는&nbsp;경기에는&nbsp;도시철도<br/>&nbsp;&nbsp;<br/>&nbsp;&nbsp;&nbsp;&nbsp;증편운행을&nbsp;적극&nbsp;검토하겠습니다.<br/><br/><br/>[담당부서&nbsp;&nbsp;&nbsp;영업전략부&nbsp;&nbsp;윤00&nbsp;TEL:&nbsp;640-2182]
+								
+							
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- 버튼 -->
+		<div class="button">
+			<div class="f_right">
+				<span class="btn_v2 white">
+					<a href="/vocRqs/pbl/list.do?showItemListCount=10&amp;srchType=&amp;srchTxt=&amp;orderByKey=&amp;orderByType=&amp;pageIndex=445">목록</a>
+				</span>
+			</div>
+		</div>
+		<!-- //버튼 -->
+	</div>
+	<!-- //컨텐츠 -->
+</section>
+<!-- //본문 -->
+<!-- 하단 -->
+	
+
+    
+    
+<style>
+	#footer {
+		  width: 100%;
+		  background-color: #1A1B23;
+		  padding: 56px;
+		  box-sizing: border-box;
+		  color: #ABB3BA;
+		  height:200px;
+		  margin-top: 0px;
+	}
+	
+	
+	.copy_area {
+		margin-top: 20px;
+	}
+
+</style>    
+    
+<footer>
+	<div id="footer">
+		
+		<div class="footer-img">
+	   		<img src="/images/renew/footer/logo.png" srcset="/images/renew/footer/logo@2x.png 2x, /images/renew/footer/logo@3x.png 3x" alt="logo" class="footer-logo" >	
+	   	</div> 
+	
+		<div class="copy_area">
+			<span class="copy">Copyright ⓒ 2025 Daegu Metropolitan City. All Rights Reserved.</span>
+		</div>
+	</div>
+</footer>
+<!-- //하단 -->
+</html>

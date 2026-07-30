@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "DAEGU_stadium_bag_policy_20260729",
+  "document_type": "stadium_bag_policy",
+  "stadium_id": "DAEGU",
+  "team_id": "SAMSUNG",
+  "title": "대구 삼성 라이온즈 파크 반입 및 안전 정책 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "daegu_kbo_safe_campaign"
+  ],
+  "content": "KBO SAFE 캠페인은 전 구장 공통 최소 안전 기준으로 유리병, 총량 1L 초과 PET, 알루미늄 캔 용기 음료, 얼린 생수 등의 반입 제한을 안내한다. 미개봉 음료는 1인당 PET 1개와 캔 2개까지 허용되는 기준이 제시되어 있다. 관람객은 가방 1개와 쇼핑백류 1개까지 지참할 수 있으며, 가방은 가로 45cm, 세로 45cm, 폭 20cm 이내 기준이 안내되어 있다. 음식물은 반입 금지 품목이 아니라면 가능하지만, 뜨거운 국물류나 냄새가 심한 음식처럼 안전과 관람 환경을 저해할 수 있는 경우 제한될 수 있다. KBO는 구단별 예외가 있을 수 있으므로 대구 삼성 라이온즈 파크 방문 전 삼성 라이온즈 공식 안내 확인이 필요하다고 안내한다.",
+  "metadata": {
+    "stadium_name": "대구 삼성 라이온즈 파크",
+    "home_team_ids": [
+      "SAMSUNG"
+    ],
+    "topic_summary": "대구 삼성 라이온즈 파크 반입 가능 물품, 반입 금지 물품, 가방 크기, 음식물, 병/캔/PET 기준 안내",
+    "search_keywords": [
+      "대구 삼성 라이온즈 파크 반입",
+      "라팍 반입 금지",
+      "라팍 가방",
+      "라팍 캔 음료",
+      "라팍 음식물",
+      "KBO SAFE 캠페인",
+      "유리병 반입 금지",
+      "PET 1L",
+      "가방 45cm"
+    ],
+    "limitations": [
+      "이 문서는 KBO 공통 정책 기반 초안이며, 대구 삼성 라이온즈 파크 전용 반입 예외 규정은 추가 공식 출처 확인이 필요하다.",
+      "구장별 특정 좌석/구역 예외는 삼성 라이온즈 공식 안내 확인이 필요하다."
+    ]
+  }
+}

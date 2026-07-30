@@ -42,6 +42,33 @@
       "fetch_status": "success",
       "byte_size": 38975,
       "content_hash": "sha256:e276e592b634870f43725d97bf961a98e6e787dcb41c002d48e04e65ac882d0f"
+    },
+    {
+      "source_id": "daegu_kbo_safe_campaign",
+      "source_url": "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+      "source_type": "official_league",
+      "local_file": "daegu_kbo_safe_campaign.html",
+      "fetch_status": "success",
+      "byte_size": 53039,
+      "content_hash": "sha256:27c926ff8bcce3d1fdb883dbe7f9c137a496b80615b11a9822c7cefbfd1891ed"
+    },
+    {
+      "source_id": "samsung_lapark_2025_home_opening_notice",
+      "source_url": "https://www.samsunglions.com/intro/intro02.asp?act=view&idx=1016926&keyword=&page=1&search=",
+      "source_type": "official_team",
+      "local_file": "samsung_lapark_2025_home_opening_notice.html",
+      "fetch_status": "success",
+      "byte_size": 50685,
+      "content_hash": "sha256:4bc54d38bcd12b01b8e9c5f99024147d9d249fb8c26da4ca21ac87adc214e27a"
+    },
+    {
+      "source_id": "daegu_city_lapark_subway_response",
+      "source_url": "https://smart.daegu.go.kr/vocRqs/pbl/view.do?cvlRqrNo=N-R-20160506-000008",
+      "source_type": "official_city",
+      "local_file": "daegu_city_lapark_subway_response.html",
+      "fetch_status": "success",
+      "byte_size": 12265,
+      "content_hash": "sha256:46fdb0751fc4394842d73b9a5a6988af65cbc712ecb362f5d8143da4d908a39a"
     }
   ]
 }

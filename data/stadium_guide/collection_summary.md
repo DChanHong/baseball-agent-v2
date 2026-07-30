@@ -6,14 +6,14 @@
 
 ## 현재 상태
 
-현재 유지 중인 normalized 문서는 6개 구장, 27개 문서다.
+현재 유지 중인 normalized 문서는 6개 구장, 30개 문서다.
 
 ```text
 SAJIK   5 docs
 GOCHEOK 5 docs
 MUNHAK  5 docs
 GWANGJU 5 docs
-DAEGU   2 docs
+DAEGU   5 docs
 SUWON   5 docs
 ```
 
@@ -113,11 +113,16 @@ SUWON   5 docs
 |---|---|---|
 | `stadium_seat_guide` | 수집 | 삼성 입장권 종류 |
 | `stadium_ticketing_guide` | 수집 | 삼성 입장권 종류, 예매방법, 예매취소/환불, KBO 티켓 안내 |
+| `stadium_bag_policy` | 수집 | KBO SAFE 캠페인 |
+| `stadium_facility_guide` | 수집 | 삼성 2025 홈 개막전 라팍 시설 보강 공지 |
+| `stadium_transport_guide` | 수집 | 삼성 공식 페이지 주소, 대구시 두드리소 대공원역 교통 답변 |
 
 메모:
 
 - 좌석/티켓/환불 정보는 공식 출처가 충분하다.
-- 교통/주차/시설 상세는 공식 출처가 부족해 제외했다.
+- 반입/안전 정책은 KBO SAFE 공통 기준으로 보강했으며, 삼성 라이온즈 파크 전용 예외는 추가 공식 출처 확인이 필요하다.
+- 시설 문서는 공식 공지의 캠핑존, SKY 요기보 패밀리석, 파티플로어석, 식음 매장, 포토존 보강 내용을 기준으로 만들었다.
+- 교통 문서는 대공원역과 도시철도 특별교통대책 근거만 최소 반영했다. 버스 노선, 출구 번호, 주차 가능 대수와 요금은 추가 공식 출처 확인이 필요하다.
 
 ### SUWON
 
