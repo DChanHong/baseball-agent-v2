@@ -683,6 +683,103 @@
       "trust_level": "official",
       "local_raw_file": "data/stadium_guide/raw/2026-07-29/DAEJEON/visitkorea_hanwha_life_ballpark.html",
       "notes": "주소, 공식 홈페이지, 문의처, 주차 가능 여부, 음식점 위치 요약의 공식 관광 출처."
+    },
+    {
+      "source_id": "seoul_jamsil_baseball_stadium",
+      "title": "서울특별시 체육시설관리사업소 잠실야구장 시설현황",
+      "url": "https://stadium.seoul.go.kr/about/jsbpark",
+      "source_type": "official_public",
+      "stadium_id": "JAMSIL",
+      "team_id": null,
+      "document_types": [
+        "stadium_facility_guide",
+        "stadium_seat_guide",
+        "stadium_transport_guide"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/JAMSIL/seoul_jamsil_baseball_stadium.html",
+      "notes": "잠실야구장 시설 규모, 좌석 수, 수용인원, 위탁 운영 정보의 공공 공식 출처."
+    },
+    {
+      "source_id": "seoul_jamsil_parking",
+      "title": "서울특별시 체육시설관리사업소 잠실종합운동장 부설주차장 안내",
+      "url": "https://stadium.seoul.go.kr/about/park-info",
+      "source_type": "official_public",
+      "stadium_id": "JAMSIL",
+      "team_id": null,
+      "document_types": [
+        "stadium_transport_guide",
+        "stadium_facility_guide"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/JAMSIL/seoul_jamsil_parking.html",
+      "notes": "잠실종합운동장 부설주차장 주차규모, 운영시간, 평상시/프로야구 경기 선불요금 안내의 공공 공식 출처."
+    },
+    {
+      "source_id": "lg_twins_ticket_general",
+      "title": "LG트윈스 일반 티켓 안내",
+      "url": "https://www.lgtwins.com/ticket/general",
+      "source_type": "official_team",
+      "stadium_id": "JAMSIL",
+      "team_id": "LG",
+      "document_types": [
+        "stadium_ticketing_guide",
+        "stadium_seat_guide",
+        "stadium_bag_policy"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/JAMSIL/lg_twins_ticket_general.html",
+      "notes": "LG 홈경기 좌석 등급, 요금, 예매 기간, 예매 수수료, 예매 한도, 취소, 관람 유의사항 공식 출처."
+    },
+    {
+      "source_id": "doosan_nol_ticket_bears",
+      "title": "NOL 티켓 스포츠 두산베어스",
+      "url": "https://nol.yanolja.com/ticket/genre/sports/bears",
+      "source_type": "official_ticketing_partner",
+      "stadium_id": "JAMSIL",
+      "team_id": "DOOSAN",
+      "document_types": [
+        "stadium_ticketing_guide",
+        "stadium_seat_guide"
+      ],
+      "refresh_policy": "before_game_series",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/JAMSIL/doosan_nol_ticket_bears.html",
+      "notes": "두산 홈경기 예매처 페이지. 잠실야구장 경기/예매 오픈 데이터는 HTML에 포함되나, 좌석/가격 상세는 동적 렌더링 또는 이미지 검수 필요."
+    },
+    {
+      "source_id": "jamsil_kbo_safe_campaign",
+      "title": "잠실야구장 참고용 KBO 경기장 안전정책 SAFE 캠페인",
+      "url": "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+      "source_type": "official_league",
+      "stadium_id": "JAMSIL",
+      "team_id": null,
+      "document_types": [
+        "stadium_bag_policy",
+        "stadium_first_visit_tip"
+      ],
+      "refresh_policy": "monthly",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/JAMSIL/jamsil_kbo_safe_campaign.html",
+      "notes": "잠실야구장 문서 raw snapshot에 포함한 공통 출처. KBO 전 구장 공통 안전/반입 최소 기준. 홈팀별 예외 확인 필요."
+    },
+    {
+      "source_id": "jamsil_kbo_ticket_map",
+      "title": "잠실야구장 참고용 KBO 리그 티켓 안내",
+      "url": "https://www.koreabaseball.com/kbo/league/map.aspx",
+      "source_type": "official_league",
+      "stadium_id": "JAMSIL",
+      "team_id": null,
+      "document_types": [
+        "stadium_ticketing_guide"
+      ],
+      "refresh_policy": "before_season",
+      "trust_level": "official",
+      "local_raw_file": "data/stadium_guide/raw/2026-07-29/JAMSIL/jamsil_kbo_ticket_map.html",
+      "notes": "LG/두산 구단별 예매처 매핑의 리그 공식 출처."
     }
   ]
 }

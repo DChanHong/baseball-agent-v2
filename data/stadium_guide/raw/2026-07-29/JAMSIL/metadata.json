@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0.0",
+  "collected_at": "2026-07-30T00:00:00+09:00",
+  "collector": "manual_curl",
+  "stadium_id": "JAMSIL",
+  "team_ids": [
+    "LG",
+    "DOOSAN"
+  ],
+  "files": [
+    {
+      "source_id": "seoul_jamsil_baseball_stadium",
+      "source_url": "https://stadium.seoul.go.kr/about/jsbpark",
+      "source_type": "official_public",
+      "local_file": "seoul_jamsil_baseball_stadium.html",
+      "fetch_status": "success",
+      "byte_size": 87769,
+      "content_hash": "sha256:bcc9ef4d540f874d482181f611901c6ea783b6f79c2c524d8f39d2bfce806ae7"
+    },
+    {
+      "source_id": "seoul_jamsil_parking",
+      "source_url": "https://stadium.seoul.go.kr/about/park-info",
+      "source_type": "official_public",
+      "local_file": "seoul_jamsil_parking.html",
+      "fetch_status": "success",
+      "byte_size": 93515,
+      "content_hash": "sha256:76f394741d4904469477eb20f311b9358daf7f50b53a4936e07d682936da0955"
+    },
+    {
+      "source_id": "lg_twins_ticket_general",
+      "source_url": "https://www.lgtwins.com/ticket/general",
+      "source_type": "official_team",
+      "local_file": "lg_twins_ticket_general.html",
+      "fetch_status": "success",
+      "byte_size": 91842,
+      "content_hash": "sha256:acb5c2af929c99deca560173f9613ca26bf10a621177c55fea1ff588a7e2cfac"
+    },
+    {
+      "source_id": "doosan_nol_ticket_bears",
+      "source_url": "https://nol.yanolja.com/ticket/genre/sports/bears",
+      "source_type": "official_ticketing_partner",
+      "local_file": "doosan_nol_ticket_bears.html",
+      "fetch_status": "success_dynamic_html",
+      "byte_size": 109837,
+      "content_hash": "sha256:eb220bd402894fd9cc896fc79bd5499df4941bcf93cf275266c9bbcb0c356bf3",
+      "notes": "NOL 스포츠 두산베어스 페이지. HTML 안에 잠실야구장 경기/예매 데이터는 있으나 좌석/가격 안내는 동적 렌더링과 이미지 검수가 필요하다."
+    },
+    {
+      "source_id": "jamsil_kbo_safe_campaign",
+      "source_url": "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+      "source_type": "official_league",
+      "local_file": "jamsil_kbo_safe_campaign.html",
+      "fetch_status": "success",
+      "byte_size": 53039,
+      "content_hash": "sha256:27c926ff8bcce3d1fdb883dbe7f9c137a496b80615b11a9822c7cefbfd1891ed"
+    },
+    {
+      "source_id": "jamsil_kbo_ticket_map",
+      "source_url": "https://www.koreabaseball.com/kbo/league/map.aspx",
+      "source_type": "official_league",
+      "local_file": "jamsil_kbo_ticket_map.html",
+      "fetch_status": "success",
+      "byte_size": 37631,
+      "content_hash": "sha256:314a241482c3b4e920e58a49afff544c41b7e8b968508723dd6590b7b0551a96"
+    }
+  ]
+}

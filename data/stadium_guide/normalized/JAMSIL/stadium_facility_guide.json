@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "JAMSIL_stadium_facility_guide_20260729",
+  "document_type": "stadium_facility_guide",
+  "stadium_id": "JAMSIL",
+  "team_id": null,
+  "title": "잠실야구장 시설 안내 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "seoul_jamsil_baseball_stadium",
+    "seoul_jamsil_parking"
+  ],
+  "content": "잠실야구장은 서울특별시 체육시설관리사업소가 안내하는 위탁시설이며, 2000년 1월 1일부터 LG스포츠와 두산베어스가 민간 위탁 운영하는 프로야구 서울 홈구단 전용 사용 시설이다. 서울시 공식 시설현황 기준으로 잠실야구장은 1980년 4월 17일 착공, 1984년 7월 15일 준공되었고, 경기장 면적은 26,331제곱미터, 건축 연면적은 45,312제곱미터다. 좌석 수는 24,411석, 수용인원은 25,000명으로 안내되어 있다. 잠실야구장 안내전화는 02-2202-3834이며, 주차 관련 문의는 잠실종합운동장 주차운영본부 02-2240-8876으로 안내된다.",
+  "metadata": {
+    "stadium_name": "잠실야구장",
+    "home_team_ids": [
+      "LG",
+      "DOOSAN"
+    ],
+    "address": "서울특별시 송파구 올림픽로 25",
+    "capacity": 25000,
+    "seat_count": 24411,
+    "topic_summary": "서울시 공식 시설현황 기준 잠실야구장 시설 개요",
+    "search_keywords": [
+      "잠실야구장 시설",
+      "잠실야구장 수용인원",
+      "잠실야구장 좌석수",
+      "잠실야구장 전화번호",
+      "잠실종합운동장 야구장"
+    ],
+    "limitations": [
+      "화장실, 수유실, 흡연구역, 팬샵, 게이트별 위치는 추가 공식 출처 확인이 필요하다.",
+      "리모델링이나 행사 운영에 따른 임시 시설 변경은 경기일별 공지를 확인해야 한다."
+    ]
+  }
+}

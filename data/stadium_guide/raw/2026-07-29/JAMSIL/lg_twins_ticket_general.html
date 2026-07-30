@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>LG트윈스 공식 홈페이지</title>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+
+        <script type="text/javascript" src="/js/common/jquery/jquery-barcode.js"></script> <!-- jquery 바코드 -->
+
+        <script type="text/javascript" src="/js/common/common.js?v=1.0.3"></script>
+        <script type="text/javascript" src="/js/common/util.js?v=1.0.0"></script>
+        <script type="text/javascript" src="/js/common/validator.js?v=1.0.0"></script>
+        <script type="text/javascript" src="/js/common/ticketlink.js?v=1.0.0"></script>
+        <script type="text/javascript" src="/js/common/app.js?v=1.0.0"></script>
+        <script type="text/javascript" src="/js/common/api.js?v=1.0.2"></script>
+        <script type="text/javascript" src="/js/common/mylgid.js?v=1.0.0"></script>
+        <link rel="stylesheet" href="/css/style.css?v=1.0.1" />
+
+        <!-- 대기열 관련 스크립트 -->
+        <script type="text/javascript" src="/js/common/netfunnel/netfunnel.js"></script>
+        <script type="text/javascript" src="/js/common/netfunnel/netfunnel-util.js"></script>
+
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-LXXL6ZK165"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-LXXL6ZK165');
+        </script>
+    </head>
+</head>
+<body>
+    <div class="wrapper">
+        
+
+        <div class="skip_links">
+            <a href="#main_nav" class="skip_link">주요 메뉴 바로가기</a>
+            <a href="#main_content" class="skip_link">본문 바로가기</a>
+        </div>
+        <header>
+            <div class="container">
+                <!-- 앱용 뒤로가기 버튼 추가 -->
+                
+                <h1 class="logo">
+                    <a href="/main" aria-label="LG트윈스 홈으로 이동">
+                        <img src="/images/common/logo.png" alt="LG트윈스 로고" />
+                    </a>
+                </h1>
+                <nav id="main_nav" class="main_nav" role="navigation" aria-label="주요 메뉴">
+                    <ul>
+                        <li><a href="/twins/about/ceo">TWINS</a></li>
+                        <li><a href="/team/coach-list">TEAM</a></li>
+                        <li><a href="/game/schedule">GAME</a></li>
+                        <li><a href="/fan/services">FAN</a></li>
+                        <li><a href="/ticket/general">TICKET</a></li>
+                        <li><a href="/shop">SHOP</a></li>
+                    </ul>
+                </nav>
+                <nav class="utility_area" role="navigation" aria-label="서브 메뉴">
+                    <!-- 로그인 전 -->
+                    
+                        <ul>
+                            <li><a href="/member/login">로그인/회원가입</a></li>
+                            <li>
+                                <button type="button" class="btn_menu text_hidden">메뉴</button>
+                            </li>
+                        </ul>
+                    
+                    
+                </nav>
+                <div class="menu_overlay" id="menu_overlay">
+                    <div class="menu_overlay_content">
+                        <div class="menu_overlay_top">
+                            <h1>
+                                <img src="/images/common/logo.png" alt="LG트윈스" />
+                            </h1>
+                            <!-- 모바일 로그인/회원가입 링크 -->
+                            <div class="mobile_auth_links">
+                                
+                                    <ul>
+                                        <li><a href="/member/login">로그인/회원가입</a></li>
+                                    </ul>
+                                
+                                
+                            </div>
+                            <!-- 메뉴 닫기 버튼 -->
+                            <button type="button" class="menu_close_btn" id="menu_close_btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none">
+                                    <path d="M39.0605 7.06055L24.1211 22L39.0605 36.9395L36.9395 39.0605L22 24.1211L7.06055 39.0605L4.93945 36.9395L19.8789 22L4.93945 7.06055L7.06055 4.93945L22 19.8789L36.9395 4.93945L39.0605 7.06055Z" fill="#222222"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <!-- 전체 메뉴 리스트 -->
+                        <div class="full_menu_container">
+                            <!-- TWINS 메뉴 -->
+                            <div class="menu_section">
+                                <h3 class="menu_title">TWINS</h3>
+                                <ul class="menu_items">
+                                    <li><a href="/twins/about/ceo">트윈스 소개</a></li>
+                                    <li><a href="/twins/feed/news">트윈스 소식</a></li>
+                                    <li><a href="/twins/history/main" target="_blank">트윈스 역사관</a></li>
+                                </ul>
+                            </div>
+
+                            <!-- TEAM 메뉴 -->
+                            <div class="menu_section">
+                                <h3 class="menu_title">TEAM</h3>
+                                <ul class="menu_items">
+                                    <li><a href="/team/coach-list">코칭스태프</a></li>
+                                    <li><a href="/team/player-list">선수단</a></li>
+                                </ul>
+                            </div>
+
+                            <!-- GAME 메뉴 -->
+                            <div class="menu_section">
+                                <h3 class="menu_title">GAME</h3>
+                                <ul class="menu_items">
+                                    <li><a href="/game/schedule">정규 리그</a></li>
+                                    <li><a href="/game/futures-schedule">퓨처스 리그</a></li>
+                                </ul>
+                            </div>
+
+                            <!-- FAN 메뉴 -->
+                            <div class="menu_section">
+                                <h3 class="menu_title">FAN</h3>
+                                <ul class="menu_items">
+                                    <li><a href="/fan/services">팬서비스 안내</a></li>
+                                    <li><a href="/fan/mvp">TWINS MVP</a></li>
+                                    <li><a href="javascript:void(0)" onclick="goVipInfo()">연간회원</a></li>
+                                    <li><a href="https://lgtwinsfanbook.com/2026/" target="_blank">팬북</a></li>
+                                    <li><a href="/fan/cheers">응원단</a></li>
+                                    <li><a href="/fan/voices">팬 보이스</a></li>
+                                    <li><a href="/fan/inquiry">1:1 문의</a></li>
+                                </ul>
+                            </div>
+
+                            <!-- TICKET 메뉴 -->
+                            <div class="menu_section">
+                                <h3 class="menu_title">TICKET</h3>
+                                <ul class="menu_items">
+                                    <li><a href="/ticket/general">일반 티켓</a></li>
+                                    <li><a href="/ticket/affiliate">계열사 예매</a></li>
+                                    <li><a href="/ticket/seasonGuide">시즌권</a></li>
+                                </ul>
+                            </div>
+
+                            <!-- SHOP 메뉴 -->
+                            <div class="menu_section">
+                                <h3 class="menu_title">SHOP</h3>
+                                <ul class="menu_items">
+                                    <li><a href="/shop">온라인 샵</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 모바일 메뉴 리스트 (720px 이하에서만 표시) -->
+                            <div class="mobile_menu_container">
+                                <!-- 로그인 후 연간회원 정보 -->
+                                <div class="user_wrap">
+                                    <div class="user_info">
+                                        <p>
+                                            <strong></strong>님 <span>(null)</span>
+                                        </p>
+                                        <div class="btn_user">
+                                            <a href="/app/notificationsPage" class="text_hidden alram">알림</a>
+                                            <a href="/app/alarm/settings" class="text_hidden setting">알림설정</a>
+                                        </div>
+                                        <div class="season_info" onclick="clickUserBarcode()">
+                                            <div>
+                                                <span class="type"></span>
+                                                <span class="date"></span>
+                                            </div>
+                                            <div class="season_barcode" id="menuUserBarcode">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="74" height="40" viewBox="0 0 74 40" fill="none">
+                                                    <path d="M1.68164 40H0V0H1.68164V40ZM5.04785 40H3.36621V0H5.04785V40ZM10.0879 40H6.72461V0H10.0879V40ZM16.8154 40H11.7695V0H16.8154V40ZM20.1836 40H18.502V0H20.1836V40ZM26.9111 40H23.5479V0H26.9111V40ZM36.9961 40H31.9512V0H36.9961V40ZM45.4053 40H42.042V0H45.4053V40ZM48.7686 40H47.0869V0H48.7686V40ZM58.8594 40H52.1328V0H58.8594V40ZM65.5918 40H63.9102V0H65.5918V40ZM74.001 40H68.9561V0H74.001V40Z" fill="white"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            function clickUserBarcode() {
+                                                app.webToAppFunction({}, 'openMemberCard');
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                                <div class="mobile_menu_wrap">
+                                    <div class="menu">
+                                    <!-- 왼쪽 대메뉴 -->
+                                        <div class="mobile_main_menu">
+                                            <div class="main_menu_item active" data-category="TWINS">
+                                                <span>TWINS</span>
+                                            </div>
+                                            <div class="main_menu_item" data-category="TEAM">
+                                                <span>TEAM</span>
+                                            </div>
+                                            <div class="main_menu_item" data-category="GAME">
+                                                <span>GAME</span>
+                                            </div>
+                                            <div class="main_menu_item" data-category="FAN">
+                                                <span>FAN</span>
+                                            </div>
+                                            <div class="main_menu_item" data-category="TICKET">
+                                                <span>TICKET</span>
+                                            </div>
+                                            <div class="main_menu_item" data-category="SHOP">
+                                                <span>SHOP</span>
+                                            </div>
+                                            
+                                        </div>
+
+                                        <!-- 오른쪽 서브메뉴 -->
+                                        <div class="mobile_sub_menu">
+                                            <!-- TWINS 서브메뉴 -->
+                                            <div class="sub_menu_content active" data-category="TWINS">
+                                                <div class="sub_menu_item">
+                                                    <a href="/twins/about/ceo">트윈스 소개</a>
+                                                </div>
+                                                <div class="sub_menu_item">
+                                                    <a href="/twins/feed/news">트윈스 소식</a>
+                                                </div>
+                                                <div class="sub_menu_item">
+                                                    <a href="/twins/history/main" target="_blank">트윈스 역사관</a>
+                                                </div>
+                                            </div>
+
+                                            <!-- TEAM 서브메뉴 -->
+                                            <div class="sub_menu_content" data-category="TEAM">
+                                                <div class="sub_menu_item">
+                                                    <a href="/team/coach-list">코칭스태프</a>
+                                                </div>
+                                                <div class="sub_menu_item">
+                                                    <a href="/team/player-list">선수단</a>
+                                                </div>
+                                            </div>
+
+                                            <!-- GAME 서브메뉴 -->
+                                            <div class="sub_menu_content" data-category="GAME">
+                                                <div class="sub_menu_item">
+                                                    <a href="/game/schedule">정규 리그</a>
+                                                </div>
+                                                <div class="sub_menu_item">
+                                                    <a href="/game/futures-schedule">퓨처스 리그</a>
+                                                </div>
+                                            </div>
+
+                                            <!-- FAN 서브메뉴 -->
+                                            <div class="sub_menu_content" data-category="FAN">
+                                                <div class="sub_menu_item">
+                                                    <a href="/fan/services">팬서비스 안내</a>
+                                                </div>
+                                                <div class="sub_menu_item">
+                                                    <a href="/fan/mvp">TWINS MVP</a>
+                                                </div>
+                                                <div class="sub_menu_item">
+                                                    <a href="javascript:void(0)" onclick="goVipInfo()">연간회원</a>
+                                                </div>
+                                                <div class="sub_menu_item">
+                                                    <a href="https://lgtwinsfanbook.com/2026/" target="_blank">팬북</a>
+                                                </div>
+                                                <div class="sub_menu_item">
+                                                    <a href="/fan/cheers">응원단</a>
+                                                </div>
+                                                <div class="sub_menu_item">
+                                                    <a href="/fan/voices">팬 보이스</a>
+                                                </div>
+                                                <div class="sub_menu_item">
+                                                    <a href="/fan/inquiry">1:1 문의</a>
+                                                </div>
+
+                                            </div>
+
+                                            <!-- TICKET 서브메뉴 -->
+                                            <div class="sub_menu_content" data-category="TICKET">
+                                                <div class="sub_menu_item">
+                                                    <a href="/ticket/general">일반 티켓</a>
+                                                </div>
+                                                <div class="sub_menu_item">
+                                                    <a href="/ticket/affiliate">계열사 예매</a>
+                                                </div>
+                                                <div class="sub_menu_item">
+                                                    <a href="/ticket/seasonGuide">시즌권</a>
+                                                </div>
+                                            </div>
+
+                                            <!-- SHOP 서브메뉴 -->
+                                            <div class="sub_menu_content" data-category="SHOP">
+                                                <div class="sub_menu_item">
+                                                    <a href="/shop">온라인 샵</a>
+                                                </div>
+                                            </div>
+
+<!--                                             PLAY BOX 서브메뉴 -->
+                                            <div class="sub_menu_content" data-category="PLAY BOX">
+                                                <div class="sub_menu_item">
+                                                    <a href="javascript:app.webToAppFunction({'path': '/sticker'}, 'navigateTo')">스티커 모으기</a>
+                                                    <a href="javascript:app.webToAppFunction({'path': '/starball'}, 'navigateTo')">스타볼 모으기</a>
+                                                    <a href="javascript:app.webToAppFunction({'path': '/attendance'}, 'navigateTo')">출석체크</a>
+                                                    <a href="javascript:app.webToAppFunction({'path': '/exchange'}, 'navigateTo')">기념품 교환</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                                <!-- 앱 화면 -->
+                                <div class="mobile_app_links">
+                                    <a href="javascript:app.webToAppFunction({'path': '/liveWatchRegist'}, 'navigateTo')" class="app_link">직관예정 등록</a>
+                                    <a href="#" onclick="checkAndLiveWatch(); return false;" class="app_link" id="liveWatchBtn">직관 인증</a>
+                                    <a href="javascript:app.webToAppFunction({}, 'openSmartTicket')" class="app_link ticket" id="smartTicketMenu">스마트 티켓</a>
+                                </div>
+
+                                <!-- 모바일 소셜 미디어 링크 -->
+                                <div class="mobile_social_links">
+                                    <a href="javascript:void(0);" onclick="clickSnsIcon('youtube', event)" target="_blank" class="social_link youtube">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none">
+                                            <path d="M21.9775 6.82764C22.0513 6.82764 35.771 6.83039 39.1816 7.75342C40.1112 7.98998 40.9609 8.47028 41.6426 9.14502C42.3243 9.81985 42.8136 10.6651 43.0596 11.5923C44.0001 14.9304 44 21.9702 44 21.9702C44 22.033 43.9955 29.07 43.0605 32.4233C42.8044 33.3459 42.3116 34.1856 41.6309 34.8589C40.9501 35.5322 40.1051 36.0162 39.1797 36.2622C35.7705 37.1701 22.0513 37.1724 21.9775 37.1724C21.9775 37.1724 8.22354 37.1725 4.82031 36.2622C3.89596 36.0073 3.05154 35.5207 2.36719 34.8491C1.68298 34.1776 1.18137 33.3426 0.90918 32.4233C0.00444642 29.07 1.80227e-05 22.033 0 21.9702C0 21.9702 -6.84313e-05 14.9304 0.910156 11.5923C1.17296 10.6683 1.67192 9.82779 2.35742 9.15479C3.04289 8.4819 3.89173 7.99915 4.82031 7.75342C8.22348 6.8279 21.9775 6.82764 21.9775 6.82764ZM17.4482 28.4487L28.8271 22.0005L17.4482 15.5522V28.4487Z"
+                                                  fill="#383838" />
+                                        </svg>
+                                    </a>
+                                    <a href="javascript:void(0);" onclick="clickSnsIcon('instagram', event)" target="_blank" class="social_link instagram">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none">
+                                            <path
+                                                    d="M33.6621 2.76074C37.8889 2.97523 41.25 6.46994 41.25 10.75V33.25L41.2393 33.6621C41.0248 37.8889 37.5301 41.25 33.25 41.25H10.75C6.33172 41.25 2.75 37.6683 2.75 33.25V10.75C2.75 6.46994 6.11114 2.97523 10.3379 2.76074L10.75 2.75H33.25L33.6621 2.76074ZM10.75 6.25C8.26472 6.25 6.25 8.26472 6.25 10.75V33.25C6.25 35.7353 8.26472 37.75 10.75 37.75H33.25C35.7353 37.75 37.75 35.7353 37.75 33.25V10.75C37.75 8.26472 35.7353 6.25 33.25 6.25H10.75ZM22 12.375C27.3157 12.375 31.625 16.6843 31.625 22C31.625 27.3157 27.3157 31.625 22 31.625C16.6843 31.625 12.375 27.3157 12.375 22C12.375 16.6843 16.6843 12.375 22 12.375ZM22 15.875C18.6173 15.875 15.875 18.6173 15.875 22C15.875 25.3827 18.6173 28.125 22 28.125C25.3827 28.125 28.125 25.3827 28.125 22C28.125 18.6173 25.3827 15.875 22 15.875ZM32.2363 9.625C33.502 9.625 34.5283 10.6513 34.5283 11.917C34.5281 13.1825 33.5019 14.208 32.2363 14.208C30.9708 14.208 29.9445 13.1825 29.9443 11.917C29.9443 10.6514 30.9707 9.62504 32.2363 9.625Z"
+                                                    fill="#383838" />
+                                        </svg>
+                                    </a>
+                                    <a href="javascript:void(0);" onclick="clickSnsIcon('x', event)" target="_blank" class="social_link twitter">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                  d="M4.88867 6.72217L28.1109 37.2777H38.4998L15.8887 6.72217H4.88867ZM11.0487 9.77772L29.6265 34.2222H32.4375L14.3486 9.77772H11.0487Z"
+                                                  fill="#383838" />
+                                            <path
+                                                    d="M21.1045 25.2385L11.0381 37.2239H5.86133L18.7744 21.8499L21.1045 25.2385ZM24.5859 21.095L21.9336 18.0891L31.4385 6.77563H36.6143L24.5859 21.095Z"
+                                                    fill="#383838" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="IS_NETFUNNEL" value="N">
+            <input type="hidden" id="IS_LOGIN" value="N">
+
+        </header>
+        <script>
+            $(document).ready(function () {
+                $(document).on('click', '.btn_menu', function (e) {
+                    e.preventDefault();
+                    console.log('🔍 메뉴 버튼 클릭됨!', $('.btn_menu').length, $('#menu_overlay').length);
+                    if (app.isApp()) {
+                        app.webToAppFunction({}, "hideHomeEventFab");
+                    }
+                    $('#menu_overlay').show();
+                    console.log('🔍 메뉴 show() 실행됨, display:', $('#menu_overlay').css('display'));
+                });
+
+                // 메뉴 닫기 버튼 클릭 이벤트 (이벤트 위임 사용)
+                $(document).on('click', '#menu_close_btn', function () {
+                    $('#menu_overlay').hide();
+                    if (app.isApp()) {
+                        app.webToAppFunction({}, "showHomeEventFab");
+                    }
+                });
+
+                // 오버레이 배경 클릭 시 메뉴 닫기
+                $('#menu_overlay').on('click', function (e) {
+                    if (e.target === this) {
+                        $(this).hide();
+                        if (app.isApp()) {
+                            app.webToAppFunction({}, "showHomeEventFab");
+                        }
+                    }
+                });
+
+                // ESC 키로 메뉴 닫기
+                $(document).on('keydown', function (e) {
+                    if (e.key === 'Escape' && $('#menu_overlay').is(':visible')) {
+                        $('#menu_overlay').hide();
+                        if (app.isApp()) {
+                            app.webToAppFunction({}, "showHomeEventFab");
+                        }
+                    }
+                });
+
+                // 메뉴 항목 클릭 시 메뉴 닫기 (페이지 이동하기 전에)
+                $('.menu_items a').on('click', function () {
+                    $('#menu_overlay').hide();
+                    if (app.isApp()) {
+                        app.webToAppFunction({}, "showHomeEventFab");
+                    }
+                });
+
+                // 모바일 2단 메뉴 - 대메뉴 클릭 이벤트
+                $('.main_menu_item').on('click', function() {
+                    const category = $(this).data('category');
+
+                    // 모든 대메뉴에서 active 클래스 제거
+                    $('.main_menu_item').removeClass('active');
+                    // 클릭한 대메뉴에 active 클래스 추가
+                    $(this).addClass('active');
+
+                    // 모든 서브메뉴 숨김
+                    $('.sub_menu_content').removeClass('active');
+                    // 해당 서브메뉴 표시
+                    $(`.sub_menu_content[data-category="${category}"]`).addClass('active');
+                });
+
+                // 서브메뉴 항목 클릭 시 메뉴 닫기
+                $('.sub_menu_item a').on('click', function(e) {
+                    // 외부 링크가 아닌 경우에만 메뉴 닫기
+                    if (!$(this).attr('target')) {
+                        $('#menu_overlay').hide();
+                        if (app.isApp()) {
+                            app.webToAppFunction({}, "showHomeEventFab");
+                        }
+                    }
+                });
+
+                if(isApp() && $("#IS_LOGIN").val() === "Y"){
+                    $('#smartTicketMenu').show();
+                } else {
+                    $('#smartTicketMenu').hide();
+                }
+            });
+
+            function logout() {
+                ajaxPost(
+                    "/api/member/logout",
+                    {},
+                    function (data) {
+                        if(isApp()){
+                            app.webToAppFunction({}, "logout");
+                        }
+                        location.href = "/";
+                    },
+                    function (err) {
+                        customAlert("로그아웃 중 오류가 발생했습니다.");
+                    }
+                )
+            }
+
+            function clickSnsIcon(type, event){
+                event.preventDefault();
+
+                if(isApp()){
+                    if(type === "youtube"){
+                        app.webToAppFunction({'url': 'https://www.youtube.com/c/LGTwinsTV'}, 'openExternalBrowser')
+                    } else if (type === "instagram"){
+                        app.webToAppFunction({'url': 'https://www.instagram.com/lgtwinsbaseballclub/'}, 'openExternalBrowser')
+                    } else if (type === "x"){
+                        app.webToAppFunction({'url': 'https://x.com/LGTWINS_SEOUL'}, 'openExternalBrowser')
+                    }
+                } else {
+                    if(type === "youtube"){
+                        window.open('https://www.youtube.com/c/LGTwinsTV', '_blank');
+                    } else if (type === "instagram"){
+                        window.open('https://www.instagram.com/lgtwinsbaseballclub/', '_blank');
+                    } else if (type === "x"){
+                        window.open('https://x.com/LGTWINS_SEOUL', '_blank');
+                    }
+                }
+            }
+
+            function checkAndLiveWatch(){
+                if(isApp()){
+                    // 오늘 홈경기가 있는지 체크
+                    ajaxPost(
+                        "/api/app/checkinGameInfo",
+                        {},
+                        function (data) {
+                            // 오늘 홈경기가 있으면 직관 인증 화면 오픈
+                            if(data.data.adminYn === 'Y') {
+                                location.href = '/app/adminCheckin';
+                            }else{
+                                app.webToAppFunction({}, 'openLiveWatchProof');
+                            }
+
+                        },
+                        function (err){
+                            customAlert(err.message);
+                        }
+                    )
+                }
+            }
+            function setActiveMenu() {
+                const currentPath = window.location.pathname; // 현재 URL 경로
+                const currentPathPrefix = currentPath.split('/')[1]; // 첫 번째 슬래시 이후의 경로 (예: '/twins/about/ceo' -> 'twins')
+
+                const menuItems = document.querySelectorAll('#main_nav a'); // 모든 메뉴 링크 (a 태그)
+
+                menuItems.forEach(item => {
+                    const href = item.getAttribute('href'); // 각 링크의 href 값
+                    const itemPathPrefix = href.split('/')[1]; // 메뉴 항목의 첫 번째 경로 (예: '/twins/about/ceo' -> 'twins')
+
+                    // 현재 경로의 첫 번째 경로와 메뉴 항목의 첫 번째 경로가 일치하면 active 클래스를 추가
+                    if (currentPathPrefix === itemPathPrefix) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            }
+
+            // 페이지가 로드될 때마다 setActiveMenu 함수 실행
+            window.onload = setActiveMenu;
+
+            // 뒤로가기 버튼 추가
+            function goBack() {
+                if (history.length > 1) {
+                    history.back();
+                } else {
+                    location.replace('/');
+                }
+            }
+
+            function goVipInfo(){
+                if($("#IS_NETFUNNEL").val() !== null && $("#IS_NETFUNNEL").val() === "Y"){
+                    // netfunnl
+                    actionWaiting("join_v0", "/fan/vip");
+                } else {
+                    location.href = "/fan/vip";
+                }
+            }
+
+        </script>
+    
+        <main id="main_content" class="main_content" role="main">
+
+            <section class="sub_title ticket">
+                <h2>TICKET</h2>
+            </section>
+            <section class="content01">
+                <div class="sub_top">
+                    <ul class="sub_menu">
+    <li>
+
+
+
+        <a href="/ticket/general;jsessionid=E94D2784F623EE998FEEA8FC416E7C8E.00231b9871cc06761" class=" active">일반 티켓</a>
+
+    </li>
+    <li>
+        <a href="/ticket/affiliate;jsessionid=E94D2784F623EE998FEEA8FC416E7C8E.00231b9871cc06761">계열사 예매</a>
+    </li>
+
+    <li>
+        <a href="/ticket/seasonGuide;jsessionid=E94D2784F623EE998FEEA8FC416E7C8E.00231b9871cc06761">시즌권</a>
+    </li>
+
+
+</ul>
+
+                    <div class="location">
+                        <span>HOME</span>
+                        <span>TICKET</span>
+                        <span>일반 티켓</span>
+                    </div>
+                </div>
+                <div class="ticket_wrap">
+                    <!--<div class="parking_img">
+                        <img src="/images/common/parking_pc.jpg" alt="" class="pc">
+                        <img src="/images/common/parking_m.jpg" alt="" class="mobile">
+                    </div>-->
+                    <div class="ticket_top">
+                        <h3>
+                            2026 시즌 일반 티켓
+                            <button class="btn_eng">ENGLISH</button>
+                        </h3>
+                        <a href="javascript:clickTicketReserve()"
+                           class="btn_ticket" >홈구장 티켓 예매하기</a>
+                    </div>
+                    <div class="seating_guide">
+                        <div class="seating_img">
+                            <span class="defult">
+                                <img src="https://ep-prod-cdcqfmasbve4b4gv.a01.azurefd.net/static/images/sub/ticket/c0.png" alt="">
+                            </span>
+                            <span class="bg">
+                                <img src="https://ep-prod-cdcqfmasbve4b4gv.a01.azurefd.net/static/images/sub/ticket/cbg.png" alt="">
+                            </span>
+                            <span class="c1">
+                                <img src="https://ep-prod-cdcqfmasbve4b4gv.a01.azurefd.net/static/images/sub/ticket/c1.png" alt="">
+                            </span>
+                            <span class="c2">
+                                <img src="https://ep-prod-cdcqfmasbve4b4gv.a01.azurefd.net/static/images/sub/ticket/c2.png" alt="">
+                            </span>
+                            <span class="c3">
+                                <img src="https://ep-prod-cdcqfmasbve4b4gv.a01.azurefd.net/static/images/sub/ticket/c3.png" alt="">
+                            </span>
+                            <span class="c4">
+                                <img src="https://ep-prod-cdcqfmasbve4b4gv.a01.azurefd.net/static/images/sub/ticket/c4.png" alt="">
+                            </span>
+                            <span class="c5">
+                                <img src="https://ep-prod-cdcqfmasbve4b4gv.a01.azurefd.net/static/images/sub/ticket/c5.png" alt="">
+                            </span>
+                            <span class="c6">
+                                <img src="https://ep-prod-cdcqfmasbve4b4gv.a01.azurefd.net/static/images/sub/ticket/c6.png" alt="">
+                            </span>
+                            <span class="c7">
+                                <img src="https://ep-prod-cdcqfmasbve4b4gv.a01.azurefd.net/static/images/sub/ticket/c7.png" alt="">
+                            </span>
+                            <span class="c8">
+                                <img src="https://ep-prod-cdcqfmasbve4b4gv.a01.azurefd.net/static/images/sub/ticket/c8.png" alt="">
+                            </span>
+                            <span class="c9">
+                                <img src="https://ep-prod-cdcqfmasbve4b4gv.a01.azurefd.net/static/images/sub/ticket/c9.png" alt="">
+                            </span>
+                        </div>
+                        <div class="seat_selection">
+                            <div class="seat_radio_group">
+                                <div class="seat_radio_item premium">
+                                    <input type="radio" id="seat_premium" name="seat_type" value="premium">
+                                    <label for="seat_premium" class="seat_radio_label">
+                                        <span class="seat_color"></span>
+                                        <span class="seat_name">프리미엄석</span>
+                                    </label>
+                                </div>
+                                <div class="seat_radio_item table">
+                                    <input type="radio" id="seat_table" name="seat_type" value="table">
+                                    <label for="seat_table" class="seat_radio_label">
+                                        <span class="seat_color"></span>
+                                        <span class="seat_name">테이블석</span>
+                                    </label>
+                                </div>
+                                <div class="seat_radio_item exciting">
+                                    <input type="radio" id="seat_exciting" name="seat_type" value="exciting">
+                                    <label for="seat_exciting" class="seat_radio_label">
+                                        <span class="seat_color"></span>
+                                        <span class="seat_name">익사이팅존</span>
+                                    </label>
+                                </div>
+                                <div class="seat_radio_item blue">
+                                    <input type="radio" id="seat_blue" name="seat_type" value="blue">
+                                    <label for="seat_blue" class="seat_radio_label">
+                                        <span class="seat_color"></span>
+                                        <span class="seat_name">블루석</span>
+                                    </label>
+                                </div>
+                                <div class="seat_radio_item orange">
+                                    <input type="radio" id="seat_orange" name="seat_type" value="orange">
+                                    <label for="seat_orange" class="seat_radio_label">
+                                        <span class="seat_color"></span>
+                                        <span class="seat_name">오렌지석</span>
+                                    </label>
+                                </div>
+                                <div class="seat_radio_item red">
+                                    <input type="radio" id="seat_red" name="seat_type" value="red">
+                                    <label for="seat_red" class="seat_radio_label">
+                                        <span class="seat_color"></span>
+                                        <span class="seat_name">레드석</span>
+                                    </label>
+                                </div>
+                                <div class="seat_radio_item navy">
+                                    <input type="radio" id="seat_navy" name="seat_type" value="navy">
+                                    <label for="seat_navy" class="seat_radio_label">
+                                        <span class="seat_color"></span>
+                                        <span class="seat_name">네이비석</span>
+                                    </label>
+                                </div>
+                                <div class="seat_radio_item green_outfield02">
+                                    <input type="radio" id="seat_green_outfield02" name="seat_type"
+                                           value="green_outfield02">
+                                    <label for="seat_green_outfield02" class="seat_radio_label">
+                                        <span class="seat_color"></span>
+                                        <span class="seat_name">그린응원석(외야)</span>
+                                    </label>
+                                </div>
+                                <div class="seat_radio_item green_outfield">
+                                    <input type="radio" id="seat_green_outfield01" name="seat_type"
+                                           value="green_outfield01">
+                                    <label for="seat_green_outfield01" class="seat_radio_label">
+                                        <span class="seat_color"></span>
+                                        <span class="seat_name">그린석(외야)</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="seating_guide02">
+                        <div>
+                            <h3>티켓 안내</h3>
+                            <div class="table_wrap price_table">
+                                <table class="col">
+                                    <caption>좌석 등급별 주중, 주말 요금 안내</caption>
+                                    <colgroup>
+                                        <col style="width:25%">
+                                        <col style="width:25%">
+                                        <col style="width:25%">
+                                        <col style="width:25%">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2">좌석등급</th>
+                                            <th>주중(화/수/목)</th>
+                                            <th>주말(금/토/일/공휴일)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td rowspan="3">
+                                                <span class="seat_name premium">프리미엄</span>
+                                            </td>
+                                            <td>일반 가격</td>
+                                            <td colspan="2" rowspan="3">100,000원</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="br">성인 회원</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="br">엘린이 회원</td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="3">
+                                                <span class="seat_name table">테이블</span>
+                                            </td>
+                                            <td>일반 가격</td>
+                                            <td rowspan="3">56,000원</td>
+                                            <td rowspan="3">62,000원</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="br">성인 회원</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="br">엘린이 회원</td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="3">
+                                                <span class="seat_name exciting">익사이팅존</span>
+                                            </td>
+                                            <td>일반 가격</td>
+                                            <td rowspan="2">30,000원</td>
+                                            <td rowspan="2">35,000원</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="br">성인 회원</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="left">
+                                                <ul class="before_none">
+                                                    <li>※ 익사이팅존은 현장 매표소에서만 티켓으로 교환 가능합니다.</li>
+                                                    <li>※ 안전한 관람을 위해 <span class="text_red">초등학생 이하 어린이의 입장은 제한됩니다.</span> <br class="mobile">(보호자 동반 시에도 입장 불가하며, 이로 인한 예매 취소 및 교환은 불가합니다.)</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="3">
+                                                <span class="seat_name blue">블루</span>
+                                            </td>
+                                            <td>일반 가격</td>
+                                            <td>24,000원</td>
+                                            <td>26,000원</td>
+                                        </tr>
+                                        <tr>
+                                            <td>성인 회원</td>
+                                            <td>23,000원</td>
+                                            <td>25,000원</td>
+                                        </tr>
+                                        <tr>
+                                            <td>엘린이 회원</td>
+                                            <td>12,000원</td>
+                                            <td>13,000원</td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="3">
+                                                <span class="seat_name orange">오렌지</span>
+                                            </td>
+                                            <td>일반 가격</td>
+                                            <td>22,000원</td>
+                                            <td>24,000원</td>
+                                        </tr>
+                                        <tr>
+                                            <td>성인 회원</td>
+                                            <td>21,000원</td>
+                                            <td>23,000원</td>
+                                        </tr>
+                                        <tr>
+                                            <td>엘린이 회원</td>
+                                            <td>11,000원</td>
+                                            <td>12,000원</td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="3">
+                                                <span class="seat_name red">레드</span>
+                                            </td>
+                                            <td>일반 가격</td>
+                                            <td>19,000원</td>
+                                            <td>21,000원</td>
+                                        </tr>
+                                        <tr>
+                                            <td>성인 회원</td>
+                                            <td>18,000원</td>
+                                            <td>20,000원</td>
+                                        </tr>
+                                        <tr>
+                                            <td>엘린이 회원</td>
+                                            <td>9,500원</td>
+                                            <td>10,500원</td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="3">
+                                                <span class="seat_name navy">네이비</span>
+                                            </td>
+                                            <td>일반 가격</td>
+                                            <td>16,000원</td>
+                                            <td>18,000원</td>
+                                        </tr>
+                                        <tr>
+                                            <td>성인 회원</td>
+                                            <td>15,000원</td>
+                                            <td>17,000원</td>
+                                        </tr>
+                                        <tr>
+                                            <td>엘린이 회원</td>
+                                            <td>8,000원</td>
+                                            <td>9,000원</td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="3">
+                                                <span class="seat_name green_outfield02">그린응원(외야)</span>
+                                            </td>
+                                            <td>일반 가격</td>
+                                            <td>11,000원</td>
+                                            <td>12,000원</td>
+                                        </tr>
+                                        <tr>
+                                            <td>성인 회원</td>
+                                            <td>10,000원</td>
+                                            <td>11,000원</td>
+                                        </tr>
+                                        <tr>
+                                            <td>엘린이 회원</td>
+                                            <td>5,500원</td>
+                                            <td>6,000원</td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="3">
+                                                <span class="seat_name green_outfield">그린(외야)</span>
+                                            </td>
+                                            <td>일반 가격</td>
+                                            <td>10,000원</td>
+                                            <td>11,000원</td>
+                                        </tr>
+                                        <tr>
+                                            <td>성인 회원</td>
+                                            <td>9,000원</td>
+                                            <td>10,000원</td>
+                                        </tr>
+                                        <tr>
+                                            <td>엘린이 회원</td>
+                                            <td colspan="2">무료입장</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div>
+                            <h3>2026 티켓 할인 안내</h3>
+                            <div class="table_wrap dc_table">
+                                <table class="col">
+                                    <caption>티켓할인 구분 별 할인 내용, 비고 내용</caption>
+                                    <colgroup>
+                                        <col style="width:25%">
+                                        <col style="width:25%">
+                                        <col style="width:50%">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>구분</th>
+                                            <th>내용</th>
+                                            <th>비고</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>신한카드 할인</td>
+                                            <td>경기당 1매 2,000원 선할인</td>
+                                            <td class="left">
+                                                <ul>
+                                                    <li>프리미엄, 테이블, 익사이팅존 할인대상 제외</li>
+                                                    <li>
+                                                        2026년 선할인 신한카드 안내
+                                                        <span>
+                                                            2030, 2030(체크), Lady, Lady(체크), Young Lady, Big Plus, Big Plus(체크),
+  Big Plus GS칼텍스, Big Plus GS칼텍스(체크), Big Plus GS칼텍스Smart, LOVE, LOVE Platinum#,
+  The LADY BEST, The BEST-F, The CLASSIC-L, SK행복, SK에너지 Oiling, GS칼텍스Shine,
+  이마트, 이마트(체크), S-OIL보너스+100, THE YOU SK, GS칼텍스Dream100, 에이치디현대오일뱅크
+  Bonus Saving100
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>LG트윈스 신한카드</td>
+                                            <td>경기당 1매 3,000원 청구할인</td>
+                                            <td class="left">
+                                                <ul>
+                                                    <li>프리미엄, 테이블, 익사이팅존 할인대상 제외</li>
+                                                    <li>LG트윈스 신한카드 권종 선택 후 결제</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>LG트윈스 신한카드 체크</td>
+                                            <td>경기당 1매 3,000원 선할인</td>
+                                            <td class="left">
+                                                <ul>
+                                                    <li>프리미엄, 테이블, 익사이팅존 할인대상 제외</li>
+                                                    <li>LG트윈스 신한카드 체크 권종 선택 후 결제</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>문화누리카드</td>
+                                            <td>경기당 4매 40% 할인</td>
+                                            <td class="left">
+                                                <ul>
+                                                    <li>프리미엄, 테이블, 익사이팅존 할인대상 제외</li>
+                                                    <li>현장 매표소에서 실물카드 확인 후 티켓 발권 가능</li>
+                                                    <li>중복할인 불가</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>LG U+ 우수(구 다이아몬드)</td>
+                                            <td>경기당 2,000원 할인</td>
+                                            <td rowspan="2" class="left">
+                                                <ul>
+                                                    <li>프리미엄, 테이블, 익사이팅존 할인대상 제외</li>
+                                                    <li>1일 1매 한정</li>
+                                                    <li>할인금액 포인트 차감</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>LG U+ VIP</td>
+                                            <td class="br">경기당 3,000원 할인</td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="3">그린응원석(외야) / 그린석(외야) 할인</td>
+                                            <td>경로, 장애, 국가유공자 본인 50% 할인</td>
+                                            <td rowspan="3" class="left">
+                                                <ul>
+                                                    <li>현장 매표소에서 증빙서류 확인 후 티켓 발권 가능<br class="mobile">(무인발권기, 스마트티켓 이용 불가)</li>
+                                                    <li>일반 사병 대상 할인 가능<br class="mobile">(직업군인, 경찰 할인대상 제외)</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="br">청소년(중, 고등학생), 군인 본인 2,000원 할인</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="br">어린이(36개월 이상~초등학생) 50% 할인</td>
+                                        </tr>
+                                        <tr>
+                                            <td>문화가 있는 날</td>
+                                            <td>매월 마지막 주 수요일 그린석(외야)50% 할인</td>
+                                            <td class="left">
+                                                <ul>
+                                                    <li>“일반 가격“ 기준 50% 할인</li>
+                                                    <li>그린응원석(외야) 할인대상 제외</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>미취학 아동</td>
+                                            <td>36개월 미만 미취학 아동 무료입장</td>
+                                            <td class="left">
+                                                <ul>
+                                                    <li>아동 본인에 한해 무료입장 가능</li>
+                                                    <li>좌석 점유 시 티켓 구매 필요</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>휠체어석 할인</td>
+                                            <td>휠체어 장애인 및 동반 1인 50% 할인</td>
+                                            <td class="left">
+                                                <ul>
+                                                    <li>프리미엄, 테이블, 익사이팅존 할인대상 제외</li>
+                                                    <li>“일반 가격” 기준 50% 할인</li>
+                                                    <li>동반인 티켓은 예매시 좌석 선택 후 권종에서 “동반1인” 선택 후 결제</li>
+                                                    <li>
+                                                        훨체어석 위치
+                                                        <span> 101B, 122B(동반인석 없음)</span>
+                                                        <span>1루 101~102B, 109B / 3루 114B, 121~122B(동반인석 있음)</span>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>장애인 할인</td>
+                                            <td>본인 50% 할인</td>
+                                            <td class="left">
+                                                <ul>
+                                                    <li>현장 매표소에서 증빙서류 확인 후 티켓 발권 가능<br class="mobile">(무인발권기, 스마트티켓 이용 불가)</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div>
+                            <h3>2026 티켓 예매 안내</h3>
+                            <h4>현장매표소 및 무인 발권기 운영 시간</h4>
+                            <div class="table_wrap info_table">
+                                <table class="col">
+                                    <caption>주중 주말 현장매표소, 무인발권기 운영시간 안내</caption>
+                                    <colgroup class="pc">
+                                        <col style="width:13.9%">
+                                        <col style="width:43.06%">
+                                        <col style="width:43.06%">
+                                    </colgroup>
+                                    <colgroup class="moblie">
+                                        <col style="width:20.83%">
+                                        <col style="width:39.5%">
+                                        <col style="width:39.5%">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>구분</th>
+                                            <th>주중(화/수/목/금)</th>
+                                            <th>주말(토/일/공휴일)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>현장 매표소</td>
+                                            <td rowspan="2">경기 시작 1시간 30분 전 개시하여 7회 초까지 발권</td>
+                                            <td>경기 시작 2시간 전 개시하여 7회 초까지 발권</td>
+                                        </tr>
+                                        <tr>
+                                            <td>무인 발권기</td>
+                                            <td>경기 시작 2시간 30분 전 개시하여 7회 초까지 발권</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">※ 당일 경기 티켓만 발권 가능합니다.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <h4>티켓 예매 기간</h4>
+                            <ul>
+                                <li>홈경기 관람 7일 전 11시부터 당일 경기 시작 후 1시간 까지 예매 가능합니다.</li>
+                                <li>매월 31일도 예매일 계산에 포함됩니다. (2023시즌부터)</li>
+                            </ul>
+                            <h4>예매 수수료</h4>
+                            <ul>
+                                <li>티켓 예매 시 티켓 금액 이외 장당 1,000원의 예매 수수료가 발생합니다.</li>
+                            </ul>
+                            <h4>예매 한도</h4>
+                            <ul>
+                                <li>경기당 1인 8매까지 예매 가능합니다. (예매 횟수와 무관)</li>
+                            </ul>
+                            <h4>예매 취소</h4>
+                            <ul>
+                                <li>예매 취소는 경기 시작 4시간 전까지 가능합니다.</li>
+                                <li>티켓 예매 취소 시 결제 금액의 10%에 해당하는 취소수수료가 발생됩니다. (당일 취소분 제외)</li>
+                            </ul>
+                            <h4>티켓 예매 관련 문의</h4>
+                            <ul>
+                                <li>티켓링크 고객센터 : 1588-7890 ▶ 2번 (프로야구)</li>
+                                <li>Ticket Link Global Call Center : 1644-3850</li>
+                                <li>LG트윈스 홈페이지/앱 ▶ 팬 ▶ 1:1문의</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="ticket_notice">
+                <h3>관람 유의사항</h3>
+                <ul>
+                    <li>관람객 개인의 부주의로 인한 사고에 대해서는 구단이 책임지지 않습니다. (연습 또는 경기 중 파울볼 등) 안전한 관람을 위해 각별히 주의하시기 바랍니다.</li>
+                    <li>우천 또는 미세먼지 등으로 인한 경기 취소 시 인터넷 예매 및 현장 카드결제를 통해 구입하신 티켓은 자동 결제 취소되며, 현금 결제한 티켓은 매표소에서 환불 받으실 수 있습니다.</li>
+                    <li>36개월 미만 유아는 무료 입장 가능합니다. 별도의 좌석은 제공되지 않으니, 안전상 보호자께서는 아이를 안고 관람해주시기 바랍니다. <br class="mobile">(등본, 가족관계증명서 등 증빙서류 필수 지참)</li>
+                    <li>36개월 이상 어린이는 반드시 티켓을 구매하여 지정 좌석에서 관람해야 합니다.</li>
+                    <li>KBO리그는 경기장 내 일절의 알코올류 반입을 지양하며, 알코올 도수 8도 이하의 맥주만 반입 가능합니다. <br class="mobile">(타 주류 반입 불가)</li>
+                    <li>모든 주류 및 음료는 1L 초과시 반입 제한됩니다.</li>
+                    <li>지나친 욕설, 고함, 과격한 행동 등으로 인해 타인의 관람에 방해를 주거나 불쾌감을 줄 경우 환불 없이 즉시 퇴장 조치될 수 있습니다.</li>
+                    <li>위 명시된 물품 및 행위 이외에도 선수 및 관람객의 안전과 쾌적한 관람에 방해가 될 경우, 구단 및 안전교원이 현장에서 반입/사용/행동을 금지할 수 있습니다.</li>
+                </ul>
+            </div>
+
+            <button class="btn_group">단체 예매 안내</button>
+            <!-- 단체예매 안내 -->
+            <div class="layer ticket_info">
+                <div class="layer_wrap">
+                    <div class="layer_header">
+                        <div class="layer_title">
+                            <h4>단체 예매 안내</h4>
+                        </div>
+                        <button class="layer_close">
+                            <img src="https://ep-prod-cdcqfmasbve4b4gv.a01.azurefd.net/static/images/common/btn_close.svg" alt="티켓링크 할인 쿠폰 및 상품권 사용방법 자세히보기 팝업 닫기">
+                        </button>
+                    </div>
+                    <div class="layer_body">
+                        <div class="layer_content">
+                            <img src="https://ep-prod-cdcqfmasbve4b4gv.a01.azurefd.net/static/images/sub/ticket/img_group.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 영어 안내 -->
+            <div class="layer ticket_info eng">
+                <div class="layer_wrap">
+                    <div class="layer_header">
+                        <div class="layer_title">
+                            <h4>2026 LG TWINS Ticket Information</h4>
+                        </div>
+                        <button class="layer_close">
+                            <img src="https://ep-prod-cdcqfmasbve4b4gv.a01.azurefd.net/static/images/common/btn_close.svg" alt="티켓링크 할인 쿠폰 및 상품권 사용방법 자세히보기 팝업 닫기">
+                        </button>
+                    </div>
+                    <div class="layer_body">
+                        <div class="layer_content">
+                            <div class="seating_img">
+                                <h5>Seoul Sports Complex Baseball Stadium</h5>
+                                <span class="defult">
+                                    <img src="https://ep-prod-cdcqfmasbve4b4gv.a01.azurefd.net/static/images/sub/ticket/en_c0.png" alt="">
+                                </span>
+                            </div>
+                            <div class="eng_info">
+                                <h5>Price Information</h5>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2">Section</th>
+                                            <th colspan="2">Price (KRW)</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Tue-Thu</th>
+                                            <th>Fri-Sun(*)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="seat_radio_item premium">
+                                                    <span class="seat_color"></span>
+                                                    <span class="seat_name">Premium Seats</span>
+                                                </div>
+                                            </td>
+                                            <td>100,000</td>
+                                            <td>100,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="seat_radio_item table">
+                                                    <span class="seat_color"></span>
+                                                    <span class="seat_name">Table Seats</span>
+                                                </div>
+                                            </td>
+                                            <td>56,000</td>
+                                            <td>62,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="seat_radio_item exciting">
+                                                    <span class="seat_color"></span>
+                                                    <span class="seat_name">Exciting Zone <br class="mobile">(Ages 13+)</span>
+                                                </div>
+                                            </td>
+                                            <td>30,000</td>
+                                            <td>35,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="seat_radio_item blue">
+                                                    <span class="seat_color"></span>
+                                                    <span class="seat_name bg">Blue Seats</span>
+                                                </div>
+                                            </td>
+                                            <td><span class="bg">24,000</span></td>
+                                            <td><span class="bg">26,000</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="seat_radio_item orange">
+                                                    <span class="seat_color"></span>
+                                                    <span class="seat_name">Orange Seats <br class="mobile">(Cheering Section)</span>
+                                                </div>
+                                            </td>
+                                            <td>22,000</td>
+                                            <td>24,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="seat_radio_item red">
+                                                    <span class="seat_color"></span>
+                                                    <span class="seat_name bg">Red Seats</span>
+                                                </div>
+                                            </td>
+                                            <td><span class="bg">19,000</span></td>
+                                            <td><span class="bg">20,000</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="seat_radio_item navy">
+                                                    <span class="seat_color"></span>
+                                                    <span class="seat_name">Navy Seats</span>
+                                                </div>
+                                            </td>
+                                            <td>16,000</td>
+                                            <td>18,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="seat_radio_item green_outfield02">
+                                                    <span class="seat_color"></span>
+                                                    <span class="seat_name bg">Green Cheering <br class="mobile">Seats (Outfield)</span>
+                                                </div>
+                                            </td>
+                                                <td>
+                                                <span class="bg">10,000</span>
+                                            </td>
+                                            <td>
+                                                <span class="bg">12,000</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="seat_radio_item green_outfield">
+                                                    <span class="seat_color"></span>
+                                                    <span class="seat_name bg">Green Seats <br class="mobile">(Outfield)</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="bg">10,000</span>
+                                            </td>
+                                            <td>
+                                                <span class="bg">11,000</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <p>※ Including Public Holidays observed in Korea.</p>
+                                <p class="on_site">Available for On-site Sales (For Digital Assistance)</p>
+                            </div>
+                            <div class="eng_info">
+                                <h5>On-site Ticket Purchase Guide <span>(For International Visitors)</span></h5>
+                                <ol>
+                                    <li>
+                                        <strong>1. Where to Buy Tickets</strong>
+                                        International visitors can purchase tickets at the stadium ticket office on game days.<br>
+                                        Please use the Ticket Office <span class="text_red">No. 3</span> <br class="mobile"><strong>- Digital Assistance Window.</strong><br>
+                                        After exiting <strong>Sports Complex Station (Line 2 & 9)</strong> <br class="mobile">Exit 5, it will be located on your left.
+                                    </li>
+                                    <li>
+                                        <strong>
+                                            2. Ticket Office Hour
+                                        </strong>
+                                        <ul>
+                                            <li>Weekday Games : Open 90 minutes before game time</li>
+                                            <li>Weekend & Holiday Games : Open 2 hours before game time</li>
+                                        </ul>
+                                        <ul class="text_gray">
+                                            <li>Ticket sales may close when ticket sell out.</li>
+                                            <li>Hours may vary depending on team policy and game conditions.</li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <strong>
+                                            3. Ticket Availability
+                                        </strong>
+                                        Tickets are sold on a first-come, first-served basis.<br>
+                                        The following seats are available for purchase (Digitally assisted guest only):<br>
+                                        Blue Seats : 10, Red Seats : 30, Green Seats : 80 (1st Base / 3rd Base each)
+                                        <p class="text_gray">※ Limit 2 tickets per person. A vaild passport is required.</p>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                $(function () {
+
+                    // netfunnel
+                    if($("#IS_NETFUNNEL").val() !== null && $("#IS_NETFUNNEL").val() === "Y"){
+                        // act_1 자원 리턴
+                        actionReturn();
+                    }
+
+                    // 기본 이미지 표시 함수
+                    function showDefaultImage() {
+                        // 모든 라디오 버튼 선택 해제
+                        $('input[name="seat_type"]').prop('checked', false);
+
+                        // 모든 좌석 이미지 숨기기
+                        $('.seating_img span').hide();
+
+                        // 기본 이미지만 표시
+                        $('.seating_img .defult').show();
+                    }
+
+                    // 좌석 선택 라디오버튼 이벤트
+                    $('input[name="seat_type"]').on('change', function () {
+                        var seatType = $(this).val();
+
+                        // 모든 좌석 이미지 숨기기
+                        $('.seating_img span').hide();
+
+                        // bg 이미지와 선택된 좌석 이미지 표시
+                        $('.seating_img .bg').show();
+
+                        // 선택된 좌석 타입에 해당하는 이미지 표시
+                        switch (seatType) {
+                            case 'premium':
+                                $('.seating_img .c1').show();
+                                break;
+                            case 'table':
+                                $('.seating_img .c2').show();
+                                break;
+                            case 'exciting':
+                                $('.seating_img .c3').show();
+                                break;
+                            case 'blue':
+                                $('.seating_img .c4').show();
+                                break;
+                            case 'orange':
+                                $('.seating_img .c7').show();
+                                break;
+                            case 'red':
+                                $('.seating_img .c5').show();
+                                break;
+                            case 'navy':
+                                $('.seating_img .c6').show();
+                                break;
+                            case 'green_outfield01':
+                                $('.seating_img .c8').show();
+                                break;
+                            case 'green_outfield02':
+                                $('.seating_img .c9').show();
+                                break;
+                            default:
+                                $('.seating_img .defult').show();
+                                $('.seating_img .bg').hide();
+                                break;
+                        }
+                    });
+
+                    // seat_selection 영역을 제외한 모든 영역 클릭 시 기본 이미지 표시
+                    $(document).on('click', function (e) {
+                        // 클릭한 요소가 seat_selection 영역 내부가 아닌 경우에만 실행
+                        if (!$(e.target).closest('.seat_selection').length) {
+                            showDefaultImage();
+                        }
+                    });
+
+                    // 초기 로드 시 기본 이미지만 표시
+                    $('.seating_img .defult').show();
+                    $('.seating_img span:not(.defult)').hide();
+
+                    // 맨 위로 가기 버튼
+                    let lastScrollTop = 0;
+
+                    $(window).on('scroll', function () {
+                        let currentScroll = $(this).scrollTop();
+
+                        if (currentScroll > lastScrollTop) {
+                            $('header').addClass('hide');
+                        } else {
+                            $('header').removeClass('hide');
+                        }
+
+                        lastScrollTop = currentScroll;
+                    });
+
+                    $('.btn_top').on('click', function (e) {
+                        e.preventDefault();
+                        $('html, body').animate({ scrollTop: 0 }, 500);
+                    });
+
+                    // 단체 예매 안내 레이어 팝업
+                    $('.btn_group').on('click', function (e) {
+                        e.preventDefault();
+                        $('.layer.ticket_info:not(.eng)').css("display", "flex");
+                        $("html, body").css("overflow", "hidden");
+                    });
+
+                    // 영어 안내 레이어 팝업
+                    $('.btn_eng').on('click', function (e) {
+                        e.preventDefault();
+                        $('.layer.ticket_info.eng').css("display", "flex");
+                        $("html, body").css("overflow", "hidden");
+                    });
+
+                    $('.layer_close').on('click', function () {
+                        $(this).closest('.layer').css("display", "none");
+                        $("html, body").css("overflow", "auto");
+                    });
+
+                    // 트윈스 역사 슬라이더 기능
+                    $('.slider_prev').on('click', function () {
+                        const slider = $('.twins_history_slider');
+                        const scrollAmount = 304; // 카드 너비 + 간격
+                        slider.animate({
+                            scrollLeft: slider.scrollLeft() - scrollAmount
+                        }, 300);
+                    });
+
+                    $('.slider_next').on('click', function () {
+                        const slider = $('.twins_history_slider');
+                        const scrollAmount = 304; // 카드 너비 + 간격
+                        slider.animate({
+                            scrollLeft: slider.scrollLeft() + scrollAmount
+                        }, 300);
+                    });
+
+                    $('.btn_ticket').on('click', function (e) {
+                        e.preventDefault();
+                        clickTicketReserve();
+                    });
+
+
+                    function clickTicketReserve(){
+
+                        ajaxPost(
+                            "/api/ticketlink/schedule/popup-url",
+                            {},
+                            function (res){
+                                if (app.isApp()){
+                                    app.webToAppFunction({productId: res.data.productId},"openTicketLinkPopup");
+                                }else {
+                                    window.open(res.data.url, 'popupWindow', 'width=1000,height=600,scrollbars=yes,resizable=yes');
+                                }
+                            },
+                            function (err){
+                                alert(err.message);
+                            }
+                        )
+
+                    }
+                });
+            </script>
+
+        </main>
+        <head>
+</head>
+    <footer>
+        <div class="footer_wrap">
+            <div class="footer_top">
+                <nav class="footer_nav" aria-label="하단 메뉴">
+                    <a href="https://ethics.lg.co.kr/index.do">정도경영 사이버신문고</a>
+                    <a href="/footer/terms-of-service">이용약관</a>
+                    <a href="/footer/privacy-policy" class="text_red">개인정보처리방침</a>
+                    <a href="/footer/email-collection-refusal">이메일주소 무단수집 거부</a>
+                    <a href="https://www.koreabaseball.com/Kbo/BusinessAndEvent/SafeGuide.aspx">KBO 경기장 안전정책</a>
+                </nav>
+                <ul>
+                    <li>
+                        <a href="https://www.youtube.com/c/LGTwinsTV" target="_blank">
+                            <img src="/images/common/icon_youtube.png" alt="유튜브 바로가기">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.instagram.com/lgtwinsbaseballclub/" target="_blank">
+                            <img src="/images/common/icon_instagram.png" alt="인스타그램 바로가기">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://x.com/lgtwins_seoul" target="_blank">
+                            <img src="/images/common/icon_x.svg" alt="x 바로가기">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="footer_bottom">
+                <div>
+                    <span>(주)엘지스포츠</span>
+                    <span>사업자등록번호 : 120-81-57558</span>
+                    <span>통신판매업신고번호 : 2016-서울송파-0646 <a href="https://www.ftc.go.kr/bizCommPop.do?wrkr_no=1208157558">사업자 정보확인</a></span>
+                </div>
+                <div>
+                    <address>서울특별시 송파구 올림픽로 25 (잠실동, 종합운동장내)</address>
+                    <span>대표이사 : 김인석</span>
+                </div>
+                <p class="copyright">ⓒ LG Sports. LTD.</p>
+            </div>
+        </div>
+    </footer>
+
+    </div>
+</body>
+</html>

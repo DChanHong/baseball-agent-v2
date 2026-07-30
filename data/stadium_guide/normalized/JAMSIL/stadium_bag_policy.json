@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "JAMSIL_stadium_bag_policy_20260729",
+  "document_type": "stadium_bag_policy",
+  "stadium_id": "JAMSIL",
+  "team_id": null,
+  "title": "잠실야구장 반입 및 안전 정책 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "jamsil_kbo_safe_campaign",
+    "lg_twins_ticket_general"
+  ],
+  "content": "잠실야구장 반입 및 안전 정책은 KBO SAFE 캠페인의 전 구장 공통 원칙을 기본 기준으로 둔다. KBO는 관람객 이동과 통행을 방해하거나 좌석, 컵홀더 등 시설물을 활용해 거치하는 방식의 과도한 물품 반입을 제한하는 원칙을 안내한다. LG 트윈스 공식 티켓 안내는 KBO리그 경기장 내 알코올류 반입을 지양하며 알코올 도수 8도 이하 맥주만 반입 가능하고, 모든 주류 및 음료는 1L 초과 시 반입 제한된다고 안내한다. 현장에서는 구단 및 안전요원이 선수와 관람객 안전, 쾌적한 관람에 방해되는 물품이나 행동을 제한할 수 있다.",
+  "metadata": {
+    "stadium_name": "잠실야구장",
+    "home_team_ids": [
+      "LG",
+      "DOOSAN"
+    ],
+    "topic_summary": "KBO SAFE 공통 안전 정책과 LG 공식 관람 유의사항 기준의 잠실야구장 반입 안내",
+    "search_keywords": [
+      "잠실야구장 반입",
+      "잠실야구장 맥주 반입",
+      "잠실야구장 음료 반입",
+      "잠실야구장 금지 물품",
+      "LG 트윈스 반입",
+      "두산 베어스 반입",
+      "KBO SAFE"
+    ],
+    "limitations": [
+      "두산 홈경기 전용 반입 예외는 별도 공식 텍스트로 충분히 확인하지 못했다.",
+      "LG 공식 안내의 주류/음료 제한은 LG 홈경기 기준일 수 있으므로 두산 홈경기 답변에는 홈팀 확인을 함께 권장해야 한다."
+    ]
+  }
+}
