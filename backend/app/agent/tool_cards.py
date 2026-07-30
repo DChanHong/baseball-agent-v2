@@ -30,6 +30,54 @@ FIND_KBO_GAME_TOOL_CARD = """
 """.strip()
 
 
+SEARCH_STADIUM_GUIDE_TOOL_CARD = """
+도구명: search_stadium_guide
+
+역할:
+- KBO 홈구장의 예매 방법, 좌석, 반입 정책, 교통, 주차, 편의시설 안내를 RAG 문서에서 검색한다.
+- 검색 결과는 답변 생성에 사용할 근거 chunk, 출처 URL, 기준 시점, 신뢰 등급을 포함한다.
+
+입력:
+- stadium_id: 필수 KBO 구장 ID
+- team_id: 팀 맥락이 있으면 KBO 팀 ID, 없으면 null
+- query: 사용자의 원문 질문
+- guide_types: 좁힐 수 있으면 문서 유형 목록, 넓은 질문이면 null
+- top_k: 기본 5
+
+구장 ID:
+- SAJIK: 사직야구장, 롯데 홈구장
+- GOCHEOK: 고척스카이돔, 키움 홈구장
+- MUNHAK: 인천 SSG 랜더스필드, 문학구장, SSG 홈구장
+- GWANGJU: 광주-기아 챔피언스 필드, KIA 홈구장
+- DAEGU: 대구 삼성 라이온즈 파크, 삼성 홈구장
+- SUWON: 수원 KT 위즈파크, KT 홈구장
+- DAEJEON: 대전 한화생명 볼파크, 한화 홈구장
+- JAMSIL: 잠실야구장, LG/두산 홈구장
+- CHANGWON: 창원NC파크, NC 홈구장
+
+guide_types:
+- stadium_bag_policy: 반입 금지 물품, 캔/병/음식물, 안전 정책, 준비물
+- stadium_facility_guide: 편의시설, 매장, 구장샵, 화장실, 수유실 등
+- stadium_seat_guide: 좌석 종류, 원정석, 응원석, 시야, 좌석 구역
+- stadium_ticketing_guide: 예매처, 예매 방법, 취소, 현장 발권
+- stadium_transport_guide: 지하철, 버스, 주차, 교통, 길찾기
+
+호출해야 하는 경우:
+- "사직구장 처음 가는데 뭐 챙겨야 해?"
+- "잠실야구장 주차요금 얼마야?"
+- "창원NC파크 예매는 어디서 해?"
+- "대전 한화생명 볼파크 좌석 알려줘"
+- "고척돔 음식물 반입 가능해?"
+- "문학구장 랜더스샵 위치 알려줘"
+
+호출하지 않는 경우:
+- 특정 날짜 경기 일정, 경기 유무, 경기 상태 질문은 find_kbo_game을 사용한다.
+- 실시간 티켓 잔여석, 실시간 주차 가능 대수, 날씨/우천 취소 예측은 현재 지원하지 않는다.
+- 질문에서 구장이나 팀을 추론할 수 없고 favorite_team_id도 없으면 clarification을 요청한다.
+""".strip()
+
+
 TOOL_ROUTING_TOOL_CARDS = [
     FIND_KBO_GAME_TOOL_CARD,
+    SEARCH_STADIUM_GUIDE_TOOL_CARD,
 ]

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 # LLM Tool Router 오프라인 평가 케이스를 실행하고 결과 JSON을 저장한다.
 # 사용자 메시지가 기대한 Agent Tool로 라우팅되는지 측정할 때 사용한다.
-
 import argparse
 import asyncio
 import json
@@ -140,26 +139,16 @@ def _compare_decisions(
             "is_in_scope": False,
             "should_call_tool": False,
             "tool_name": False,
-            "team_id": False,
-            "date": False,
-            "date_range": False,
+            "args": False,
             "clarification": False,
             "unsupported": False,
         }
-
-    expected_args = expected.args
-    actual_args = actual.args
 
     return {
         "is_in_scope": expected.is_in_scope == actual.is_in_scope,
         "should_call_tool": expected.should_call_tool == actual.should_call_tool,
         "tool_name": expected.tool_name == actual.tool_name,
-        "team_id": _arg_value(expected_args, "team_id") == _arg_value(actual_args, "team_id"),
-        "date": _arg_value(expected_args, "date") == _arg_value(actual_args, "date"),
-        "date_range": (
-            _arg_value(expected_args, "date_from") == _arg_value(actual_args, "date_from")
-            and _arg_value(expected_args, "date_to") == _arg_value(actual_args, "date_to")
-        ),
+        "args": _args_payload(expected.args) == _args_payload(actual.args),
         "clarification": (
             expected.needs_clarification == actual.needs_clarification
             and expected.clarification_reason == actual.clarification_reason
@@ -168,10 +157,10 @@ def _compare_decisions(
     }
 
 
-def _arg_value(args: Any, key: str) -> Any:
+def _args_payload(args: Any) -> dict[str, Any] | None:
     if args is None:
         return None
-    return getattr(args, key)
+    return args.model_dump(mode="json")
 
 
 def build_metrics(results: list[dict[str, Any]]) -> dict[str, Any]:
@@ -180,9 +169,7 @@ def build_metrics(results: list[dict[str, Any]]) -> dict[str, Any]:
         "is_in_scope",
         "should_call_tool",
         "tool_name",
-        "team_id",
-        "date",
-        "date_range",
+        "args",
         "clarification",
         "unsupported",
     ]
@@ -250,9 +237,7 @@ def print_metrics(metrics: dict[str, Any], output_path: Path) -> None:
     print(f"is_in_scope_accuracy={metrics['is_in_scope_accuracy']}")
     print(f"should_call_tool_accuracy={metrics['should_call_tool_accuracy']}")
     print(f"tool_name_accuracy={metrics['tool_name_accuracy']}")
-    print(f"team_id_accuracy={metrics['team_id_accuracy']}")
-    print(f"date_accuracy={metrics['date_accuracy']}")
-    print(f"date_range_accuracy={metrics['date_range_accuracy']}")
+    print(f"args_accuracy={metrics['args_accuracy']}")
     print(f"clarification_accuracy={metrics['clarification_accuracy']}")
     print(f"unsupported_accuracy={metrics['unsupported_accuracy']}")
     print(f"exact_match_accuracy={metrics['exact_match_accuracy']}")

@@ -1,0 +1,60 @@
+from __future__ import annotations
+
+from pydantic import BaseModel
+
+from app.agent.routing_schemas import (
+    FindKboGameRoutingArgs,
+    SearchStadiumGuideRoutingArgs,
+    ToolRoutingDecision,
+)
+from app.domains.baseball.tool.find_kbo_game.handler import FindKboGameToolHandler
+from app.domains.baseball.tool.find_kbo_game.schemas import FindKboGameToolInput
+from app.domains.baseball.tool.search_stadium_guide.handler import (
+    SearchStadiumGuideToolHandler,
+)
+from app.domains.baseball.tool.search_stadium_guide.schemas import (
+    SearchStadiumGuideToolInput,
+)
+
+
+class AgentToolExecutor:
+    """Routing decision을 실제 backend tool handler 호출로 변환합니다."""
+
+    def __init__(
+        self,
+        *,
+        find_kbo_game_handler: FindKboGameToolHandler,
+        search_stadium_guide_handler: SearchStadiumGuideToolHandler,
+    ) -> None:
+        self._find_kbo_game_handler = find_kbo_game_handler
+        self._search_stadium_guide_handler = search_stadium_guide_handler
+
+    async def execute(self, decision: ToolRoutingDecision) -> BaseModel:
+        """선택된 Tool을 실행하고 해당 Tool의 Pydantic 결과 모델을 반환합니다."""
+
+        if not decision.should_call_tool or decision.tool_name is None:
+            raise ValueError("Tool execution requires should_call_tool=true")
+
+        if decision.tool_name == "find_kbo_game":
+            if not isinstance(decision.args, FindKboGameRoutingArgs):
+                raise ValueError("find_kbo_game requires FindKboGameRoutingArgs")
+
+            return await self._find_kbo_game_handler.execute(
+                FindKboGameToolInput.model_validate(
+                    decision.args.model_dump(mode="json")
+                )
+            )
+
+        if decision.tool_name == "search_stadium_guide":
+            if not isinstance(decision.args, SearchStadiumGuideRoutingArgs):
+                raise ValueError(
+                    "search_stadium_guide requires SearchStadiumGuideRoutingArgs"
+                )
+
+            return await self._search_stadium_guide_handler.execute(
+                SearchStadiumGuideToolInput.model_validate(
+                    decision.args.model_dump(mode="json")
+                )
+            )
+
+        raise ValueError(f"Unsupported tool_name: {decision.tool_name}")

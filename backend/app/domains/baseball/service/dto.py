@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from datetime import date, datetime, time
+from datetime import date as Date
+from datetime import datetime, time
 from typing import Self
 from uuid import UUID
 
@@ -12,9 +13,9 @@ class ListKboGamesQuery:
     """KBO 경기 조회 Service에 전달하는 입력 DTO입니다."""
 
     team_id: str | None = None
-    date: date | None = None
-    date_from: date | None = None
-    date_to: date | None = None
+    date: Date | None = None
+    date_from: Date | None = None
+    date_to: Date | None = None
 
     def __post_init__(self) -> None:
         if self.team_id is not None and not self.team_id.strip():
@@ -33,11 +34,11 @@ class ListKboGamesQuery:
             raise ValueError("date_from은 date_to보다 늦을 수 없습니다.")
 
     @property
-    def effective_date_from(self) -> date | None:
+    def effective_date_from(self) -> Date | None:
         return self.date if self.date is not None else self.date_from
 
     @property
-    def effective_date_to(self) -> date | None:
+    def effective_date_to(self) -> Date | None:
         return self.date if self.date is not None else self.date_to
 
 
@@ -49,7 +50,7 @@ class KboGameResultDto:
     season_year: int
     source_game_id: str | None
     internal_game_key: str
-    game_date: date
+    game_date: Date
     start_time: time | None
     starts_at: datetime | None
     away_team_id: str

@@ -18,6 +18,26 @@ KboTeamId = Literal[
     "KT",
 ]
 
+KboStadiumId = Literal[
+    "SAJIK",
+    "GOCHEOK",
+    "MUNHAK",
+    "GWANGJU",
+    "DAEGU",
+    "SUWON",
+    "DAEJEON",
+    "JAMSIL",
+    "CHANGWON",
+]
+
+StadiumGuideType = Literal[
+    "stadium_bag_policy",
+    "stadium_facility_guide",
+    "stadium_seat_guide",
+    "stadium_ticketing_guide",
+    "stadium_transport_guide",
+]
+
 
 class ToolRoutingUserContext(BaseModel):
     """User context available to the routing model."""
@@ -71,6 +91,32 @@ class FindKboGameRoutingArgs(BaseModel):
         return self
 
 
+class SearchStadiumGuideRoutingArgs(BaseModel):
+    """Arguments for the search_stadium_guide routing decision."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    stadium_id: KboStadiumId = Field(
+        description="KBO home stadium id used as the required metadata filter."
+    )
+    team_id: KboTeamId | None = Field(
+        description="Optional KBO team id when the question includes a team context."
+    )
+    query: str = Field(
+        min_length=1,
+        description="Original user question to search against stadium guide chunks.",
+    )
+    guide_types: list[StadiumGuideType] | None = Field(
+        description="Optional document type filters. Null when the question is broad."
+    )
+    top_k: int = Field(
+        default=5,
+        ge=1,
+        le=10,
+        description="Maximum number of evidence chunks to return.",
+    )
+
+
 class ToolRoutingDecision(BaseModel):
     """Structured decision returned by the LLM before final answer generation."""
 
@@ -82,16 +128,22 @@ class ToolRoutingDecision(BaseModel):
     should_call_tool: bool = Field(
         description="Whether the system should call a backend tool before answering."
     )
-    tool_name: Literal["find_kbo_game"] | None = Field(
+    tool_name: Literal["find_kbo_game", "search_stadium_guide"] | None = Field(
         description="Tool to call. Null when should_call_tool is false."
     )
-    args: FindKboGameRoutingArgs | None = Field(
+    args: FindKboGameRoutingArgs | SearchStadiumGuideRoutingArgs | None = Field(
         description="Tool arguments. Null when should_call_tool is false."
     )
     needs_clarification: bool = Field(
         description="Whether the assistant should ask a clarification question."
     )
-    clarification_reason: Literal["team_required_for_schedule_lookup"] | None
+    clarification_reason: (
+        Literal[
+            "team_required_for_schedule_lookup",
+            "stadium_required_for_stadium_guide_search",
+        ]
+        | None
+    )
     unsupported_reason: (
         Literal[
             "out_of_scope",
@@ -105,10 +157,18 @@ class ToolRoutingDecision(BaseModel):
     @model_validator(mode="after")
     def validate_decision_shape(self) -> ToolRoutingDecision:
         if self.should_call_tool:
-            if self.tool_name != "find_kbo_game":
-                raise ValueError("tool_name must be find_kbo_game when calling a tool")
+            if self.tool_name not in {"find_kbo_game", "search_stadium_guide"}:
+                raise ValueError("tool_name must be a supported tool when calling a tool")
             if self.args is None:
                 raise ValueError("args are required when calling a tool")
+            if self.tool_name == "find_kbo_game" and not isinstance(
+                self.args, FindKboGameRoutingArgs
+            ):
+                raise ValueError("args must match find_kbo_game")
+            if self.tool_name == "search_stadium_guide" and not isinstance(
+                self.args, SearchStadiumGuideRoutingArgs
+            ):
+                raise ValueError("args must match search_stadium_guide")
             if self.needs_clarification:
                 raise ValueError("tool calls cannot also require clarification")
             if self.unsupported_reason is not None:

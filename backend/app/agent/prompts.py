@@ -24,12 +24,18 @@ TOOL_ROUTING_POLICY_PROMPT = """
 공통 판단 정책:
 - 경기 일정, 경기 유무, 특정 경기 장소, 경기 상태, 취소 사유, 점수 질문이면
   가능한 도구를 호출한다.
-- 일반 야구 규칙, 팀 역사, 응원 문화, 구장 준비물, 직관 팁 질문은 도구를 호출하지 않는다.
+- 구장별 예매, 좌석, 반입 정책, 교통, 주차, 편의시설, 직관 준비 질문이면
+  search_stadium_guide를 호출한다.
+- 일반 야구 규칙, 팀 역사, 선수 정보, KBO 일반 상식 질문은 도구를 호출하지 않는다.
 - 일정/상태 조회에 팀이 필요하고 질문에 팀이 없으면 favorite_team_id를 기본 team_id로 쓴다.
 - 질문에 팀이 명시되어 있으면 favorite_team_id보다 질문의 팀을 우선한다.
 - 일정/상태 조회에 팀이 필요한데 질문에도 없고 favorite_team_id도 없으면
   needs_clarification=true, clarification_reason=team_required_for_schedule_lookup로 둔다.
 - 구장만 명시된 경기 유무 질문은 team_id=null로 두고 날짜만 추출한다.
+- 구장 안내 질문에 구장이 직접 명시되지 않았지만 팀이나 favorite_team_id가 있으면
+  해당 팀의 홈구장 stadium_id를 사용한다.
+- 구장 안내 질문인데 구장과 팀을 모두 추론할 수 없고 favorite_team_id도 없으면
+  needs_clarification=true, clarification_reason=stadium_required_for_stadium_guide_search로 둔다.
 - 야구 외 질문은 is_in_scope=false, unsupported_reason=out_of_scope로 둔다.
 
 날짜 해석:
@@ -45,7 +51,7 @@ TOOL_ROUTING_POLICY_PROMPT = """
 
 출력 값 주의:
 - 설명은 한국어로 이해하되 출력 enum 값은 스키마의 영문 값을 그대로 사용한다.
-- tool_name은 호출할 때만 "find_kbo_game"이고, 호출하지 않으면 null이다.
+- tool_name은 호출할 때만 "find_kbo_game" 또는 "search_stadium_guide"이고, 호출하지 않으면 null이다.
 - args는 도구를 호출할 때만 채우고, 호출하지 않으면 null이다.
 """.strip()
 
@@ -92,6 +98,26 @@ TOOL_ROUTING_FEW_SHOT_PROMPT = """
 {"message":"지금 티켓 남았어?","user_context":{"auth_status":"authenticated","favorite_team_id":"LG","today":"2026-07-28","timezone":"Asia/Seoul"}}
 출력:
 {"is_in_scope":true,"should_call_tool":false,"tool_name":null,"args":null,"needs_clarification":false,"clarification_reason":null,"unsupported_reason":"ticket_inventory_tool_required"}
+
+입력:
+{"message":"사직구장 처음 가는데 뭐 챙겨야 해?","user_context":{"auth_status":"authenticated","favorite_team_id":"LOTTE","today":"2026-07-28","timezone":"Asia/Seoul"}}
+출력:
+{"is_in_scope":true,"should_call_tool":true,"tool_name":"search_stadium_guide","args":{"stadium_id":"SAJIK","team_id":"LOTTE","query":"사직구장 처음 가는데 뭐 챙겨야 해?","guide_types":["stadium_bag_policy","stadium_facility_guide"],"top_k":5},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
+
+입력:
+{"message":"고척돔 음식물 반입 가능해?","user_context":{"auth_status":"authenticated","favorite_team_id":null,"today":"2026-07-28","timezone":"Asia/Seoul"}}
+출력:
+{"is_in_scope":true,"should_call_tool":true,"tool_name":"search_stadium_guide","args":{"stadium_id":"GOCHEOK","team_id":"KIWOOM","query":"고척돔 음식물 반입 가능해?","guide_types":["stadium_bag_policy"],"top_k":5},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
+
+입력:
+{"message":"우리 팀 홈구장 주차 알려줘","user_context":{"auth_status":"authenticated","favorite_team_id":"NC","today":"2026-07-28","timezone":"Asia/Seoul"}}
+출력:
+{"is_in_scope":true,"should_call_tool":true,"tool_name":"search_stadium_guide","args":{"stadium_id":"CHANGWON","team_id":"NC","query":"우리 팀 홈구장 주차 알려줘","guide_types":["stadium_transport_guide"],"top_k":5},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
+
+입력:
+{"message":"처음 직관 가는데 뭐 챙겨야 해?","user_context":{"auth_status":"authenticated","favorite_team_id":null,"today":"2026-07-28","timezone":"Asia/Seoul"}}
+출력:
+{"is_in_scope":true,"should_call_tool":false,"tool_name":null,"args":null,"needs_clarification":true,"clarification_reason":"stadium_required_for_stadium_guide_search","unsupported_reason":null}
 
 입력:
 {"message":"두산이랑 LG 언제 해?","user_context":{"auth_status":"authenticated","favorite_team_id":null,"today":"2026-07-28","timezone":"Asia/Seoul"}}
