@@ -53,7 +53,7 @@ data/stadium_guide/raw/2026-07-29/{STADIUM_ID}/metadata.json
 
 ## 3. 현재 유지 중인 구장
 
-현재 normalized 문서가 유지되는 구장은 6개다.
+현재 normalized 문서가 유지되는 구장은 7개다.
 
 ```text
 SAJIK
@@ -62,12 +62,13 @@ MUNHAK
 GWANGJU
 DAEGU
 SUWON
+DAEJEON
 ```
 
 문서 수:
 
 ```text
-총 23개 normalized JSON
+총 35개 normalized JSON
 ```
 
 대략적인 상태:
@@ -80,6 +81,7 @@ SUWON
 | `GWANGJU` | 구장/교통/티켓 중심으로 유지 |
 | `DAEGU` | 좌석/티켓/환불 중심으로 유지 |
 | `SUWON` | 주차예약/구장/티켓 출처가 비교적 좋음 |
+| `DAEJEON` | 좌석/시설/주소 중심으로 유지. 티켓/교통 상세는 추가 검수 필요 |
 
 자세한 현재 상태는 아래 파일을 먼저 확인한다.
 
@@ -94,8 +96,6 @@ data/stadium_guide/collection_summary.md
 ```text
 JAMSIL
 CHANGWON
-DAEJEON
-POHANG
 ```
 
 ### 4.1 JAMSIL
@@ -153,18 +153,19 @@ NC 공식 최신 운영 상태 공지
 HANWHA
 ```
 
-보류 이유:
+수집 상태:
 
-- 한화 공식 티켓 URL은 raw fetch 결과가 `{"user":null}` 수준이라 usable source가 아니다.
-- 공식 VR은 JavaScript/WebGL 중심이라 텍스트 추출 근거로 약하다.
-- 대전시 소개 자료는 시설 개요에는 좋지만 관람 실무 안내로는 부족하다.
+- 2026-07-30 기준 공식 출처 기반 normalized 5개 문서 생성 완료.
+- 한화 공식 페이지는 브라우저 기준으로 좌석, 시설, 주소, 대표 전화 정보를 확인했다.
+- 한화 공식 페이지 raw fetch는 일부 `{}`
+  또는 `{"user":null}` 수준으로만 저장되어 raw snapshot 단독 재현성은 약하다.
 
-다음에 찾아야 할 출처:
+추가 보강 후보:
 
 ```text
-한화 공식 티켓/좌석 안내를 브라우저 기반으로 확인
-한화생명 볼파크 입장/GATE/반입/시설 안내
-대전시 또는 중구청의 공식 교통/주차 안내
+티켓/좌석 세부 수동 검수
+입장/GATE/반입 세부 안내
+버스, 지하철, 주차 가능 대수, 주차 요금 공식 출처
 ```
 
 ### 4.4 POHANG
@@ -175,12 +176,13 @@ HANWHA
 SAMSUNG 보조 구장
 ```
 
-보류 이유:
+초기 수집 대상 제외 이유:
 
+- 정규 홈구장 중심 RAG 초기 수집 범위에서 보조 구장은 제외한다.
 - 삼성 공식 티켓 페이지에 포항경기 요금표는 있으나, 포항야구장 자체 시설/교통/주차 공식 출처가 부족하다.
 - 보조 구장이라 경기 편성 시점의 삼성 공지가 중요하다.
 
-다음에 찾아야 할 출처:
+향후 검토 조건:
 
 ```text
 포항시 또는 포항시시설관리공단 포항야구장 전용 시설 안내
@@ -370,7 +372,6 @@ find data/stadium_guide/normalized -mindepth 2 -maxdepth 2 -name '*.json'
 1. 남은 구장 중 JAMSIL 공식 출처 재조사
 2. JAMSIL을 LG/DOOSAN 홈팀별로 분리할지 결정
 3. CHANGWON 최신 운영/티켓 공식 출처 확인
-4. DAEJEON 한화 공식 사이트를 브라우저 기반으로 확인
-5. approved 문서 검수 기준 작성
-6. chunk JSONL 생성 스크립트 작성
+4. approved 문서 검수 기준 작성
+5. chunk JSONL 생성 스크립트 작성
 ```

@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0.0",
+  "collected_at": "2026-07-29T00:00:00+09:00",
+  "collector": "manual_curl",
+  "stadium_id": "DAEJEON",
+  "team_ids": [
+    "HANWHA"
+  ],
+  "files": [
+    {
+      "source_id": "hanwha_life_ballpark",
+      "source_url": "https://www.hanwhaeagles.co.kr/MN/EP/MNEPPI01.do",
+      "source_type": "official_team",
+      "local_file": "hanwha_life_ballpark.html",
+      "fetch_status": "blocked_minimal_response",
+      "byte_size": 2,
+      "content_hash": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "notes": "웹 브라우저와 검색 인덱스에서는 텍스트 확인 가능하나, 단순 curl 요청은 빈 JSON 응답만 반환했다."
+    },
+    {
+      "source_id": "hanwha_ticket_info",
+      "source_url": "https://www.hanwhaeagles.co.kr/ticketInfo.do",
+      "source_type": "official_team",
+      "local_file": "hanwha_ticket_info.html",
+      "fetch_status": "blocked_minimal_response",
+      "byte_size": 13,
+      "content_hash": "sha256:2e7fe66d0f26a4cc5aaad5f34dba496c7988c175f79b24dcfa414a1dba289c0a",
+      "notes": "웹 브라우저와 검색 인덱스에서는 티켓 페이지 확인 가능하나, 단순 curl 요청은 user null JSON만 반환했다."
+    },
+    {
+      "source_id": "daejeon_kbo_safe_campaign",
+      "source_url": "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+      "source_type": "official_league",
+      "local_file": "daejeon_kbo_safe_campaign.html",
+      "fetch_status": "success",
+      "byte_size": 53039,
+      "content_hash": "sha256:27c926ff8bcce3d1fdb883dbe7f9c137a496b80615b11a9822c7cefbfd1891ed"
+    },
+    {
+      "source_id": "daejeon_kbo_ticket_map",
+      "source_url": "https://www.koreabaseball.com/kbo/league/map.aspx",
+      "source_type": "official_league",
+      "local_file": "daejeon_kbo_ticket_map.html",
+      "fetch_status": "success",
+      "byte_size": 37631,
+      "content_hash": "sha256:314a241482c3b4e920e58a49afff544c41b7e8b968508723dd6590b7b0551a96"
+    },
+    {
+      "source_id": "visitkorea_hanwha_life_ballpark",
+      "source_url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=248219",
+      "source_type": "official_tourism",
+      "local_file": "visitkorea_hanwha_life_ballpark.html",
+      "fetch_status": "success",
+      "byte_size": 217737,
+      "content_hash": "sha256:12887557a2ec7a5fb2228f871c8fa4c26a9b6942687fa046dc43feadbd0a2cb3"
+    }
+  ]
+}

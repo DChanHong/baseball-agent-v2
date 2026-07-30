@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "DAEJEON_stadium_transport_guide_20260729",
+  "document_type": "stadium_transport_guide",
+  "stadium_id": "DAEJEON",
+  "team_id": "HANWHA",
+  "title": "대전 한화생명 볼파크 교통 및 주차 안내 초안",
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "sources": [
+    "hanwha_life_ballpark",
+    "visitkorea_hanwha_life_ballpark"
+  ],
+  "content": "한화이글스 공식 대전 한화생명 볼파크 안내는 주소를 대전광역시 중구 대종로 373으로 제공한다. 한국관광공사 공식 관광정보도 같은 주소를 제공하며, 주차 가능과 주차요금 무료를 안내한다. 현재 수집된 공식 텍스트 기준으로는 대전 한화생명 볼파크의 상세 지하철역, 버스 노선, 경기일 혼잡도, 주차 가능 대수, 주변 임시주차장 정보는 충분히 확인되지 않았다. 따라서 이 문서는 주소와 주차 가능 여부만 최소 안내하고, 실제 방문 전 한화이글스 공식 안내와 지도 서비스를 함께 확인해야 한다.",
+  "metadata": {
+    "stadium_name": "대전 한화생명 볼파크",
+    "home_team_ids": [
+      "HANWHA"
+    ],
+    "topic_summary": "대전 한화생명 볼파크 주소, 주차 가능 여부, 교통 상세 추가 확인 필요 안내",
+    "search_keywords": [
+      "대전 한화생명 볼파크 가는 법",
+      "한화생명 볼파크 주소",
+      "한화생명 볼파크 교통",
+      "한화생명 볼파크 주차",
+      "대종로 373",
+      "대전 중구 대종로 373",
+      "부사동",
+      "한화생명 볼파크 주차요금"
+    ],
+    "known_address": "대전광역시 중구 대종로 373",
+    "parking_summary": "한국관광공사 공식 관광정보는 주차 가능과 주차요금 무료를 안내한다.",
+    "limitations": [
+      "지하철역, 버스 노선, 주차 가능 대수, 경기일 임시주차장 정보는 현재 공식 텍스트 수집 범위에서 충분히 확인되지 않았다.",
+      "한국관광공사 관광정보의 주차 안내는 경기일 운영과 다를 수 있으므로 한화이글스 최신 공지를 함께 확인해야 한다."
+    ]
+  }
+}
