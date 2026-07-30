@@ -1,0 +1,3226 @@
+{
+  "dataset_path": "../data/stadium_guide/evaluation/cases/stadium_guide_search_cases.jsonl",
+  "embedding_model": "text-embedding-3-small",
+  "top_k": 3,
+  "relevance_threshold": 0.65,
+  "run_name": "all-stadium-baseline",
+  "run_timestamp": "2026-07-30T12:18:18.367195+00:00",
+  "summary": {
+    "total_cases": 49,
+    "positive_cases": 45,
+    "negative_cases": 4,
+    "top1_hits": 41,
+    "top3_hits": 45,
+    "top1_accuracy": 0.9111111111111111,
+    "top3_accuracy": 1.0,
+    "negative_cases_over_threshold": [
+      "negative_001",
+      "negative_002",
+      "negative_003"
+    ],
+    "failed_top1_case_ids": [
+      "munhak_004",
+      "munhak_005",
+      "daegu_003",
+      "suwon_005"
+    ],
+    "failed_top3_case_ids": []
+  },
+  "cases": [
+    {
+      "id": "sajik_001",
+      "query": "사직구장 지하철로 어떻게 가?",
+      "case_type": "positive",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_transport_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.5621547369408099,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_facility_guide",
+        "stadium_seat_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+          "distance": 0.5621547369408099,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "사직야구장 시설 안내 초안",
+          "distance": 0.5703608636398736,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "사직야구장 좌석 안내 초안",
+          "distance": 0.6348625269110367,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=340",
+            "https://www.giantsclub.com/html/?pcode=339"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "대중교통 질문은 교통 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "sajik_002",
+      "query": "사직구장 반입 금지 물품 알려줘",
+      "case_type": "positive",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_bag_policy",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.5071120658524071,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_bag_policy",
+        "stadium_facility_guide",
+        "stadium_seat_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "사직야구장 반입 및 안전 정책 초안",
+          "distance": 0.5071120658524071,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "사직야구장 시설 안내 초안",
+          "distance": 0.6104264270380904,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "사직야구장 좌석 안내 초안",
+          "distance": 0.6767411583178493,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=340",
+            "https://www.giantsclub.com/html/?pcode=339"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "반입 제한과 안전 정책 질문은 반입 정책 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "sajik_003",
+      "query": "사직구장 좌석 종류 알려줘",
+      "case_type": "positive",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_seat_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.4698128175421524,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_seat_guide",
+        "stadium_facility_guide",
+        "stadium_bag_policy"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "사직야구장 좌석 안내 초안",
+          "distance": 0.4698128175421524,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=340",
+            "https://www.giantsclub.com/html/?pcode=339"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "사직야구장 시설 안내 초안",
+          "distance": 0.555258366657208,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "사직야구장 반입 및 안전 정책 초안",
+          "distance": 0.5878164828225488,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "좌석 구역 종류 질문은 좌석 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "sajik_004",
+      "query": "롯데 홈경기 예매는 어디서 해?",
+      "case_type": "positive",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_ticketing_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.632456782295727,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_ticketing_guide",
+        "stadium_transport_guide",
+        "stadium_facility_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "사직야구장 티켓 및 예매 안내 초안",
+          "distance": 0.632456782295727,
+          "source_urls": [
+            "https://www.koreabaseball.com/kbo/league/map.aspx",
+            "https://www.giantsclub.com/m/?pcode=539",
+            "https://www.giantsclub.com/html/?pcode=339",
+            "https://www.giantsclub.com/html/?pcode=341"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+          "distance": 0.7268311390405346,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "사직야구장 시설 안내 초안",
+          "distance": 0.7447531674504515,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "예매처와 티켓 안내 질문은 티켓 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "sajik_005",
+      "query": "사직구장 자이언츠샵 위치 알려줘",
+      "case_type": "positive",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_facility_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.4766951594604877,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_facility_guide",
+        "stadium_seat_guide",
+        "stadium_ticketing_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "사직야구장 시설 안내 초안",
+          "distance": 0.4766951594604877,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "사직야구장 좌석 안내 초안",
+          "distance": 0.6007441201566098,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=340",
+            "https://www.giantsclub.com/html/?pcode=339"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "사직야구장 티켓 및 예매 안내 초안",
+          "distance": 0.6012029237182638,
+          "source_urls": [
+            "https://www.koreabaseball.com/kbo/league/map.aspx",
+            "https://www.giantsclub.com/m/?pcode=539",
+            "https://www.giantsclub.com/html/?pcode=339",
+            "https://www.giantsclub.com/html/?pcode=341"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "구장샵과 편의시설 질문은 시설 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "gocheok_001",
+      "query": "고척돔 지하철로 어떻게 가?",
+      "case_type": "positive",
+      "stadium_id": "GOCHEOK",
+      "expected_document_type": "stadium_transport_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.6237442021245179,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_facility_guide",
+        "stadium_ticketing_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "GOCHEOK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "GOCHEOK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "고척스카이돔 stadium_transport_guide 초안",
+          "distance": 0.6237442021245179,
+          "source_urls": [
+            "https://heroesbaseball.co.kr/ticket/normal/view.do",
+            "https://heroesbaseball.co.kr/ticket/normal/viewPurchase.do",
+            "https://www.sisul.or.kr/open_content/skydome/"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "GOCHEOK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "GOCHEOK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "고척스카이돔 stadium_facility_guide 초안",
+          "distance": 0.6553490315714158,
+          "source_urls": [
+            "https://www.sisul.or.kr/open_content/skydome/"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "GOCHEOK_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "GOCHEOK_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "고척스카이돔 stadium_ticketing_guide 초안",
+          "distance": 0.6954721578010571,
+          "source_urls": [
+            "https://heroesbaseball.co.kr/ticket/normal/view.do",
+            "https://heroesbaseball.co.kr/ticket/normal/viewPurchase.do",
+            "https://www.koreabaseball.com/kbo/league/map.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "고척돔 대중교통 질문은 교통 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "gocheok_002",
+      "query": "고척돔 음식물 반입 가능해?",
+      "case_type": "positive",
+      "stadium_id": "GOCHEOK",
+      "expected_document_type": "stadium_bag_policy",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.6058216892335333,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_bag_policy",
+        "stadium_facility_guide",
+        "stadium_transport_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "GOCHEOK_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "GOCHEOK_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "고척스카이돔 stadium_bag_policy 초안",
+          "distance": 0.6058216892335333,
+          "source_urls": [
+            "https://heroesbaseball.co.kr/ticket/normal/view.do",
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "GOCHEOK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "GOCHEOK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "고척스카이돔 stadium_facility_guide 초안",
+          "distance": 0.7335743728641116,
+          "source_urls": [
+            "https://www.sisul.or.kr/open_content/skydome/"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "GOCHEOK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "GOCHEOK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "고척스카이돔 stadium_transport_guide 초안",
+          "distance": 0.7476305341353443,
+          "source_urls": [
+            "https://heroesbaseball.co.kr/ticket/normal/view.do",
+            "https://heroesbaseball.co.kr/ticket/normal/viewPurchase.do",
+            "https://www.sisul.or.kr/open_content/skydome/"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "반입 가능 물품 질문은 반입 정책 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "gocheok_003",
+      "query": "고척돔 좌석 종류 알려줘",
+      "case_type": "positive",
+      "stadium_id": "GOCHEOK",
+      "expected_document_type": "stadium_seat_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.6356779946039466,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_seat_guide",
+        "stadium_facility_guide",
+        "stadium_transport_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "GOCHEOK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "GOCHEOK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "고척스카이돔 stadium_seat_guide 초안",
+          "distance": 0.6356779946039466,
+          "source_urls": [
+            "https://heroesbaseball.co.kr/ticket/normal/view.do"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "GOCHEOK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "GOCHEOK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "고척스카이돔 stadium_facility_guide 초안",
+          "distance": 0.6630328582944398,
+          "source_urls": [
+            "https://www.sisul.or.kr/open_content/skydome/"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "GOCHEOK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "GOCHEOK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "고척스카이돔 stadium_transport_guide 초안",
+          "distance": 0.6933576848034513,
+          "source_urls": [
+            "https://heroesbaseball.co.kr/ticket/normal/view.do",
+            "https://heroesbaseball.co.kr/ticket/normal/viewPurchase.do",
+            "https://www.sisul.or.kr/open_content/skydome/"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "좌석 구역 질문은 좌석 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "gocheok_004",
+      "query": "키움 홈경기 예매는 어디서 해?",
+      "case_type": "positive",
+      "stadium_id": "GOCHEOK",
+      "expected_document_type": "stadium_ticketing_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.47893979719642854,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_ticketing_guide",
+        "stadium_transport_guide",
+        "stadium_facility_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "GOCHEOK_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "GOCHEOK_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "고척스카이돔 stadium_ticketing_guide 초안",
+          "distance": 0.47893979719642854,
+          "source_urls": [
+            "https://heroesbaseball.co.kr/ticket/normal/view.do",
+            "https://heroesbaseball.co.kr/ticket/normal/viewPurchase.do",
+            "https://www.koreabaseball.com/kbo/league/map.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "GOCHEOK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "GOCHEOK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "고척스카이돔 stadium_transport_guide 초안",
+          "distance": 0.6263221098278123,
+          "source_urls": [
+            "https://heroesbaseball.co.kr/ticket/normal/view.do",
+            "https://heroesbaseball.co.kr/ticket/normal/viewPurchase.do",
+            "https://www.sisul.or.kr/open_content/skydome/"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "GOCHEOK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "GOCHEOK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "고척스카이돔 stadium_facility_guide 초안",
+          "distance": 0.6433481854114966,
+          "source_urls": [
+            "https://www.sisul.or.kr/open_content/skydome/"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "예매처 질문은 티켓 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "gocheok_005",
+      "query": "고척돔 편의시설 알려줘",
+      "case_type": "positive",
+      "stadium_id": "GOCHEOK",
+      "expected_document_type": "stadium_facility_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.4802974452636314,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_facility_guide",
+        "stadium_transport_guide",
+        "stadium_ticketing_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "GOCHEOK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "GOCHEOK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "고척스카이돔 stadium_facility_guide 초안",
+          "distance": 0.4802974452636314,
+          "source_urls": [
+            "https://www.sisul.or.kr/open_content/skydome/"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "GOCHEOK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "GOCHEOK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "고척스카이돔 stadium_transport_guide 초안",
+          "distance": 0.5413453528519293,
+          "source_urls": [
+            "https://heroesbaseball.co.kr/ticket/normal/view.do",
+            "https://heroesbaseball.co.kr/ticket/normal/viewPurchase.do",
+            "https://www.sisul.or.kr/open_content/skydome/"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "GOCHEOK_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "GOCHEOK_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "고척스카이돔 stadium_ticketing_guide 초안",
+          "distance": 0.601210791977125,
+          "source_urls": [
+            "https://heroesbaseball.co.kr/ticket/normal/view.do",
+            "https://heroesbaseball.co.kr/ticket/normal/viewPurchase.do",
+            "https://www.koreabaseball.com/kbo/league/map.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "편의시설 질문은 시설 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "munhak_001",
+      "query": "문학구장 지하철로 어떻게 가?",
+      "case_type": "positive",
+      "stadium_id": "MUNHAK",
+      "expected_document_type": "stadium_transport_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.6078342104425984,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_facility_guide",
+        "stadium_seat_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "MUNHAK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "MUNHAK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "인천 SSG 랜더스필드 교통 및 주차 안내 초안",
+          "distance": 0.6078342104425984,
+          "source_urls": [
+            "https://app.ssglanders.com/stadium",
+            "https://www.ssglanders.com/stadium/parking"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "MUNHAK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "MUNHAK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "인천 SSG 랜더스필드 stadium_facility_guide 초안",
+          "distance": 0.7069524334462752,
+          "source_urls": [
+            "https://app.ssglanders.com/stadium"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "MUNHAK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "MUNHAK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "인천 SSG 랜더스필드 stadium_seat_guide 초안",
+          "distance": 0.7078714400222061,
+          "source_urls": [
+            "https://app.ssglanders.com/stadium",
+            "https://www.ssglanders.com/game/group"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "문학구장 대중교통 질문은 교통 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "munhak_002",
+      "query": "문학구장 캔 음료 들고 가도 돼?",
+      "case_type": "positive",
+      "stadium_id": "MUNHAK",
+      "expected_document_type": "stadium_bag_policy",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.7430015913228486,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": false,
+      "retrieved_document_types": [
+        "stadium_bag_policy",
+        "stadium_transport_guide",
+        "stadium_facility_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "MUNHAK_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "MUNHAK_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "인천 SSG 랜더스필드 stadium_bag_policy 초안",
+          "distance": 0.7430015913228486,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "MUNHAK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "MUNHAK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "인천 SSG 랜더스필드 교통 및 주차 안내 초안",
+          "distance": 0.7437903744766166,
+          "source_urls": [
+            "https://app.ssglanders.com/stadium",
+            "https://www.ssglanders.com/stadium/parking"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "MUNHAK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "MUNHAK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "인천 SSG 랜더스필드 stadium_facility_guide 초안",
+          "distance": 0.75392367158406,
+          "source_urls": [
+            "https://app.ssglanders.com/stadium"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "캔 음료 반입 질문은 반입 정책 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "munhak_003",
+      "query": "문학구장 좌석 알려줘",
+      "case_type": "positive",
+      "stadium_id": "MUNHAK",
+      "expected_document_type": "stadium_seat_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.5735315190513446,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_seat_guide",
+        "stadium_transport_guide",
+        "stadium_facility_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "MUNHAK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "MUNHAK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "인천 SSG 랜더스필드 stadium_seat_guide 초안",
+          "distance": 0.5735315190513446,
+          "source_urls": [
+            "https://app.ssglanders.com/stadium",
+            "https://www.ssglanders.com/game/group"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "MUNHAK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "MUNHAK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "인천 SSG 랜더스필드 교통 및 주차 안내 초안",
+          "distance": 0.5816160713645278,
+          "source_urls": [
+            "https://app.ssglanders.com/stadium",
+            "https://www.ssglanders.com/stadium/parking"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "MUNHAK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "MUNHAK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "인천 SSG 랜더스필드 stadium_facility_guide 초안",
+          "distance": 0.5908817551024497,
+          "source_urls": [
+            "https://app.ssglanders.com/stadium"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "좌석 질문은 좌석 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "munhak_004",
+      "query": "SSG 홈경기 예매는 어디서 해?",
+      "case_type": "positive",
+      "stadium_id": "MUNHAK",
+      "expected_document_type": "stadium_ticketing_guide",
+      "top1_hit": false,
+      "top3_hit": true,
+      "top_distance": 0.5235239562393657,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_facility_guide",
+        "stadium_ticketing_guide",
+        "stadium_bag_policy"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "MUNHAK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "MUNHAK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "인천 SSG 랜더스필드 stadium_facility_guide 초안",
+          "distance": 0.5235239562393657,
+          "source_urls": [
+            "https://app.ssglanders.com/stadium"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "MUNHAK_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "MUNHAK_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "인천 SSG 랜더스필드 stadium_ticketing_guide 초안",
+          "distance": 0.5350107464635652,
+          "source_urls": [
+            "https://www.ssglanders.com/game/group",
+            "https://app.ssglanders.com/noticeView?seq=3077",
+            "https://www.koreabaseball.com/kbo/league/map.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "MUNHAK_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "MUNHAK_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "인천 SSG 랜더스필드 stadium_bag_policy 초안",
+          "distance": 0.5578872657078586,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "예매 질문은 티켓 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "munhak_005",
+      "query": "문학구장 랜더스샵 위치 알려줘",
+      "case_type": "positive",
+      "stadium_id": "MUNHAK",
+      "expected_document_type": "stadium_facility_guide",
+      "top1_hit": false,
+      "top3_hit": true,
+      "top_distance": 0.6068882782031194,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_facility_guide",
+        "stadium_seat_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "MUNHAK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "MUNHAK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "인천 SSG 랜더스필드 교통 및 주차 안내 초안",
+          "distance": 0.6068882782031194,
+          "source_urls": [
+            "https://app.ssglanders.com/stadium",
+            "https://www.ssglanders.com/stadium/parking"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "MUNHAK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "MUNHAK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "인천 SSG 랜더스필드 stadium_facility_guide 초안",
+          "distance": 0.6267412263745908,
+          "source_urls": [
+            "https://app.ssglanders.com/stadium"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "MUNHAK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "MUNHAK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "인천 SSG 랜더스필드 stadium_seat_guide 초안",
+          "distance": 0.6365530696624728,
+          "source_urls": [
+            "https://app.ssglanders.com/stadium",
+            "https://www.ssglanders.com/game/group"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "구장샵과 시설 질문은 시설 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "gwangju_001",
+      "query": "광주 챔피언스필드 대중교통 알려줘",
+      "case_type": "positive",
+      "stadium_id": "GWANGJU",
+      "expected_document_type": "stadium_transport_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.49209094457860303,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_bag_policy",
+        "stadium_seat_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "GWANGJU_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "GWANGJU_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "광주-기아 챔피언스 필드 stadium_transport_guide 초안",
+          "distance": 0.49209094457860303,
+          "source_urls": [
+            "https://tigers.co.kr/tigers/champions-field/team-guide"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "GWANGJU_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "GWANGJU_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "광주-기아 챔피언스 필드 반입 및 안전 정책 초안",
+          "distance": 0.5430463638011072,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "GWANGJU_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "GWANGJU_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "광주-기아 챔피언스 필드 좌석 안내 초안",
+          "distance": 0.5616718210022527,
+          "source_urls": [
+            "https://tigers.co.kr/tigers/champions-field/team-guide",
+            "https://tigers.co.kr/ticket/reservation"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "대중교통 질문은 교통 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "gwangju_002",
+      "query": "광주 챔피언스필드 반입 금지 물품 알려줘",
+      "case_type": "positive",
+      "stadium_id": "GWANGJU",
+      "expected_document_type": "stadium_bag_policy",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.3899836034335348,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_bag_policy",
+        "stadium_seat_guide",
+        "stadium_facility_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "GWANGJU_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "GWANGJU_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "광주-기아 챔피언스 필드 반입 및 안전 정책 초안",
+          "distance": 0.3899836034335348,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "GWANGJU_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "GWANGJU_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "광주-기아 챔피언스 필드 좌석 안내 초안",
+          "distance": 0.5784860536126821,
+          "source_urls": [
+            "https://tigers.co.kr/tigers/champions-field/team-guide",
+            "https://tigers.co.kr/ticket/reservation"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "GWANGJU_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "GWANGJU_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "광주-기아 챔피언스 필드 stadium_facility_guide 초안",
+          "distance": 0.6126598841674943,
+          "source_urls": [
+            "https://tigers.co.kr/tigers/champions-field/team-guide"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "반입 제한 질문은 반입 정책 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "gwangju_003",
+      "query": "광주 챔피언스필드 좌석 종류 알려줘",
+      "case_type": "positive",
+      "stadium_id": "GWANGJU",
+      "expected_document_type": "stadium_seat_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.4534693653730193,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_seat_guide",
+        "stadium_bag_policy",
+        "stadium_facility_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "GWANGJU_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "GWANGJU_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "광주-기아 챔피언스 필드 좌석 안내 초안",
+          "distance": 0.4534693653730193,
+          "source_urls": [
+            "https://tigers.co.kr/tigers/champions-field/team-guide",
+            "https://tigers.co.kr/ticket/reservation"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "GWANGJU_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "GWANGJU_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "광주-기아 챔피언스 필드 반입 및 안전 정책 초안",
+          "distance": 0.5867202983119505,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "GWANGJU_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "GWANGJU_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "광주-기아 챔피언스 필드 stadium_facility_guide 초안",
+          "distance": 0.604129909393353,
+          "source_urls": [
+            "https://tigers.co.kr/tigers/champions-field/team-guide"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "좌석 종류 질문은 좌석 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "gwangju_004",
+      "query": "KIA 홈경기 예매는 어디서 해?",
+      "case_type": "positive",
+      "stadium_id": "GWANGJU",
+      "expected_document_type": "stadium_ticketing_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.4355982532073327,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_ticketing_guide",
+        "stadium_transport_guide",
+        "stadium_facility_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "GWANGJU_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "GWANGJU_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "광주-기아 챔피언스 필드 stadium_ticketing_guide 초안",
+          "distance": 0.4355982532073327,
+          "source_urls": [
+            "https://tigers.co.kr/ticket/reservation",
+            "https://tigers.co.kr/contents/notice/1005665",
+            "https://www.koreabaseball.com/kbo/league/map.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "GWANGJU_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "GWANGJU_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "광주-기아 챔피언스 필드 stadium_transport_guide 초안",
+          "distance": 0.5760468030517124,
+          "source_urls": [
+            "https://tigers.co.kr/tigers/champions-field/team-guide"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "GWANGJU_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "GWANGJU_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "광주-기아 챔피언스 필드 stadium_facility_guide 초안",
+          "distance": 0.5783560131072609,
+          "source_urls": [
+            "https://tigers.co.kr/tigers/champions-field/team-guide"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "예매처 질문은 티켓 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "gwangju_005",
+      "query": "광주 챔피언스필드 편의시설 알려줘",
+      "case_type": "positive",
+      "stadium_id": "GWANGJU",
+      "expected_document_type": "stadium_facility_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.5505580192267348,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_facility_guide",
+        "stadium_transport_guide",
+        "stadium_bag_policy"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "GWANGJU_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "GWANGJU_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "광주-기아 챔피언스 필드 stadium_facility_guide 초안",
+          "distance": 0.5505580192267348,
+          "source_urls": [
+            "https://tigers.co.kr/tigers/champions-field/team-guide"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "GWANGJU_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "GWANGJU_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "광주-기아 챔피언스 필드 stadium_transport_guide 초안",
+          "distance": 0.5624672980521872,
+          "source_urls": [
+            "https://tigers.co.kr/tigers/champions-field/team-guide"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "GWANGJU_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "GWANGJU_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "광주-기아 챔피언스 필드 반입 및 안전 정책 초안",
+          "distance": 0.5660836877038311,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "편의시설 질문은 시설 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "daegu_001",
+      "query": "대구 라이온즈파크 지하철로 어떻게 가?",
+      "case_type": "positive",
+      "stadium_id": "DAEGU",
+      "expected_document_type": "stadium_transport_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.5062218216730304,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_ticketing_guide",
+        "stadium_facility_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "DAEGU_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "DAEGU_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "대구 삼성 라이온즈 파크 교통 안내 초안",
+          "distance": 0.5062218216730304,
+          "source_urls": [
+            "https://www.samsunglions.com/intro/intro02.asp?act=view&idx=1016926&keyword=&page=1&search=",
+            "https://smart.daegu.go.kr/vocRqs/pbl/view.do?cvlRqrNo=N-R-20160506-000008"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "DAEGU_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "DAEGU_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "대구 삼성 라이온즈 파크 stadium_ticketing_guide 초안",
+          "distance": 0.5785749643163132,
+          "source_urls": [
+            "https://www.samsunglions.com/m/ticket/score_4_1.asp",
+            "https://www.samsunglions.com/m/ticket/score_4_1_3.asp",
+            "https://www.samsunglions.com/m/ticket/score_4_1_4.asp",
+            "https://www.koreabaseball.com/kbo/league/map.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "DAEGU_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "DAEGU_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "대구 삼성 라이온즈 파크 시설 안내 초안",
+          "distance": 0.5925412329068106,
+          "source_urls": [
+            "https://www.samsunglions.com/intro/intro02.asp?act=view&idx=1016926&keyword=&page=1&search="
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "대중교통 질문은 교통 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "daegu_002",
+      "query": "대구 라이온즈파크 음식물 반입 가능해?",
+      "case_type": "positive",
+      "stadium_id": "DAEGU",
+      "expected_document_type": "stadium_bag_policy",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.4066946880259167,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_bag_policy",
+        "stadium_facility_guide",
+        "stadium_transport_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "DAEGU_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "DAEGU_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "대구 삼성 라이온즈 파크 반입 및 안전 정책 초안",
+          "distance": 0.4066946880259167,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "DAEGU_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "DAEGU_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "대구 삼성 라이온즈 파크 시설 안내 초안",
+          "distance": 0.6101209120675708,
+          "source_urls": [
+            "https://www.samsunglions.com/intro/intro02.asp?act=view&idx=1016926&keyword=&page=1&search="
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "DAEGU_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "DAEGU_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "대구 삼성 라이온즈 파크 교통 안내 초안",
+          "distance": 0.6336924428444706,
+          "source_urls": [
+            "https://www.samsunglions.com/intro/intro02.asp?act=view&idx=1016926&keyword=&page=1&search=",
+            "https://smart.daegu.go.kr/vocRqs/pbl/view.do?cvlRqrNo=N-R-20160506-000008"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "음식물 반입 질문은 반입 정책 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "daegu_003",
+      "query": "대구 라이온즈파크 좌석 알려줘",
+      "case_type": "positive",
+      "stadium_id": "DAEGU",
+      "expected_document_type": "stadium_seat_guide",
+      "top1_hit": false,
+      "top3_hit": true,
+      "top_distance": 0.46217359062770214,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_facility_guide",
+        "stadium_seat_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "DAEGU_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "DAEGU_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "대구 삼성 라이온즈 파크 교통 안내 초안",
+          "distance": 0.46217359062770214,
+          "source_urls": [
+            "https://www.samsunglions.com/intro/intro02.asp?act=view&idx=1016926&keyword=&page=1&search=",
+            "https://smart.daegu.go.kr/vocRqs/pbl/view.do?cvlRqrNo=N-R-20160506-000008"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "DAEGU_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "DAEGU_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "대구 삼성 라이온즈 파크 시설 안내 초안",
+          "distance": 0.46310132606754884,
+          "source_urls": [
+            "https://www.samsunglions.com/intro/intro02.asp?act=view&idx=1016926&keyword=&page=1&search="
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "DAEGU_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "DAEGU_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "대구 삼성 라이온즈 파크 stadium_seat_guide 초안",
+          "distance": 0.5094228394012562,
+          "source_urls": [
+            "https://www.samsunglions.com/m/ticket/score_4_1.asp"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "좌석 질문은 좌석 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "daegu_004",
+      "query": "삼성 홈경기 예매 취소 어떻게 해?",
+      "case_type": "positive",
+      "stadium_id": "DAEGU",
+      "expected_document_type": "stadium_ticketing_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.5046842086325652,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_ticketing_guide",
+        "stadium_facility_guide",
+        "stadium_seat_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "DAEGU_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "DAEGU_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "대구 삼성 라이온즈 파크 stadium_ticketing_guide 초안",
+          "distance": 0.5046842086325652,
+          "source_urls": [
+            "https://www.samsunglions.com/m/ticket/score_4_1.asp",
+            "https://www.samsunglions.com/m/ticket/score_4_1_3.asp",
+            "https://www.samsunglions.com/m/ticket/score_4_1_4.asp",
+            "https://www.koreabaseball.com/kbo/league/map.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "DAEGU_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "DAEGU_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "대구 삼성 라이온즈 파크 시설 안내 초안",
+          "distance": 0.6401231703784176,
+          "source_urls": [
+            "https://www.samsunglions.com/intro/intro02.asp?act=view&idx=1016926&keyword=&page=1&search="
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "DAEGU_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "DAEGU_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "대구 삼성 라이온즈 파크 stadium_seat_guide 초안",
+          "distance": 0.6441862849294113,
+          "source_urls": [
+            "https://www.samsunglions.com/m/ticket/score_4_1.asp"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "예매 취소 질문은 티켓 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "daegu_005",
+      "query": "대구 라이온즈파크 구장 시설 알려줘",
+      "case_type": "positive",
+      "stadium_id": "DAEGU",
+      "expected_document_type": "stadium_facility_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.38426485163023605,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_facility_guide",
+        "stadium_transport_guide",
+        "stadium_ticketing_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "DAEGU_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "DAEGU_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "대구 삼성 라이온즈 파크 시설 안내 초안",
+          "distance": 0.38426485163023605,
+          "source_urls": [
+            "https://www.samsunglions.com/intro/intro02.asp?act=view&idx=1016926&keyword=&page=1&search="
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "DAEGU_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "DAEGU_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "대구 삼성 라이온즈 파크 교통 안내 초안",
+          "distance": 0.45319838824548486,
+          "source_urls": [
+            "https://www.samsunglions.com/intro/intro02.asp?act=view&idx=1016926&keyword=&page=1&search=",
+            "https://smart.daegu.go.kr/vocRqs/pbl/view.do?cvlRqrNo=N-R-20160506-000008"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "DAEGU_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "DAEGU_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "대구 삼성 라이온즈 파크 stadium_ticketing_guide 초안",
+          "distance": 0.5067581964354979,
+          "source_urls": [
+            "https://www.samsunglions.com/m/ticket/score_4_1.asp",
+            "https://www.samsunglions.com/m/ticket/score_4_1_3.asp",
+            "https://www.samsunglions.com/m/ticket/score_4_1_4.asp",
+            "https://www.koreabaseball.com/kbo/league/map.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "구장 시설 질문은 시설 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "suwon_001",
+      "query": "수원 위즈파크 지하철로 어떻게 가?",
+      "case_type": "positive",
+      "stadium_id": "SUWON",
+      "expected_document_type": "stadium_transport_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.5273840266159812,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_facility_guide",
+        "stadium_ticketing_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SUWON_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SUWON_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "수원 KT 위즈파크 stadium_transport_guide 초안",
+          "distance": 0.5273840266159812,
+          "source_urls": [
+            "https://www.ktwiz.co.kr/wizpark",
+            "https://www.ktwiz.co.kr/wizpark/parking"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SUWON_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SUWON_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "수원 KT 위즈파크 stadium_facility_guide 초안",
+          "distance": 0.6096582907444195,
+          "source_urls": [
+            "https://www.ktwiz.co.kr/wizpark",
+            "https://www.ktwiz.co.kr/wizpark/guide"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SUWON_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "SUWON_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "수원 KT 위즈파크 stadium_ticketing_guide 초안",
+          "distance": 0.6371011754038657,
+          "source_urls": [
+            "https://www.ktwiz.co.kr/ticket/reservation",
+            "https://www.ktwiz.co.kr/media/wiznews/198098",
+            "https://www.koreabaseball.com/kbo/league/map.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "대중교통 질문은 교통 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "suwon_002",
+      "query": "수원 위즈파크 반입 금지 물품 알려줘",
+      "case_type": "positive",
+      "stadium_id": "SUWON",
+      "expected_document_type": "stadium_bag_policy",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.4249760916300108,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_bag_policy",
+        "stadium_transport_guide",
+        "stadium_ticketing_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SUWON_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "SUWON_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "수원 KT 위즈파크 반입 및 안전 정책 초안",
+          "distance": 0.4249760916300108,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SUWON_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SUWON_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "수원 KT 위즈파크 stadium_transport_guide 초안",
+          "distance": 0.6727510784201418,
+          "source_urls": [
+            "https://www.ktwiz.co.kr/wizpark",
+            "https://www.ktwiz.co.kr/wizpark/parking"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SUWON_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "SUWON_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "수원 KT 위즈파크 stadium_ticketing_guide 초안",
+          "distance": 0.6768360496803297,
+          "source_urls": [
+            "https://www.ktwiz.co.kr/ticket/reservation",
+            "https://www.ktwiz.co.kr/media/wiznews/198098",
+            "https://www.koreabaseball.com/kbo/league/map.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "반입 제한 질문은 반입 정책 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "suwon_003",
+      "query": "수원 위즈파크 좌석 종류 알려줘",
+      "case_type": "positive",
+      "stadium_id": "SUWON",
+      "expected_document_type": "stadium_seat_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.5984054266287546,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_seat_guide",
+        "stadium_facility_guide",
+        "stadium_bag_policy"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SUWON_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SUWON_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "수원 KT 위즈파크 stadium_seat_guide 초안",
+          "distance": 0.5984054266287546,
+          "source_urls": [
+            "https://www.ktwiz.co.kr/wizpark/guide",
+            "https://www.ktwiz.co.kr/media/wiznews/198098"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SUWON_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SUWON_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "수원 KT 위즈파크 stadium_facility_guide 초안",
+          "distance": 0.6164135903863707,
+          "source_urls": [
+            "https://www.ktwiz.co.kr/wizpark",
+            "https://www.ktwiz.co.kr/wizpark/guide"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SUWON_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "SUWON_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "수원 KT 위즈파크 반입 및 안전 정책 초안",
+          "distance": 0.6197115943101712,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "좌석 종류 질문은 좌석 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "suwon_004",
+      "query": "KT 홈경기 예매는 어디서 해?",
+      "case_type": "positive",
+      "stadium_id": "SUWON",
+      "expected_document_type": "stadium_ticketing_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.563302301585461,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_ticketing_guide",
+        "stadium_transport_guide",
+        "stadium_seat_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SUWON_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "SUWON_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "수원 KT 위즈파크 stadium_ticketing_guide 초안",
+          "distance": 0.563302301585461,
+          "source_urls": [
+            "https://www.ktwiz.co.kr/ticket/reservation",
+            "https://www.ktwiz.co.kr/media/wiznews/198098",
+            "https://www.koreabaseball.com/kbo/league/map.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SUWON_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SUWON_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "수원 KT 위즈파크 stadium_transport_guide 초안",
+          "distance": 0.5879388612007956,
+          "source_urls": [
+            "https://www.ktwiz.co.kr/wizpark",
+            "https://www.ktwiz.co.kr/wizpark/parking"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SUWON_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SUWON_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "수원 KT 위즈파크 stadium_seat_guide 초안",
+          "distance": 0.6001567794295817,
+          "source_urls": [
+            "https://www.ktwiz.co.kr/wizpark/guide",
+            "https://www.ktwiz.co.kr/media/wiznews/198098"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "예매처 질문은 티켓 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "suwon_005",
+      "query": "수원 위즈파크 편의시설 알려줘",
+      "case_type": "positive",
+      "stadium_id": "SUWON",
+      "expected_document_type": "stadium_facility_guide",
+      "top1_hit": false,
+      "top3_hit": true,
+      "top_distance": 0.5047273087039754,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_facility_guide",
+        "stadium_seat_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SUWON_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SUWON_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "수원 KT 위즈파크 stadium_transport_guide 초안",
+          "distance": 0.5047273087039754,
+          "source_urls": [
+            "https://www.ktwiz.co.kr/wizpark",
+            "https://www.ktwiz.co.kr/wizpark/parking"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SUWON_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SUWON_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "수원 KT 위즈파크 stadium_facility_guide 초안",
+          "distance": 0.5213703491865176,
+          "source_urls": [
+            "https://www.ktwiz.co.kr/wizpark",
+            "https://www.ktwiz.co.kr/wizpark/guide"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SUWON_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SUWON_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "수원 KT 위즈파크 stadium_seat_guide 초안",
+          "distance": 0.553764723553188,
+          "source_urls": [
+            "https://www.ktwiz.co.kr/wizpark/guide",
+            "https://www.ktwiz.co.kr/media/wiznews/198098"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "편의시설 질문은 시설 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "daejeon_001",
+      "query": "대전 한화생명 볼파크 대중교통 알려줘",
+      "case_type": "positive",
+      "stadium_id": "DAEJEON",
+      "expected_document_type": "stadium_transport_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.41567448433479104,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_facility_guide",
+        "stadium_bag_policy"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "DAEJEON_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "DAEJEON_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "대전 한화생명 볼파크 교통 및 주차 안내 초안",
+          "distance": 0.41567448433479104,
+          "source_urls": [
+            "https://www.hanwhaeagles.co.kr/MN/EP/MNEPPI01.do",
+            "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=248219"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "DAEJEON_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "DAEJEON_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "대전 한화생명 볼파크 시설 안내 초안",
+          "distance": 0.48488108009046793,
+          "source_urls": [
+            "https://www.hanwhaeagles.co.kr/MN/EP/MNEPPI01.do",
+            "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=248219"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "DAEJEON_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "DAEJEON_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "대전 한화생명 볼파크 반입 및 안전 정책 초안",
+          "distance": 0.5491145789265071,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "대중교통 질문은 교통 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "daejeon_002",
+      "query": "대전 한화생명 볼파크 반입 금지 물품 알려줘",
+      "case_type": "positive",
+      "stadium_id": "DAEJEON",
+      "expected_document_type": "stadium_bag_policy",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.3778390273590033,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_bag_policy",
+        "stadium_facility_guide",
+        "stadium_transport_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "DAEJEON_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "DAEJEON_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "대전 한화생명 볼파크 반입 및 안전 정책 초안",
+          "distance": 0.3778390273590033,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "DAEJEON_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "DAEJEON_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "대전 한화생명 볼파크 시설 안내 초안",
+          "distance": 0.5365724916986183,
+          "source_urls": [
+            "https://www.hanwhaeagles.co.kr/MN/EP/MNEPPI01.do",
+            "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=248219"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "DAEJEON_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "DAEJEON_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "대전 한화생명 볼파크 교통 및 주차 안내 초안",
+          "distance": 0.5977648942245217,
+          "source_urls": [
+            "https://www.hanwhaeagles.co.kr/MN/EP/MNEPPI01.do",
+            "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=248219"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "반입 제한 질문은 반입 정책 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "daejeon_003",
+      "query": "대전 한화생명 볼파크 좌석 알려줘",
+      "case_type": "positive",
+      "stadium_id": "DAEJEON",
+      "expected_document_type": "stadium_seat_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.4682610386067524,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_seat_guide",
+        "stadium_facility_guide",
+        "stadium_transport_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "DAEJEON_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "DAEJEON_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "대전 한화생명 볼파크 좌석 안내 초안",
+          "distance": 0.4682610386067524,
+          "source_urls": [
+            "https://www.hanwhaeagles.co.kr/MN/EP/MNEPPI01.do",
+            "https://www.hanwhaeagles.co.kr/ticketInfo.do"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "DAEJEON_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "DAEJEON_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "대전 한화생명 볼파크 시설 안내 초안",
+          "distance": 0.5320325550864404,
+          "source_urls": [
+            "https://www.hanwhaeagles.co.kr/MN/EP/MNEPPI01.do",
+            "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=248219"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "DAEJEON_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "DAEJEON_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "대전 한화생명 볼파크 교통 및 주차 안내 초안",
+          "distance": 0.5358924940340034,
+          "source_urls": [
+            "https://www.hanwhaeagles.co.kr/MN/EP/MNEPPI01.do",
+            "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=248219"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "좌석 질문은 좌석 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "daejeon_004",
+      "query": "한화 홈경기 예매는 어디서 해?",
+      "case_type": "positive",
+      "stadium_id": "DAEJEON",
+      "expected_document_type": "stadium_ticketing_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.5303922566026862,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_ticketing_guide",
+        "stadium_facility_guide",
+        "stadium_transport_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "DAEJEON_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "DAEJEON_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "대전 한화생명 볼파크 티켓 및 예매 안내 초안",
+          "distance": 0.5303922566026862,
+          "source_urls": [
+            "https://www.hanwhaeagles.co.kr/ticketInfo.do",
+            "https://www.koreabaseball.com/kbo/league/map.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "DAEJEON_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "DAEJEON_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "대전 한화생명 볼파크 시설 안내 초안",
+          "distance": 0.6070549138575329,
+          "source_urls": [
+            "https://www.hanwhaeagles.co.kr/MN/EP/MNEPPI01.do",
+            "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=248219"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "DAEJEON_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "DAEJEON_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "대전 한화생명 볼파크 교통 및 주차 안내 초안",
+          "distance": 0.6342086823715987,
+          "source_urls": [
+            "https://www.hanwhaeagles.co.kr/MN/EP/MNEPPI01.do",
+            "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=248219"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "예매처 질문은 티켓 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "daejeon_005",
+      "query": "대전 한화생명 볼파크 편의시설 알려줘",
+      "case_type": "positive",
+      "stadium_id": "DAEJEON",
+      "expected_document_type": "stadium_facility_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.4267651292546639,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_facility_guide",
+        "stadium_transport_guide",
+        "stadium_seat_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "DAEJEON_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "DAEJEON_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "대전 한화생명 볼파크 시설 안내 초안",
+          "distance": 0.4267651292546639,
+          "source_urls": [
+            "https://www.hanwhaeagles.co.kr/MN/EP/MNEPPI01.do",
+            "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=248219"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "DAEJEON_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "DAEJEON_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "대전 한화생명 볼파크 교통 및 주차 안내 초안",
+          "distance": 0.4664283271140002,
+          "source_urls": [
+            "https://www.hanwhaeagles.co.kr/MN/EP/MNEPPI01.do",
+            "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=248219"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "DAEJEON_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "DAEJEON_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "대전 한화생명 볼파크 좌석 안내 초안",
+          "distance": 0.5392319159248383,
+          "source_urls": [
+            "https://www.hanwhaeagles.co.kr/MN/EP/MNEPPI01.do",
+            "https://www.hanwhaeagles.co.kr/ticketInfo.do"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "편의시설 질문은 시설 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "jamsil_001",
+      "query": "잠실야구장 지하철로 어떻게 가?",
+      "case_type": "positive",
+      "stadium_id": "JAMSIL",
+      "expected_document_type": "stadium_transport_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.43593481031943215,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_facility_guide",
+        "stadium_ticketing_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "JAMSIL_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "JAMSIL_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "잠실야구장 교통 및 주차 안내 초안",
+          "distance": 0.43593481031943215,
+          "source_urls": [
+            "https://stadium.seoul.go.kr/about/jsbpark",
+            "https://stadium.seoul.go.kr/about/park-info"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "JAMSIL_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "JAMSIL_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "잠실야구장 시설 안내 초안",
+          "distance": 0.46750449791501014,
+          "source_urls": [
+            "https://stadium.seoul.go.kr/about/jsbpark",
+            "https://stadium.seoul.go.kr/about/park-info"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "JAMSIL_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "JAMSIL_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "잠실야구장 티켓 및 예매 안내 초안",
+          "distance": 0.505976339711719,
+          "source_urls": [
+            "https://www.lgtwins.com/ticket/general",
+            "https://nol.yanolja.com/ticket/genre/sports/bears",
+            "https://www.koreabaseball.com/kbo/league/map.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "대중교통 질문은 교통 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "jamsil_002",
+      "query": "잠실야구장 반입 금지 물품 알려줘",
+      "case_type": "positive",
+      "stadium_id": "JAMSIL",
+      "expected_document_type": "stadium_bag_policy",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.37473727343993,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_bag_policy",
+        "stadium_seat_guide",
+        "stadium_ticketing_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "JAMSIL_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "JAMSIL_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "잠실야구장 반입 및 안전 정책 초안",
+          "distance": 0.37473727343993,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+            "https://www.lgtwins.com/ticket/general"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "JAMSIL_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "JAMSIL_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "잠실야구장 좌석 안내 초안",
+          "distance": 0.502114994785946,
+          "source_urls": [
+            "https://stadium.seoul.go.kr/about/jsbpark",
+            "https://www.lgtwins.com/ticket/general",
+            "https://nol.yanolja.com/ticket/genre/sports/bears"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "JAMSIL_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "JAMSIL_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "잠실야구장 티켓 및 예매 안내 초안",
+          "distance": 0.5161862179703826,
+          "source_urls": [
+            "https://www.lgtwins.com/ticket/general",
+            "https://nol.yanolja.com/ticket/genre/sports/bears",
+            "https://www.koreabaseball.com/kbo/league/map.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "반입 제한 질문은 반입 정책 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "jamsil_003",
+      "query": "잠실야구장 좌석 종류 알려줘",
+      "case_type": "positive",
+      "stadium_id": "JAMSIL",
+      "expected_document_type": "stadium_seat_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.37695582839573394,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_seat_guide",
+        "stadium_facility_guide",
+        "stadium_transport_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "JAMSIL_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "JAMSIL_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "잠실야구장 좌석 안내 초안",
+          "distance": 0.37695582839573394,
+          "source_urls": [
+            "https://stadium.seoul.go.kr/about/jsbpark",
+            "https://www.lgtwins.com/ticket/general",
+            "https://nol.yanolja.com/ticket/genre/sports/bears"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "JAMSIL_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "JAMSIL_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "잠실야구장 시설 안내 초안",
+          "distance": 0.47706328173383616,
+          "source_urls": [
+            "https://stadium.seoul.go.kr/about/jsbpark",
+            "https://stadium.seoul.go.kr/about/park-info"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "JAMSIL_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "JAMSIL_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "잠실야구장 교통 및 주차 안내 초안",
+          "distance": 0.489128620183813,
+          "source_urls": [
+            "https://stadium.seoul.go.kr/about/jsbpark",
+            "https://stadium.seoul.go.kr/about/park-info"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "좌석 종류 질문은 좌석 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "jamsil_004",
+      "query": "잠실야구장 홈경기 예매는 어디서 해?",
+      "case_type": "positive",
+      "stadium_id": "JAMSIL",
+      "expected_document_type": "stadium_ticketing_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.42225180690584285,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_ticketing_guide",
+        "stadium_seat_guide",
+        "stadium_transport_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "JAMSIL_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "JAMSIL_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "잠실야구장 티켓 및 예매 안내 초안",
+          "distance": 0.42225180690584285,
+          "source_urls": [
+            "https://www.lgtwins.com/ticket/general",
+            "https://nol.yanolja.com/ticket/genre/sports/bears",
+            "https://www.koreabaseball.com/kbo/league/map.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "JAMSIL_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "JAMSIL_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "잠실야구장 좌석 안내 초안",
+          "distance": 0.49376676489439375,
+          "source_urls": [
+            "https://stadium.seoul.go.kr/about/jsbpark",
+            "https://www.lgtwins.com/ticket/general",
+            "https://nol.yanolja.com/ticket/genre/sports/bears"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "JAMSIL_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "JAMSIL_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "잠실야구장 교통 및 주차 안내 초안",
+          "distance": 0.5017557452272512,
+          "source_urls": [
+            "https://stadium.seoul.go.kr/about/jsbpark",
+            "https://stadium.seoul.go.kr/about/park-info"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "예매처 질문은 티켓 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "jamsil_005",
+      "query": "잠실야구장 편의시설 알려줘",
+      "case_type": "positive",
+      "stadium_id": "JAMSIL",
+      "expected_document_type": "stadium_facility_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.42759760281186965,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_facility_guide",
+        "stadium_transport_guide",
+        "stadium_seat_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "JAMSIL_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "JAMSIL_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "잠실야구장 시설 안내 초안",
+          "distance": 0.42759760281186965,
+          "source_urls": [
+            "https://stadium.seoul.go.kr/about/jsbpark",
+            "https://stadium.seoul.go.kr/about/park-info"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "JAMSIL_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "JAMSIL_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "잠실야구장 교통 및 주차 안내 초안",
+          "distance": 0.43708405520595883,
+          "source_urls": [
+            "https://stadium.seoul.go.kr/about/jsbpark",
+            "https://stadium.seoul.go.kr/about/park-info"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "JAMSIL_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "JAMSIL_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "잠실야구장 좌석 안내 초안",
+          "distance": 0.4728938689977257,
+          "source_urls": [
+            "https://stadium.seoul.go.kr/about/jsbpark",
+            "https://www.lgtwins.com/ticket/general",
+            "https://nol.yanolja.com/ticket/genre/sports/bears"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "편의시설 질문은 시설 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "changwon_001",
+      "query": "창원NC파크 지하철이나 버스로 어떻게 가?",
+      "case_type": "positive",
+      "stadium_id": "CHANGWON",
+      "expected_document_type": "stadium_transport_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.4337516512533186,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_facility_guide",
+        "stadium_bag_policy"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "CHANGWON_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "CHANGWON_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "창원NC파크 교통 및 주차 안내 초안",
+          "distance": 0.4337516512533186,
+          "source_urls": [
+            "https://www.changwon.go.kr/tour/index.do?menuCode=001_003000000000&page.pageNo=1&search.searchKeyword=%EC%B0%BD%EC%9B%90NC%ED%8C%8C%ED%81%AC&tourProgramNo=135",
+            "https://www.ncdinos.com/dinos/notice/view.do?newsType=all&pageNo=1&seq=541766",
+            "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&cpage=3&gcode=1011&idx=857954"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "CHANGWON_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "CHANGWON_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "창원NC파크 시설 안내 초안",
+          "distance": 0.5294605802210093,
+          "source_urls": [
+            "https://www.changwon.go.kr/tour/index.do?menuCode=001_003000000000&page.pageNo=1&search.searchKeyword=%EC%B0%BD%EC%9B%90NC%ED%8C%8C%ED%81%AC&tourProgramNo=135",
+            "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&cpage=3&gcode=1011&idx=857954",
+            "https://www.ncdinos.com/dinos/notice/view.do?newsType=all&pageNo=1&seq=541766"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "CHANGWON_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "CHANGWON_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "창원NC파크 반입 및 안전 정책 초안",
+          "distance": 0.5544594391013351,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+            "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&cpage=3&gcode=1011&idx=857954",
+            "https://www.ncdinos.com/dinos/notice/view.do?newsType=all&pageNo=1&seq=541766"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "대중교통 질문은 교통 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "changwon_002",
+      "query": "창원NC파크 반입 금지 물품 알려줘",
+      "case_type": "positive",
+      "stadium_id": "CHANGWON",
+      "expected_document_type": "stadium_bag_policy",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.40538279208922,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_bag_policy",
+        "stadium_facility_guide",
+        "stadium_transport_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "CHANGWON_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "CHANGWON_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "창원NC파크 반입 및 안전 정책 초안",
+          "distance": 0.40538279208922,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+            "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&cpage=3&gcode=1011&idx=857954",
+            "https://www.ncdinos.com/dinos/notice/view.do?newsType=all&pageNo=1&seq=541766"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "CHANGWON_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "CHANGWON_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "창원NC파크 시설 안내 초안",
+          "distance": 0.5356903585991535,
+          "source_urls": [
+            "https://www.changwon.go.kr/tour/index.do?menuCode=001_003000000000&page.pageNo=1&search.searchKeyword=%EC%B0%BD%EC%9B%90NC%ED%8C%8C%ED%81%AC&tourProgramNo=135",
+            "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&cpage=3&gcode=1011&idx=857954",
+            "https://www.ncdinos.com/dinos/notice/view.do?newsType=all&pageNo=1&seq=541766"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "CHANGWON_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "CHANGWON_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "창원NC파크 교통 및 주차 안내 초안",
+          "distance": 0.536202526074482,
+          "source_urls": [
+            "https://www.changwon.go.kr/tour/index.do?menuCode=001_003000000000&page.pageNo=1&search.searchKeyword=%EC%B0%BD%EC%9B%90NC%ED%8C%8C%ED%81%AC&tourProgramNo=135",
+            "https://www.ncdinos.com/dinos/notice/view.do?newsType=all&pageNo=1&seq=541766",
+            "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&cpage=3&gcode=1011&idx=857954"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "반입 제한 질문은 반입 정책 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "changwon_003",
+      "query": "창원NC파크 좌석 종류 알려줘",
+      "case_type": "positive",
+      "stadium_id": "CHANGWON",
+      "expected_document_type": "stadium_seat_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.38738882848580924,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_seat_guide",
+        "stadium_bag_policy",
+        "stadium_facility_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "CHANGWON_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "CHANGWON_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "창원NC파크 좌석 안내 초안",
+          "distance": 0.38738882848580924,
+          "source_urls": [
+            "https://www.changwon.go.kr/tour/index.do?menuCode=001_003000000000&page.pageNo=1&search.searchKeyword=%EC%B0%BD%EC%9B%90NC%ED%8C%8C%ED%81%AC&tourProgramNo=135",
+            "https://apps.apple.com/kr/app/nc-dinos/id1495745743"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "CHANGWON_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "CHANGWON_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "창원NC파크 반입 및 안전 정책 초안",
+          "distance": 0.5157498560137389,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+            "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&cpage=3&gcode=1011&idx=857954",
+            "https://www.ncdinos.com/dinos/notice/view.do?newsType=all&pageNo=1&seq=541766"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "CHANGWON_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "CHANGWON_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "창원NC파크 시설 안내 초안",
+          "distance": 0.5334451071910922,
+          "source_urls": [
+            "https://www.changwon.go.kr/tour/index.do?menuCode=001_003000000000&page.pageNo=1&search.searchKeyword=%EC%B0%BD%EC%9B%90NC%ED%8C%8C%ED%81%AC&tourProgramNo=135",
+            "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&cpage=3&gcode=1011&idx=857954",
+            "https://www.ncdinos.com/dinos/notice/view.do?newsType=all&pageNo=1&seq=541766"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "좌석 종류 질문은 좌석 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "changwon_004",
+      "query": "NC 홈경기 예매는 어디서 해?",
+      "case_type": "positive",
+      "stadium_id": "CHANGWON",
+      "expected_document_type": "stadium_ticketing_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.5470245260177529,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_ticketing_guide",
+        "stadium_facility_guide",
+        "stadium_transport_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "CHANGWON_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "CHANGWON_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "창원NC파크 티켓 및 예매 안내 초안",
+          "distance": 0.5470245260177529,
+          "source_urls": [
+            "https://apps.apple.com/kr/app/nc-dinos/id1495745743",
+            "https://www.koreabaseball.com/kbo/league/map.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "CHANGWON_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "CHANGWON_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "창원NC파크 시설 안내 초안",
+          "distance": 0.6163355404625498,
+          "source_urls": [
+            "https://www.changwon.go.kr/tour/index.do?menuCode=001_003000000000&page.pageNo=1&search.searchKeyword=%EC%B0%BD%EC%9B%90NC%ED%8C%8C%ED%81%AC&tourProgramNo=135",
+            "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&cpage=3&gcode=1011&idx=857954",
+            "https://www.ncdinos.com/dinos/notice/view.do?newsType=all&pageNo=1&seq=541766"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "CHANGWON_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "CHANGWON_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "창원NC파크 교통 및 주차 안내 초안",
+          "distance": 0.6181490089547808,
+          "source_urls": [
+            "https://www.changwon.go.kr/tour/index.do?menuCode=001_003000000000&page.pageNo=1&search.searchKeyword=%EC%B0%BD%EC%9B%90NC%ED%8C%8C%ED%81%AC&tourProgramNo=135",
+            "https://www.ncdinos.com/dinos/notice/view.do?newsType=all&pageNo=1&seq=541766",
+            "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&cpage=3&gcode=1011&idx=857954"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "예매처 질문은 티켓 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "changwon_005",
+      "query": "창원NC파크 편의시설 알려줘",
+      "case_type": "positive",
+      "stadium_id": "CHANGWON",
+      "expected_document_type": "stadium_facility_guide",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.4051232753250862,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_facility_guide",
+        "stadium_transport_guide",
+        "stadium_bag_policy"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "CHANGWON_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "CHANGWON_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "창원NC파크 시설 안내 초안",
+          "distance": 0.4051232753250862,
+          "source_urls": [
+            "https://www.changwon.go.kr/tour/index.do?menuCode=001_003000000000&page.pageNo=1&search.searchKeyword=%EC%B0%BD%EC%9B%90NC%ED%8C%8C%ED%81%AC&tourProgramNo=135",
+            "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&cpage=3&gcode=1011&idx=857954",
+            "https://www.ncdinos.com/dinos/notice/view.do?newsType=all&pageNo=1&seq=541766"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "CHANGWON_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "CHANGWON_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "창원NC파크 교통 및 주차 안내 초안",
+          "distance": 0.4155472709190092,
+          "source_urls": [
+            "https://www.changwon.go.kr/tour/index.do?menuCode=001_003000000000&page.pageNo=1&search.searchKeyword=%EC%B0%BD%EC%9B%90NC%ED%8C%8C%ED%81%AC&tourProgramNo=135",
+            "https://www.ncdinos.com/dinos/notice/view.do?newsType=all&pageNo=1&seq=541766",
+            "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&cpage=3&gcode=1011&idx=857954"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "CHANGWON_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "CHANGWON_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "창원NC파크 반입 및 안전 정책 초안",
+          "distance": 0.44606785554323236,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+            "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&cpage=3&gcode=1011&idx=857954",
+            "https://www.ncdinos.com/dinos/notice/view.do?newsType=all&pageNo=1&seq=541766"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "편의시설 질문은 시설 안내 문서가 상위에 와야 한다."
+    },
+    {
+      "id": "negative_001",
+      "query": "잠실야구장 주차요금 얼마야?",
+      "case_type": "negative",
+      "stadium_id": "SAJIK",
+      "expected_document_type": null,
+      "top1_hit": null,
+      "top3_hit": null,
+      "top_distance": 0.5505974333392618,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_ticketing_guide",
+        "stadium_facility_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+          "distance": 0.5505974333392618,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "SAJIK_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "title": "사직야구장 티켓 및 예매 안내 초안",
+          "distance": 0.5880516297112759,
+          "source_urls": [
+            "https://www.koreabaseball.com/kbo/league/map.aspx",
+            "https://www.giantsclub.com/m/?pcode=539",
+            "https://www.giantsclub.com/html/?pcode=339",
+            "https://www.giantsclub.com/html/?pcode=341"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "사직야구장 시설 안내 초안",
+          "distance": 0.6215757340573913,
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "질문 구장과 stadium_id filter가 불일치하므로 실제 응답 앞단에서 구장 불일치를 처리해야 한다."
+    },
+    {
+      "id": "negative_002",
+      "query": "고척돔 주차 가능해?",
+      "case_type": "negative",
+      "stadium_id": "CHANGWON",
+      "expected_document_type": null,
+      "top1_hit": null,
+      "top3_hit": null,
+      "top_distance": 0.5785393052415038,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_transport_guide",
+        "stadium_bag_policy",
+        "stadium_seat_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "CHANGWON_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "CHANGWON_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "창원NC파크 교통 및 주차 안내 초안",
+          "distance": 0.5785393052415038,
+          "source_urls": [
+            "https://www.changwon.go.kr/tour/index.do?menuCode=001_003000000000&page.pageNo=1&search.searchKeyword=%EC%B0%BD%EC%9B%90NC%ED%8C%8C%ED%81%AC&tourProgramNo=135",
+            "https://www.ncdinos.com/dinos/notice/view.do?newsType=all&pageNo=1&seq=541766",
+            "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&cpage=3&gcode=1011&idx=857954"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "CHANGWON_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "CHANGWON_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "title": "창원NC파크 반입 및 안전 정책 초안",
+          "distance": 0.7151632966859223,
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx",
+            "https://www.changwon.go.kr/cwportal/10310/10429/10432.web?amode=view&cpage=3&gcode=1011&idx=857954",
+            "https://www.ncdinos.com/dinos/notice/view.do?newsType=all&pageNo=1&seq=541766"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "CHANGWON_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "CHANGWON_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "창원NC파크 좌석 안내 초안",
+          "distance": 0.7200066556191127,
+          "source_urls": [
+            "https://www.changwon.go.kr/tour/index.do?menuCode=001_003000000000&page.pageNo=1&search.searchKeyword=%EC%B0%BD%EC%9B%90NC%ED%8C%8C%ED%81%AC&tourProgramNo=135",
+            "https://apps.apple.com/kr/app/nc-dinos/id1495745743"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "질문 구장과 CHANGWON filter가 불일치하는 케이스다."
+    },
+    {
+      "id": "negative_003",
+      "query": "포항야구장 좌석 알려줘",
+      "case_type": "negative",
+      "stadium_id": "DAEGU",
+      "expected_document_type": null,
+      "top1_hit": null,
+      "top3_hit": null,
+      "top_distance": 0.5493683373368157,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": true,
+      "retrieved_document_types": [
+        "stadium_seat_guide",
+        "stadium_facility_guide",
+        "stadium_transport_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "DAEGU_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "DAEGU_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "대구 삼성 라이온즈 파크 stadium_seat_guide 초안",
+          "distance": 0.5493683373368157,
+          "source_urls": [
+            "https://www.samsunglions.com/m/ticket/score_4_1.asp"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "DAEGU_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "DAEGU_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "대구 삼성 라이온즈 파크 시설 안내 초안",
+          "distance": 0.5701111465731137,
+          "source_urls": [
+            "https://www.samsunglions.com/intro/intro02.asp?act=view&idx=1016926&keyword=&page=1&search="
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "DAEGU_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "DAEGU_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "대구 삼성 라이온즈 파크 교통 안내 초안",
+          "distance": 0.5942696622170099,
+          "source_urls": [
+            "https://www.samsunglions.com/intro/intro02.asp?act=view&idx=1016926&keyword=&page=1&search=",
+            "https://smart.daegu.go.kr/vocRqs/pbl/view.do?cvlRqrNo=N-R-20160506-000008"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "포항은 초기 RAG 수집 대상에서 제외된 보조구장이다."
+    },
+    {
+      "id": "negative_004",
+      "query": "도쿄돔 원정석 어디야?",
+      "case_type": "negative",
+      "stadium_id": "GOCHEOK",
+      "expected_document_type": null,
+      "top1_hit": null,
+      "top3_hit": null,
+      "top_distance": 0.6605801806953918,
+      "relevance_threshold": 0.65,
+      "top_result_is_relevant": false,
+      "retrieved_document_types": [
+        "stadium_seat_guide",
+        "stadium_facility_guide",
+        "stadium_transport_guide"
+      ],
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "GOCHEOK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "GOCHEOK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "title": "고척스카이돔 stadium_seat_guide 초안",
+          "distance": 0.6605801806953918,
+          "source_urls": [
+            "https://heroesbaseball.co.kr/ticket/normal/view.do"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "GOCHEOK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "GOCHEOK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "title": "고척스카이돔 stadium_facility_guide 초안",
+          "distance": 0.6951951688620928,
+          "source_urls": [
+            "https://www.sisul.or.kr/open_content/skydome/"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "GOCHEOK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "GOCHEOK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "title": "고척스카이돔 stadium_transport_guide 초안",
+          "distance": 0.6992841089020209,
+          "source_urls": [
+            "https://heroesbaseball.co.kr/ticket/normal/view.do",
+            "https://heroesbaseball.co.kr/ticket/normal/viewPurchase.do",
+            "https://www.sisul.or.kr/open_content/skydome/"
+          ],
+          "as_of": "2026-07-29",
+          "trust_level": "official",
+          "review_status": "needs_review"
+        }
+      ],
+      "note": "해외 야구장 질문은 국내 구장 RAG 문서로 자신 있게 답하면 안 된다."
+    }
+  ]
+}

@@ -21,7 +21,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--stadium-id",
         default="SAJIK",
-        help="Stadium ID to export. Defaults to SAJIK.",
+        help="Stadium ID to export, or 'all' for every normalized stadium. Defaults to SAJIK.",
     )
     parser.add_argument(
         "--project-root",
@@ -135,11 +135,21 @@ def iter_normalized_documents(
     return documents
 
 
+def iter_stadium_normalized_dirs(normalized_root: Path, stadium_id: str) -> list[Path]:
+    if stadium_id == "ALL":
+        return sorted(path for path in normalized_root.iterdir() if path.is_dir())
+
+    normalized_dir = normalized_root / stadium_id
+    if not normalized_dir.exists():
+        raise FileNotFoundError(f"Normalized directory does not exist: {normalized_dir}")
+    return [normalized_dir]
+
+
 def main() -> None:
     args = parse_args()
     project_root = args.project_root.resolve()
     stadium_id = args.stadium_id.upper()
-    normalized_dir = project_root / "data" / "stadium_guide" / "normalized" / stadium_id
+    normalized_root = project_root / "data" / "stadium_guide" / "normalized"
     sources_path = project_root / "data" / "stadium_guide" / "sources.json"
     output_path = args.output or (
         project_root
@@ -149,11 +159,12 @@ def main() -> None:
         / "stadium_guide_chunks.jsonl"
     )
 
-    if not normalized_dir.exists():
-        raise FileNotFoundError(f"Normalized directory does not exist: {normalized_dir}")
-
     source_url_index = build_source_url_index(sources_path)
-    documents = iter_normalized_documents(normalized_dir)
+    normalized_dirs = iter_stadium_normalized_dirs(normalized_root, stadium_id)
+    documents: list[tuple[Path, dict[str, Any]]] = []
+    for normalized_dir in normalized_dirs:
+        documents.extend(iter_normalized_documents(normalized_dir))
+
     chunks = [
         build_chunk(document, source_file, project_root, source_url_index)
         for source_file, document in documents

@@ -328,10 +328,16 @@ def summarize(case_results: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def output_path(output_dir: Path, run_name: str, embedding_model: str) -> Path:
+def output_path(
+    output_dir: Path,
+    run_name: str,
+    embedding_model: str,
+    cases_path: Path,
+) -> Path:
     timestamp = datetime.now(UTC).strftime("%Y-%m-%d_%H%M%S")
     safe_model = embedding_model.replace("/", "-")
-    return output_dir / f"{timestamp}_SAJIK_{safe_model}_{run_name}.json"
+    safe_dataset = cases_path.stem
+    return output_dir / f"{timestamp}_{safe_dataset}_{safe_model}_{run_name}.json"
 
 
 async def main() -> None:
@@ -422,7 +428,7 @@ async def main() -> None:
     }
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    path = output_path(args.output_dir, args.run_name, args.embedding_model)
+    path = output_path(args.output_dir, args.run_name, args.embedding_model, args.cases)
     path.write_text(
         json.dumps(run_result, ensure_ascii=False, indent=2),
         encoding="utf-8",

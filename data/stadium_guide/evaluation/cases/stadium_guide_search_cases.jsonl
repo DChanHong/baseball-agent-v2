@@ -1,0 +1,49 @@
+{"id":"sajik_001","query":"사직구장 지하철로 어떻게 가?","stadium_id":"SAJIK","expected_document_type":"stadium_transport_guide","case_type":"positive","note":"대중교통 질문은 교통 안내 문서가 상위에 와야 한다."}
+{"id":"sajik_002","query":"사직구장 반입 금지 물품 알려줘","stadium_id":"SAJIK","expected_document_type":"stadium_bag_policy","case_type":"positive","note":"반입 제한과 안전 정책 질문은 반입 정책 문서가 상위에 와야 한다."}
+{"id":"sajik_003","query":"사직구장 좌석 종류 알려줘","stadium_id":"SAJIK","expected_document_type":"stadium_seat_guide","case_type":"positive","note":"좌석 구역 종류 질문은 좌석 안내 문서가 상위에 와야 한다."}
+{"id":"sajik_004","query":"롯데 홈경기 예매는 어디서 해?","stadium_id":"SAJIK","expected_document_type":"stadium_ticketing_guide","case_type":"positive","note":"예매처와 티켓 안내 질문은 티켓 안내 문서가 상위에 와야 한다."}
+{"id":"sajik_005","query":"사직구장 자이언츠샵 위치 알려줘","stadium_id":"SAJIK","expected_document_type":"stadium_facility_guide","case_type":"positive","note":"구장샵과 편의시설 질문은 시설 안내 문서가 상위에 와야 한다."}
+{"id":"gocheok_001","query":"고척돔 지하철로 어떻게 가?","stadium_id":"GOCHEOK","expected_document_type":"stadium_transport_guide","case_type":"positive","note":"고척돔 대중교통 질문은 교통 안내 문서가 상위에 와야 한다."}
+{"id":"gocheok_002","query":"고척돔 음식물 반입 가능해?","stadium_id":"GOCHEOK","expected_document_type":"stadium_bag_policy","case_type":"positive","note":"반입 가능 물품 질문은 반입 정책 문서가 상위에 와야 한다."}
+{"id":"gocheok_003","query":"고척돔 좌석 종류 알려줘","stadium_id":"GOCHEOK","expected_document_type":"stadium_seat_guide","case_type":"positive","note":"좌석 구역 질문은 좌석 안내 문서가 상위에 와야 한다."}
+{"id":"gocheok_004","query":"키움 홈경기 예매는 어디서 해?","stadium_id":"GOCHEOK","expected_document_type":"stadium_ticketing_guide","case_type":"positive","note":"예매처 질문은 티켓 안내 문서가 상위에 와야 한다."}
+{"id":"gocheok_005","query":"고척돔 편의시설 알려줘","stadium_id":"GOCHEOK","expected_document_type":"stadium_facility_guide","case_type":"positive","note":"편의시설 질문은 시설 안내 문서가 상위에 와야 한다."}
+{"id":"munhak_001","query":"문학구장 지하철로 어떻게 가?","stadium_id":"MUNHAK","expected_document_type":"stadium_transport_guide","case_type":"positive","note":"문학구장 대중교통 질문은 교통 안내 문서가 상위에 와야 한다."}
+{"id":"munhak_002","query":"문학구장 캔 음료 들고 가도 돼?","stadium_id":"MUNHAK","expected_document_type":"stadium_bag_policy","case_type":"positive","note":"캔 음료 반입 질문은 반입 정책 문서가 상위에 와야 한다."}
+{"id":"munhak_003","query":"문학구장 좌석 알려줘","stadium_id":"MUNHAK","expected_document_type":"stadium_seat_guide","case_type":"positive","note":"좌석 질문은 좌석 안내 문서가 상위에 와야 한다."}
+{"id":"munhak_004","query":"SSG 홈경기 예매는 어디서 해?","stadium_id":"MUNHAK","expected_document_type":"stadium_ticketing_guide","case_type":"positive","note":"예매 질문은 티켓 안내 문서가 상위에 와야 한다."}
+{"id":"munhak_005","query":"문학구장 랜더스샵 위치 알려줘","stadium_id":"MUNHAK","expected_document_type":"stadium_facility_guide","case_type":"positive","note":"구장샵과 시설 질문은 시설 안내 문서가 상위에 와야 한다."}
+{"id":"gwangju_001","query":"광주 챔피언스필드 대중교통 알려줘","stadium_id":"GWANGJU","expected_document_type":"stadium_transport_guide","case_type":"positive","note":"대중교통 질문은 교통 안내 문서가 상위에 와야 한다."}
+{"id":"gwangju_002","query":"광주 챔피언스필드 반입 금지 물품 알려줘","stadium_id":"GWANGJU","expected_document_type":"stadium_bag_policy","case_type":"positive","note":"반입 제한 질문은 반입 정책 문서가 상위에 와야 한다."}
+{"id":"gwangju_003","query":"광주 챔피언스필드 좌석 종류 알려줘","stadium_id":"GWANGJU","expected_document_type":"stadium_seat_guide","case_type":"positive","note":"좌석 종류 질문은 좌석 안내 문서가 상위에 와야 한다."}
+{"id":"gwangju_004","query":"KIA 홈경기 예매는 어디서 해?","stadium_id":"GWANGJU","expected_document_type":"stadium_ticketing_guide","case_type":"positive","note":"예매처 질문은 티켓 안내 문서가 상위에 와야 한다."}
+{"id":"gwangju_005","query":"광주 챔피언스필드 편의시설 알려줘","stadium_id":"GWANGJU","expected_document_type":"stadium_facility_guide","case_type":"positive","note":"편의시설 질문은 시설 안내 문서가 상위에 와야 한다."}
+{"id":"daegu_001","query":"대구 라이온즈파크 지하철로 어떻게 가?","stadium_id":"DAEGU","expected_document_type":"stadium_transport_guide","case_type":"positive","note":"대중교통 질문은 교통 안내 문서가 상위에 와야 한다."}
+{"id":"daegu_002","query":"대구 라이온즈파크 음식물 반입 가능해?","stadium_id":"DAEGU","expected_document_type":"stadium_bag_policy","case_type":"positive","note":"음식물 반입 질문은 반입 정책 문서가 상위에 와야 한다."}
+{"id":"daegu_003","query":"대구 라이온즈파크 좌석 알려줘","stadium_id":"DAEGU","expected_document_type":"stadium_seat_guide","case_type":"positive","note":"좌석 질문은 좌석 안내 문서가 상위에 와야 한다."}
+{"id":"daegu_004","query":"삼성 홈경기 예매 취소 어떻게 해?","stadium_id":"DAEGU","expected_document_type":"stadium_ticketing_guide","case_type":"positive","note":"예매 취소 질문은 티켓 안내 문서가 상위에 와야 한다."}
+{"id":"daegu_005","query":"대구 라이온즈파크 구장 시설 알려줘","stadium_id":"DAEGU","expected_document_type":"stadium_facility_guide","case_type":"positive","note":"구장 시설 질문은 시설 안내 문서가 상위에 와야 한다."}
+{"id":"suwon_001","query":"수원 위즈파크 지하철로 어떻게 가?","stadium_id":"SUWON","expected_document_type":"stadium_transport_guide","case_type":"positive","note":"대중교통 질문은 교통 안내 문서가 상위에 와야 한다."}
+{"id":"suwon_002","query":"수원 위즈파크 반입 금지 물품 알려줘","stadium_id":"SUWON","expected_document_type":"stadium_bag_policy","case_type":"positive","note":"반입 제한 질문은 반입 정책 문서가 상위에 와야 한다."}
+{"id":"suwon_003","query":"수원 위즈파크 좌석 종류 알려줘","stadium_id":"SUWON","expected_document_type":"stadium_seat_guide","case_type":"positive","note":"좌석 종류 질문은 좌석 안내 문서가 상위에 와야 한다."}
+{"id":"suwon_004","query":"KT 홈경기 예매는 어디서 해?","stadium_id":"SUWON","expected_document_type":"stadium_ticketing_guide","case_type":"positive","note":"예매처 질문은 티켓 안내 문서가 상위에 와야 한다."}
+{"id":"suwon_005","query":"수원 위즈파크 편의시설 알려줘","stadium_id":"SUWON","expected_document_type":"stadium_facility_guide","case_type":"positive","note":"편의시설 질문은 시설 안내 문서가 상위에 와야 한다."}
+{"id":"daejeon_001","query":"대전 한화생명 볼파크 대중교통 알려줘","stadium_id":"DAEJEON","expected_document_type":"stadium_transport_guide","case_type":"positive","note":"대중교통 질문은 교통 안내 문서가 상위에 와야 한다."}
+{"id":"daejeon_002","query":"대전 한화생명 볼파크 반입 금지 물품 알려줘","stadium_id":"DAEJEON","expected_document_type":"stadium_bag_policy","case_type":"positive","note":"반입 제한 질문은 반입 정책 문서가 상위에 와야 한다."}
+{"id":"daejeon_003","query":"대전 한화생명 볼파크 좌석 알려줘","stadium_id":"DAEJEON","expected_document_type":"stadium_seat_guide","case_type":"positive","note":"좌석 질문은 좌석 안내 문서가 상위에 와야 한다."}
+{"id":"daejeon_004","query":"한화 홈경기 예매는 어디서 해?","stadium_id":"DAEJEON","expected_document_type":"stadium_ticketing_guide","case_type":"positive","note":"예매처 질문은 티켓 안내 문서가 상위에 와야 한다."}
+{"id":"daejeon_005","query":"대전 한화생명 볼파크 편의시설 알려줘","stadium_id":"DAEJEON","expected_document_type":"stadium_facility_guide","case_type":"positive","note":"편의시설 질문은 시설 안내 문서가 상위에 와야 한다."}
+{"id":"jamsil_001","query":"잠실야구장 지하철로 어떻게 가?","stadium_id":"JAMSIL","expected_document_type":"stadium_transport_guide","case_type":"positive","note":"대중교통 질문은 교통 안내 문서가 상위에 와야 한다."}
+{"id":"jamsil_002","query":"잠실야구장 반입 금지 물품 알려줘","stadium_id":"JAMSIL","expected_document_type":"stadium_bag_policy","case_type":"positive","note":"반입 제한 질문은 반입 정책 문서가 상위에 와야 한다."}
+{"id":"jamsil_003","query":"잠실야구장 좌석 종류 알려줘","stadium_id":"JAMSIL","expected_document_type":"stadium_seat_guide","case_type":"positive","note":"좌석 종류 질문은 좌석 안내 문서가 상위에 와야 한다."}
+{"id":"jamsil_004","query":"잠실야구장 홈경기 예매는 어디서 해?","stadium_id":"JAMSIL","expected_document_type":"stadium_ticketing_guide","case_type":"positive","note":"예매처 질문은 티켓 안내 문서가 상위에 와야 한다."}
+{"id":"jamsil_005","query":"잠실야구장 편의시설 알려줘","stadium_id":"JAMSIL","expected_document_type":"stadium_facility_guide","case_type":"positive","note":"편의시설 질문은 시설 안내 문서가 상위에 와야 한다."}
+{"id":"changwon_001","query":"창원NC파크 지하철이나 버스로 어떻게 가?","stadium_id":"CHANGWON","expected_document_type":"stadium_transport_guide","case_type":"positive","note":"대중교통 질문은 교통 안내 문서가 상위에 와야 한다."}
+{"id":"changwon_002","query":"창원NC파크 반입 금지 물품 알려줘","stadium_id":"CHANGWON","expected_document_type":"stadium_bag_policy","case_type":"positive","note":"반입 제한 질문은 반입 정책 문서가 상위에 와야 한다."}
+{"id":"changwon_003","query":"창원NC파크 좌석 종류 알려줘","stadium_id":"CHANGWON","expected_document_type":"stadium_seat_guide","case_type":"positive","note":"좌석 종류 질문은 좌석 안내 문서가 상위에 와야 한다."}
+{"id":"changwon_004","query":"NC 홈경기 예매는 어디서 해?","stadium_id":"CHANGWON","expected_document_type":"stadium_ticketing_guide","case_type":"positive","note":"예매처 질문은 티켓 안내 문서가 상위에 와야 한다."}
+{"id":"changwon_005","query":"창원NC파크 편의시설 알려줘","stadium_id":"CHANGWON","expected_document_type":"stadium_facility_guide","case_type":"positive","note":"편의시설 질문은 시설 안내 문서가 상위에 와야 한다."}
+{"id":"negative_001","query":"잠실야구장 주차요금 얼마야?","stadium_id":"SAJIK","expected_document_type":null,"case_type":"negative","note":"질문 구장과 stadium_id filter가 불일치하므로 실제 응답 앞단에서 구장 불일치를 처리해야 한다."}
+{"id":"negative_002","query":"고척돔 주차 가능해?","stadium_id":"CHANGWON","expected_document_type":null,"case_type":"negative","note":"질문 구장과 CHANGWON filter가 불일치하는 케이스다."}
+{"id":"negative_003","query":"포항야구장 좌석 알려줘","stadium_id":"DAEGU","expected_document_type":null,"case_type":"negative","note":"포항은 초기 RAG 수집 대상에서 제외된 보조구장이다."}
+{"id":"negative_004","query":"도쿄돔 원정석 어디야?","stadium_id":"GOCHEOK","expected_document_type":null,"case_type":"negative","note":"해외 야구장 질문은 국내 구장 RAG 문서로 자신 있게 답하면 안 된다."}
