@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0.0",
+  "sources": [
+    {
+      "document_type": "official_baseball_rules",
+      "extractor": "pdfplumber",
+      "local_filename": "2024_야구규칙.pdf",
+      "repo_tracked": false,
+      "season_year": 2024,
+      "source_id": "kbo_2024_official_baseball_rules",
+      "source_kind": "pdf",
+      "source_url": "https://www.koreabaseball.com/Kbo/Board/Ebook/EbookCategory.aspx",
+      "title": "2024 공식야구규칙"
+    },
+    {
+      "document_type": "official_baseball_rules",
+      "extractor": "pdfplumber",
+      "local_filename": "2025_야구규칙.pdf",
+      "repo_tracked": false,
+      "season_year": 2025,
+      "source_id": "kbo_2025_official_baseball_rules",
+      "source_kind": "pdf",
+      "source_url": "https://www.koreabaseball.com/Kbo/Board/Ebook/EbookCategory.aspx",
+      "title": "2025 공식야구규칙"
+    },
+    {
+      "document_type": "official_baseball_rules",
+      "extractor": "pdfplumber",
+      "local_filename": "2026_야구규칙.pdf",
+      "repo_tracked": false,
+      "season_year": 2026,
+      "source_id": "kbo_2026_official_baseball_rules",
+      "source_kind": "pdf",
+      "source_url": "https://www.koreabaseball.com/Kbo/Board/Ebook/EbookCategory.aspx",
+      "title": "2026 공식야구규칙"
+    },
+    {
+      "document_type": "league_rules",
+      "extractor": "pdfplumber",
+      "local_filename": "2024_리그규정.pdf",
+      "repo_tracked": false,
+      "season_year": 2024,
+      "source_id": "kbo_2024_league_rules",
+      "source_kind": "pdf",
+      "source_url": "https://www.koreabaseball.com/Kbo/Board/Ebook/EbookCategory.aspx",
+      "title": "2024 KBO 리그 규정"
+    },
+    {
+      "document_type": "league_rules",
+      "extractor": "pdfplumber",
+      "local_filename": "2025_리그규정.pdf",
+      "repo_tracked": false,
+      "season_year": 2025,
+      "source_id": "kbo_2025_league_rules",
+      "source_kind": "pdf",
+      "source_url": "https://www.koreabaseball.com/Kbo/Board/Ebook/EbookCategory.aspx",
+      "title": "2025 KBO 리그 규정"
+    },
+    {
+      "document_type": "league_rules",
+      "extractor": "pdfplumber",
+      "local_filename": "2026_리그규정.pdf",
+      "repo_tracked": false,
+      "season_year": 2026,
+      "source_id": "kbo_2026_league_rules",
+      "source_kind": "pdf",
+      "source_url": "https://www.koreabaseball.com/Kbo/Board/Ebook/EbookCategory.aspx",
+      "title": "2026 KBO 리그 규정"
+    },
+    {
+      "document_type": "latest_kbo_rules_web",
+      "repo_tracked": false,
+      "season_year": 2026,
+      "source_id": "kbo_2026_game_manage_rules_page",
+      "source_kind": "web_page",
+      "source_url": "https://www.koreabaseball.com/Kbo/League/GameManage2026.aspx",
+      "title": "2026 주요 규정 및 규칙"
+    }
+  ]
+}
