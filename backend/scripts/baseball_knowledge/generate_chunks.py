@@ -14,6 +14,7 @@ DEFAULT_EMBEDDING_MODEL = "text-embedding-3-small"
 DEFAULT_EMBEDDING_DIMENSIONS = 1536
 DEFAULT_AS_OF = "2026-07-31"
 MAX_CONTENT_CHARS = 6500
+MAX_EMBEDDING_SOURCE_CHARS = 2500
 
 
 @dataclass(frozen=True)
@@ -423,18 +424,60 @@ def build_content(topic: Topic, records: list[dict[str, Any]]) -> str:
     )
 
 
-def build_embedding_text(topic: Topic, content: str) -> str:
+def build_search_questions(topic: Topic) -> list[str]:
+    """Return natural-language query patterns that should retrieve this topic."""
+
+    questions = list(topic.example_questions)
+    questions.extend(
+        [
+            f"{topic.title}가 뭐야?",
+            f"{topic.title} 뜻 알려줘",
+            f"{topic.title} 규칙 설명해줘",
+        ]
+    )
+    return list(dict.fromkeys(questions))
+
+
+def build_embedding_source_excerpt(records: list[dict[str, Any]]) -> str:
+    """Return a compact official excerpt so long PDF slices do not dilute retrieval."""
+
+    blocks: list[str] = []
+    remaining_chars = MAX_EMBEDDING_SOURCE_CHARS
+    for record in records:
+        if remaining_chars <= 0:
+            break
+
+        header = f"[{record['document_title']} p.{record['page_number']}]"
+        text = str(record["text"]).strip()
+        if not text:
+            continue
+
+        available_chars = max(0, remaining_chars - len(header) - 2)
+        if available_chars <= 0:
+            break
+
+        excerpt = text[:available_chars].strip()
+        blocks.append(f"{header}\n{excerpt}")
+        remaining_chars -= len(header) + len(excerpt) + 2
+
+    return "\n\n".join(blocks)
+
+
+def build_embedding_text(topic: Topic, records: list[dict[str, Any]]) -> str:
     return "\n".join(
         [
-            f"제목: {topic.title}",
+            f"검색문서명: {topic.title}",
+            f"핵심주제: {topic.title}",
+            f"주제반복: {topic.title}",
+            f"topic_id: {topic.topic_id}",
             f"문서유형: {topic.document_type}",
             f"지식유형: {topic.knowledge_type}",
-            f"topic_id: {topic.topic_id}",
-            f"핵심주제: {topic.summary}",
-            f"검색키워드: {', '.join(topic.keywords)}",
-            f"초보자 질문 예시: {', '.join(topic.example_questions)}",
-            "본문:",
-            content,
+            f"핵심 답변 요약: {topic.summary}",
+            f"검색 키워드와 동의어: {', '.join(topic.keywords)}",
+            "이 문서가 답해야 하는 질문:",
+            "\n".join(f"- {question}" for question in build_search_questions(topic)),
+            "공식 근거 짧은 발췌:",
+            build_embedding_source_excerpt(records),
         ]
     )
 
@@ -469,7 +512,7 @@ def build_chunk(
     chunk_index: int,
 ) -> dict[str, Any]:
     content = build_content(topic, records)
-    embedding_text = build_embedding_text(topic, content)
+    embedding_text = build_embedding_text(topic, records)
     source_ids = list(dict.fromkeys(record["source_id"] for record in records))
     years = sorted({int(record["season_year"]) for record in records})
 
