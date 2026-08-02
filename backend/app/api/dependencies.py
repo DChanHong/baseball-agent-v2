@@ -16,6 +16,12 @@ from app.domains.baseball.tool.find_kbo_game.handler import FindKboGameToolHandl
 from app.domains.baseball.tool.get_stadium_info.handler import (
     GetStadiumInfoToolHandler,
 )
+from app.domains.baseball.tool.search_baseball_knowledge.handler import (
+    SearchBaseballKnowledgeToolHandler,
+)
+from app.domains.baseball.tool.search_baseball_knowledge.retriever import (
+    PgVectorBaseballKnowledgeRetriever,
+)
 from app.domains.baseball.tool.search_stadium_guide.handler import (
     SearchStadiumGuideToolHandler,
 )
@@ -81,6 +87,17 @@ def get_search_stadium_guide_tool_handler(
     )
 
 
+def get_search_baseball_knowledge_tool_handler(
+    session: DatabaseSession,
+) -> SearchBaseballKnowledgeToolHandler:
+    """야구 지식 RAG Tool 실행에 필요한 의존성을 조립합니다."""
+
+    return SearchBaseballKnowledgeToolHandler(
+        openai_client=get_openai_client(),
+        retriever=PgVectorBaseballKnowledgeRetriever(session),
+    )
+
+
 def get_stadium_info_tool_handler(
     session: DatabaseSession,
 ) -> GetStadiumInfoToolHandler:
@@ -98,4 +115,7 @@ def get_agent_tool_executor(
         find_kbo_game_handler=get_find_kbo_game_tool_handler(session),
         get_stadium_info_handler=get_stadium_info_tool_handler(session),
         search_stadium_guide_handler=get_search_stadium_guide_tool_handler(session),
+        search_baseball_knowledge_handler=get_search_baseball_knowledge_tool_handler(
+            session
+        ),
     )

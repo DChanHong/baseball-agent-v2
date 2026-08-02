@@ -18,7 +18,8 @@ FIND_KBO_GAME_TOOL_CARD = """
 - "내일 고척 경기 있어?"
 
 호출하지 않는 경우:
-- 일반 야구 규칙, 팀 역사, 응원 문화, 구장 준비물, 직관 팁 질문
+- 일반 야구 규칙, 플레이 설명, 최신 KBO 규정 질문
+- 팀 역사, 응원 문화, 구장 준비물, 직관 팁 질문
 - 현재 티켓 잔여 여부
 - 날씨 또는 미래/실시간 우천 취소 예측
 - 두 팀 간 맞대결 일정 필터
@@ -27,6 +28,41 @@ FIND_KBO_GAME_TOOL_CARD = """
 - 티켓 잔여 여부: ticket_inventory_tool_required
 - 날씨 또는 미래/실시간 우천 취소 예측: weather_or_realtime_cancellation_prediction_required
 - 두 팀 간 맞대결 일정: opponent_team_filter_not_supported_yet
+""".strip()
+
+
+SEARCH_BASEBALL_KNOWLEDGE_TOOL_CARD = """
+도구명: search_baseball_knowledge
+
+역할:
+- 공식야구규칙, KBO 리그 규정, 자주 나오는 플레이/판정 설명을 RAG 문서에서 검색한다.
+- 검색 결과는 답변 생성에 사용할 근거 chunk, 출처 URL, 기준 시점, 신뢰 등급을 포함한다.
+
+입력:
+- query: 사용자의 원문 질문
+- knowledge_types: 좁힐 수 있으면 문서 유형 목록, 넓은 질문이면 null
+- top_k: 기본 5
+
+knowledge_types:
+- baseball_rule: 야구 기본 규칙, 득점, 볼/스트라이크, 페어/파울, 아웃, 주자 진루, 정식경기
+- common_play: 보크, 인필드 플라이, 태그아웃/포스아웃, 도루/견제, 희생플라이, 병살, 폭투/포일
+- latest_kbo_rule: 비디오 판독, 체크스윙 판독, ABS, 피치클락, 우천취소/노게임/서스펜디드, 경기 거행 권한
+
+호출해야 하는 경우:
+- "야구는 어떻게 이기는 거야?"
+- "볼이랑 스트라이크가 뭐야?"
+- "인필드 플라이가 왜 선언돼?"
+- "보크가 뭐야?"
+- "피치클락 위반하면 어떻게 돼?"
+- "비 오면 누가 경기 취소를 결정해?"
+- "노게임이랑 서스펜디드는 뭐가 달라?"
+
+호출하지 않는 경우:
+- 특정 날짜 경기 일정, 경기 유무, 경기 상태 질문은 find_kbo_game을 사용한다.
+- 구장 주소, 돔 여부, 홈팀, 지역, 기본 식별 정보 질문은 get_stadium_info를 사용한다.
+- 구장별 예매, 좌석, 반입 정책, 교통, 주차, 편의시설 질문은 search_stadium_guide를 사용한다.
+- 선수/팀 역사, 실시간 티켓 잔여석, 실시간 주차 가능 대수는 현재 지원하지 않는다.
+- "오늘 경기 우천 취소될까?"처럼 특정 경기의 미래/실시간 취소 예측은 확정 답변하지 않는다.
 """.strip()
 
 
@@ -51,6 +87,7 @@ GET_STADIUM_INFO_TOOL_CARD = """
 호출하지 않는 경우:
 - 경기 일정, 경기 유무, 경기 상태 질문은 find_kbo_game을 사용한다.
 - 예매 방법, 좌석 종류, 반입 정책, 교통/주차 세부 안내, 편의시설 설명은 search_stadium_guide를 사용한다.
+- 야구 규칙, 플레이 설명, 최신 KBO 규정 질문은 search_baseball_knowledge를 사용한다.
 """.strip()
 
 
@@ -96,6 +133,7 @@ guide_types:
 
 호출하지 않는 경우:
 - 특정 날짜 경기 일정, 경기 유무, 경기 상태 질문은 find_kbo_game을 사용한다.
+- 야구 규칙, 플레이 설명, 최신 KBO 규정 질문은 search_baseball_knowledge를 사용한다.
 - 실시간 티켓 잔여석, 실시간 주차 가능 대수, 날씨/우천 취소 예측은 현재 지원하지 않는다.
 - 질문에서 구장이나 팀을 추론할 수 없고 favorite_team_id도 없으면 clarification을 요청한다.
 """.strip()
@@ -103,6 +141,7 @@ guide_types:
 
 TOOL_ROUTING_TOOL_CARDS = [
     FIND_KBO_GAME_TOOL_CARD,
+    SEARCH_BASEBALL_KNOWLEDGE_TOOL_CARD,
     GET_STADIUM_INFO_TOOL_CARD,
     SEARCH_STADIUM_GUIDE_TOOL_CARD,
 ]

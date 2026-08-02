@@ -39,6 +39,12 @@ StadiumGuideType = Literal[
     "stadium_transport_guide",
 ]
 
+BaseballKnowledgeType = Literal[
+    "baseball_rule",
+    "common_play",
+    "latest_kbo_rule",
+]
+
 
 class ToolRoutingUserContext(BaseModel):
     """User context available to the routing model."""
@@ -118,6 +124,26 @@ class SearchStadiumGuideRoutingArgs(BaseModel):
     )
 
 
+class SearchBaseballKnowledgeRoutingArgs(BaseModel):
+    """Arguments for the search_baseball_knowledge routing decision."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    query: str = Field(
+        min_length=1,
+        description="Original user question to search against baseball knowledge chunks.",
+    )
+    knowledge_types: list[BaseballKnowledgeType] | None = Field(
+        description="Optional document type filters. Null when the question is broad."
+    )
+    top_k: int = Field(
+        default=5,
+        ge=1,
+        le=10,
+        description="Maximum number of evidence chunks to return.",
+    )
+
+
 class GetStadiumInfoRoutingArgs(BaseModel):
     """Arguments for the get_stadium_info routing decision."""
 
@@ -149,7 +175,13 @@ class ToolRoutingDecision(BaseModel):
         description="Whether the system should call a backend tool before answering."
     )
     tool_name: (
-        Literal["find_kbo_game", "get_stadium_info", "search_stadium_guide"] | None
+        Literal[
+            "find_kbo_game",
+            "get_stadium_info",
+            "search_stadium_guide",
+            "search_baseball_knowledge",
+        ]
+        | None
     ) = Field(
         description="Tool to call. Null when should_call_tool is false."
     )
@@ -157,6 +189,7 @@ class ToolRoutingDecision(BaseModel):
         FindKboGameRoutingArgs
         | GetStadiumInfoRoutingArgs
         | SearchStadiumGuideRoutingArgs
+        | SearchBaseballKnowledgeRoutingArgs
         | None
     ) = Field(
         description="Tool arguments. Null when should_call_tool is false."
@@ -188,6 +221,7 @@ class ToolRoutingDecision(BaseModel):
                 "find_kbo_game",
                 "get_stadium_info",
                 "search_stadium_guide",
+                "search_baseball_knowledge",
             }:
                 raise ValueError("tool_name must be a supported tool when calling a tool")
             if self.args is None:
@@ -204,6 +238,10 @@ class ToolRoutingDecision(BaseModel):
                 self.args, SearchStadiumGuideRoutingArgs
             ):
                 raise ValueError("args must match search_stadium_guide")
+            if self.tool_name == "search_baseball_knowledge" and not isinstance(
+                self.args, SearchBaseballKnowledgeRoutingArgs
+            ):
+                raise ValueError("args must match search_baseball_knowledge")
             if self.needs_clarification:
                 raise ValueError("tool calls cannot also require clarification")
             if self.unsupported_reason is not None:

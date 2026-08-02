@@ -27,7 +27,9 @@ TOOL_ROUTING_POLICY_PROMPT = """
 - 구장 주소, 돔 여부, 홈팀, 지역, 기본 식별 정보 질문이면 get_stadium_info를 호출한다.
 - 구장별 예매, 좌석, 반입 정책, 교통, 주차, 편의시설, 직관 준비 질문이면
   search_stadium_guide를 호출한다.
-- 일반 야구 규칙, 팀 역사, 선수 정보, KBO 일반 상식 질문은 도구를 호출하지 않는다.
+- 야구 기본 규칙, 플레이 설명, 판정, 최신 KBO 리그 규정 질문이면
+  search_baseball_knowledge를 호출한다.
+- 팀 역사, 선수 정보, KBO 일반 상식 중 RAG source 범위 밖 질문은 도구를 호출하지 않는다.
 - 일정/상태 조회에 팀이 필요하고 질문에 팀이 없으면 favorite_team_id를 기본 team_id로 쓴다.
 - 질문에 팀이 명시되어 있으면 favorite_team_id보다 질문의 팀을 우선한다.
 - 일정/상태 조회에 팀이 필요한데 질문에도 없고 favorite_team_id도 없으면
@@ -52,7 +54,7 @@ TOOL_ROUTING_POLICY_PROMPT = """
 
 출력 값 주의:
 - 설명은 한국어로 이해하되 출력 enum 값은 스키마의 영문 값을 그대로 사용한다.
-- tool_name은 호출할 때만 "find_kbo_game", "get_stadium_info", "search_stadium_guide" 중 하나이고, 호출하지 않으면 null이다.
+- tool_name은 호출할 때만 "find_kbo_game", "get_stadium_info", "search_stadium_guide", "search_baseball_knowledge" 중 하나이고, 호출하지 않으면 null이다.
 - args는 도구를 호출할 때만 채우고, 호출하지 않으면 null이다.
 """.strip()
 
@@ -88,7 +90,7 @@ TOOL_ROUTING_FEW_SHOT_PROMPT = """
 입력:
 {"message":"야구 규칙 알려줘","user_context":{"auth_status":"authenticated","favorite_team_id":null,"today":"2026-07-28","timezone":"Asia/Seoul"}}
 출력:
-{"is_in_scope":true,"should_call_tool":false,"tool_name":null,"args":null,"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
+{"is_in_scope":true,"should_call_tool":true,"tool_name":"search_baseball_knowledge","args":{"query":"야구 규칙 알려줘","knowledge_types":null,"top_k":5},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
 
 입력:
 {"message":"비트코인 전망 알려줘","user_context":{"auth_status":"authenticated","favorite_team_id":"LOTTE","today":"2026-07-28","timezone":"Asia/Seoul"}}
@@ -134,6 +136,26 @@ TOOL_ROUTING_FEW_SHOT_PROMPT = """
 {"message":"두산이랑 LG 언제 해?","user_context":{"auth_status":"authenticated","favorite_team_id":null,"today":"2026-07-28","timezone":"Asia/Seoul"}}
 출력:
 {"is_in_scope":true,"should_call_tool":false,"tool_name":null,"args":null,"needs_clarification":false,"clarification_reason":null,"unsupported_reason":"opponent_team_filter_not_supported_yet"}
+
+입력:
+{"message":"보크가 뭐야?","user_context":{"auth_status":"authenticated","favorite_team_id":null,"today":"2026-07-28","timezone":"Asia/Seoul"}}
+출력:
+{"is_in_scope":true,"should_call_tool":true,"tool_name":"search_baseball_knowledge","args":{"query":"보크가 뭐야?","knowledge_types":["common_play"],"top_k":5},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
+
+입력:
+{"message":"피치클락 위반하면 어떻게 돼?","user_context":{"auth_status":"authenticated","favorite_team_id":null,"today":"2026-07-28","timezone":"Asia/Seoul"}}
+출력:
+{"is_in_scope":true,"should_call_tool":true,"tool_name":"search_baseball_knowledge","args":{"query":"피치클락 위반하면 어떻게 돼?","knowledge_types":["latest_kbo_rule"],"top_k":5},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
+
+입력:
+{"message":"볼이랑 스트라이크가 뭐야?","user_context":{"auth_status":"authenticated","favorite_team_id":null,"today":"2026-07-28","timezone":"Asia/Seoul"}}
+출력:
+{"is_in_scope":true,"should_call_tool":true,"tool_name":"search_baseball_knowledge","args":{"query":"볼이랑 스트라이크가 뭐야?","knowledge_types":["baseball_rule"],"top_k":5},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
+
+입력:
+{"message":"비 오면 누가 경기 취소를 결정해?","user_context":{"auth_status":"authenticated","favorite_team_id":"LOTTE","today":"2026-07-28","timezone":"Asia/Seoul"}}
+출력:
+{"is_in_scope":true,"should_call_tool":true,"tool_name":"search_baseball_knowledge","args":{"query":"비 오면 누가 경기 취소를 결정해?","knowledge_types":["latest_kbo_rule"],"top_k":5},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
 """.strip()
 
 
