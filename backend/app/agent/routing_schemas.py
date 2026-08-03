@@ -125,6 +125,29 @@ class SearchStadiumGuideRoutingArgs(BaseModel):
     )
 
 
+class SearchTicketingGuideRoutingArgs(BaseModel):
+    """Arguments for the search_ticketing_guide routing decision."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    stadium_id: KboStadiumId = Field(
+        description="KBO home stadium id used as the required metadata filter."
+    )
+    team_id: KboTeamId | None = Field(
+        description="Optional KBO team id when the question includes a team context."
+    )
+    query: str = Field(
+        min_length=1,
+        description="Original user question to search against ticketing guide chunks.",
+    )
+    top_k: int = Field(
+        default=5,
+        ge=1,
+        le=10,
+        description="Maximum number of evidence chunks to return.",
+    )
+
+
 class SearchBaseballKnowledgeRoutingArgs(BaseModel):
     """Arguments for the search_baseball_knowledge routing decision."""
 
@@ -200,6 +223,7 @@ class ToolRoutingDecision(BaseModel):
             "find_kbo_game",
             "get_stadium_info",
             "search_stadium_guide",
+            "search_ticketing_guide",
             "search_baseball_knowledge",
             "get_weather_context",
         ]
@@ -211,6 +235,7 @@ class ToolRoutingDecision(BaseModel):
         FindKboGameRoutingArgs
         | GetStadiumInfoRoutingArgs
         | SearchStadiumGuideRoutingArgs
+        | SearchTicketingGuideRoutingArgs
         | SearchBaseballKnowledgeRoutingArgs
         | GetWeatherContextRoutingArgs
         | None
@@ -246,6 +271,7 @@ class ToolRoutingDecision(BaseModel):
                 "find_kbo_game",
                 "get_stadium_info",
                 "search_stadium_guide",
+                "search_ticketing_guide",
                 "search_baseball_knowledge",
                 "get_weather_context",
             }:
@@ -264,6 +290,10 @@ class ToolRoutingDecision(BaseModel):
                 self.args, SearchStadiumGuideRoutingArgs
             ):
                 raise ValueError("args must match search_stadium_guide")
+            if self.tool_name == "search_ticketing_guide" and not isinstance(
+                self.args, SearchTicketingGuideRoutingArgs
+            ):
+                raise ValueError("args must match search_ticketing_guide")
             if self.tool_name == "search_baseball_knowledge" and not isinstance(
                 self.args, SearchBaseballKnowledgeRoutingArgs
             ):

@@ -33,6 +33,9 @@ from app.domains.baseball.tool.search_stadium_guide.handler import (
 from app.domains.baseball.tool.search_stadium_guide.retriever import (
     PgVectorStadiumGuideRetriever,
 )
+from app.domains.baseball.tool.search_ticketing_guide.handler import (
+    SearchTicketingGuideToolHandler,
+)
 from app.domains.conversation.infrastructure.repositories import (
     SqlAlchemyConversationRepository,
 )
@@ -92,6 +95,17 @@ def get_search_stadium_guide_tool_handler(
     )
 
 
+def get_search_ticketing_guide_tool_handler(
+    session: DatabaseSession,
+) -> SearchTicketingGuideToolHandler:
+    """예매 안내 RAG Tool 실행에 필요한 의존성을 조립합니다."""
+
+    return SearchTicketingGuideToolHandler(
+        openai_client=get_openai_client(),
+        retriever=PgVectorStadiumGuideRetriever(session),
+    )
+
+
 def get_search_baseball_knowledge_tool_handler(
     session: DatabaseSession,
 ) -> SearchBaseballKnowledgeToolHandler:
@@ -132,6 +146,9 @@ def get_agent_tool_executor(
         find_kbo_game_handler=get_find_kbo_game_tool_handler(session),
         get_stadium_info_handler=get_stadium_info_tool_handler(session),
         search_stadium_guide_handler=get_search_stadium_guide_tool_handler(session),
+        search_ticketing_guide_handler=get_search_ticketing_guide_tool_handler(
+            session
+        ),
         search_baseball_knowledge_handler=get_search_baseball_knowledge_tool_handler(
             session
         ),

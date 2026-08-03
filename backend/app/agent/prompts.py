@@ -25,7 +25,9 @@ TOOL_ROUTING_POLICY_PROMPT = """
 - 경기 일정, 경기 유무, 특정 경기 장소, 경기 상태, 취소 사유, 점수 질문이면
   가능한 도구를 호출한다.
 - 구장 주소, 돔 여부, 홈팀, 지역, 기본 식별 정보 질문이면 get_stadium_info를 호출한다.
-- 구장별 예매, 좌석, 반입 정책, 교통, 주차, 편의시설, 직관 준비 질문이면
+- 구장별 예매처, 예매 방법, 티켓 취소, 현장 발권, 예매 주의사항 질문이면
+  search_ticketing_guide를 호출한다.
+- 구장별 좌석, 반입 정책, 교통, 주차, 편의시설, 직관 준비 질문이면
   search_stadium_guide를 호출한다.
 - 야구 기본 규칙, 플레이 설명, 판정, 최신 KBO 리그 규정 질문이면
   search_baseball_knowledge를 호출한다.
@@ -67,7 +69,7 @@ TOOL_ROUTING_POLICY_PROMPT = """
 
 출력 값 주의:
 - 설명은 한국어로 이해하되 출력 enum 값은 스키마의 영문 값을 그대로 사용한다.
-- tool_name은 호출할 때만 "find_kbo_game", "get_stadium_info", "search_stadium_guide", "search_baseball_knowledge", "get_weather_context" 중 하나이고, 호출하지 않으면 null이다.
+- tool_name은 호출할 때만 "find_kbo_game", "get_stadium_info", "search_ticketing_guide", "search_stadium_guide", "search_baseball_knowledge", "get_weather_context" 중 하나이고, 호출하지 않으면 null이다.
 - args는 도구를 호출할 때만 채우고, 호출하지 않으면 null이다.
 """.strip()
 
@@ -134,6 +136,21 @@ TOOL_ROUTING_FEW_SHOT_PROMPT = """
 {"message":"고척돔 음식물 반입 가능해?","user_context":{"auth_status":"authenticated","favorite_team_id":null,"today":"2026-07-28","timezone":"Asia/Seoul"}}
 출력:
 {"is_in_scope":true,"should_call_tool":true,"tool_name":"search_stadium_guide","args":{"stadium_id":"GOCHEOK","team_id":"KIWOOM","query":"고척돔 음식물 반입 가능해?","guide_types":["stadium_bag_policy"],"top_k":5},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
+
+입력:
+{"message":"사직 예매 어디서 해?","user_context":{"auth_status":"authenticated","favorite_team_id":null,"today":"2026-07-28","timezone":"Asia/Seoul"}}
+출력:
+{"is_in_scope":true,"should_call_tool":true,"tool_name":"search_ticketing_guide","args":{"stadium_id":"SAJIK","team_id":"LOTTE","query":"사직 예매 어디서 해?","top_k":5},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
+
+입력:
+{"message":"우리 팀 경기 예매 방법 알려줘","user_context":{"auth_status":"authenticated","favorite_team_id":"NC","today":"2026-07-28","timezone":"Asia/Seoul"}}
+출력:
+{"is_in_scope":true,"should_call_tool":true,"tool_name":"search_ticketing_guide","args":{"stadium_id":"CHANGWON","team_id":"NC","query":"우리 팀 경기 예매 방법 알려줘","top_k":5},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
+
+입력:
+{"message":"창원NC파크 현장 발권 돼?","user_context":{"auth_status":"authenticated","favorite_team_id":null,"today":"2026-07-28","timezone":"Asia/Seoul"}}
+출력:
+{"is_in_scope":true,"should_call_tool":true,"tool_name":"search_ticketing_guide","args":{"stadium_id":"CHANGWON","team_id":"NC","query":"창원NC파크 현장 발권 돼?","top_k":5},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
 
 입력:
 {"message":"우리 팀 홈구장 주차 알려줘","user_context":{"auth_status":"authenticated","favorite_team_id":"NC","today":"2026-07-28","timezone":"Asia/Seoul"}}

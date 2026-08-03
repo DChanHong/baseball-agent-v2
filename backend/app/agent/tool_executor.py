@@ -8,6 +8,7 @@ from app.agent.routing_schemas import (
     GetWeatherContextRoutingArgs,
     SearchBaseballKnowledgeRoutingArgs,
     SearchStadiumGuideRoutingArgs,
+    SearchTicketingGuideRoutingArgs,
     ToolRoutingDecision,
 )
 from app.domains.baseball.tool.find_kbo_game.handler import FindKboGameToolHandler
@@ -32,6 +33,12 @@ from app.domains.baseball.tool.search_stadium_guide.handler import (
 from app.domains.baseball.tool.search_stadium_guide.schemas import (
     SearchStadiumGuideToolInput,
 )
+from app.domains.baseball.tool.search_ticketing_guide.handler import (
+    SearchTicketingGuideToolHandler,
+)
+from app.domains.baseball.tool.search_ticketing_guide.schemas import (
+    SearchTicketingGuideToolInput,
+)
 
 
 class AgentToolExecutor:
@@ -43,12 +50,14 @@ class AgentToolExecutor:
         find_kbo_game_handler: FindKboGameToolHandler,
         get_stadium_info_handler: GetStadiumInfoToolHandler,
         search_stadium_guide_handler: SearchStadiumGuideToolHandler,
+        search_ticketing_guide_handler: SearchTicketingGuideToolHandler,
         search_baseball_knowledge_handler: SearchBaseballKnowledgeToolHandler,
         get_weather_context_handler: GetWeatherContextToolHandler,
     ) -> None:
         self._find_kbo_game_handler = find_kbo_game_handler
         self._get_stadium_info_handler = get_stadium_info_handler
         self._search_stadium_guide_handler = search_stadium_guide_handler
+        self._search_ticketing_guide_handler = search_ticketing_guide_handler
         self._search_baseball_knowledge_handler = search_baseball_knowledge_handler
         self._get_weather_context_handler = get_weather_context_handler
 
@@ -99,6 +108,18 @@ class AgentToolExecutor:
 
             return await self._search_baseball_knowledge_handler.execute(
                 SearchBaseballKnowledgeToolInput.model_validate(
+                    decision.args.model_dump(mode="json")
+                )
+            )
+
+        if decision.tool_name == "search_ticketing_guide":
+            if not isinstance(decision.args, SearchTicketingGuideRoutingArgs):
+                raise ValueError(
+                    "search_ticketing_guide requires SearchTicketingGuideRoutingArgs"
+                )
+
+            return await self._search_ticketing_guide_handler.execute(
+                SearchTicketingGuideToolInput.model_validate(
                     decision.args.model_dump(mode="json")
                 )
             )
