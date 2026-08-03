@@ -1,77 +1,35 @@
 "use client";
 
-import styled from "styled-components";
 import type { ToolResult } from "@/entities/tool-result/model/types";
+import { BaseballKnowledgeCard } from "@/entities/tool-result/ui/cards/baseball-knowledge-card";
+import { FindKboGameCard } from "@/entities/tool-result/ui/cards/find-kbo-game-card";
+import { GenericToolCard } from "@/entities/tool-result/ui/cards/generic-tool-card";
+import { SearchGuideCard } from "@/entities/tool-result/ui/cards/search-guide-card";
+import { StadiumInfoCard } from "@/entities/tool-result/ui/cards/stadium-info-card";
+import { WeatherContextCard } from "@/entities/tool-result/ui/cards/weather-context-card";
 
 type ToolResultCardProps = {
   result: ToolResult;
 };
 
-const statusLabel = {
-  idle: "대기",
-  running: "진행 중",
-  success: "완료",
-  error: "확인 필요",
-};
-
 export function ToolResultCard({ result }: ToolResultCardProps) {
-  return (
-    <Card>
-      <TopLine>
-        <Title>{result.title}</Title>
-        <Status $status={result.status}>{statusLabel[result.status]}</Status>
-      </TopLine>
-      <Summary>{result.summary}</Summary>
-      {result.asOf ? <Meta>기준 시점 {result.asOf}</Meta> : null}
-    </Card>
-  );
+  if (result.status === "failed") {
+    return <GenericToolCard result={result} />;
+  }
+
+  switch (result.name) {
+    case "find_kbo_game":
+      return <FindKboGameCard result={result} />;
+    case "get_stadium_info":
+      return <StadiumInfoCard result={result} />;
+    case "get_weather_context":
+      return <WeatherContextCard result={result} />;
+    case "search_stadium_guide":
+    case "search_ticketing_guide":
+      return <SearchGuideCard result={result} />;
+    case "search_baseball_knowledge":
+      return <BaseballKnowledgeCard result={result} />;
+    default:
+      return <GenericToolCard result={result} />;
+  }
 }
-
-const Card = styled.article`
-  display: grid;
-  gap: 8px;
-  border: 1px solid ${({ theme }) => theme.color.border};
-  border-radius: ${({ theme }) => theme.radius.md};
-  padding: 14px;
-  background: ${({ theme }) => theme.color.panel};
-`;
-
-const TopLine = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-`;
-
-const Title = styled.h3`
-  margin: 0;
-  font-size: 15px;
-`;
-
-const Status = styled.span<{ $status: ToolResult["status"] }>`
-  flex: 0 0 auto;
-  border-radius: 999px;
-  padding: 4px 8px;
-  background: ${({ $status, theme }) =>
-    $status === "error" ? "#fde8e5" : $status === "running" ? "#e7f0f8" : theme.color.panelAlt};
-  color: ${({ $status, theme }) =>
-    $status === "error"
-      ? theme.color.accent
-      : $status === "running"
-        ? theme.color.info
-        : theme.color.primary};
-  font-size: 12px;
-  font-weight: 700;
-`;
-
-const Summary = styled.p`
-  margin: 0;
-  color: ${({ theme }) => theme.color.foreground};
-  line-height: 1.55;
-`;
-
-const Meta = styled.p`
-  margin: 0;
-  color: ${({ theme }) => theme.color.muted};
-  font-size: 13px;
-`;
