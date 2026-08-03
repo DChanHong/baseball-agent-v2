@@ -13,6 +13,7 @@
 | 문서 | 목적 | 상태 |
 |---|---|---|
 | [001-service-and-mvp.md](001-service-and-mvp.md) | 서비스, MVP, Tool 및 RAG 범위 정의 | 초안 |
+| [002-mvp2-backend-upgrade-plan.md](002-mvp2-backend-upgrade-plan.md) | 채팅/Tool 기본 틀 이후 RAG 검색 품질, 프롬프트, 관측성 개선 계획 | 초안 |
 | [game-schedule/001-data-collection-and-db.md](game-schedule/001-data-collection-and-db.md) | KBO 경기 일정 수집 전략과 Supabase DB 정의 | 초안 |
 
 ## 작업 원칙
