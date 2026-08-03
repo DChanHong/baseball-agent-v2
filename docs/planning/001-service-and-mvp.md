@@ -1,13 +1,14 @@
 # 야구 직관 Agent 서비스 및 MVP 기획
 
-> 상태: 초안  
-> 작성일: 2026-07-27  
-> 참고 프로젝트: `my-baseball-agent`  
-> 첫 구현 목표: 원하는 팀의 경기 일정 찾기
+> 상태: MVP1 기준 업데이트
+> 작성일: 2026-07-27
+> 최근 업데이트: 2026-08-03
+> 참고 프로젝트: `my-baseball-agent`
+> MVP1 구현 기준: 로그인 전 guest 채팅, 단일 `/api/v1/chat` 스트리밍 엔드포인트, Tool 결과 카드 렌더링 준비
 
 ## 1. 문서 목적
 
-야구 팬의 직관 준비를 돕는 Agent가 어떤 문제를 해결할지 정의하고, 최소 Tool로 완성할 첫 MVP와 이후 확장 순서를 정한다.
+야구 팬의 직관 준비를 돕는 Agent가 어떤 문제를 해결할지 정의하고, MVP1에서 구현한 채팅/Tool 기본 틀과 이후 확장 순서를 정리한다.
 
 이 문서는 기존 프로젝트의 기능을 그대로 이식하기 위한 문서가 아니다. `my-baseball-agent`의 데이터 출처, 수집 방식, 실패 사례와 구현 아이디어를 참고하되 데이터 수집과 Tool 계약을 처음부터 다시 검토한다.
 
@@ -66,99 +67,63 @@
 
 이미 응원 팀이 있는 사용자는 기본 지식과 팀 탐색 단계를 건너뛸 수 있다.
 
-응원 팀 선택은 강제하지 않는다. 선택하지 않은 사용자는 바로 질문을 시작할 수 있으며, 이후 대화에서 팀을 선택하거나 변경할 수 있다.
+응원 팀 선택은 강제하지 않는다. MVP1에서는 로그인과 사용자 프로필 저장을 붙이지 않고, 사용자가 바로 질문을 시작할 수 있는 guest-first 채팅으로 구현한다.
 
-첫 MVP에서는 이 중 `선택형 응원 팀 온보딩 → 경기 일정 조회 → 기본 응답`까지만 완성한다. 야구 기본 지식 안내와 취향 기반 팀 추천은 후속 MVP에서 별도 범위와 Tool을 정의한다.
+MVP1에서는 이 중 `로그인 전 채팅 시작 → Tool 라우팅 → Tool 실행 이벤트 스트리밍 → Tool 결과 카드 렌더링 준비 → 기본 assistant 응답 저장`까지의 틀을 마련했다. 선택형 응원 팀 온보딩, 로그인 사용자 프로필, 좌석 최종 추천은 후속 MVP에서 별도 범위와 Tool을 정의한다.
 
-### 3.1 로그인 사용자 온보딩
+### 3.1 MVP1 guest 채팅 시작
 
-로그인한 사용자가 첫 채팅을 시작할 때 응원 팀 선택 메시지를 표시한다.
+로그인 전 사용자가 첫 채팅을 시작할 때 별도 가입이나 팀 선택을 요구하지 않는다.
 
 ```text
 직관할 경기를 함께 찾아볼게요.
-응원하는 팀이 있다면 선택해주세요.
-선택하지 않고 원하는 날짜, 지역, 팀이나 구장을 바로 입력해도 돼요.
-
-[KIA] [삼성] [LG] [두산] [KT]
-[SSG] [롯데] [한화] [NC] [키움]
+원하는 날짜, 지역, 팀, 구장이나 궁금한 야구 정보를 바로 입력해도 돼요.
 
 예시: “다음 주말 서울에서 볼 수 있는 경기 찾아줘”
 ```
 
 처리 원칙:
 
-- 팀 선택은 선택 사항이며 채팅 시작을 막지 않는다.
-- 별도의 `건너뛰기` 버튼은 제공하지 않는다.
-- 사용자는 팀을 선택하지 않고 메시지를 입력해 바로 일반 채팅을 시작할 수 있다.
-- 팀을 선택하면 정규화된 `team_id`를 로그인한 사용자 프로필에 저장한다.
-- 팀을 선택하지 않고 첫 메시지를 보내면 별도의 안내나 확인 없이 자연스럽게 온보딩을 종료한다.
-- 온보딩 노출 여부를 별도로 저장하여 다음 새 채팅에서 같은 선택 메시지를 반복 노출하지 않는다.
-- 저장된 팀은 일정 조회와 안내에서 기본 context로 사용할 수 있다.
-- 사용자가 질문에서 다른 팀을 명시하면 저장된 응원 팀보다 현재 질문을 우선한다.
-- 다른 팀을 질문했다고 해서 저장된 응원 팀을 자동으로 변경하지 않는다.
-- 응원 팀 변경은 사용자의 명시적 선택이나 변경 요청이 있을 때만 저장한다.
-- 채팅 도중 팀을 선택하면 이후 대화와 새 대화에도 사용할 수 있도록 프로필에 반영한다.
+- 첫 방문 시 frontend가 `guest_id`를 생성해 localStorage에 저장한다.
+- 새 채팅은 `conversation_id = null`로 `/api/v1/chat`을 호출한다.
+- 백엔드는 conversation을 생성하고 SSE로 `conversation.created` 이벤트를 보낸다.
+- 이후 같은 대화는 `conversation_id`를 포함해 이어서 호출한다.
+- 로그인, 응원 팀 프로필 저장, 온보딩 노출 여부 저장은 MVP1 범위에서 제외한다.
+- 사용자가 질문에 팀, 날짜, 구장, 목적을 명시하면 해당 값을 현재 요청의 context로 사용한다.
+- 조건이 부족하면 Tool을 억지로 호출하지 않고 필요한 조건을 묻는다.
 
 예시:
 
 ```text
-저장된 응원 팀: LOTTE
-사용자: 다음 주 경기 알려줘
-→ LOTTE 일정 조회
+사용자: 다음 주 롯데 경기 알려줘
+→ find_kbo_game
 
-저장된 응원 팀: LOTTE
-사용자: 다음 주 한화 경기 알려줘
-→ HANWHA 일정 조회
-→ 저장된 응원 팀은 LOTTE로 유지
+사용자: 잠실야구장 위치 알려줘
+→ get_stadium_info
+
+사용자: 보크가 뭐야?
+→ search_baseball_knowledge
 ```
 
-응원 팀이 저장되어 있지 않고 질문에도 팀이 없더라도 날짜, 지역 또는 구장 조건으로 조회할 수 있으면 그대로 진행한다. 경기 탐색 조건이 전혀 없을 때만 날짜, 지역, 팀 중 하나를 질문한다. 팀과 무관한 야구 기본 지식 질문에는 팀 선택을 요구하지 않는다.
+MVP1 시작 흐름:
 
-팀 선택 후에는 저장 완료만 알리고 대화를 끝내지 않는다. 직관할 경기를 찾을 수 있도록 짧은 다음 질문을 함께 제공한다.
-
-```text
-사용자: [롯데] 선택
-Agent: 롯데 자이언츠를 응원 팀으로 저장했어요.
-       언제 직관할 경기를 찾고 있나요? 날짜나 기간을 알려주세요.
-
-사용자: 팀을 선택하지 않고 “이번 주말 잠실 경기 알려줘” 입력
-Agent: 응원 팀 선택을 다시 요구하지 않고 잠실 경기 일정 조회를 진행
-
-사용자: 팀을 선택하지 않고 “야구 처음인데 뭘 알아야 해?” 입력
-Agent: 직관 일정 질문을 강제하지 않고 현재 질문에 답변
-```
-
-후속 질문은 대화를 돕기 위한 제안이며 반드시 답해야 하는 입력 단계가 아니다.
-
-팀 선택 여부에 따른 시작 흐름:
-
-| 시작 상태 | 사용자 행동 | Agent의 다음 행동 |
+| 시작 상태 | 사용자 행동 | 다음 행동 |
 |---|---|---|
-| 응원 팀 선택 | 팀 버튼 선택 | 팀을 저장하고 직관 날짜 또는 기간을 질문 |
-| 응원 팀 미선택 | 팀이 포함된 일정 질문 | 질문의 팀으로 경기 일정 조회 |
-| 응원 팀 미선택 | 지역·구장이 포함된 질문 | 해당 지역 또는 구장의 경기 후보 조회 |
-| 응원 팀 미선택 | 날짜만 포함된 질문 | 해당 날짜의 경기 후보를 보여주거나 필요한 지역·팀 조건을 질문 |
-| 응원 팀 미선택 | 직관 의도만 표현 | 날짜, 지역, 팀 중 답하기 쉬운 조건 하나를 질문 |
-| 응원 팀 미선택 | 예매·응원·좌석 질문 | 알고 있는 구장·경기 조건으로 해당 단계부터 처리 |
+| 첫 방문 | 메시지 입력 | frontend가 `guest_id` 생성 후 `/api/v1/chat` 호출 |
+| 새 대화 | 메시지 입력 | `conversation_id = null`로 conversation 생성 |
+| 기존 대화 | 메시지 입력 | 기존 `conversation_id`로 메시지 추가 |
+| Tool 실행 필요 | 질문 라우팅 성공 | `tool.started`와 `tool.completed` 이벤트 전송 |
+| Tool 결과 표시 | 이벤트 수신 | 채팅창 안에 Tool card 렌더링 |
+| 답변 생성 | Tool 결과 요약 | `assistant.delta`와 `assistant.completed` 이벤트 전송 |
 
-Agent는 응원 팀이 없다는 이유만으로 팀 선택 화면으로 돌려보내지 않는다. 현재 메시지에서 확인할 수 있는 날짜, 지역, 구장, 팀과 목적을 먼저 사용한다.
-
-사용자 프로필에 필요한 최소 필드 초안:
-
-| 필드 | 설명 |
-|---|---|
-| `favorite_team_id` | 사용자가 선택한 응원 팀. 선택하지 않으면 `null` |
-| `team_onboarding_seen_at` | 첫 채팅에서 응원 팀 선택 메시지를 노출한 시각 |
-| `team_preference_updated_at` | 응원 팀을 마지막으로 변경한 시각 |
-
-`favorite_team_id = null`만으로는 아직 온보딩을 보지 않은 사용자와 선택 없이 채팅을 시작한 사용자를 구분할 수 없으므로 `team_onboarding_seen_at`을 별도로 둔다. 실제 테이블명과 필드 타입은 로그인 및 사용자 프로필 설계에서 확정한다.
+로그인 도입 후에는 `guest_id`로 만든 conversation을 사용자 계정에 귀속하는 흐름을 별도 설계한다.
 
 ### 3.2 직관 정보 찾기 대화 흐름
 
-응원 팀 온보딩 이후에는 직관할 경기를 찾는 흐름으로 자연스럽게 연결한다.
+MVP1에서는 온보딩 단계 없이 사용자의 첫 메시지에서 바로 직관 정보를 찾는 흐름으로 연결한다.
 
 ```text
-응원 팀 선택 또는 일반 메시지 입력
+일반 메시지 입력
 → 직관 희망 날짜나 기간 확인
 → 경기 일정 조회
 → 경기 후보 제시
@@ -185,17 +150,17 @@ Agent는 응원 팀이 없다는 이유만으로 팀 선택 화면으로 돌려�
 → 직관 흐름을 강제하지 않고 일반 야구 지식으로 답변
 ```
 
-Agent는 대화에서 확인된 값을 세션 context로 유지한다.
+Agent는 대화에서 확인된 값을 conversation context로 유지한다. MVP1에서는 명시적 profile 저장 없이 현재 대화에서 확인된 값만 사용한다.
 
 | context | 설명 |
 |---|---|
-| `favorite_team_id` | 사용자 프로필에 저장된 응원 팀 |
+| `favorite_team_id` | 로그인 이후 사용자 프로필에 저장할 응원 팀. MVP1에서는 사용하지 않음 |
 | `active_team_id` | 현재 질문이나 대화에서 다루는 팀 |
 | `selected_game_id` | 사용자가 현재 선택한 경기 |
 | `selected_stadium_id` | 선택한 경기 또는 질문의 구장 |
 | `visit_date` | 직관 예정일 |
 
-프로필의 응원 팀과 현재 대화의 팀은 구분한다. 사용자가 다른 팀의 경기나 구장을 물어도 프로필의 응원 팀을 자동 변경하지 않는다.
+로그인 이후에는 프로필의 응원 팀과 현재 대화의 팀을 구분한다. 사용자가 다른 팀의 경기나 구장을 물어도 프로필의 응원 팀을 자동 변경하지 않는다.
 
 #### 직관 탐색에 필요한 조건
 
@@ -214,7 +179,7 @@ home_or_away
 추가 질문 원칙:
 
 - 한 번에 하나의 핵심 조건만 질문한다.
-- 저장된 응원 팀은 기본값으로 사용할 수 있지만 질문에 명시된 조건이 우선한다.
+- 로그인 이후 저장된 응원 팀은 기본값으로 사용할 수 있지만 질문에 명시된 조건이 우선한다.
 - 팀이 없어도 날짜와 지역 또는 구장으로 경기 후보를 찾을 수 있다.
 - 날짜가 없으면 “언제 보러 갈 예정인가요?”처럼 기간을 확인한다.
 - 조건이 충분하면 불필요한 확인 질문 없이 Tool을 호출한다.
@@ -250,131 +215,139 @@ home_or_away
 
 초기 직관 Tool의 계약을 일반 야구 정보까지 미리 확장하지 않는다. 새로운 사용자 문제를 선택할 때마다 필요한 Tool, 데이터 출처, 갱신 주기와 검증 기준을 별도로 정의한다.
 
-## 4. MVP 1: 원하는 팀의 경기 일정 찾기
+## 4. MVP 1: guest 채팅과 Tool 실행 기반 직관 도우미
 
 ### 4.1 목표
 
-사용자가 응원할 팀과 날짜 또는 기간을 입력하면 해당 팀의 KBO 경기 일정을 찾아 기본 경기 정보를 답한다.
+사용자가 로그인 없이 채팅창에 KBO 직관 관련 질문을 입력하면, 백엔드가 필요한 Tool을 선택해 실행하고, 프론트엔드가 Tool 실행 결과를 채팅창 안의 카드로 렌더링할 수 있는 기본 틀을 완성한다.
 
 예시:
 
 ```text
 사용자: 2026년 5월 23일 롯데 경기 일정 알려줘
 
-응답에 필요한 정보:
-- 경기 날짜와 시작 시각
-- 홈팀과 원정팀
-- 구장명
-- 경기 상태
-- 데이터 출처
-- 데이터 기준 시점
+SSE 이벤트 흐름:
+conversation.created
+message.created
+tool.started
+tool.completed
+assistant.delta
+assistant.completed
+conversation.updated
+done
 ```
 
-### 4.2 최소 Tool
+MVP1은 완성된 최종 Agent가 아니라, 이후 RAG 품질 개선과 프롬프트 개선을 반복할 수 있는 제품 골격이다.
 
-MVP 1에서는 다음 Tool 하나만 구현한다.
+### 4.2 MVP1 Tool 범위
+
+MVP1에서는 다음 Tool들을 backend routing과 chat stream에 연결했다.
 
 ```text
 find_kbo_game
+get_stadium_info
+get_weather_context
+search_ticketing_guide
+search_stadium_guide
+search_baseball_knowledge
 ```
 
-책임:
+Tool 책임:
 
-- 팀, 날짜 또는 기간을 조건으로 경기 일정을 조회한다.
-- 조회된 경기의 기본 정보를 반환한다.
-- 경기 없음과 데이터 오류를 구분한다.
+| Tool | 책임 | 데이터 성격 |
+|---|---|---|
+| `find_kbo_game` | 팀, 날짜, 기간 조건으로 KBO 경기 일정 조회 | 정형 DB |
+| `get_stadium_info` | 구장 기본 정보 조회 | 정형 DB |
+| `get_weather_context` | 구장/경기 기준 날씨와 직관 컨디션 조회 | 외부 API/정형 계산 |
+| `search_ticketing_guide` | 예매 절차와 주의사항 검색 | RAG |
+| `search_stadium_guide` | 구장별 안내, 반입, 교통, 시설 등 검색 | RAG |
+| `search_baseball_knowledge` | 야구 규칙, 용어, 플레이 설명 검색 | RAG |
 
-MVP 1의 구장명은 경기 일정 데이터에 포함한다. 별도의 `get_stadium_info`는 아직 호출하지 않는다.
-
-### 4.3 MVP 입력
+### 4.3 Chat API 입력
 
 | 필드 | 필수 여부 | 설명 |
 |---|---|---|
-| `team_id` | 필수 | 정규화된 KBO 팀 식별자 |
-| `date` | 조건부 필수 | 특정 날짜 조회 |
-| `date_from` | 조건부 필수 | 기간 조회 시작일 |
-| `date_to` | 조건부 필수 | 기간 조회 종료일 |
+| `guest_id` | 필수 | 로그인 전 사용자를 구분하는 client-generated id |
+| `conversation_id` | 선택 | 기존 대화를 이어갈 때 사용하는 id. 새 대화는 `null` |
+| `message` | 필수 | 사용자 자연어 메시지 |
 
-`date` 또는 `date_from`과 `date_to` 중 하나의 조회 조건이 필요하다.
-
-자연어 팀 이름은 Tool 호출 전에 정규화한다.
+Endpoint:
 
 ```text
-롯데, 롯데 자이언츠 → LOTTE
-LG, 엘지, LG 트윈스 → LG
+POST /api/v1/chat
 ```
 
-질문에 팀이 없으면 로그인 사용자 프로필의 응원 팀을 기본값으로 사용할 수 있다. 질문에 명시된 팀이 있으면 해당 값을 우선한다.
+MVP1에서는 `/api/v1/games`, `/api/v1/conversations`를 유지하되, 실제 채팅 UX는 `/api/v1/chat` 하나로 모으는 방향을 기준으로 한다.
 
-### 4.4 MVP 출력 초안
+### 4.4 Chat stream 출력
 
-```json
-{
-  "status": "success",
-  "query": {
-    "team_id": "LOTTE",
-    "date": "2026-05-23"
-  },
-  "games": [
-    {
-      "game_id": "source-defined-id",
-      "game_date": "2026-05-23",
-      "start_time": "17:00:00",
-      "home_team_id": "LOTTE",
-      "away_team_id": "LG",
-      "stadium_id": "SAJIK",
-      "stadium_name": "사직야구장",
-      "game_status": "scheduled"
-    }
-  ],
-  "source": {
-    "name": "미정",
-    "url": "미정",
-    "collected_at": "2026-05-01T10:00:00+09:00"
-  },
-  "limitations": []
-}
+응답은 `text/event-stream` SSE로 전송한다.
+
+주요 이벤트:
+
+```text
+conversation.created
+message.created
+tool.started
+tool.completed
+tool.failed
+assistant.delta
+assistant.completed
+conversation.updated
+stream.failed
+done
 ```
 
-상태 후보:
+Tool event의 공통 목적:
 
-| 상태 | 의미 |
+| 이벤트 | 프론트엔드 역할 |
 |---|---|
-| `success` | 한 경기 이상 조회됨 |
-| `no_result` | 정상적으로 조회했지만 조건에 맞는 경기가 없음 |
-| `invalid_input` | 팀 또는 날짜 조건이 잘못됨 |
-| `source_unavailable` | 데이터 출처 또는 저장소 조회 실패 |
-| `stale_data` | 데이터가 있으나 최신성을 보장하기 어려움 |
+| `tool.started` | 실행 중 상태의 Tool card를 만든다 |
+| `tool.completed` | 같은 `tool_call_id`의 card를 완료 상태와 result로 갱신한다 |
+| `tool.failed` | 같은 `tool_call_id`의 card를 실패 상태와 error로 갱신한다 |
+| `assistant.delta` | assistant 말풍선 텍스트를 스트리밍으로 이어 붙인다 |
+| `assistant.completed` | assistant 메시지를 완료 처리한다 |
 
-출력 필드와 상태명은 구현 전에 최종 확정한다.
+MVP1의 assistant 답변은 아직 최종 LLM 답변 품질을 목표로 하지 않는다. 현재는 Tool 결과 요약을 스트리밍하는 기본 흐름이며, 프롬프트 개선과 Tool 결과 기반 자연어 답변 생성은 MVP2에서 다룬다.
 
-### 4.5 MVP에서 제외할 기능
+### 4.5 MVP1에서 제외한 기능
 
-- 구장 상세 안내
 - 지도, 대중교통, 자동차 경로와 현장 동선
-- 예매 안내
-- 응원 팁
 - 좌석 검색과 추천
-- 날씨
-- 임베딩과 Vector Store
-- RAG
-- LLM이 자유롭게 여러 Tool을 반복 호출하는 Agent
+- 로그인 필수화
+- 응원 팀 프로필 저장
+- guest conversation의 user account 귀속
+- 외부 reranker
+- 하이브리드 서치
+- LangChain/LangGraph 전면 도입
+- 운영용 observability dashboard
+- LLM이 여러 Tool을 반복 호출하며 계획을 수정하는 Agent loop
 
-### 4.6 MVP 완료 조건 초안
+### 4.6 MVP1 완료/진행 상태
 
-- 로그인 사용자가 첫 채팅에서 응원 팀을 선택하거나 선택 없이 바로 메시지를 보낼 수 있다.
-- 선택한 응원 팀이 사용자 프로필에 저장되고 새 대화에서도 유지된다.
-- 선택 없이 채팅을 시작한 사용자에게 새 채팅마다 온보딩을 반복 노출하지 않는다.
-- 저장된 응원 팀은 팀이 생략된 일정 질문의 기본값으로 사용된다.
-- 질문에 다른 팀이 명시되면 현재 질문의 팀을 우선하되 프로필은 자동 변경하지 않는다.
-- 팀과 날짜가 있는 질문에서 올바른 경기를 반환한다.
-- 팀 별칭을 내부 `team_id`로 정규화한다.
-- 팀 또는 날짜가 빠졌을 때 필요한 정보를 다시 묻는다.
-- 경기 없음과 시스템 오류를 다른 응답으로 처리한다.
-- 홈·원정팀, 시작 시각과 구장이 원본 데이터와 일치한다.
-- 응답에서 데이터 출처와 수집 시점을 확인할 수 있다.
-- 대표 정상·경기 없음·잘못된 입력 사례에 자동 테스트가 있다.
-- 채팅 요청부터 Tool 실행, 답변 저장까지 한 흐름으로 실행된다.
+완료된 항목:
+
+```text
+POST /api/v1/chat SSE endpoint 추가
+guest_id, conversation_id, message request schema 정의
+conversation/message 저장 흐름 연결
+Tool routing과 Tool executor 연결
+tool.started / tool.completed / tool.failed 이벤트 정의
+assistant.delta / assistant.completed 이벤트 정의
+backend SSE contract 테스트 추가
+프론트엔드 Tool 결과 타입을 backend 이벤트 계약에 맞게 정리
+Tool별 card component 분리
+```
+
+남은 MVP1 연결 항목:
+
+```text
+frontend에서 POST /api/v1/chat fetch stream 연결
+실제 SSE 이벤트를 message state와 Tool card state에 반영
+guest_id localStorage helper 연결
+conversation_id 저장과 현재 대화 복원
+수동 MVP 시나리오 검증
+```
 
 ## 5. 데이터 수집 전략
 
@@ -392,16 +365,20 @@ Tool 계약
 → 전체 범위 수집
 ```
 
-### 5.2 MVP 1에 필요한 데이터
+### 5.2 MVP1에 사용한 데이터 범위
 
-- 경기 고유 식별자
-- 경기 날짜와 시작 시각
-- 홈팀과 원정팀
-- 구장 식별자와 구장명
-- 경기 상태
-- 원본 URL 또는 출처 식별자
-- 수집 시각
-- 데이터 기준 시점이 별도로 존재한다면 해당 값
+정형 Tool:
+
+- KBO 경기 일정
+- KBO 팀 식별자와 별칭
+- KBO 구장 기본 정보
+- 구장별 기상청 격자 정보
+
+RAG Tool:
+
+- 구장 안내 문서
+- 예매 안내 문서
+- 야구 기본 규칙과 자주 묻는 플레이 지식
 
 ### 5.3 수집 방법 후보
 
@@ -414,12 +391,13 @@ Tool 계약
 
 ### 5.4 아직 결정할 사항
 
-- 일정 데이터의 공식 출처
-- 지원할 최초 시즌과 기간
+- 일정 데이터의 갱신 주기와 stale 판단 기준
+- 지원할 시즌과 기간 확장 기준
 - 크롤링 주기와 재수집 정책
 - 우천 취소, 연기, 더블헤더 상태 표현
-- 원본 및 정규화 데이터 저장 형식
 - 데이터 중복과 변경 감지 방법
+- RAG 문서별 최신성 기준과 재임베딩 정책
+- 날씨 API 실패 시 fallback 응답 정책
 
 ## 6. RAG 적용 범위
 
@@ -457,75 +435,110 @@ Tool 계약
 
 ### 6.3 RAG Tool 후보
 
-Tool 이름과 책임은 각 확장 단계에서 다시 확정한다.
+MVP1에서 실제 연결한 RAG Tool:
 
 ```text
 search_ticketing_guide
+search_stadium_guide
+search_baseball_knowledge
+```
+
+아직 분리하지 않은 후보:
+
+```text
 search_cheering_guide
 search_stadium_seat_knowledge
 search_stadium_facility_guide
 ```
 
-야구 기본 지식과 팀 탐색에 사용할 Tool은 질문 범위와 출처를 정의한 후 추가한다. MVP 1에 미리 포함하지 않는다.
+MVP1에서는 구장 상세 안내를 `search_stadium_guide`로 묶어 시작했다. 이후 평가 결과에 따라 응원, 좌석, 시설을 별도 Tool로 분리한다.
 
 예매, 응원, 좌석, 구장 시설은 하나의 통합 Tool로 합치지 않는다. 출처, 갱신 주기와 metadata filter가 다르므로 각각 독립적으로 구현하고 검증한다.
 
 | RAG Tool | 단일 책임 | MVP 포함 여부 |
 |---|---|---|
-| `search_ticketing_guide` | 구단·경기별 예매 절차와 주의사항 검색 | 제품 MVP 후보 |
-| `search_cheering_guide` | 팀 응원 문화, 응원 구역과 준비 팁 검색 | 제품 MVP 후보 |
+| `search_ticketing_guide` | 구단·경기별 예매 절차와 주의사항 검색 | MVP1 포함 |
+| `search_stadium_guide` | 구장별 반입, 교통, 시설, 관람 안내 검색 | MVP1 포함 |
+| `search_baseball_knowledge` | 야구 규칙, 용어, 플레이 설명 검색 | MVP1 포함 |
+| `search_cheering_guide` | 팀 응원 문화, 응원 구역과 준비 팁 검색 | MVP 이후 분리 후보 |
 | `search_stadium_seat_knowledge` | 구장 좌석 구역별 시야와 특징 검색 | MVP 이후 |
 | `search_stadium_facility_guide` | 구장 내부 편의시설과 이용 안내 검색 | MVP 이후 |
 
 동선 Tool은 이 RAG 목록에 포함하지 않는다. 지도 API를 도입할 시점에 출발지, 도착 구장, 이동 수단과 출발 시각을 입력받는 별도 정형/API Tool로 기획한다.
 
-## 7. 단계별 Tool 확장안
+## 7. 단계별 확장안
 
-### 단계 1: 경기 일정 MVP
+### 단계 1: MVP1 채팅/Tool 기본 틀
 
 ```text
 find_kbo_game
+get_stadium_info
+get_weather_context
+search_ticketing_guide
+search_stadium_guide
+search_baseball_knowledge
+POST /api/v1/chat SSE
+Tool result card layout
 ```
 
-이미 응원할 팀이 있는 사용자를 우선 지원한다.
+로그인 없이 질문을 시작하고, 필요한 Tool을 실행해 채팅창 안에서 결과를 확인할 수 있는 기반을 만든다.
 
-### 단계 2: 야구 입문 및 응원 팀 탐색
-
-Tool은 사용자 질문과 필요한 데이터 범위를 확인한 후 최소 단위로 확정한다.
+### 단계 2: MVP1 프론트 연결 마무리
 
 ```text
-야구 기본 지식 안내
+SSE fetch stream hook
+guest_id localStorage helper
+conversation_id 복원
+message state reducer
+tool.started / tool.completed 기반 card 갱신
+```
+
+프론트엔드 임시 card preview는 제거했고, 실제 backend event로 card를 렌더링하는 연결 작업이 남아 있다.
+
+### 단계 3: MVP2 검색 품질 개선
+
+```text
+RAG 평가셋
+semantic search baseline
+hybrid search
+lightweight re-rank
+prompt 개선
+observability
+```
+
+세부 계획은 `docs/planning/002-mvp2-backend-upgrade-plan.md`를 기준으로 한다.
+
+### 단계 4: 로그인과 사용자 프로필
+
+```text
+회원가입/로그인
+guest conversation 귀속
+favorite_team_id
+team_onboarding_seen_at
+team_preference_updated_at
+```
+
+응원 팀 선택은 이 단계에서 다시 도입한다. 로그인 전 MVP1에서는 팀 선택을 강제하지 않는다.
+
+### 단계 5: 응원 팀 탐색
+
+```text
 KBO 팀 특징 탐색
+응원 문화 안내
 응원 팀 선택 지원
 ```
 
 팀 선택은 LLM의 주관만으로 결정하지 않는다. 연고지, 선호하는 응원 문화, 좋아하는 선수나 경기 스타일, 직관 접근성 등 사용자가 제공한 기준을 바탕으로 선택 이유를 설명해야 한다.
 
-### 단계 3: 구장 기본 정보
-
-```text
-+ get_stadium_info
-```
-
-주소, 좌표, 홈팀, 공식 URL과 같은 정형 데이터를 제공한다.
-
-### 단계 4: 예매 안내
-
-```text
-+ search_ticketing_guide
-```
-
-첫 RAG Tool로 예매 문서의 출처, 청킹, 검색과 citation 품질을 검증한다.
-
-### 단계 5: 응원 안내
+### 단계 6: 응원 안내 분리
 
 ```text
 + search_cheering_guide
 ```
 
-예매 Tool과 합치지 않고 팀별 응원 문화와 응원 구역 안내만 담당한다.
+현재 구장 안내/예매 안내와 겹치는 응원 정보를 별도 Tool로 분리할 필요가 있을 때 추가한다.
 
-### 단계 6: 좌석 추천
+### 단계 7: 좌석 추천
 
 ```text
 + search_stadium_seat_knowledge
@@ -537,13 +550,8 @@ KBO 팀 특징 탐색
 ### 후속 후보
 
 ```text
-get_weather_context
+지도·교통 API 기반 동선 Tool
 ```
-
-기상청 단기예보 API를 사용해 구장 또는 경기 기준의 날씨 context를 제공한다.
-초기 범위는 좌석 추천이 아니라 비, 더위, 습도, 바람에 따른 직관 컨디션과 준비 팁이다.
-특정 좌석의 지붕, 그늘, 시야, 쾌적도를 확정하지 않으며, 우천 취소도 확정하지 않는다.
-실제 경기 취소 여부는 경기 상태 Tool 또는 공식 발표를 함께 확인해야 한다.
 
 지도·교통 API 기반 동선 Tool은 MVP 이후 후보로 두고, API 제공 범위와 비용을 검토한 뒤 별도 기획한다.
 
@@ -551,58 +559,53 @@ get_weather_context
 
 ### 8.1 처리 흐름 초안
 
-MVP 1에서는 복잡한 Agent 대신 제한된 흐름을 사용한다.
+MVP1에서는 단일 `/api/v1/chat` endpoint와 SSE event stream을 사용한다.
 
 ```text
-로그인 사용자와 프로필 조회
-→ 첫 채팅이면 선택형 응원 팀 온보딩 표시
-→ 선택 시 사용자 프로필에 team_id 저장
-→ 선택 없이 메시지를 보내면 저장 없이 일반 채팅 시작
-→ 사용자 메시지
-→ intent와 필수 입력 확인
-→ 질문의 팀 또는 프로필 기본 팀 결정
-→ 팀 및 날짜 정규화
-→ find_kbo_game 호출
-→ Tool 결과를 기본 답변으로 변환
-→ 사용자 메시지와 assistant 답변 저장
+frontend가 guest_id 확보
+→ POST /api/v1/chat
+→ conversation 생성 또는 조회
+→ user message 저장
+→ ToolRoutingService가 Tool과 입력 결정
+→ tool.started event
+→ AgentToolExecutor가 Tool 실행
+→ tool.completed 또는 tool.failed event
+→ assistant.delta event
+→ assistant.completed event
+→ conversation.updated event
+→ done event
 ```
 
-팀을 결정하는 우선순위:
+현재 Tool 선택 기준:
 
 ```text
-1. 현재 사용자 메시지에 명시된 팀
-2. 현재 대화에서 사용자가 선택한 팀
-3. 로그인 사용자 프로필에 저장된 응원 팀
+1. 현재 사용자 메시지에 명시된 조건
+2. 기존 conversation context에서 추론 가능한 조건
+3. Tool별 필수 입력 충족 여부
 4. 값이 없으면 필요한 경우에만 추가 질문
 ```
 
-### 8.2 라우팅 결과 초안
+### 8.2 Chat request와 event 계약
 
 ```json
 {
-  "intent": "schedule_lookup",
-  "required_tools": ["find_kbo_game"],
-  "tool_inputs": {
-    "find_kbo_game": {
-      "team_id": "LOTTE",
-      "date": "2026-05-23"
-    }
-  },
-  "needs_clarification": false,
-  "missing_fields": [],
-  "next_action": "call_tools"
+  "guest_id": "guest_...",
+  "conversation_id": null,
+  "message": "다음 주 롯데 경기 알려줘"
 }
 ```
+
+SSE event는 `event: <name>`과 JSON `data`로 보낸다. 프론트엔드는 event name을 기준으로 message state와 Tool card state를 갱신한다.
 
 ### 8.3 사용자 응답에 필요한 요소
 
 - 조건을 어떻게 이해했는지 알 수 있는 문장
-- 일정 결과
+- Tool 결과 요약
 - 경기 없음 또는 오류 안내
 - 출처와 데이터 기준 시점
 - 다음 행동을 돕는 짧은 질문
 
-응답 JSON의 최종 Schema, citation 표현과 채팅 저장 방식은 별도 Tool 계약을 작성하면서 확정한다.
+MVP1에서는 Tool card의 구조화 데이터와 assistant 자연어 답변을 분리하는 기반을 마련한다. 최종 답변 품질 개선은 MVP2의 프롬프트 개선 단계에서 진행한다.
 
 ## 9. 테스트와 검증 방향
 
@@ -616,52 +619,66 @@ MVP 1에서는 복잡한 Agent 대신 제한된 흐름을 사용한다.
 - 날짜 형식이 잘못된 경우
 - 일정이 취소 또는 연기된 경우
 - 데이터 출처 조회가 실패한 경우
+- 구장 기본 정보가 있는 경우와 없는 경우
+- 날씨 API가 성공하는 경우와 실패하는 경우
+- RAG 검색 결과가 있는 경우와 없는 경우
+- RAG 결과의 `answerable`과 `limitations`가 올바른 경우
 
 ### 9.2 채팅 흐름 테스트 후보
 
-- 첫 채팅에서 응원 팀을 선택하고 프로필에 저장하는 경우
-- 첫 채팅에서 팀을 선택하지 않고 바로 메시지를 보내는 경우
-- 저장된 응원 팀으로 팀이 생략된 일정 질문을 처리하는 경우
-- 질문에 명시된 다른 팀이 프로필 응원 팀보다 우선하는 경우
-- 다른 팀을 조회해도 프로필 응원 팀이 변경되지 않는 경우
-- 사용자가 명시적으로 응원 팀을 변경하는 경우
+- 새 guest가 첫 메시지를 보내 conversation이 생성되는 경우
+- 기존 conversation에 메시지를 이어 보내는 경우
 - 팀과 날짜가 모두 있는 요청
 - 팀이 없어 추가 질문이 필요한 요청
 - 날짜가 없어 추가 질문이 필요한 요청
-- 이전 대화에서 선택한 팀을 재사용하는 요청
+- 구장 정보 요청
+- 날씨 요청
+- 예매 안내 RAG 요청
+- 구장 안내 RAG 요청
+- 야구 지식 RAG 요청
+- `tool.started` 후 `tool.completed`가 같은 `tool_call_id`로 도착하는지 확인
+- `tool.failed`를 카드 실패 상태로 표시하는지 확인
+- `assistant.delta`를 하나의 assistant message로 이어 붙이는지 확인
 - Tool의 `no_result`를 자연어로 안내하는 경우
 - Tool 오류를 경기 없음으로 잘못 안내하지 않는지 확인
 
 ### 9.3 MVP 품질 기준
 
-정확도 지표와 최소 통과 기준은 일정 출처와 평가 데이터 범위를 확정한 후 작성한다.
+MVP1 품질 기준은 기능 연결과 계약 안정성에 둔다.
+
+```text
+backend tests 통과
+frontend lint/typecheck/build 통과
+POST /api/v1/chat route 등록 확인
+SSE event contract 테스트 존재
+Tool card component가 모든 MVP Tool name을 처리
+실제 stream 연결 후 대표 질문 수동 검증
+```
 
 ## 10. 결정이 필요한 항목
 
 아래 항목을 순서대로 결정한다.
 
-1. `find_kbo_game`의 최종 입력·출력 Schema
-2. KBO 일정 데이터 출처와 수집 방식
-3. 원본 및 정규화 데이터 저장 구조
-4. 채팅 기본 응답 Schema와 citation 표현
-5. intent 및 입력 추출을 규칙, LLM 또는 혼합 방식 중 무엇으로 처리할지
-6. MVP 테스트 데이터와 완료 기준
-7. MVP 이후 두 번째 사용자 시나리오
-8. 첫 RAG Tool과 해당 문서 출처
+1. 프론트엔드 SSE stream parser 구현 방식
+2. message state와 Tool card state의 최종 구조
+3. conversation 목록 API를 바로 붙일지 localStorage cache를 먼저 둘지
+4. assistant 답변을 Tool 요약으로 둘지 LLM 답변 생성까지 붙일지
+5. RAG 평가셋의 우선 Tool
+6. 하이브리드 서치 실험 순서
+7. 로그인 도입 시점과 guest conversation 귀속 방식
+8. MVP2에서 LangChain/LangGraph를 비교할 최소 범위
 
 ## 11. 바로 다음 작업
 
-다음 문서에서는 `find_kbo_game` 하나만 다룬다.
+MVP1 문서 기준 바로 다음 작업은 프론트엔드와 실제 chat stream 연결이다.
 
 ```text
-Tool 책임
-→ 사용자 질문 예시
-→ 입력 Schema
-→ 출력 Schema
-→ 상태 및 오류
-→ 데이터 출처 후보
-→ 테스트 사례
-→ 완료 조건
+frontend SSE stream client 작성
+→ guest_id localStorage helper 연결
+→ chat message reducer 작성
+→ tool.started / tool.completed card 갱신
+→ assistant.delta 누적 렌더링
+→ 대표 질문 수동 검증
 ```
 
-이 계약을 확정한 후 `my-baseball-agent`의 일정 데이터와 크롤러를 분석한다.
+그 다음 작업은 `docs/planning/002-mvp2-backend-upgrade-plan.md`에 따라 RAG 평가셋과 baseline run을 만드는 것이다.
