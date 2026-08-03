@@ -1,0 +1,1 @@
+"""Chat HTTP controller package."""

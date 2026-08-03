@@ -173,6 +173,39 @@ class SqlAlchemyMessageRepository:
 
         return MessageMapper.to_domain(model)
 
+    async def save(
+        self,
+        message: Message,
+    ) -> Message:
+        """기존 메시지의 변경 가능한 필드를 저장합니다."""
+
+        statement = select(ChatMessageModel).where(
+            ChatMessageModel.id == message.id,
+        )
+
+        result = await self._session.execute(statement)
+        model = result.scalar_one_or_none()
+
+        if model is None:
+            raise ValueError("저장할 메시지를 찾을 수 없습니다.")
+
+        model.content = message.content
+        model.content_type = message.content_type.value
+        model.status = message.status.value
+        model.parent_message_id = message.parent_message_id
+        model.model_name = message.model_name
+        model.prompt_tokens = message.prompt_tokens
+        model.completion_tokens = message.completion_tokens
+        model.total_tokens = message.total_tokens
+        model.latency_ms = message.latency_ms
+        model.error_code = message.error_code
+        model.extra_metadata = dict(message.metadata)
+
+        await self._session.flush()
+        await self._session.refresh(model)
+
+        return MessageMapper.to_domain(model)
+
     async def list_by_conversation_id(
         self,
         conversation_id: UUID,

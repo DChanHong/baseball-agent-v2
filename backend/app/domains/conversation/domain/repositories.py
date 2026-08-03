@@ -73,6 +73,11 @@ class MessageRepository(Protocol):
 
         ...
 
+    async def save(self, message: Message) -> Message:
+        """변경된 메시지 상태를 저장합니다."""
+
+        ...
+
     async def list_by_conversation_id(
         self,
         conversation_id: UUID,

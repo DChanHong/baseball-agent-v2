@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.agent.routing_service import ToolRoutingService
 from app.agent.tool_executor import AgentToolExecutor
 from app.core.config import get_settings
 from app.core.database import get_db_session
@@ -36,8 +37,10 @@ from app.domains.baseball.tool.search_stadium_guide.retriever import (
 from app.domains.baseball.tool.search_ticketing_guide.handler import (
     SearchTicketingGuideToolHandler,
 )
+from app.domains.chat.service.services import ChatStreamService
 from app.domains.conversation.infrastructure.repositories import (
     SqlAlchemyConversationRepository,
+    SqlAlchemyMessageRepository,
 )
 from app.domains.conversation.service.services import (
     CreateConversationService,
@@ -153,4 +156,18 @@ def get_agent_tool_executor(
             session
         ),
         get_weather_context_handler=get_weather_context_tool_handler(),
+    )
+
+
+def get_chat_stream_service(
+    session: DatabaseSession,
+) -> ChatStreamService:
+    """Streaming chat endpoint에 필요한 의존성을 조립합니다."""
+
+    return ChatStreamService(
+        conversation_repository=SqlAlchemyConversationRepository(session),
+        message_repository=SqlAlchemyMessageRepository(session),
+        tool_routing_service=ToolRoutingService(),
+        tool_executor=get_agent_tool_executor(session),
+        session=session,
     )
