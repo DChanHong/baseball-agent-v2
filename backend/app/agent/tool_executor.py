@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from app.agent.routing_schemas import (
     FindKboGameRoutingArgs,
     GetStadiumInfoRoutingArgs,
+    GetWeatherContextRoutingArgs,
     SearchBaseballKnowledgeRoutingArgs,
     SearchStadiumGuideRoutingArgs,
     ToolRoutingDecision,
@@ -13,6 +14,12 @@ from app.domains.baseball.tool.find_kbo_game.handler import FindKboGameToolHandl
 from app.domains.baseball.tool.find_kbo_game.schemas import FindKboGameToolInput
 from app.domains.baseball.tool.get_stadium_info.handler import GetStadiumInfoToolHandler
 from app.domains.baseball.tool.get_stadium_info.schemas import GetStadiumInfoToolInput
+from app.domains.baseball.tool.get_weather_context.handler import (
+    GetWeatherContextToolHandler,
+)
+from app.domains.baseball.tool.get_weather_context.schemas import (
+    GetWeatherContextToolInput,
+)
 from app.domains.baseball.tool.search_baseball_knowledge.handler import (
     SearchBaseballKnowledgeToolHandler,
 )
@@ -37,11 +44,13 @@ class AgentToolExecutor:
         get_stadium_info_handler: GetStadiumInfoToolHandler,
         search_stadium_guide_handler: SearchStadiumGuideToolHandler,
         search_baseball_knowledge_handler: SearchBaseballKnowledgeToolHandler,
+        get_weather_context_handler: GetWeatherContextToolHandler,
     ) -> None:
         self._find_kbo_game_handler = find_kbo_game_handler
         self._get_stadium_info_handler = get_stadium_info_handler
         self._search_stadium_guide_handler = search_stadium_guide_handler
         self._search_baseball_knowledge_handler = search_baseball_knowledge_handler
+        self._get_weather_context_handler = get_weather_context_handler
 
     async def execute(self, decision: ToolRoutingDecision) -> BaseModel:
         """선택된 Tool을 실행하고 해당 Tool의 Pydantic 결과 모델을 반환합니다."""
@@ -90,6 +99,18 @@ class AgentToolExecutor:
 
             return await self._search_baseball_knowledge_handler.execute(
                 SearchBaseballKnowledgeToolInput.model_validate(
+                    decision.args.model_dump(mode="json")
+                )
+            )
+
+        if decision.tool_name == "get_weather_context":
+            if not isinstance(decision.args, GetWeatherContextRoutingArgs):
+                raise ValueError(
+                    "get_weather_context requires GetWeatherContextRoutingArgs"
+                )
+
+            return await self._get_weather_context_handler.execute(
+                GetWeatherContextToolInput.model_validate(
                     decision.args.model_dump(mode="json")
                 )
             )

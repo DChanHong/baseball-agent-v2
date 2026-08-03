@@ -4,6 +4,7 @@ from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.agent.tool_executor import AgentToolExecutor
+from app.core.config import get_settings
 from app.core.database import get_db_session
 from app.core.llm import get_openai_client
 from app.domains.baseball.infrastructure.repositories import (
@@ -16,6 +17,10 @@ from app.domains.baseball.tool.find_kbo_game.handler import FindKboGameToolHandl
 from app.domains.baseball.tool.get_stadium_info.handler import (
     GetStadiumInfoToolHandler,
 )
+from app.domains.baseball.tool.get_weather_context.handler import (
+    GetWeatherContextToolHandler,
+)
+from app.domains.baseball.tool.get_weather_context.kma_client import KmaClient
 from app.domains.baseball.tool.search_baseball_knowledge.handler import (
     SearchBaseballKnowledgeToolHandler,
 )
@@ -106,6 +111,18 @@ def get_stadium_info_tool_handler(
     return GetStadiumInfoToolHandler(session=session)
 
 
+def get_weather_context_tool_handler() -> GetWeatherContextToolHandler:
+    """구장 기준 날씨 context Tool 실행에 필요한 의존성을 조립합니다."""
+
+    settings = get_settings()
+    return GetWeatherContextToolHandler(
+        kma_client=KmaClient(
+            endpoint=settings.kma_api_endpoint,
+            service_key=settings.kma_service_key,
+        )
+    )
+
+
 def get_agent_tool_executor(
     session: DatabaseSession,
 ) -> AgentToolExecutor:
@@ -118,4 +135,5 @@ def get_agent_tool_executor(
         search_baseball_knowledge_handler=get_search_baseball_knowledge_tool_handler(
             session
         ),
+        get_weather_context_handler=get_weather_context_tool_handler(),
     )

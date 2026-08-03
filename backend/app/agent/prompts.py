@@ -29,6 +29,15 @@ TOOL_ROUTING_POLICY_PROMPT = """
   search_stadium_guide를 호출한다.
 - 야구 기본 규칙, 플레이 설명, 판정, 최신 KBO 리그 규정 질문이면
   search_baseball_knowledge를 호출한다.
+- 구장 또는 경기 장소 기준의 날씨, 비, 기온, 바람, 습도, 직관 날씨 컨디션 질문이면
+  get_weather_context를 호출한다.
+- 날씨 조회는 현재 실황과 오늘~글피까지만 지원한다.
+- 과거 날씨나 글피 이후 장기예보 질문이면 도구를 호출하지 않고
+  unsupported_reason=weather_forecast_range_not_supported로 둔다.
+- 특정 경기의 공식 우천 취소 여부나 취소 확정을 요구하는 질문은 도구를 호출하지 않고
+  unsupported_reason=weather_or_realtime_cancellation_prediction_required로 둔다.
+- "취소될까?", "비 와도 괜찮을까?"처럼 날씨 context와 직관 준비 수준으로 답할 수 있는 질문은
+  get_weather_context를 호출하되, 취소 확정은 Tool 결과의 limitation으로만 다룬다.
 - 팀 역사, 선수 정보, KBO 일반 상식 중 RAG source 범위 밖 질문은 도구를 호출하지 않는다.
 - 일정/상태 조회에 팀이 필요하고 질문에 팀이 없으면 favorite_team_id를 기본 team_id로 쓴다.
 - 질문에 팀이 명시되어 있으면 favorite_team_id보다 질문의 팀을 우선한다.
@@ -39,6 +48,10 @@ TOOL_ROUTING_POLICY_PROMPT = """
   해당 팀의 홈구장 stadium_id를 사용한다.
 - 구장 안내 질문인데 구장과 팀을 모두 추론할 수 없고 favorite_team_id도 없으면
   needs_clarification=true, clarification_reason=stadium_required_for_stadium_guide_search로 둔다.
+- 날씨 질문에 구장이 직접 명시되지 않았지만 팀이나 favorite_team_id가 있으면
+  해당 팀의 홈구장 stadium_id를 사용한다.
+- 날씨 질문인데 구장과 팀을 모두 추론할 수 없고 favorite_team_id도 없으면
+  needs_clarification=true, clarification_reason=stadium_required_for_weather_lookup로 둔다.
 - 야구 외 질문은 is_in_scope=false, unsupported_reason=out_of_scope로 둔다.
 
 날짜 해석:
@@ -54,7 +67,7 @@ TOOL_ROUTING_POLICY_PROMPT = """
 
 출력 값 주의:
 - 설명은 한국어로 이해하되 출력 enum 값은 스키마의 영문 값을 그대로 사용한다.
-- tool_name은 호출할 때만 "find_kbo_game", "get_stadium_info", "search_stadium_guide", "search_baseball_knowledge" 중 하나이고, 호출하지 않으면 null이다.
+- tool_name은 호출할 때만 "find_kbo_game", "get_stadium_info", "search_stadium_guide", "search_baseball_knowledge", "get_weather_context" 중 하나이고, 호출하지 않으면 null이다.
 - args는 도구를 호출할 때만 채우고, 호출하지 않으면 null이다.
 """.strip()
 
@@ -156,6 +169,26 @@ TOOL_ROUTING_FEW_SHOT_PROMPT = """
 {"message":"비 오면 누가 경기 취소를 결정해?","user_context":{"auth_status":"authenticated","favorite_team_id":"LOTTE","today":"2026-07-28","timezone":"Asia/Seoul"}}
 출력:
 {"is_in_scope":true,"should_call_tool":true,"tool_name":"search_baseball_knowledge","args":{"query":"비 오면 누가 경기 취소를 결정해?","knowledge_types":["latest_kbo_rule"],"top_k":5},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
+
+입력:
+{"message":"오늘 사직 비 와?","user_context":{"auth_status":"authenticated","favorite_team_id":null,"today":"2026-07-28","timezone":"Asia/Seoul"}}
+출력:
+{"is_in_scope":true,"should_call_tool":true,"tool_name":"get_weather_context","args":{"stadium_id":"SAJIK","date":"2026-07-28","time":null,"purpose":"visit_weather"},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
+
+입력:
+{"message":"내일 잠실 경기 날씨 어때?","user_context":{"auth_status":"authenticated","favorite_team_id":null,"today":"2026-07-28","timezone":"Asia/Seoul"}}
+출력:
+{"is_in_scope":true,"should_call_tool":true,"tool_name":"get_weather_context","args":{"stadium_id":"JAMSIL","date":"2026-07-29","time":null,"purpose":"game_weather"},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
+
+입력:
+{"message":"고척돔이면 비 와도 괜찮아?","user_context":{"auth_status":"authenticated","favorite_team_id":null,"today":"2026-07-28","timezone":"Asia/Seoul"}}
+출력:
+{"is_in_scope":true,"should_call_tool":true,"tool_name":"get_weather_context","args":{"stadium_id":"GOCHEOK","date":"2026-07-28","time":null,"purpose":"visit_weather"},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
+
+입력:
+{"message":"다음 주 사직 날씨 알려줘","user_context":{"auth_status":"authenticated","favorite_team_id":null,"today":"2026-07-28","timezone":"Asia/Seoul"}}
+출력:
+{"is_in_scope":true,"should_call_tool":false,"tool_name":null,"args":null,"needs_clarification":false,"clarification_reason":null,"unsupported_reason":"weather_forecast_range_not_supported"}
 """.strip()
 
 

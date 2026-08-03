@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import date as Date
+from datetime import time as Time
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -163,6 +164,26 @@ class GetStadiumInfoRoutingArgs(BaseModel):
         return self
 
 
+class GetWeatherContextRoutingArgs(BaseModel):
+    """Arguments for the get_weather_context routing decision."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    stadium_id: KboStadiumId = Field(
+        description="KBO stadium id. Weather lookup requires a known stadium."
+    )
+    date: Date = Field(
+        description="Weather target date. Supported only from today through three days later."
+    )
+    time: Time | None = Field(
+        description="Optional target time. Use game start or requested time when known."
+    )
+    purpose: Literal["game_weather", "visit_weather"] = Field(
+        default="visit_weather",
+        description="Whether the user asks about game weather or visit condition.",
+    )
+
+
 class ToolRoutingDecision(BaseModel):
     """Structured decision returned by the LLM before final answer generation."""
 
@@ -180,6 +201,7 @@ class ToolRoutingDecision(BaseModel):
             "get_stadium_info",
             "search_stadium_guide",
             "search_baseball_knowledge",
+            "get_weather_context",
         ]
         | None
     ) = Field(
@@ -190,6 +212,7 @@ class ToolRoutingDecision(BaseModel):
         | GetStadiumInfoRoutingArgs
         | SearchStadiumGuideRoutingArgs
         | SearchBaseballKnowledgeRoutingArgs
+        | GetWeatherContextRoutingArgs
         | None
     ) = Field(
         description="Tool arguments. Null when should_call_tool is false."
@@ -201,6 +224,7 @@ class ToolRoutingDecision(BaseModel):
         Literal[
             "team_required_for_schedule_lookup",
             "stadium_required_for_stadium_guide_search",
+            "stadium_required_for_weather_lookup",
         ]
         | None
     )
@@ -208,6 +232,7 @@ class ToolRoutingDecision(BaseModel):
         Literal[
             "out_of_scope",
             "weather_or_realtime_cancellation_prediction_required",
+            "weather_forecast_range_not_supported",
             "ticket_inventory_tool_required",
             "opponent_team_filter_not_supported_yet",
         ]
@@ -222,6 +247,7 @@ class ToolRoutingDecision(BaseModel):
                 "get_stadium_info",
                 "search_stadium_guide",
                 "search_baseball_knowledge",
+                "get_weather_context",
             }:
                 raise ValueError("tool_name must be a supported tool when calling a tool")
             if self.args is None:
@@ -242,6 +268,10 @@ class ToolRoutingDecision(BaseModel):
                 self.args, SearchBaseballKnowledgeRoutingArgs
             ):
                 raise ValueError("args must match search_baseball_knowledge")
+            if self.tool_name == "get_weather_context" and not isinstance(
+                self.args, GetWeatherContextRoutingArgs
+            ):
+                raise ValueError("args must match get_weather_context")
             if self.needs_clarification:
                 raise ValueError("tool calls cannot also require clarification")
             if self.unsupported_reason is not None:

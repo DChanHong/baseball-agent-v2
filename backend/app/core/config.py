@@ -16,6 +16,10 @@ class Settings(BaseSettings):
     openai_model: str = "gpt-5-mini"
     openai_timeout_seconds: float = 30.0
 
+    # KMA short-term forecast API
+    kma_api_endpoint: str = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0"
+    kma_service_key: str = ""
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

@@ -139,9 +139,55 @@ guide_types:
 """.strip()
 
 
+GET_WEATHER_CONTEXT_TOOL_CARD = """
+도구명: get_weather_context
+
+역할:
+- KBO 구장 기준의 현재 실황 또는 오늘~글피 날씨 예보를 조회한다.
+- 강수, 기온, 습도, 바람을 바탕으로 직관 준비와 주의 수준을 반환한다.
+- 우천 취소 여부를 확정하지 않고, 좌석별 쾌적도도 확정하지 않는다.
+
+입력:
+- stadium_id: 필수 KBO 구장 ID
+- date: 필수 조회 날짜. 오늘부터 글피까지만 지원한다.
+- time: 경기 시작 시각 또는 사용자가 물은 시각. 없으면 null
+- purpose: game_weather 또는 visit_weather
+
+구장 ID:
+- SAJIK: 사직야구장, 롯데 홈구장
+- GOCHEOK: 고척스카이돔, 키움 홈구장
+- MUNHAK: 인천 SSG 랜더스필드, 문학구장, SSG 홈구장
+- GWANGJU: 광주-기아 챔피언스 필드, KIA 홈구장
+- DAEGU: 대구 삼성 라이온즈 파크, 삼성 홈구장
+- SUWON: 수원 KT 위즈파크, KT 홈구장
+- DAEJEON: 대전 한화생명 볼파크, 한화 홈구장
+- JAMSIL: 잠실야구장, LG/두산 홈구장
+- CHANGWON: 창원NC파크, NC 홈구장
+
+호출해야 하는 경우:
+- "오늘 사직 비 와?"
+- "내일 잠실 날씨 어때?"
+- "대전 한화생명 볼파크 날씨 알려줘"
+- "고척돔이면 비 와도 괜찮아?"
+- "오늘 날씨면 직관 가기 괜찮아?"
+- "오늘 너무 더우면 야구장 가기 힘들까?"
+
+호출하지 않는 경우:
+- 과거 날씨 질문
+- 글피 이후 장기예보 질문
+- 특정 경기의 공식 우천 취소 여부 또는 취소 확정 요구
+- 질문에서 구장이나 팀을 추론할 수 없고 favorite_team_id도 없으면 clarification을 요청한다.
+
+미지원 분류:
+- 과거 날씨 또는 글피 이후 장기예보: weather_forecast_range_not_supported
+- 특정 경기의 공식 우천 취소 여부 또는 취소 확정 요구: weather_or_realtime_cancellation_prediction_required
+""".strip()
+
+
 TOOL_ROUTING_TOOL_CARDS = [
     FIND_KBO_GAME_TOOL_CARD,
     SEARCH_BASEBALL_KNOWLEDGE_TOOL_CARD,
     GET_STADIUM_INFO_TOOL_CARD,
     SEARCH_STADIUM_GUIDE_TOOL_CARD,
+    GET_WEATHER_CONTEXT_TOOL_CARD,
 ]

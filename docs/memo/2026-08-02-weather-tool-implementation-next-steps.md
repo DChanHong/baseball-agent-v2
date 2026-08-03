@@ -82,6 +82,9 @@ get_weather_context
 실제 경기 취소 여부는 find_kbo_game의 game_status 또는 공식 발표를 확인해야 한다.
 좌석 추천 Tool이 아니며, 좌석별 지붕/그늘/시야/쾌적도를 확정하지 않는다.
 비, 더위, 습도, 바람을 바탕으로 직관 준비와 주의 수준만 알려준다.
+기상청 단기예보 조회서비스에서 조회 가능한 기간까지만 지원한다.
+초기 지원 범위는 현재 실황과 오늘~글피 예보다.
+과거 날씨, 글피 이후 장기예보, 시즌 전체/이번 주말 범위 중 조회 가능 기간을 넘는 날씨는 지원하지 않는다.
 ```
 
 ## 3. KMA API 설정
@@ -91,7 +94,7 @@ get_weather_context
 확정 env 이름:
 
 ```env
-KMA_API_ENDPOINT=http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0
+KMA_API_ENDPOINT=https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0
 KMA_SERVICE_KEY=...
 ```
 
@@ -99,7 +102,7 @@ KMA_SERVICE_KEY=...
 
 ```text
 기상청_단기예보 조회서비스
-Service URL: http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0
+Service URL: https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0
 ```
 
 사용 가능한 상세 API:
@@ -122,7 +125,7 @@ ServiceKey
 `backend/.env.example`에도 아래 값을 추가해야 한다.
 
 ```env
-KMA_API_ENDPOINT=http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0
+KMA_API_ENDPOINT=https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0
 KMA_SERVICE_KEY=
 ```
 
