@@ -22,6 +22,11 @@ import { chatInputAtom } from "@/features/send-message/model/chat-input.atom";
 
 type SuggestionCategory = "seat" | "ticket" | "weather";
 
+type ChatComposerProps = {
+  disabled?: boolean;
+  onSendMessage?: (message: string) => void;
+};
+
 const commandSuggestions: Record<SuggestionCategory, string[]> = {
   seat: [
     "잠실에서 LG 응원하기 좋은 좌석 추천해줘",
@@ -65,7 +70,7 @@ const categoryMeta: Record<
   },
 };
 
-export function ChatComposer() {
+export function ChatComposer({ disabled = false, onSendMessage }: ChatComposerProps) {
   const [value, setValue] = useAtom(chatInputAtom);
   const [searchEnabled, setSearchEnabled] = useState(true);
   const [deepResearchEnabled, setDeepResearchEnabled] = useState(false);
@@ -91,10 +96,13 @@ export function ChatComposer() {
   };
 
   const handleSendMessage = () => {
-    if (!value.trim()) {
+    const trimmedValue = value.trim();
+
+    if (!trimmedValue || disabled) {
       return;
     }
 
+    onSendMessage?.(trimmedValue);
     setValue("");
   };
 
@@ -107,6 +115,7 @@ export function ChatComposer() {
             type="text"
             placeholder="경기 일정, 좌석, 예매, 날씨를 한 번에 물어보세요"
             value={value}
+            disabled={disabled}
             onChange={(event) => setValue(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Enter") {
@@ -169,7 +178,8 @@ export function ChatComposer() {
             <SendButton
               type="button"
               aria-label="메시지 전송"
-              disabled={!value.trim()}
+              disabled={!value.trim() || disabled}
+              $disabled={disabled}
               onClick={handleSendMessage}
             >
               <ArrowUp size={18} />
@@ -281,6 +291,10 @@ const Input = styled.input`
   &::placeholder {
     color: ${({ theme }) => theme.color.muted};
   }
+
+  &:disabled {
+    cursor: wait;
+  }
 `;
 
 const UploadedFiles = styled.div`
@@ -375,7 +389,7 @@ const IconButton = styled.button`
   color: ${({ theme }) => theme.color.muted};
 `;
 
-const SendButton = styled.button`
+const SendButton = styled.button<{ $disabled: boolean }>`
   display: inline-grid;
   width: 36px;
   height: 36px;
@@ -391,7 +405,7 @@ const SendButton = styled.button`
   &:disabled {
     background: #e2e5e0;
     color: #99a29b;
-    cursor: not-allowed;
+    cursor: ${({ $disabled }) => ($disabled ? "wait" : "not-allowed")};
   }
 `;
 
