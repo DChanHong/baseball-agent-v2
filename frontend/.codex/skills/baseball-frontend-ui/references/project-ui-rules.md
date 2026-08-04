@@ -85,3 +85,5 @@ pnpm dev
 ```
 
 375px 전후의 mobile 폭과 1180-1440px 전후의 desktop 폭을 확인한다.
+
+성능 관련 변경이라면 `vercel-react-best-practices.md`를 기준으로 waterfall, bundle, data fetching, re-render 관점도 함께 확인한다.

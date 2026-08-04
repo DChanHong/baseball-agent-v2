@@ -1,6 +1,6 @@
 ---
 name: baseball-frontend-ui
-description: Baseball Agent frontend UI를 설계, 구현, 리뷰할 때 사용한다. frontend/의 Next.js App Router, React, styled-components, FSD-inspired 구조, chat UX, streaming assistant state, source/citation drawer, tool-result card, responsive layout, accessibility, visual polish, Claude-to-Codex UI/UX skill 변환 작업에 사용한다.
+description: Baseball Agent frontend UI를 설계, 구현, 리뷰할 때 사용한다. frontend/의 Next.js App Router, React, styled-components, FSD-inspired 구조, chat UX, streaming assistant state, source/citation drawer, tool-result card, responsive layout, accessibility, visual polish, React/Next.js performance review, Vercel React best practices, Claude-to-Codex UI/UX skill 변환 작업에 사용한다.
 ---
 
 # Baseball Frontend UI
@@ -19,7 +19,7 @@ UI 변경 전에는 필요한 범위만 작게 읽는다.
 - `frontend/src/shared/styles/global-style.ts`
 - 작업 대상과 관련된 `frontend/src/views`, `frontend/src/widgets`, `frontend/src/features`, `frontend/src/entities`, `frontend/src/shared` 하위 파일
 
-조금이라도 의미 있는 UI 구현/리뷰라면 `references/project-ui-rules.md`를 읽는다. Claude용 UI/UX Pro Max 지침을 가져오거나 변환할 때만 `references/claude-to-codex-notes.md`를 읽는다.
+조금이라도 의미 있는 UI 구현/리뷰라면 `references/project-ui-rules.md`를 읽는다. React/Next.js 성능, data fetching, bundle, re-render, streaming UI를 건드리면 `references/vercel-react-best-practices.md`를 읽는다. Claude용 UI/UX Pro Max 지침을 가져오거나 변환할 때만 `references/claude-to-codex-notes.md`를 읽는다.
 
 ## 작업 흐름
 
@@ -29,7 +29,8 @@ UI 변경 전에는 필요한 범위만 작게 읽는다.
 4. 새 색상, radius, shadow, spacing을 추가하기 전에 기존 theme token을 먼저 적용한다.
 5. tool 출력은 신뢰 가능하게 만든다. 가능한 경우 출처, 기준 시점, loading/failure 상태, 한계를 보여준다.
 6. 모바일/데스크톱 폭에서 반응형을 확인한다. 가로 스크롤, 잘린 컨트롤, 겹치는 텍스트가 없어야 한다.
-7. TypeScript 또는 React 코드를 바꿨다면 `frontend/`에서 `pnpm lint`, `pnpm typecheck`를 실행한다.
+7. React/Next.js 성능에 영향이 있으면 Vercel 우선순위대로 waterfall, bundle, server/client fetching, re-render를 먼저 점검한다.
+8. TypeScript 또는 React 코드를 바꿨다면 `frontend/`에서 `pnpm lint`, `pnpm typecheck`를 실행한다.
 
 ## 디자인 방향
 
@@ -66,8 +67,10 @@ UI 변경 전에는 필요한 범위만 작게 읽는다.
 - 새 token을 의도적으로 추가한 경우가 아니라면 color는 `theme.ts`에서 온다.
 - animation은 reduced-motion 기대를 존중하고 짧은 상태 전환에만 사용한다.
 - `pnpm lint`, `pnpm typecheck`를 실행했거나 실행하지 못한 이유를 보고한다.
+- 성능 관련 변경이면 waterfall, bundle, server/client fetching, re-render 관점의 확인 결과를 짧게 보고한다.
 
 ## 참조 문서
 
 - `references/project-ui-rules.md`: 프로젝트 전용 UI, FSD, 접근성, 카드 설계 규칙.
+- `references/vercel-react-best-practices.md`: Vercel React Best Practices를 이 프로젝트에 맞게 요약한 성능 리뷰 규칙.
 - `references/claude-to-codex-notes.md`: Claude용 UI/UX Pro Max 지침을 Codex에 맞게 바꾸는 방법.
