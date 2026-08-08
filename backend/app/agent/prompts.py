@@ -36,7 +36,7 @@ TOOL_ROUTING_POLICY_PROMPT = """
 - 날씨 조회는 현재 실황과 오늘~글피까지만 지원한다.
 - 과거 날씨나 글피 이후 장기예보 질문이면 도구를 호출하지 않고
   unsupported_reason=weather_forecast_range_not_supported로 둔다.
-- 특정 경기의 공식 우천 취소 여부나 취소 확정을 요구하는 질문은 도구를 호출하지 않고
+- 특정 경기의 공식 우천 취소 발표 여부나 취소 확정을 요구하는 질문은 도구를 호출하지 않고
   unsupported_reason=weather_or_realtime_cancellation_prediction_required로 둔다.
 - "취소될까?", "비 와도 괜찮을까?"처럼 날씨 context와 직관 준비 수준으로 답할 수 있는 질문은
   get_weather_context를 호출하되, 취소 확정은 Tool 결과의 limitation으로만 다룬다.
@@ -186,6 +186,11 @@ TOOL_ROUTING_FEW_SHOT_PROMPT = """
 {"message":"비 오면 누가 경기 취소를 결정해?","user_context":{"auth_status":"authenticated","favorite_team_id":"LOTTE","today":"2026-07-28","timezone":"Asia/Seoul"}}
 출력:
 {"is_in_scope":true,"should_call_tool":true,"tool_name":"search_baseball_knowledge","args":{"query":"비 오면 누가 경기 취소를 결정해?","knowledge_types":["latest_kbo_rule"],"top_k":5},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
+
+입력:
+{"message":"오늘 경기 우천 취소될까?","user_context":{"auth_status":"authenticated","favorite_team_id":"LOTTE","today":"2026-07-28","timezone":"Asia/Seoul"}}
+출력:
+{"is_in_scope":true,"should_call_tool":true,"tool_name":"get_weather_context","args":{"stadium_id":"SAJIK","date":"2026-07-28","time":null,"purpose":"game_weather"},"needs_clarification":false,"clarification_reason":null,"unsupported_reason":null}
 
 입력:
 {"message":"오늘 사직 비 와?","user_context":{"auth_status":"authenticated","favorite_team_id":null,"today":"2026-07-28","timezone":"Asia/Seoul"}}

@@ -212,18 +212,19 @@ GET_WEATHER_CONTEXT_TOOL_CARD = """
 - "내일 잠실 날씨 어때?"
 - "대전 한화생명 볼파크 날씨 알려줘"
 - "고척돔이면 비 와도 괜찮아?"
+- "오늘 경기 우천 취소될까?"
 - "오늘 날씨면 직관 가기 괜찮아?"
 - "오늘 너무 더우면 야구장 가기 힘들까?"
 
 호출하지 않는 경우:
 - 과거 날씨 질문
 - 글피 이후 장기예보 질문
-- 특정 경기의 공식 우천 취소 여부 또는 취소 확정 요구
+- 특정 경기의 공식 우천 취소 발표 여부 또는 취소 확정 요구
 - 질문에서 구장이나 팀을 추론할 수 없고 favorite_team_id도 없으면 clarification을 요청한다.
 
 미지원 분류:
 - 과거 날씨 또는 글피 이후 장기예보: weather_forecast_range_not_supported
-- 특정 경기의 공식 우천 취소 여부 또는 취소 확정 요구: weather_or_realtime_cancellation_prediction_required
+- 특정 경기의 공식 우천 취소 발표 여부 또는 취소 확정 요구: weather_or_realtime_cancellation_prediction_required
 """.strip()
 
 
