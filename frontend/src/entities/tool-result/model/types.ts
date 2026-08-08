@@ -1,26 +1,33 @@
 import { z } from "zod";
 
-export const toolResultKindSchema = z.enum([
+const jsonObjectSchema = z.record(z.string(), z.unknown());
+
+export const toolResultNameSchema = z.enum([
   "find_kbo_game",
   "get_stadium_info",
   "get_weather_context",
+  "search_stadium_guide",
+  "search_ticketing_guide",
   "search_baseball_knowledge",
-  "score_seat_candidates",
-  "get_ticketing_guide",
-  "get_logistics_guide",
 ]);
 
-export const toolResultStatusSchema = z.enum(["idle", "running", "success", "error"]);
+export const toolResultStatusSchema = z.enum(["running", "completed", "failed"]);
+
+export const toolResultErrorSchema = z.object({
+  code: z.string().min(1),
+  message: z.string().min(1),
+});
 
 export const toolResultSchema = z.object({
   id: z.string().min(1),
-  kind: toolResultKindSchema,
-  title: z.string().min(1),
+  name: toolResultNameSchema,
   status: toolResultStatusSchema,
-  summary: z.string().min(1),
-  asOf: z.string().optional(),
+  input: jsonObjectSchema.default({}),
+  result: jsonObjectSchema.nullable(),
+  error: toolResultErrorSchema.nullable(),
 });
 
-export type ToolResultKind = z.infer<typeof toolResultKindSchema>;
+export type ToolResultName = z.infer<typeof toolResultNameSchema>;
 export type ToolResultStatus = z.infer<typeof toolResultStatusSchema>;
+export type ToolResultError = z.infer<typeof toolResultErrorSchema>;
 export type ToolResult = z.infer<typeof toolResultSchema>;

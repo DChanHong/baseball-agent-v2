@@ -739,3 +739,19 @@ Agent routing 연결 완료
 3. 현재 상태를 검색 품질 baseline run으로 저장
 4. 실패 케이스가 명확해진 뒤 chunk split, threshold, re-rank, curated chunk 중 선택
 ```
+
+## 다음 블로그 정리 후보
+
+이번 글은 `search_baseball_knowledge`의 검색 품질 baseline과 1차 embedding_text 개선까지로 닫는다.
+
+이후 별도 글로 정리할 만한 내용:
+
+```text
+1. POST /api/v1/chat SSE 스트리밍 엔드포인트 설계와 구현
+2. tool.started / tool.completed / assistant.delta 이벤트 계약
+3. 백엔드 Tool 결과 schema와 프론트 Tool 카드 layout 분리
+4. guest_id 기반 MVP 채팅 세션 흐름
+5. RAG 품질 개선 전에 평가셋과 관측 로그를 먼저 만드는 이유
+```
+
+아직 별도 글로 쓸 만큼 결과가 쌓인 것은 아니지만, 다음 개발 흐름은 "채팅 스트리밍 계약과 Tool 카드 렌더링" 또는 "RAG 검색 평가셋 자동화" 중 하나로 묶으면 좋다.

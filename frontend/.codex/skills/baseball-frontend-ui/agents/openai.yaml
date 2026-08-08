@@ -1,0 +1,4 @@
+interface:
+  display_name: "Baseball Frontend UI"
+  short_description: "KBO 채팅 UI 설계와 구현 기준"
+  default_prompt: "Use $baseball-frontend-ui to design or review frontend UI changes for the KBO baseball agent."
