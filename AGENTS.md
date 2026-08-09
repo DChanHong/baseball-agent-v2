@@ -9,7 +9,7 @@
 - `supabase/`: local Supabase 설정, migration, seed SQL.
 - `data/`: KBO schedule, stadium guide, baseball knowledge 원천/정규화/평가 데이터.
 - `docs/`: 기획, 로드맵, backend/frontend 설계, RAG/embedding 계획, 작업 메모.
-- `docs/spec/`: MVP 현재 구현 상태, UI/API 계약, 개선 전 기준선 문서.
+- `docs/frontend/`: 프론트엔드 구조, UX 계획, UI/API 계약, 개선 전 기준선 문서. layout 관련 spec은 `docs/frontend/layout/`에 둔다.
 - `utils/`: 임시 수집, 검사, 보조 스크립트.
 - `blog/`: 작업 로그와 정리 글 초안.
 - `.agent/`: 이 프로젝트에서 공유 가능한 Codex용 에이전트/스킬 지침.

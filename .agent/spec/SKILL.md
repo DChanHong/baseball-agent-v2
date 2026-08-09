@@ -195,6 +195,12 @@ sequenceDiagram
 docs/spec/
 ```
 
+프론트엔드 전용 spec은 주제별 하위 폴더에 저장한다. layout spec은 다음 위치에 저장한다.
+
+```text
+docs/frontend/layout/
+```
+
 파일명 규칙:
 
 ```text
@@ -207,6 +213,7 @@ YYYY-MM-DD-<scope>-spec.md
 docs/spec/2026-08-09-chat-ui-spec.md
 docs/spec/2026-08-09-backend-api-spec.md
 docs/spec/2026-08-09-mvp-current-state-spec.md
+docs/frontend/layout/2026-08-09-frontend-layout-spec.md
 ```
 
 이미 같은 주제 문서가 있으면 새 파일을 만들기 전에 기존 문서를 읽고 다음 중 하나를 선택한다.
