@@ -26,5 +26,7 @@
 - 작업 대상 폴더의 기존 구조와 문서를 먼저 확인한다.
 - frontend 작업은 `frontend/AGENTS.md`를 따른다.
 - spec 문서화 작업은 `.agent/spec/SKILL.md`의 기준을 따른다.
+- git commit, push 등 이력 변경 작업은 사용자에게 먼저 확인받고 진행한다.
+- DB 접속, migration, seed, reset 등 데이터베이스 작업은 사용자에게 먼저 확인받고 진행한다.
 - 사용자 데이터, API key, 실제 사용자 대화 전문을 저장하지 않는다.
 - 생성 데이터와 평가 결과를 다룰 때는 `raw`, `processed`/`normalized`, `evaluation/cases`, `evaluation/runs`의 의미를 유지한다.
