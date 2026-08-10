@@ -1,0 +1,4 @@
+interface:
+  display_name: "Baseball Frontend Security Audit"
+  short_description: "KBO 프론트엔드 보안 감사 체크리스트"
+  default_prompt: "Use $baseball-frontend-security-audit to review frontend security risks in the KBO baseball agent."
