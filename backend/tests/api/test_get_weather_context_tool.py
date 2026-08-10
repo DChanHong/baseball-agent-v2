@@ -8,6 +8,7 @@ from app.domains.baseball.tool.get_weather_context.handler import (
     GetWeatherContextToolHandler,
 )
 from app.domains.baseball.tool.get_weather_context.kma_client import (
+    KmaClient,
     KmaForecastResponse,
     latest_ultra_short_nowcast_base,
     latest_vilage_forecast_base,
@@ -17,10 +18,16 @@ from app.domains.baseball.tool.get_weather_context.schemas import (
 )
 
 KST = ZoneInfo("Asia/Seoul")
+FIXED_NOW = datetime(2026, 8, 3, 9, 50, tzinfo=KST)
 
 
 class FakeKmaClient:
+    def __init__(self) -> None:
+        self.nowcast_called = False
+        self.vilage_forecast_called = False
+
     async def get_ultra_short_nowcast(self, *, nx: int, ny: int, now: datetime):
+        self.nowcast_called = True
         return KmaForecastResponse(
             api_name="기상청 초단기실황",
             base_date="20260803",
@@ -35,6 +42,7 @@ class FakeKmaClient:
         )
 
     async def get_vilage_forecast(self, *, nx: int, ny: int, now: datetime):
+        self.vilage_forecast_called = True
         return KmaForecastResponse(
             api_name="기상청 단기예보",
             base_date="20260803",
@@ -103,8 +111,22 @@ def test_latest_vilage_forecast_base_waits_for_publish_buffer():
 
 
 @pytest.mark.asyncio
+async def test_kma_client_requires_service_key():
+    client = KmaClient(
+        endpoint="https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0",
+        service_key="",
+    )
+
+    with pytest.raises(ValueError, match="KMA_SERVICE_KEY is required"):
+        await client.get_ultra_short_nowcast(nx=61, ny=126, now=FIXED_NOW)
+
+
+@pytest.mark.asyncio
 async def test_get_weather_context_rejects_dates_outside_supported_range():
-    handler = GetWeatherContextToolHandler(kma_client=FakeKmaClient())
+    handler = GetWeatherContextToolHandler(
+        kma_client=FakeKmaClient(),
+        now_provider=lambda: FIXED_NOW,
+    )
 
     result = await handler.execute(
         GetWeatherContextToolInput(
@@ -121,7 +143,11 @@ async def test_get_weather_context_rejects_dates_outside_supported_range():
 
 @pytest.mark.asyncio
 async def test_get_weather_context_builds_visit_condition_from_forecast():
-    handler = GetWeatherContextToolHandler(kma_client=FakeKmaClient())
+    fake_client = FakeKmaClient()
+    handler = GetWeatherContextToolHandler(
+        kma_client=fake_client,
+        now_provider=lambda: FIXED_NOW,
+    )
 
     result = await handler.execute(
         GetWeatherContextToolInput(
@@ -132,6 +158,8 @@ async def test_get_weather_context_builds_visit_condition_from_forecast():
     )
 
     assert result.supported is True
+    assert fake_client.vilage_forecast_called is True
+    assert fake_client.nowcast_called is False
     assert result.weather is not None
     assert result.weather.temperature_c == 31
     assert result.weather.precipitation_probability == 70
@@ -144,7 +172,10 @@ async def test_get_weather_context_builds_visit_condition_from_forecast():
 
 @pytest.mark.asyncio
 async def test_get_weather_context_keeps_dome_context_for_gocheok():
-    handler = GetWeatherContextToolHandler(kma_client=FakeKmaClient())
+    handler = GetWeatherContextToolHandler(
+        kma_client=FakeKmaClient(),
+        now_provider=lambda: FIXED_NOW,
+    )
 
     result = await handler.execute(
         GetWeatherContextToolInput(
@@ -156,3 +187,28 @@ async def test_get_weather_context_keeps_dome_context_for_gocheok():
 
     assert result.visit_condition.level == "caution"
     assert "dome_stadium_weather_exposure_limited" in result.visit_condition.reasons
+
+
+@pytest.mark.asyncio
+async def test_get_weather_context_uses_nowcast_for_current_query():
+    fake_client = FakeKmaClient()
+    handler = GetWeatherContextToolHandler(
+        kma_client=fake_client,
+        now_provider=lambda: FIXED_NOW,
+    )
+
+    result = await handler.execute(
+        GetWeatherContextToolInput(
+            stadium_id="SAJIK",
+            date=date(2026, 8, 3),
+            time=time(9, 30),
+        )
+    )
+
+    assert result.supported is True
+    assert fake_client.nowcast_called is True
+    assert fake_client.vilage_forecast_called is False
+    assert result.source is not None
+    assert result.source.api == "기상청 초단기실황"
+    assert result.weather is not None
+    assert result.weather.temperature_c == 29.2

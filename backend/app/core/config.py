@@ -9,6 +9,15 @@ class Settings(BaseSettings):
     app_host: str = "0.0.0.0"
     app_port: int = 4000
     app_debug: bool = True
+    api_response_logging_enabled: bool = True
+    api_response_log_dir: str = "logs/api-responses"
+    api_response_log_max_body_bytes: int = 1_000_000
+    cors_allow_origins: str = (
+        "http://127.0.0.1:3001,"
+        "http://localhost:3001,"
+        "http://127.0.0.1:3000,"
+        "http://localhost:3000"
+    )
     database_url: str
 
     # OpenAI

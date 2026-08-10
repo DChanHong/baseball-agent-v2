@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from datetime import datetime, time
 from zoneinfo import ZoneInfo
 
@@ -42,8 +43,13 @@ PTY_LABELS = {
 class GetWeatherContextToolHandler:
     """LLM의 get_weather_context tool 호출을 처리합니다."""
 
-    def __init__(self, kma_client: KmaClient) -> None:
+    def __init__(
+        self,
+        kma_client: KmaClient,
+        now_provider: Callable[[], datetime] | None = None,
+    ) -> None:
         self._kma_client = kma_client
+        self._now_provider = now_provider or (lambda: datetime.now(KST))
 
     async def execute(
         self,
@@ -63,7 +69,7 @@ class GetWeatherContextToolHandler:
                 limitations=["stadium_weather_grid_not_supported"],
             )
 
-        now = datetime.now(KST)
+        now = self._now_provider().astimezone(KST)
         if not is_within_supported_forecast_range(tool_input.date, now.date()):
             return _unsupported_result(
                 tool_input,
