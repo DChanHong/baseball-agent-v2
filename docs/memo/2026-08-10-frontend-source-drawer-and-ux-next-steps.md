@@ -63,3 +63,24 @@
 3. tool card별 도메인 UI 고도화
 4. 모바일 active chat 수동 QA
 5. streaming 상태 관리 hook 분리 검토
+
+## 5. 로그인/Auth 후속 메모
+
+원활한 클라이언트 테스트와 실제 대화 저장 흐름을 위해 로그인 기능도 후속 작업으로 필요하다.
+
+### 5.1 클라이언트 선행 작업
+
+- 실제 provider 결정 전에는 localStorage 기반 mock/local auth로 header와 modal 흐름을 먼저 테스트할 수 있다.
+- 로그인 모달에서 닉네임 또는 이름을 입력하면 header 우측을 `로그인` 버튼에서 `이름/닉네임 + 원형 프로필`로 전환한다.
+- 프로필 dropdown에는 `마이페이지`, `로그아웃`을 둔다.
+- 새로고침 후에도 테스트 로그인 상태가 유지되도록 한다.
+- 실제 auth로 교체하기 쉽도록 `AuthUser` 같은 타입을 먼저 잡아둔다.
+
+### 5.2 백엔드/Auth 연동 필요
+
+- 실제 서비스 단계에서는 backend에도 로그인/auth 처리가 필요하다.
+- auth provider는 Supabase Auth 또는 다른 provider 중 결정해야 한다.
+- backend API에서 authenticated user와 guest user를 구분하는 계약이 필요하다.
+- conversation, message, source/citation 데이터를 user owner와 연결해야 한다.
+- guest conversation을 로그인 계정으로 이전할지 정책을 정해야 한다.
+- 로그인 후 대화 목록 API와 sidebar session list를 실제 user conversation summary와 연결한다.
