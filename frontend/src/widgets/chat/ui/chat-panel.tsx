@@ -1,12 +1,12 @@
 "use client";
 
 import { useSetAtom } from "jotai";
-import { Sparkles } from "lucide-react";
+import { ListChecks, Sparkles, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import type { ChatMessage } from "@/entities/message/model/types";
 import { MessageBubble } from "@/entities/message/ui/message-bubble";
-import type { ToolResult } from "@/entities/tool-result/model/types";
+import type { ToolResult, ToolResultName } from "@/entities/tool-result/model/types";
 import {
   streamChatMessage,
   type ChatStreamEvent,
@@ -21,17 +21,45 @@ import { ChatComposer } from "@/features/send-message/ui/chat-composer";
 import { Button } from "@/shared/ui/button";
 import { isSourceDrawerOpenAtom } from "@/widgets/source-drawer/model/source-drawer.atom";
 
+type ResponseStatus = "idle" | "streaming" | "failed" | ToolResultName;
+
+const responseStatusLabels: Record<ResponseStatus, string> = {
+  idle: "준비됨",
+  streaming: "답변 작성 중",
+  failed: "응답 실패",
+  find_kbo_game: "경기 일정 확인 중",
+  get_stadium_info: "구장 정보 확인 중",
+  get_weather_context: "날씨 확인 중",
+  search_stadium_guide: "구장 가이드 검색 중",
+  search_ticketing_guide: "예매 정보 검색 중",
+  search_baseball_knowledge: "야구 지식 검색 중",
+};
+
+const toolDisplayLabels: Record<ToolResultName, string> = {
+  find_kbo_game: "경기 일정",
+  get_stadium_info: "구장 정보",
+  get_weather_context: "구장 날씨",
+  search_stadium_guide: "구장 가이드",
+  search_ticketing_guide: "예매 안내",
+  search_baseball_knowledge: "야구 지식",
+};
+
 export function ChatPanel() {
   const openSourceDrawer = useSetAtom(isSourceDrawerOpenAtom);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [conversationId, setConversationId] = useState<string | null>(() =>
     typeof window === "undefined" ? null : getStoredConversationId(),
   );
+  const [responseStatus, setResponseStatus] = useState<ResponseStatus>("idle");
   const [isStreaming, setIsStreaming] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [failedRequestMessage, setFailedRequestMessage] = useState<string | null>(null);
+  const [isActivityOpen, setIsActivityOpen] = useState(false);
+  const [activeAssistantMessageId, setActiveAssistantMessageId] = useState<string | null>(null);
   const guestIdRef = useRef<string | null>(null);
   const pendingUserMessageIdRef = useRef<string | null>(null);
   const activeAssistantMessageIdRef = useRef<string | null>(null);
+  const lastSubmittedMessageRef = useRef<string | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
@@ -51,9 +79,14 @@ export function ChatPanel() {
     guestIdRef.current = guestId;
 
     const pendingUserMessageId = `local_user_${window.crypto.randomUUID()}`;
+    const pendingAssistantMessageId = `local_assistant_${window.crypto.randomUUID()}`;
+    lastSubmittedMessageRef.current = message;
     pendingUserMessageIdRef.current = pendingUserMessageId;
-    activeAssistantMessageIdRef.current = null;
+    activeAssistantMessageIdRef.current = pendingAssistantMessageId;
+    setActiveAssistantMessageId(pendingAssistantMessageId);
     setErrorMessage(null);
+    setFailedRequestMessage(null);
+    setResponseStatus("streaming");
     setIsStreaming(true);
     setMessages((prev) => [
       ...prev,
@@ -62,6 +95,13 @@ export function ChatPanel() {
         role: "user",
         content: message,
         createdAt: new Date().toISOString(),
+      },
+      {
+        id: pendingAssistantMessageId,
+        role: "assistant",
+        content: "",
+        createdAt: new Date().toISOString(),
+        toolResults: [],
       },
     ]);
 
@@ -98,9 +138,12 @@ export function ChatPanel() {
 
       const message = error instanceof Error ? error.message : "채팅 응답을 불러오지 못했습니다.";
       setErrorMessage(message);
+      setFailedRequestMessage(lastSubmittedMessageRef.current);
+      setResponseStatus("failed");
       ensureAssistantMessage("응답을 가져오는 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
     } finally {
       setIsStreaming(false);
+      setResponseStatus((current) => (current === "failed" ? current : "idle"));
       abortControllerRef.current = null;
       pendingUserMessageIdRef.current = null;
     }
@@ -116,6 +159,7 @@ export function ChatPanel() {
         applyMessageCreated(event.message);
         return;
       case "tool.started":
+        setResponseStatus(event.name);
         upsertToolResult({
           id: event.toolCallId,
           name: event.name,
@@ -126,6 +170,7 @@ export function ChatPanel() {
         });
         return;
       case "tool.completed":
+        setResponseStatus("streaming");
         upsertToolResult({
           id: event.toolCallId,
           name: event.name,
@@ -136,6 +181,7 @@ export function ChatPanel() {
         });
         return;
       case "tool.failed":
+        setResponseStatus("failed");
         upsertToolResult({
           id: event.toolCallId,
           name: event.name,
@@ -146,22 +192,49 @@ export function ChatPanel() {
         });
         return;
       case "assistant.delta":
-        activeAssistantMessageIdRef.current = event.messageId;
-        appendAssistantDelta(event.messageId, event.delta);
+        setResponseStatus("streaming");
+        {
+          const previousAssistantMessageId = activeAssistantMessageIdRef.current;
+          activeAssistantMessageIdRef.current = event.messageId;
+          setActiveAssistantMessageId(event.messageId);
+          appendAssistantDelta(event.messageId, event.delta, previousAssistantMessageId);
+        }
         return;
       case "assistant.completed":
-        activeAssistantMessageIdRef.current = event.messageId;
-        setMessages((prev) =>
-          prev.map((item) =>
-            item.id === event.messageId ? { ...item, content: event.content } : item,
-          ),
-        );
+        setResponseStatus("streaming");
+        {
+          const previousAssistantMessageId = activeAssistantMessageIdRef.current;
+          activeAssistantMessageIdRef.current = event.messageId;
+          setActiveAssistantMessageId(event.messageId);
+          setMessages((prev) => {
+            if (prev.some((item) => item.id === event.messageId)) {
+              return prev.map((item) =>
+                item.id === event.messageId ? { ...item, content: event.content } : item,
+              );
+            }
+
+            if (previousAssistantMessageId?.startsWith("local_assistant_")) {
+              return prev.map((item) =>
+                item.id === previousAssistantMessageId
+                  ? { ...item, id: event.messageId, content: event.content }
+                  : item,
+              );
+            }
+
+            return prev;
+          });
+        }
         return;
       case "stream.failed":
         setErrorMessage(event.error.message);
+        setFailedRequestMessage(lastSubmittedMessageRef.current);
+        setResponseStatus("failed");
+        ensureAssistantMessage("응답을 가져오는 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
         return;
       case "conversation.updated":
+        return;
       case "done":
+        setResponseStatus((current) => (current === "failed" ? current : "idle"));
         return;
       default:
         return;
@@ -177,7 +250,36 @@ export function ChatPanel() {
     };
 
     if (message.role === "assistant") {
+      const previousAssistantMessageId = activeAssistantMessageIdRef.current;
       activeAssistantMessageIdRef.current = message.id;
+      setActiveAssistantMessageId(message.id);
+
+      setMessages((prev) => {
+        if (prev.some((item) => item.id === message.id)) {
+          return prev;
+        }
+
+        if (previousAssistantMessageId?.startsWith("local_assistant_")) {
+          const hasLocalAssistantMessage = prev.some((item) => item.id === previousAssistantMessageId);
+
+          if (!hasLocalAssistantMessage) {
+            return [...prev, chatMessage];
+          }
+
+          return prev.map((item) =>
+            item.id === previousAssistantMessageId
+              ? {
+                  ...chatMessage,
+                  content: chatMessage.content || item.content,
+                  toolResults: item.toolResults ?? [],
+                }
+              : item,
+          );
+        }
+
+        return [...prev, chatMessage];
+      });
+      return;
     }
 
     setMessages((prev) => {
@@ -199,6 +301,7 @@ export function ChatPanel() {
     const messageId =
       activeAssistantMessageIdRef.current ?? `local_assistant_${window.crypto.randomUUID()}`;
     activeAssistantMessageIdRef.current = messageId;
+    setActiveAssistantMessageId(messageId);
 
     setMessages((prev) => {
       if (prev.some((item) => item.id === messageId)) {
@@ -220,9 +323,25 @@ export function ChatPanel() {
     return messageId;
   };
 
-  const appendAssistantDelta = (messageId: string, delta: string) => {
+  const appendAssistantDelta = (
+    messageId: string,
+    delta: string,
+    previousAssistantMessageId: string | null,
+  ) => {
     setMessages((prev) => {
       if (!prev.some((item) => item.id === messageId)) {
+        if (previousAssistantMessageId?.startsWith("local_assistant_")) {
+          const hasLocalAssistantMessage = prev.some((item) => item.id === previousAssistantMessageId);
+
+          if (hasLocalAssistantMessage) {
+            return prev.map((item) =>
+              item.id === previousAssistantMessageId
+                ? { ...item, id: messageId, content: `${item.content}${delta}` }
+                : item,
+            );
+          }
+        }
+
         return [
           ...prev,
           {
@@ -271,6 +390,16 @@ export function ChatPanel() {
   };
 
   const hasMessages = messages.length > 0;
+  const currentStatusLabel = responseStatusLabels[responseStatus];
+  const activityItems = messages.flatMap((message) => message.toolResults ?? []);
+  const hasActivity = activityItems.length > 0 || isStreaming || errorMessage;
+  const handleRetry = () => {
+    if (!failedRequestMessage || isStreaming) {
+      return;
+    }
+
+    handleSendMessage(failedRequestMessage);
+  };
 
   return (
     <Panel $hasMessages={hasMessages}>
@@ -278,12 +407,27 @@ export function ChatPanel() {
         <ChatWorkspace>
           <MessageList aria-live="polite">
             {messages.map((message) => (
-              <MessageBubble key={message.id} message={message} />
+              <MessageBubble
+                key={message.id}
+                message={message}
+                isStreaming={isStreaming && message.id === activeAssistantMessageId}
+              />
             ))}
-            {errorMessage ? <ErrorText>{errorMessage}</ErrorText> : null}
+            {errorMessage ? (
+              <ErrorBlock role="alert">
+                <ErrorText>{errorMessage}</ErrorText>
+                <RetryButton type="button" disabled={isStreaming} onClick={handleRetry}>
+                  다시 시도
+                </RetryButton>
+              </ErrorBlock>
+            ) : null}
           </MessageList>
           <Dock>
-            <ChatComposer disabled={isStreaming} onSendMessage={handleSendMessage} />
+            <ChatComposer
+              disabled={isStreaming}
+              showSuggestions={false}
+              onSendMessage={handleSendMessage}
+            />
             <FooterActions>
               <Button type="button" variant="ghost" onClick={() => openSourceDrawer(true)}>
                 출처 패널 열기
@@ -317,9 +461,53 @@ export function ChatPanel() {
           </FooterActions>
         </Hero>
       )}
+      <ActivityButton
+        type="button"
+        aria-expanded={isActivityOpen}
+        aria-controls="chat-activity-panel"
+        onClick={() => setIsActivityOpen((prev) => !prev)}
+      >
+        <ListChecks size={18} />
+        작업 내역
+        {hasActivity ? <ActivityDot aria-hidden="true" /> : null}
+      </ActivityButton>
+      {isActivityOpen ? (
+        <ActivityPanel id="chat-activity-panel">
+          <ActivityHeader>
+            <ActivityTitle>작업 내역</ActivityTitle>
+            <ActivityCloseButton
+              type="button"
+              aria-label="작업 내역 닫기"
+              onClick={() => setIsActivityOpen(false)}
+            >
+              <X size={16} />
+            </ActivityCloseButton>
+          </ActivityHeader>
+          <ActivityList>
+            {activityItems.length ? (
+              activityItems.map((item) => (
+                <ActivityItem key={item.id}>
+                  <ActivityName>{toolLabel(item.name)}</ActivityName>
+                  <StatusBadge $status={item.status === "failed" ? "failed" : item.status === "running" ? item.name : "idle"}>
+                    {item.status === "running"
+                      ? "진행 중"
+                      : item.status === "failed"
+                        ? "실패"
+                        : "완료"}
+                  </StatusBadge>
+                </ActivityItem>
+              ))
+            ) : (
+              <ActivityEmpty>{currentStatusLabel}</ActivityEmpty>
+            )}
+          </ActivityList>
+        </ActivityPanel>
+      ) : null}
     </Panel>
   );
 }
+
+const toolLabel = (name: ToolResultName) => toolDisplayLabels[name];
 
 const Panel = styled.main<{ $hasMessages: boolean }>`
   display: flex;
@@ -348,6 +536,33 @@ const ChatWorkspace = styled.section`
   @media (max-width: 720px) {
     min-height: calc(100vh - 64px);
   }
+`;
+
+const StatusBadge = styled.span<{ $status: ResponseStatus }>`
+  display: inline-flex;
+  flex: 0 0 auto;
+  min-height: 28px;
+  align-items: center;
+  border: 1px solid
+    ${({ $status, theme }) =>
+      $status === "failed" ? "rgba(217, 70, 53, 0.26)" : theme.color.border};
+  border-radius: 999px;
+  padding: 0 10px;
+  background: ${({ $status, theme }) =>
+    $status === "failed"
+      ? "rgba(217, 70, 53, 0.08)"
+      : $status === "idle"
+        ? theme.color.panel
+        : "rgba(19, 111, 74, 0.1)"};
+  color: ${({ $status, theme }) =>
+    $status === "failed"
+      ? theme.color.accent
+      : $status === "idle"
+        ? theme.color.muted
+        : theme.color.primary};
+  font-size: 12px;
+  font-weight: 850;
+  white-space: nowrap;
 `;
 
 const MessageList = styled.div`
@@ -469,4 +684,148 @@ const ErrorText = styled.p`
   color: ${({ theme }) => theme.color.accent};
   font-size: 13px;
   font-weight: 700;
+`;
+
+const ErrorBlock = styled.div`
+  display: flex;
+  width: min(100%, 760px);
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid rgba(217, 70, 53, 0.22);
+  border-radius: ${({ theme }) => theme.radius.md};
+  padding: 10px 12px;
+  background: rgba(217, 70, 53, 0.08);
+
+  ${ErrorText} {
+    width: auto;
+    border: 0;
+    padding: 0;
+    background: transparent;
+  }
+`;
+
+const RetryButton = styled.button`
+  flex: 0 0 auto;
+  border: 1px solid rgba(217, 70, 53, 0.24);
+  border-radius: 999px;
+  padding: 7px 10px;
+  background: ${({ theme }) => theme.color.panel};
+  color: ${({ theme }) => theme.color.accent};
+  font-size: 12px;
+  font-weight: 850;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+`;
+
+const ActivityButton = styled.button`
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 25;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  border: 1px solid rgba(19, 111, 74, 0.2);
+  border-radius: 999px;
+  padding: 0 14px;
+  background: ${({ theme }) => theme.color.panel};
+  color: ${({ theme }) => theme.color.primary};
+  font-size: 13px;
+  font-weight: 900;
+  box-shadow: ${({ theme }) => theme.shadow.panel};
+
+  @media (max-width: 560px) {
+    right: 14px;
+    bottom: 14px;
+  }
+`;
+
+const ActivityDot = styled.span`
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: ${({ theme }) => theme.color.accent};
+`;
+
+const ActivityPanel = styled.aside`
+  position: fixed;
+  right: 22px;
+  bottom: 74px;
+  z-index: 24;
+  display: grid;
+  gap: 12px;
+  width: min(340px, calc(100vw - 28px));
+  border: 1px solid ${({ theme }) => theme.color.border};
+  border-radius: ${({ theme }) => theme.radius.md};
+  padding: 14px;
+  background: ${({ theme }) => theme.color.panel};
+  box-shadow: ${({ theme }) => theme.shadow.panel};
+
+  @media (max-width: 560px) {
+    right: 14px;
+    bottom: 66px;
+  }
+`;
+
+const ActivityHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+`;
+
+const ActivityTitle = styled.h2`
+  margin: 0;
+  color: ${({ theme }) => theme.color.foreground};
+  font-size: 15px;
+`;
+
+const ActivityCloseButton = styled.button`
+  display: inline-grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: ${({ theme }) => theme.color.panelAlt};
+  color: ${({ theme }) => theme.color.muted};
+`;
+
+const ActivityList = styled.div`
+  display: grid;
+  gap: 8px;
+`;
+
+const ActivityItem = styled.div`
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid ${({ theme }) => theme.color.border};
+  border-radius: ${({ theme }) => theme.radius.sm};
+  padding: 10px;
+  background: ${({ theme }) => theme.color.panelAlt};
+`;
+
+const ActivityName = styled.span`
+  min-width: 0;
+  overflow: hidden;
+  color: ${({ theme }) => theme.color.foreground};
+  font-size: 13px;
+  font-weight: 850;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const ActivityEmpty = styled.p`
+  margin: 0;
+  color: ${({ theme }) => theme.color.muted};
+  font-size: 13px;
+  font-weight: 750;
 `;

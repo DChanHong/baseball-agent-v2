@@ -20,7 +20,7 @@ const statusLabel: Record<ToolResultStatus, string> = {
 
 export function ToolCardShell({ icon, title, status, children, meta }: ToolCardShellProps) {
   return (
-    <Card>
+    <Card $status={status}>
       <TopLine>
         <TitleWrap>
           <IconWrap $status={status}>{icon}</IconWrap>
@@ -37,14 +37,57 @@ export function ToolCardShell({ icon, title, status, children, meta }: ToolCardS
 export const Summary = styled.p`
   margin: 0;
   color: ${({ theme }) => theme.color.foreground};
-  line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.72;
   white-space: pre-wrap;
+  word-break: keep-all;
+`;
+
+export const LoadingDots = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 6px;
+
+  span {
+    width: 5px;
+    height: 5px;
+    border-radius: 999px;
+    background: ${({ theme }) => theme.color.info};
+    animation: tool-loading 900ms ease-in-out infinite;
+  }
+
+  span:nth-child(2) {
+    animation-delay: 120ms;
+  }
+
+  span:nth-child(3) {
+    animation-delay: 240ms;
+  }
+
+  @keyframes tool-loading {
+    0%,
+    80%,
+    100% {
+      opacity: 0.3;
+      transform: translateY(0);
+    }
+
+    40% {
+      opacity: 1;
+      transform: translateY(-2px);
+    }
+  }
 `;
 
 export const DataGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  overflow: hidden;
+  border: 1px solid ${({ theme }) => theme.color.border};
+  border-radius: ${({ theme }) => theme.radius.md};
+  background: ${({ theme }) => theme.color.border};
+  gap: 1px;
 
   @media (max-width: 560px) {
     grid-template-columns: 1fr;
@@ -53,26 +96,25 @@ export const DataGrid = styled.div`
 
 export const DataItem = styled.div`
   display: grid;
-  gap: 3px;
+  gap: 5px;
   min-width: 0;
-  border: 1px solid ${({ theme }) => theme.color.border};
-  border-radius: ${({ theme }) => theme.radius.sm};
-  padding: 10px;
-  background: ${({ theme }) => theme.color.panelAlt};
+  padding: 12px 14px;
+  background: #f6faf7;
 `;
 
 export const Label = styled.span`
   color: ${({ theme }) => theme.color.muted};
-  font-size: 12px;
-  font-weight: 800;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0;
 `;
 
 export const Value = styled.span`
   min-width: 0;
   color: ${({ theme }) => theme.color.foreground};
-  font-size: 14px;
-  font-weight: 800;
-  line-height: 1.45;
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1.35;
   overflow-wrap: anywhere;
 `;
 
@@ -104,13 +146,40 @@ export const EvidenceText = styled.p`
   -webkit-line-clamp: 2;
 `;
 
-const Card = styled.article`
+const Card = styled.article<{ $status: ToolResultStatus }>`
+  position: relative;
   display: grid;
-  gap: 12px;
+  overflow: hidden;
+  gap: 14px;
   border: 1px solid ${({ theme }) => theme.color.border};
   border-radius: ${({ theme }) => theme.radius.md};
-  padding: 14px;
-  background: ${({ theme }) => theme.color.panel};
+  padding: 16px;
+  background:
+    linear-gradient(
+      90deg,
+      ${({ $status }) =>
+          $status === "failed"
+            ? "rgba(217, 70, 53, 0.08)"
+            : $status === "running"
+              ? "rgba(29, 95, 145, 0.08)"
+              : "rgba(19, 111, 74, 0.08)"}
+        0,
+      rgba(255, 255, 255, 0) 110px
+    ),
+    ${({ theme }) => theme.color.panel};
+
+  &::before {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: ${({ $status, theme }) =>
+      $status === "failed"
+        ? theme.color.accent
+        : $status === "running"
+          ? theme.color.info
+          : theme.color.primary};
+    content: "";
+  }
 `;
 
 const TopLine = styled.div`
@@ -130,8 +199,8 @@ const TitleWrap = styled.div`
 const IconWrap = styled.span<{ $status: ToolResultStatus }>`
   display: inline-grid;
   flex: 0 0 auto;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   place-items: center;
   border-radius: ${({ theme }) => theme.radius.sm};
 
@@ -156,14 +225,15 @@ const Title = styled.h3`
   min-width: 0;
   margin: 0;
   color: ${({ theme }) => theme.color.foreground};
-  font-size: 15px;
+  font-size: 16px;
+  line-height: 1.35;
   overflow-wrap: anywhere;
 `;
 
 const Status = styled.span<{ $status: ToolResultStatus }>`
   flex: 0 0 auto;
   border-radius: 999px;
-  padding: 4px 8px;
+  padding: 5px 9px;
   background: ${({ $status, theme }) =>
     $status === "failed" ? "#fde8e5" : $status === "running" ? "#e7f0f8" : theme.color.panelAlt};
   color: ${({ $status, theme }) =>
@@ -178,7 +248,7 @@ const Status = styled.span<{ $status: ToolResultStatus }>`
 
 const Body = styled.div`
   display: grid;
-  gap: 10px;
+  gap: 12px;
 `;
 
 const Meta = styled.div`

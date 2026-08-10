@@ -46,7 +46,7 @@ export function WeatherContextCard({ result }: Props) {
     >
       <Summary>
         {stringValue(payload?.stadium_name, stringValue(payload?.stadium_id, "구장"))} 기준 직관
-        컨디션은 {conditionLabel[level] ?? level}입니다.
+        컨디션은 {conditionLabel[level] ?? level} 수준입니다.
       </Summary>
       <DataGrid>
         <DataItem>

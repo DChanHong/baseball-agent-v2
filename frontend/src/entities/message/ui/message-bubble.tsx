@@ -6,17 +6,33 @@ import { ToolResultCard } from "@/entities/tool-result/ui/tool-result-card";
 
 type MessageBubbleProps = {
   message: ChatMessage;
+  isStreaming?: boolean;
 };
 
-export function MessageBubble({ message }: MessageBubbleProps) {
+export function MessageBubble({ message, isStreaming = false }: MessageBubbleProps) {
   const isUser = message.role === "user";
+  const toolResults = message.toolResults ?? [];
+  const shouldShowTyping = !isUser && isStreaming && !message.content.trim();
+  const hasContent = Boolean(message.content.trim());
+  const hasToolResults = toolResults.length > 0;
+
+  if (!hasContent && !hasToolResults && !shouldShowTyping) {
+    return null;
+  }
 
   return (
     <Bubble $isUser={isUser}>
-      <Body>{message.content}</Body>
-      {message.toolResults?.length ? (
+      {hasContent ? <Body>{message.content}</Body> : null}
+      {shouldShowTyping ? (
+        <TypingIndicator $hasFollowingContent={hasToolResults} aria-label="답변 작성 중">
+          <TypingDot />
+          <TypingDot />
+          <TypingDot />
+        </TypingIndicator>
+      ) : null}
+      {hasToolResults ? (
         <ToolList>
-          {message.toolResults.map((result) => (
+          {toolResults.map((result) => (
             <ToolResultCard key={result.id} result={result} />
           ))}
         </ToolList>
@@ -44,4 +60,49 @@ const ToolList = styled.div`
   display: grid;
   gap: 10px;
   margin-top: 14px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+`;
+
+const TypingIndicator = styled.div<{ $hasFollowingContent: boolean }>`
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: ${({ $hasFollowingContent }) => ($hasFollowingContent ? "12px" : 0)};
+  border-radius: 999px;
+  padding: 8px 10px;
+  background: ${({ theme }) => theme.color.panelAlt};
+`;
+
+const TypingDot = styled.span`
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: ${({ theme }) => theme.color.primary};
+  animation: typing-bounce 880ms ease-in-out infinite;
+
+  &:nth-child(2) {
+    animation-delay: 120ms;
+  }
+
+  &:nth-child(3) {
+    animation-delay: 240ms;
+  }
+
+  @keyframes typing-bounce {
+    0%,
+    80%,
+    100% {
+      opacity: 0.35;
+      transform: translateY(0);
+    }
+
+    40% {
+      opacity: 1;
+      transform: translateY(-3px);
+    }
+  }
 `;

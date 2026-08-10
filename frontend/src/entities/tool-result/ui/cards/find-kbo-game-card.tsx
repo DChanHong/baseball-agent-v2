@@ -23,7 +23,7 @@ export function FindKboGameCard({ result }: Props) {
 
   return (
     <ToolCardShell icon={<CalendarDays size={18} />} title="경기 일정" status={result.status}>
-      <Summary>조건에 맞는 경기 {total}건을 조회했습니다.</Summary>
+      <Summary>조건에 맞는 경기 {total}건을 찾았습니다.</Summary>
       {games.map((game) => (
         <DataGrid key={stringValue(game.internal_game_key, stringValue(game.id))}>
           <DataItem>

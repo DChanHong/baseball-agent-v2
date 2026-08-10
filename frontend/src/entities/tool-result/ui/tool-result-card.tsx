@@ -13,7 +13,7 @@ type ToolResultCardProps = {
 };
 
 export function ToolResultCard({ result }: ToolResultCardProps) {
-  if (result.status === "failed") {
+  if (result.status !== "completed") {
     return <GenericToolCard result={result} />;
   }
 
