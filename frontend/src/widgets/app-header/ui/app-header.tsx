@@ -101,9 +101,11 @@ export function AppHeader() {
 }
 
 const Header = styled.header`
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 20;
+  right: 0;
+  left: 0;
+  z-index: 30;
   display: flex;
   align-items: center;
   justify-content: space-between;

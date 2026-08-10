@@ -332,6 +332,11 @@ const Panel = styled.main<{ $hasMessages: boolean }>`
     linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(247, 248, 243, 0.96)),
     radial-gradient(circle at 50% 18%, rgba(217, 70, 53, 0.1), transparent 34%),
     ${({ theme }) => theme.color.background};
+
+  @media (max-width: 720px) {
+    min-height: calc(100vh - 64px);
+    padding: ${({ $hasMessages }) => ($hasMessages ? "0 14px" : "36px 14px")};
+  }
 `;
 
 const ChatWorkspace = styled.section`
@@ -339,6 +344,10 @@ const ChatWorkspace = styled.section`
   grid-template-rows: minmax(0, 1fr) auto;
   width: min(100%, 920px);
   min-height: calc(100vh - 72px);
+
+  @media (max-width: 720px) {
+    min-height: calc(100vh - 64px);
+  }
 `;
 
 const MessageList = styled.div`
