@@ -286,6 +286,7 @@ class ChatStreamService:
         conversation = Conversation(
             id=uuid4(),
             user_id=None,
+            user_profile_id=None,
             guest_id=guest_id,
             title=title,
             status=ConversationStatus.ACTIVE,
@@ -317,6 +318,7 @@ class ChatStreamService:
             id=uuid4(),
             conversation_id=conversation_id,
             user_id=None,
+            user_profile_id=None,
             role=role,
             content=content,
             content_type=MessageContentType.MARKDOWN,
@@ -332,6 +334,7 @@ class ChatStreamService:
             metadata=metadata,
             created_at=now,
             updated_at=now,
+            deleted_at=None,
         )
         return await self._message_repository.add(message)
 

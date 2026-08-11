@@ -8,6 +8,11 @@ from app.agent.tool_executor import AgentToolExecutor
 from app.core.config import get_settings
 from app.core.database import get_db_session
 from app.core.llm import get_openai_client
+from app.domains.auth.infrastructure.repositories import (
+    SqlAlchemyUserProfileRepository,
+)
+from app.domains.auth.infrastructure.supabase_auth_client import SupabaseAuthClient
+from app.domains.auth.service.services import AuthRedirectService, AuthSessionService
 from app.domains.baseball.infrastructure.repositories import (
     SqlAlchemyKboGameRepository,
 )
@@ -62,6 +67,24 @@ def get_create_conversation_service(
 
     return CreateConversationService(
         repository=repository,
+        session=session,
+    )
+
+
+def get_auth_redirect_service() -> AuthRedirectService:
+    """Auth OAuth redirect flow에 필요한 의존성을 조립합니다."""
+
+    return AuthRedirectService(settings=get_settings())
+
+
+def get_auth_session_service(
+    session: DatabaseSession,
+) -> AuthSessionService:
+    """Auth session 처리에 필요한 의존성을 조립합니다."""
+
+    return AuthSessionService(
+        supabase_auth_client=SupabaseAuthClient(settings=get_settings()),
+        user_profile_repository=SqlAlchemyUserProfileRepository(session),
         session=session,
     )
 

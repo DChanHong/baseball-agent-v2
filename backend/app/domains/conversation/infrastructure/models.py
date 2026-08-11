@@ -53,6 +53,13 @@ class ChatConversationModel(Base):
         nullable=True,
     )
 
+    # 애플리케이션 프로필 기준 소유자입니다. Auth 전환 후 주 조회 기준입니다.
+    user_profile_id: Mapped[UUID | None] = mapped_column(
+        PostgreSQLUUID(as_uuid=True),
+        ForeignKey("public.user_profiles.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+
     # 로그인 전 브라우저 사용자를 식별하는 임시 UUID입니다.
     guest_id: Mapped[UUID | None] = mapped_column(
         PostgreSQLUUID(as_uuid=True),
@@ -143,6 +150,13 @@ class ChatMessageModel(Base):
     user_id: Mapped[UUID | None] = mapped_column(
         PostgreSQLUUID(as_uuid=True),
         ForeignKey("auth.users.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+
+    # 애플리케이션 프로필 기준 작성자입니다. Auth 전환 후 주 조회 기준입니다.
+    user_profile_id: Mapped[UUID | None] = mapped_column(
+        PostgreSQLUUID(as_uuid=True),
+        ForeignKey("public.user_profiles.id", ondelete="SET NULL"),
         nullable=True,
     )
 
@@ -240,4 +254,10 @@ class ChatMessageModel(Base):
         DateTime(timezone=True),
         nullable=False,
         server_default=func.now(),
+    )
+
+    # NULL이면 정상 메시지, 값이 있으면 소프트 삭제된 메시지입니다.
+    deleted_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
     )

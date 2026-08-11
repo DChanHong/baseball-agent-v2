@@ -36,6 +36,7 @@ class CreateConversationService:
         conversation = Conversation(
             id=uuid4(),
             user_id=None,
+            user_profile_id=None,
             guest_id=command.guest_id,
             title=command.title,
             status=ConversationStatus.ACTIVE,

@@ -27,6 +27,7 @@ class ConversationResponse(BaseModel):
 
     id: UUID
     user_id: UUID | None
+    user_profile_id: UUID | None
     guest_id: UUID | None
     title: str | None
     status: ConversationStatus

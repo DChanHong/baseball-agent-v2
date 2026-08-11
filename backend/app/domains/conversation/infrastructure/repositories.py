@@ -123,6 +123,7 @@ class SqlAlchemyConversationRepository:
             raise ValueError("저장할 대화방을 찾을 수 없습니다.")
 
         model.user_id = conversation.user_id
+        model.user_profile_id = conversation.user_profile_id
         model.guest_id = conversation.guest_id
         model.title = conversation.title
         model.status = conversation.status.value
@@ -200,6 +201,7 @@ class SqlAlchemyMessageRepository:
         model.latency_ms = message.latency_ms
         model.error_code = message.error_code
         model.extra_metadata = dict(message.metadata)
+        model.deleted_at = message.deleted_at
 
         await self._session.flush()
         await self._session.refresh(model)
@@ -219,6 +221,7 @@ class SqlAlchemyMessageRepository:
             select(ChatMessageModel)
             .where(
                 ChatMessageModel.conversation_id == conversation_id,
+                ChatMessageModel.deleted_at.is_(None),
             )
             .order_by(ChatMessageModel.sequence_no.asc())
             .limit(limit)
@@ -260,6 +263,7 @@ class SqlAlchemyMessageRepository:
             + 1
         ).where(
             ChatMessageModel.conversation_id == conversation_id,
+            ChatMessageModel.deleted_at.is_(None),
         )
 
         sequence_result = await self._session.execute(sequence_statement)

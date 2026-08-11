@@ -21,6 +21,7 @@ class ConversationMapper:
         return Conversation(
             id=model.id,
             user_id=model.user_id,
+            user_profile_id=model.user_profile_id,
             guest_id=model.guest_id,
             title=model.title,
             status=ConversationStatus(model.status),
@@ -40,6 +41,7 @@ class ConversationMapper:
         return ChatConversationModel(
             id=entity.id,
             user_id=entity.user_id,
+            user_profile_id=entity.user_profile_id,
             guest_id=entity.guest_id,
             title=entity.title,
             status=entity.status.value,
@@ -64,6 +66,7 @@ class MessageMapper:
             id=model.id,
             conversation_id=model.conversation_id,
             user_id=model.user_id,
+            user_profile_id=model.user_profile_id,
             role=MessageRole(model.role),
             content=model.content,
             content_type=MessageContentType(model.content_type),
@@ -79,6 +82,7 @@ class MessageMapper:
             metadata=dict(model.extra_metadata),
             created_at=model.created_at,
             updated_at=model.updated_at,
+            deleted_at=model.deleted_at,
         )
 
     @staticmethod
@@ -89,6 +93,7 @@ class MessageMapper:
             id=entity.id,
             conversation_id=entity.conversation_id,
             user_id=entity.user_id,
+            user_profile_id=entity.user_profile_id,
             role=entity.role.value,
             content=entity.content,
             content_type=entity.content_type.value,
@@ -104,4 +109,5 @@ class MessageMapper:
             extra_metadata=dict(entity.metadata),
             created_at=entity.created_at,
             updated_at=entity.updated_at,
+            deleted_at=entity.deleted_at,
         )

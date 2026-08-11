@@ -24,6 +24,7 @@ class Conversation:
 
     id: UUID
     user_id: UUID | None
+    user_profile_id: UUID | None
     guest_id: UUID | None
     title: str | None
     status: ConversationStatus
@@ -58,6 +59,7 @@ class Message:
     id: UUID
     conversation_id: UUID
     user_id: UUID | None
+    user_profile_id: UUID | None
     role: MessageRole
     content: str
     content_type: MessageContentType
@@ -73,6 +75,7 @@ class Message:
     metadata: dict[str, Any]
     created_at: datetime
     updated_at: datetime
+    deleted_at: datetime | None
 
     def __post_init__(self) -> None:
         """메시지 순서와 성능 측정값이 올바른지 검사합니다."""

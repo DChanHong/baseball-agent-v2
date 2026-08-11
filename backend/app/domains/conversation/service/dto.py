@@ -39,6 +39,7 @@ class ConversationResultDto:
 
     id: UUID
     user_id: UUID | None
+    user_profile_id: UUID | None
     guest_id: UUID | None
     title: str | None
     status: ConversationStatus
@@ -60,6 +61,7 @@ class ConversationResultDto:
         return cls(
             id=conversation.id,
             user_id=conversation.user_id,
+            user_profile_id=conversation.user_profile_id,
             guest_id=conversation.guest_id,
             title=conversation.title,
             status=conversation.status,

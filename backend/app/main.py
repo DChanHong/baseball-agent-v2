@@ -25,7 +25,7 @@ app.add_middleware(
         for origin in settings.cors_allow_origins.split(",")
         if origin.strip()
     ],
-    allow_credentials=False,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
