@@ -1,7 +1,6 @@
 import { z } from "zod";
 import type { ToolResultName } from "@/entities/tool-result/model/types";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:4000";
+import { API_BASE_URL } from "@/features/auth/api/auth-api";
 
 export type ChatStreamRequest = {
   guestId: string;
@@ -263,6 +262,7 @@ export async function* streamChatMessage(
       Accept: "text/event-stream",
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify({
       guest_id: request.guestId,
       conversation_id: request.conversationId,

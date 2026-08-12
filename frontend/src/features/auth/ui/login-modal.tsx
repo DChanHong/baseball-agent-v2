@@ -1,7 +1,9 @@
 "use client";
 
 import { useAtom } from "jotai";
+import { Mail } from "lucide-react";
 import styled from "styled-components";
+import { startGoogleOAuth } from "@/features/auth/api/auth-api";
 import { isLoginModalOpenAtom } from "@/features/auth/model/auth-modal.atom";
 import { Button } from "@/shared/ui/button";
 import { Modal } from "@/shared/ui/modal";
@@ -15,12 +17,11 @@ export function LoginModal() {
         <Description>
           대화 기록과 선호 팀, 예산, 좌석 성향을 저장하기 위한 로그인 영역입니다.
         </Description>
-        <Field>
-          <Label htmlFor="email">이메일</Label>
-          <Input id="email" type="email" placeholder="you@example.com" />
-        </Field>
-        <Button type="button" variant="primary">
-          이메일로 계속하기
+        <Button type="button" variant="primary" onClick={startGoogleOAuth}>
+          <ButtonContent>
+            <Mail aria-hidden="true" size={18} />
+            Google로 계속하기
+          </ButtonContent>
         </Button>
       </Content>
     </Modal>
@@ -39,19 +40,9 @@ const Description = styled.p`
   line-height: 1.6;
 `;
 
-const Field = styled.div`
-  display: grid;
+const ButtonContent = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   gap: 8px;
-`;
-
-const Label = styled.label`
-  font-size: 13px;
-  font-weight: 700;
-`;
-
-const Input = styled.input`
-  min-height: 42px;
-  border: 1px solid ${({ theme }) => theme.color.border};
-  border-radius: ${({ theme }) => theme.radius.sm};
-  padding: 0 12px;
 `;

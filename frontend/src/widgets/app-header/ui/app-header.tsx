@@ -5,23 +5,16 @@ import { useSetAtom } from "jotai";
 import { ChevronDown, LogIn, LogOut, UserRound } from "lucide-react";
 import styled from "styled-components";
 import { isLoginModalOpenAtom } from "@/features/auth/model/auth-modal.atom";
+import { useCurrentUser, useLogout } from "@/features/auth/model/auth-query";
 import { isProfileModalOpenAtom } from "@/features/profile/model/profile-modal.atom";
-
-type HeaderUser = {
-  displayName: string;
-  avatarUrl?: string;
-};
-
-function getHeaderUser(): HeaderUser | null {
-  return null;
-}
 
 export function AppHeader() {
   const openLoginModal = useSetAtom(isLoginModalOpenAtom);
   const openProfileModal = useSetAtom(isProfileModalOpenAtom);
+  const { data: user, isLoading } = useCurrentUser();
+  const logoutMutation = useLogout();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const user = getHeaderUser();
 
   useEffect(() => {
     if (!isMenuOpen) {
@@ -48,6 +41,7 @@ export function AppHeader() {
 
   function logout() {
     setIsMenuOpen(false);
+    logoutMutation.mutate();
   }
 
   return (
@@ -70,10 +64,8 @@ export function AppHeader() {
             aria-haspopup="menu"
             onClick={() => setIsMenuOpen((current) => !current)}
           >
-            <UserName>{user.displayName}</UserName>
-            <Avatar $imageUrl={user.avatarUrl}>
-              {!user.avatarUrl ? user.displayName.slice(0, 1) : null}
-            </Avatar>
+            <UserName>{user.nickname}</UserName>
+            <Avatar>{user.nickname.slice(0, 1)}</Avatar>
             <ChevronDown aria-hidden="true" size={16} strokeWidth={2.4} />
           </AccountButton>
 
@@ -83,7 +75,12 @@ export function AppHeader() {
                 <UserRound aria-hidden="true" size={17} />
                 마이페이지
               </MenuItem>
-              <MenuItem type="button" role="menuitem" onClick={logout}>
+              <MenuItem
+                type="button"
+                role="menuitem"
+                onClick={logout}
+                disabled={logoutMutation.isPending}
+              >
                 <LogOut aria-hidden="true" size={17} />
                 로그아웃
               </MenuItem>
@@ -91,7 +88,12 @@ export function AppHeader() {
           ) : null}
         </AccountMenu>
       ) : (
-        <LoginButton type="button" aria-label="로그인" onClick={() => openLoginModal(true)}>
+        <LoginButton
+          type="button"
+          aria-label="로그인"
+          disabled={isLoading}
+          onClick={() => openLoginModal(true)}
+        >
           <LogIn aria-hidden="true" size={17} />
           <LoginLabel>로그인</LoginLabel>
         </LoginButton>
@@ -211,6 +213,11 @@ const LoginButton = styled.button`
     transform: translateY(1px);
   }
 
+  &:disabled {
+    cursor: wait;
+    opacity: 0.7;
+  }
+
   @media (max-width: 420px) {
     width: 40px;
     padding: 0;
@@ -261,15 +268,13 @@ const UserName = styled.span`
   }
 `;
 
-const Avatar = styled.span<{ $imageUrl?: string }>`
+const Avatar = styled.span`
   display: grid;
   width: 32px;
   height: 32px;
   place-items: center;
   border-radius: 999px;
-  background:
-    ${({ $imageUrl }) => ($imageUrl ? `url(${$imageUrl}) center / cover` : "none")},
-    ${({ theme }) => theme.color.primary};
+  background: ${({ theme }) => theme.color.primary};
   color: #ffffff;
   font-size: 13px;
   font-weight: 900;
@@ -304,5 +309,10 @@ const MenuItem = styled.button`
 
   &:hover {
     background: ${({ theme }) => theme.color.panelAlt};
+  }
+
+  &:disabled {
+    cursor: wait;
+    opacity: 0.58;
   }
 `;

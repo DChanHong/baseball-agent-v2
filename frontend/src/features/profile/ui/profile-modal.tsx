@@ -2,30 +2,28 @@
 
 import { useAtom } from "jotai";
 import styled from "styled-components";
+import { useCurrentUser } from "@/features/auth/model/auth-query";
 import { isProfileModalOpenAtom } from "@/features/profile/model/profile-modal.atom";
 import { Button } from "@/shared/ui/button";
 import { Modal } from "@/shared/ui/modal";
 
 export function ProfileModal() {
   const [isOpen, setIsOpen] = useAtom(isProfileModalOpenAtom);
+  const { data: user } = useCurrentUser();
 
   return (
     <Modal isOpen={isOpen} title="나의 프로필" onClose={() => setIsOpen(false)}>
       <Content>
         <Field>
+          <Label htmlFor="nickname">닉네임</Label>
+          <Input id="nickname" value={user?.nickname ?? ""} readOnly />
+        </Field>
+        <Field>
           <Label htmlFor="team">응원 팀</Label>
-          <Input id="team" placeholder="예: 롯데 자이언츠" />
+          <Input id="team" value={user?.favoriteTeam ?? ""} readOnly placeholder="아직 설정되지 않았습니다" />
         </Field>
-        <Field>
-          <Label htmlFor="budget">1인 예산</Label>
-          <Input id="budget" placeholder="예: 50,000원" />
-        </Field>
-        <Field>
-          <Label htmlFor="seat">좌석 선호</Label>
-          <Input id="seat" placeholder="예: 응원석, 시야 좋은 곳, 그늘" />
-        </Field>
-        <Button type="button" variant="primary">
-          선호 저장
+        <Button type="button" variant="secondary" disabled>
+          프로필 수정 준비 중
         </Button>
       </Content>
     </Modal>

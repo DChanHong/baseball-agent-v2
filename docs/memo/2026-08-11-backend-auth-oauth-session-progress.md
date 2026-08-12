@@ -108,17 +108,34 @@ DATABASE_URL = local Supabase DB
 
 로컬 완전 격리 테스트에 적합하지만 Google OAuth 설정을 로컬 Supabase에도 추가해야 한다.
 
+2026-08-11 후속 진행:
+
+- B안으로 진행하기로 결정했다.
+- `supabase/config.toml`에 `[auth.external.google]` 설정을 추가했다.
+- 프로젝트 루트 `.env.example`과 로컬 전용 `.env`에 Google OAuth client env placeholder를 추가했다.
+- `backend/.env.example`의 `SUPABASE_URL` 기본 예시를 local Supabase Auth URL로 바꿨다.
+- `supabase stop && supabase start`로 Google provider config 반영을 확인했다.
+- `backend/.env`에 local Supabase Auth URL과 local publishable/secret key를 반영했다.
+- 프론트 로그인 모달/Header를 백엔드 Auth API와 연결했다.
+  - 로그인 모달의 Google 버튼은 `/api/v1/auth/google`로 이동한다.
+  - Header는 `/api/v1/auth/me`로 현재 사용자를 조회해 닉네임을 표시한다.
+  - 로그아웃 메뉴는 `/api/v1/auth/logout`을 호출하고 current user cache를 비운다.
+  - 채팅 fetch는 `credentials: "include"`로 auth cookie를 포함한다.
+
 1. Google Cloud Console 승인된 리디렉션 URI에 `http://127.0.0.1:54321/auth/v1/callback`을 추가한다.
-2. `supabase/config.toml`에 Google provider 설정을 추가한다.
-3. `SUPABASE_URL=http://127.0.0.1:54321`로 바꾼다.
-4. `DATABASE_URL=postgresql+asyncpg://postgres:postgres@127.0.0.1:54322/postgres`를 유지한다.
-5. 로컬 Supabase Auth와 local DB 기준으로 OAuth를 테스트한다.
+2. 프로젝트 루트 `.env`에 Google OAuth Client ID/Secret을 채운다. (완료)
+3. Docker를 실행하고 `supabase start` 또는 `supabase stop && supabase start`로 config 변경을 반영한다. (완료)
+4. `supabase status` 출력의 local anon/service role key를 `backend/.env`에 반영한다. (완료)
+   - `SUPABASE_URL=http://127.0.0.1:54321`
+   - `DATABASE_URL=postgresql+asyncpg://postgres:postgres@127.0.0.1:54322/postgres`는 유지한다.
+5. FastAPI를 실행한다.
+6. 브라우저에서 `http://127.0.0.1:4000/api/v1/auth/google` 접속 후 실제 로그인 callback을 테스트한다.
+7. 로그인 후 `GET /api/v1/auth/me`가 profile을 반환하는지 확인한다.
 
 ## 7. 다음 구현 작업
 
-- 실제 OAuth callback 브라우저 QA
+- 프론트 로그인 버튼에서 시작하는 실제 OAuth callback 브라우저 QA
 - 오류 발생 시 Supabase token exchange 응답에 맞춰 `supabase_auth_client.py` 보정
 - `PATCH /api/v1/auth/me` 닉네임/응원팀 수정 구현
 - `DELETE /api/v1/auth/me` 회원탈퇴 구현
 - 채팅 API를 guest 기반에서 로그인 사용자 `user_profile_id` 기준으로 전환
-- 프론트 로그인 모달/Header/auth state 연결
