@@ -34,6 +34,24 @@ class CreateConversationCommand:
 
 
 @dataclass(frozen=True, slots=True)
+class ListConversationsQuery:
+    """로그인 사용자의 대화 목록 조회 Service 입력 DTO입니다."""
+
+    user_profile_id: UUID
+    limit: int = 50
+    offset: int = 0
+
+    def __post_init__(self) -> None:
+        """페이지네이션 입력값을 검증합니다."""
+
+        if self.limit < 1 or self.limit > 100:
+            raise ValueError("limit은 1 이상 100 이하이어야 합니다.")
+
+        if self.offset < 0:
+            raise ValueError("offset은 0 이상이어야 합니다.")
+
+
+@dataclass(frozen=True, slots=True)
 class ConversationResultDto:
     """Service가 Controller에 반환하는 대화방 결과 DTO입니다."""
 

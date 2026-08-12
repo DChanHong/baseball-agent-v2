@@ -1,217 +1,25 @@
 "use client";
 
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { ChevronLeft, ChevronRight, Menu, MessageSquare, PenLine } from "lucide-react";
-import { useRef, useState, useSyncExternalStore } from "react";
+import { useSetAtom } from "jotai";
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  LoaderCircle,
+  LogIn,
+  LogOut,
+  Menu,
+  MessageSquare,
+  PenLine,
+  UserRound,
+} from "lucide-react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import styled from "styled-components";
-
-type MockChatSession = {
-  id: string;
-  title: string;
-};
-
-const mockChatSessions: MockChatSession[] = [
-  {
-    id: "session-1",
-    title: "잠실 주말 경기 예매와 좌석 추천",
-  },
-  {
-    id: "session-2",
-    title: "사직 원정 동선과 비 예보 확인",
-  },
-  {
-    id: "session-3",
-    title: "고척돔 첫 직관 준비물 정리",
-  },
-  {
-    id: "session-4",
-    title: "대전 한화생명볼파크 먹거리와 주차",
-  },
-  {
-    id: "session-5",
-    title: "문학 야간 경기 날씨와 외야석 비교",
-  },
-  {
-    id: "session-6",
-    title: "창원NC파크 가족석과 테이블석 비교",
-  },
-  {
-    id: "session-7",
-    title: "수원 케이티위즈파크 퇴근길 직관",
-  },
-  {
-    id: "session-8",
-    title: "광주 챔피언스필드 응원석 분위기",
-  },
-  {
-    id: "session-9",
-    title: "대구 삼성라이온즈파크 원정 응원",
-  },
-  {
-    id: "session-10",
-    title: "잠실 더블헤더 일정과 좌석 선택",
-  },
-  {
-    id: "session-11",
-    title: "고척돔 키움전 예매 오픈 시간",
-  },
-  {
-    id: "session-12",
-    title: "사직구장 비 예보와 우천 취소 가능성",
-  },
-  {
-    id: "session-13",
-    title: "문학 홈런커플존 시야 확인",
-  },
-  {
-    id: "session-14",
-    title: "대전 신구장 첫 방문 체크리스트",
-  },
-  {
-    id: "session-15",
-    title: "잠실 3루 네이비석과 레드석 비교",
-  },
-  {
-    id: "session-16",
-    title: "수원 외야 자유석 준비물",
-  },
-  {
-    id: "session-17",
-    title: "창원 야간 경기 숙소 동선",
-  },
-  {
-    id: "session-18",
-    title: "대구 원정 버스와 주차장 비교",
-  },
-  {
-    id: "session-19",
-    title: "광주 주말 낮 경기 더위 대비",
-  },
-  {
-    id: "session-20",
-    title: "잠실 어린이 동반 좌석 추천",
-  },
-  {
-    id: "session-21",
-    title: "고척돔 응원단상 가까운 구역",
-  },
-  {
-    id: "session-22",
-    title: "사직 내야필드석 시야와 가격",
-  },
-  {
-    id: "session-23",
-    title: "문학 푸드코트와 입장 시간",
-  },
-  {
-    id: "session-24",
-    title: "대전 불꽃놀이 이벤트 경기",
-  },
-  {
-    id: "session-25",
-    title: "수원 1루 응원석 예매 전략",
-  },
-  {
-    id: "session-26",
-    title: "창원 테이블석 예매 난이도",
-  },
-  {
-    id: "session-27",
-    title: "대구 3루 원정석과 응원 동선",
-  },
-  {
-    id: "session-28",
-    title: "광주 챔필 주차와 셔틀 정보",
-  },
-  {
-    id: "session-29",
-    title: "잠실 평일 경기 퇴근 후 입장",
-  },
-  {
-    id: "session-30",
-    title: "고척돔 비 오는 날 관람 준비",
-  },
-  {
-    id: "session-31",
-    title: "사직 롯데 응원석 처음 가는 날",
-  },
-  {
-    id: "session-32",
-    title: "문학 스카이탁자석 시야",
-  },
-  {
-    id: "session-33",
-    title: "대전 중앙탁자석과 내야지정석",
-  },
-  {
-    id: "session-34",
-    title: "수원 먹거리 추천과 반입 규정",
-  },
-  {
-    id: "session-35",
-    title: "창원 원정팬 좌석 위치",
-  },
-  {
-    id: "session-36",
-    title: "대구 여름 야구장 복장",
-  },
-  {
-    id: "session-37",
-    title: "광주 KIA 홈경기 예매 팁",
-  },
-  {
-    id: "session-38",
-    title: "잠실 외야석 햇빛 방향 확인",
-  },
-  {
-    id: "session-39",
-    title: "고척돔 4층 지정석 시야",
-  },
-  {
-    id: "session-40",
-    title: "사직 주말 매진 경기 대안 좌석",
-  },
-  {
-    id: "session-41",
-    title: "문학 원정팬 입장 게이트",
-  },
-  {
-    id: "session-42",
-    title: "대전 낮 경기 그늘 좌석",
-  },
-  {
-    id: "session-43",
-    title: "수원 응원석 소음과 아이 동반",
-  },
-  {
-    id: "session-44",
-    title: "창원NC파크 주변 맛집 동선",
-  },
-  {
-    id: "session-45",
-    title: "대구 지하철 이동과 막차 시간",
-  },
-  {
-    id: "session-46",
-    title: "광주 원정 숙소 위치 추천",
-  },
-  {
-    id: "session-47",
-    title: "잠실 포스트시즌 예매 준비",
-  },
-  {
-    id: "session-48",
-    title: "고척돔 키움 홈경기 좌석별 분위기",
-  },
-  {
-    id: "session-49",
-    title: "사직 우천 취소 환불 기준",
-  },
-  {
-    id: "session-50",
-    title: "문학 야구장 첫 방문 전체 플랜",
-  },
-];
+import { isLoginModalOpenAtom } from "@/features/auth/model/auth-modal.atom";
+import { useCurrentUser, useLogout } from "@/features/auth/model/auth-query";
+import { useConversationList } from "@/features/conversation-list/model/conversation-list-query";
+import { isProfileModalOpenAtom } from "@/features/profile/model/profile-modal.atom";
 
 function subscribeToSidebarBreakpoint(callback: () => void) {
   const mediaQuery = window.matchMedia("(max-width: 720px)");
@@ -231,25 +39,67 @@ function getSidebarBreakpointServerSnapshot() {
 }
 
 export function ChatSidebar() {
+  const openLoginModal = useSetAtom(isLoginModalOpenAtom);
+  const openProfileModal = useSetAtom(isProfileModalOpenAtom);
+  const { data: user, isLoading: isCheckingAuth } = useCurrentUser();
+  const logoutMutation = useLogout();
+  const {
+    data: conversationSummaries = [],
+    isError: isConversationListError,
+    isLoading: isConversationListLoading,
+  } = useConversationList({ enabled: Boolean(user) });
   const isNarrowSidebar = useSyncExternalStore(
     subscribeToSidebarBreakpoint,
     getSidebarBreakpointSnapshot,
     getSidebarBreakpointServerSnapshot,
   );
   const [userCollapsedState, setUserCollapsedState] = useState<boolean | null>(null);
-  const [activeSessionId, setActiveSessionId] = useState<string | null>(
-    mockChatSessions[0]?.id ?? null,
-  );
+  const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
+  const [isAccountPanelOpen, setIsAccountPanelOpen] = useState(false);
   const sessionListRef = useRef<HTMLUListElement>(null);
+  const accountRef = useRef<HTMLDivElement>(null);
   const isCollapsed = userCollapsedState ?? isNarrowSidebar;
+  const userInitial = user?.nickname.slice(0, 1) ?? "K";
   // TanStack Virtual intentionally returns imperative helpers; React Compiler cannot memoize them.
   // eslint-disable-next-line react-hooks/incompatible-library
   const sessionVirtualizer = useVirtualizer({
-    count: mockChatSessions.length,
+    count: conversationSummaries.length,
     estimateSize: () => 44,
     getScrollElement: () => sessionListRef.current,
     overscan: 6,
   });
+
+  useEffect(() => {
+    if (!isAccountPanelOpen) {
+      return;
+    }
+
+    function closeOnOutsidePointer(event: PointerEvent) {
+      if (!accountRef.current?.contains(event.target as Node)) {
+        setIsAccountPanelOpen(false);
+      }
+    }
+
+    window.addEventListener("pointerdown", closeOnOutsidePointer);
+
+    return () => {
+      window.removeEventListener("pointerdown", closeOnOutsidePointer);
+    };
+  }, [isAccountPanelOpen]);
+
+  useEffect(() => {
+    if (!user) {
+      setActiveSessionId(null);
+      return;
+    }
+
+    if (
+      activeSessionId &&
+      !conversationSummaries.some((conversation) => conversation.id === activeSessionId)
+    ) {
+      setActiveSessionId(null);
+    }
+  }, [activeSessionId, conversationSummaries, user]);
 
   function startNewChat() {
     setActiveSessionId(null);
@@ -265,6 +115,29 @@ export function ChatSidebar() {
     if (window.matchMedia("(max-width: 480px)").matches) {
       setUserCollapsedState(true);
     }
+  }
+
+  function openLogin() {
+    setIsAccountPanelOpen(false);
+    openLoginModal(true);
+    closeOnCompactPhone();
+  }
+
+  function openProfile() {
+    setIsAccountPanelOpen(false);
+    openProfileModal(true);
+    closeOnCompactPhone();
+  }
+
+  function logout() {
+    setIsAccountPanelOpen(false);
+    logoutMutation.mutate();
+    closeOnCompactPhone();
+  }
+
+  function openAccountFromRail() {
+    setUserCollapsedState(false);
+    setIsAccountPanelOpen(true);
   }
 
   return (
@@ -287,59 +160,171 @@ export function ChatSidebar() {
       />
 
       <Sidebar $isCollapsed={isCollapsed} aria-label="채팅 목록">
-        <Rail $isCollapsed={isCollapsed}>
-          <IconButton type="button" aria-label="새 채팅" title="새 채팅" onClick={startNewChat}>
-            <PenLine aria-hidden="true" size={18} />
-          </IconButton>
-          <IconButton
-            type="button"
-            aria-label={isCollapsed ? "사이드바 펼치기" : "사이드바 접기"}
-            title={isCollapsed ? "사이드바 펼치기" : "사이드바 접기"}
-            onClick={() => setUserCollapsedState(!isCollapsed)}
-          >
-            {isCollapsed ? (
-              <ChevronRight aria-hidden="true" size={18} />
-            ) : (
-              <ChevronLeft aria-hidden="true" size={18} />
-            )}
-          </IconButton>
-        </Rail>
-
-        {!isCollapsed ? (
-          <ExpandedPanel>
-            <NewChatButton type="button" onClick={startNewChat}>
+        {isCollapsed ? (
+          <Rail>
+            <LogoIconButton
+              type="button"
+              aria-label="KBO Mate"
+              title="KBO Mate"
+              onClick={() => setUserCollapsedState(false)}
+            >
+              <LogoImage src="/brand/flaming-baseball-logo.webp" alt="" />
+            </LogoIconButton>
+            <IconButton type="button" aria-label="새 채팅" title="새 채팅" onClick={startNewChat}>
               <PenLine aria-hidden="true" size={18} />
-              새 채팅
-            </NewChatButton>
+            </IconButton>
+            <IconButton
+              type="button"
+              aria-label="사이드바 펼치기"
+              title="사이드바 펼치기"
+              onClick={() => setUserCollapsedState(false)}
+            >
+              <ChevronRight aria-hidden="true" size={18} />
+            </IconButton>
+            <RailSpacer />
+            <IconButton
+              type="button"
+              aria-label={user ? "계정 메뉴" : "로그인"}
+              title={user ? "계정 메뉴" : "로그인"}
+              disabled={isCheckingAuth}
+              onClick={user ? openAccountFromRail : openLogin}
+            >
+              {isCheckingAuth ? (
+                <LoadingIcon aria-hidden="true" size={18} />
+              ) : user ? (
+                <RailAvatar>{userInitial}</RailAvatar>
+              ) : (
+                <LogIn aria-hidden="true" size={18} />
+              )}
+            </IconButton>
+          </Rail>
+        ) : (
+          <ExpandedPanel>
+            <TopGroup>
+              <BrandRow>
+                <BrandIdentity>
+                  <LogoFrame aria-hidden="true">
+                    <LogoImage src="/brand/flaming-baseball-logo.webp" alt="" />
+                  </LogoFrame>
+                  <BrandText>
+                    <BrandName>KBO Mate</BrandName>
+                    <BrandCaption>야구 관람 도우미</BrandCaption>
+                  </BrandText>
+                </BrandIdentity>
+                <HeaderActions>
+                  <IconButton
+                    type="button"
+                    aria-label="사이드바 접기"
+                    title="사이드바 접기"
+                    onClick={() => setUserCollapsedState(true)}
+                  >
+                    <ChevronLeft aria-hidden="true" size={18} />
+                  </IconButton>
+                </HeaderActions>
+              </BrandRow>
 
-            <SessionList ref={sessionListRef} aria-label="채팅 세션">
-              <VirtualListSpace $height={sessionVirtualizer.getTotalSize()}>
-                {sessionVirtualizer.getVirtualItems().map((virtualSession) => {
-                  const session = mockChatSessions[virtualSession.index];
+              <NewChatButton type="button" onClick={startNewChat}>
+                <PenLine aria-hidden="true" size={18} />
+                새 채팅
+              </NewChatButton>
+            </TopGroup>
 
-                  return (
-                    <SessionItem
-                      key={session.id}
-                      $height={virtualSession.size}
-                      $start={virtualSession.start}
-                      ref={sessionVirtualizer.measureElement}
-                      data-index={virtualSession.index}
-                    >
-                      <SessionButton
+            <ListGroup>
+              <SectionLabel>채팅 목록</SectionLabel>
+              {!user ? (
+                <ListStateText>로그인 후 대화 목록을 볼 수 있습니다.</ListStateText>
+              ) : isConversationListLoading ? (
+                <ListStateText>대화 목록을 불러오는 중입니다.</ListStateText>
+              ) : isConversationListError ? (
+                <ListStateText>대화 목록을 불러오지 못했습니다.</ListStateText>
+              ) : conversationSummaries.length === 0 ? (
+                <ListStateText>아직 저장된 대화가 없습니다.</ListStateText>
+              ) : (
+                <SessionList ref={sessionListRef} aria-label="채팅 세션">
+                  <VirtualListSpace $height={sessionVirtualizer.getTotalSize()}>
+                    {sessionVirtualizer.getVirtualItems().map((virtualSession) => {
+                      const conversation = conversationSummaries[virtualSession.index];
+
+                      return (
+                        <SessionItem
+                          key={conversation.id}
+                          $height={virtualSession.size}
+                          $start={virtualSession.start}
+                          ref={sessionVirtualizer.measureElement}
+                          data-index={virtualSession.index}
+                        >
+                          <SessionButton
+                            type="button"
+                            $isActive={conversation.id === activeSessionId}
+                            onClick={() => selectSession(conversation.id)}
+                          >
+                            <MessageSquare aria-hidden="true" size={16} />
+                            <SessionTitle>{conversation.title ?? "새 대화"}</SessionTitle>
+                          </SessionButton>
+                        </SessionItem>
+                      );
+                    })}
+                  </VirtualListSpace>
+                </SessionList>
+              )}
+            </ListGroup>
+
+            <AccountArea ref={accountRef}>
+              {user ? (
+                <>
+                  <AccountButton
+                    type="button"
+                    aria-expanded={isAccountPanelOpen}
+                    aria-haspopup="menu"
+                    onClick={() => setIsAccountPanelOpen((current) => !current)}
+                  >
+                    <AccountAvatar>{userInitial}</AccountAvatar>
+                    <AccountText>
+                      <AccountName>{user.nickname}</AccountName>
+                      <AccountCaption>개인</AccountCaption>
+                    </AccountText>
+                    <ChevronDown aria-hidden="true" size={17} />
+                  </AccountButton>
+
+                  {isAccountPanelOpen ? (
+                    <AccountPanel role="menu" aria-label="계정 메뉴">
+                      <AccountPanelHeader>
+                        <AccountAvatar $large>{userInitial}</AccountAvatar>
+                        <AccountText>
+                          <AccountName>{user.nickname}</AccountName>
+                          <AccountCaption>개인</AccountCaption>
+                        </AccountText>
+                      </AccountPanelHeader>
+                      <MenuItem type="button" role="menuitem" onClick={openProfile}>
+                        <UserRound aria-hidden="true" size={19} />
+                        마이페이지
+                      </MenuItem>
+                      <MenuDivider />
+                      <DangerMenuItem
                         type="button"
-                        $isActive={session.id === activeSessionId}
-                        onClick={() => selectSession(session.id)}
+                        role="menuitem"
+                        disabled={logoutMutation.isPending}
+                        onClick={logout}
                       >
-                        <MessageSquare aria-hidden="true" size={16} />
-                        <SessionTitle>{session.title}</SessionTitle>
-                      </SessionButton>
-                    </SessionItem>
-                  );
-                })}
-              </VirtualListSpace>
-            </SessionList>
+                        <LogOut aria-hidden="true" size={19} />
+                        로그아웃
+                      </DangerMenuItem>
+                    </AccountPanel>
+                  ) : null}
+                </>
+              ) : (
+                <LoginButton type="button" disabled={isCheckingAuth} onClick={openLogin}>
+                  {isCheckingAuth ? (
+                    <LoadingIcon aria-hidden="true" size={18} />
+                  ) : (
+                    <LogIn aria-hidden="true" size={18} />
+                  )}
+                  {isCheckingAuth ? "확인 중" : "로그인"}
+                </LoginButton>
+              )}
+            </AccountArea>
           </ExpandedPanel>
-        ) : null}
+        )}
       </Sidebar>
     </>
   );
@@ -347,7 +332,7 @@ export function ChatSidebar() {
 
 const FloatingMenuButton = styled.button<{ $isVisible: boolean }>`
   position: fixed;
-  top: 76px;
+  top: 14px;
   left: 12px;
   z-index: 20;
   display: none;
@@ -367,7 +352,7 @@ const FloatingMenuButton = styled.button<{ $isVisible: boolean }>`
 
 const CompactScrim = styled.button<{ $isVisible: boolean }>`
   position: fixed;
-  top: 64px;
+  top: 0;
   right: 0;
   bottom: 0;
   left: 0;
@@ -384,14 +369,13 @@ const CompactScrim = styled.button<{ $isVisible: boolean }>`
 
 const Sidebar = styled.aside<{ $isCollapsed: boolean }>`
   position: sticky;
-  top: 72px;
+  top: 0;
   z-index: 12;
-  display: grid;
-  grid-template-columns: ${({ $isCollapsed }) => ($isCollapsed ? "56px" : "56px 224px")};
-  width: ${({ $isCollapsed }) => ($isCollapsed ? "56px" : "280px")};
-  height: calc(100vh - 72px);
+  display: block;
+  width: ${({ $isCollapsed }) => ($isCollapsed ? "58px" : "300px")};
+  height: 100vh;
   border-right: 1px solid ${({ theme }) => theme.color.border};
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(247, 247, 245, 0.96);
   backdrop-filter: blur(14px);
   transition:
     grid-template-columns 180ms ease,
@@ -399,17 +383,16 @@ const Sidebar = styled.aside<{ $isCollapsed: boolean }>`
 
   @media (max-width: 720px) {
     position: fixed;
-    top: 64px;
+    top: 0;
     bottom: 0;
     left: 0;
-    height: calc(100vh - 64px);
+    height: 100vh;
     box-shadow: ${({ $isCollapsed, theme }) => ($isCollapsed ? "none" : theme.shadow.panel)};
   }
 
   @media (max-width: 480px) {
     z-index: 22;
-    grid-template-columns: 56px minmax(0, 224px);
-    width: min(280px, calc(100vw - 28px));
+    width: ${({ $isCollapsed }) => ($isCollapsed ? "58px" : "min(300px, calc(100vw - 28px))")};
     border-right: ${({ $isCollapsed, theme }) =>
       $isCollapsed ? "0" : `1px solid ${theme.color.border}`};
     transform: translateX(${({ $isCollapsed }) => ($isCollapsed ? "-100%" : "0")});
@@ -420,14 +403,13 @@ const Sidebar = styled.aside<{ $isCollapsed: boolean }>`
   }
 `;
 
-const Rail = styled.div<{ $isCollapsed: boolean }>`
+const Rail = styled.div`
   display: flex;
+  height: 100%;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  border-right: ${({ $isCollapsed, theme }) =>
-    $isCollapsed ? "0" : `1px solid ${theme.color.border}`};
-  padding: 14px 8px;
+  gap: 8px;
+  padding: 14px 8px 12px;
 `;
 
 const IconButton = styled.button`
@@ -444,44 +426,161 @@ const IconButton = styled.button`
     border-color 160ms ease,
     color 160ms ease;
 
+  &:disabled {
+    cursor: wait;
+    opacity: 0.58;
+  }
+
   &:hover {
     border-color: rgba(19, 111, 74, 0.18);
-    background: ${({ theme }) => theme.color.panelAlt};
-    color: ${({ theme }) => theme.color.primary};
+    background: rgba(255, 255, 255, 0.86);
+    color: ${({ theme }) => theme.color.foreground};
   }
+`;
+
+const LogoIconButton = styled(IconButton)`
+  margin-bottom: 12px;
+  padding: 4px;
+  background: transparent;
+`;
+
+const LogoImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+`;
+
+const RailSpacer = styled.div`
+  flex: 1 1 auto;
+`;
+
+const RailAvatar = styled.span`
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 999px;
+  background: #f5c21b;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 900;
 `;
 
 const ExpandedPanel = styled.div`
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-  gap: 14px;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 16px;
+  width: 100%;
   height: 100%;
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  padding: 14px 12px;
+  padding: 16px 16px 14px 14px;
+`;
+
+const TopGroup = styled.div`
+  display: grid;
+  gap: 20px;
+`;
+
+const BrandRow = styled.div`
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+`;
+
+const BrandIdentity = styled.div`
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+`;
+
+const LogoFrame = styled.div`
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  flex: 0 0 auto;
+`;
+
+const BrandText = styled.div`
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+`;
+
+const BrandName = styled.h1`
+  margin: 0;
+  overflow: hidden;
+  color: ${({ theme }) => theme.color.foreground};
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.05;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const BrandCaption = styled.p`
+  margin: 0;
+  overflow: hidden;
+  color: ${({ theme }) => theme.color.muted};
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const HeaderActions = styled.div`
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 4px;
 `;
 
 const NewChatButton = styled.button`
   display: inline-flex;
-  min-height: 42px;
+  min-height: 44px;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border: 1px solid ${({ theme }) => theme.color.primary};
+  justify-content: flex-start;
+  gap: 12px;
+  border: 0;
   border-radius: ${({ theme }) => theme.radius.sm};
-  padding: 0 12px;
-  background: ${({ theme }) => theme.color.primary};
-  color: #ffffff;
+  padding: 0 9px;
+  background: transparent;
+  color: ${({ theme }) => theme.color.foreground};
   font-weight: 850;
   transition:
     background 160ms ease,
-    border-color 160ms ease;
+    color 160ms ease;
+
+  svg {
+    flex: 0 0 auto;
+  }
 
   &:hover {
-    border-color: ${({ theme }) => theme.color.primaryHover};
-    background: ${({ theme }) => theme.color.primaryHover};
+    background: rgba(255, 255, 255, 0.82);
   }
+`;
+
+const ListGroup = styled.div`
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  gap: 8px;
+`;
+
+const SectionLabel = styled.h2`
+  margin: 0;
+  padding: 0 8px;
+  color: #8a8f8b;
+  font-size: 13px;
+  font-weight: 850;
+  line-height: 1.4;
 `;
 
 const SessionList = styled.ul`
@@ -491,6 +590,33 @@ const SessionList = styled.ul`
   padding: 0;
   overflow-y: auto;
   list-style: none;
+  scrollbar-color: rgba(23, 32, 28, 0.22) transparent;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: rgba(23, 32, 28, 0.2);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(23, 32, 28, 0.32);
+  }
+`;
+
+const ListStateText = styled.p`
+  margin: 6px 8px 0;
+  color: ${({ theme }) => theme.color.muted};
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
 `;
 
 const VirtualListSpace = styled.div<{ $height: number }>`
@@ -514,13 +640,13 @@ const SessionButton = styled.button<{ $isActive: boolean }>`
   width: 100%;
   min-height: 40px;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   border: 0;
   border-radius: ${({ theme }) => theme.radius.sm};
   padding: 0 10px;
-  background: ${({ $isActive }) => ($isActive ? "rgba(19, 111, 74, 0.1)" : "transparent")};
+  background: ${({ $isActive }) => ($isActive ? "rgba(255, 255, 255, 0.94)" : "transparent")};
   color: ${({ theme }) => theme.color.foreground};
-  font-weight: ${({ $isActive }) => ($isActive ? 850 : 650)};
+  font-weight: ${({ $isActive }) => ($isActive ? 850 : 720)};
   text-align: left;
   transition:
     background 160ms ease,
@@ -532,8 +658,7 @@ const SessionButton = styled.button<{ $isActive: boolean }>`
   }
 
   &:hover {
-    background: ${({ $isActive, theme }) =>
-      $isActive ? "rgba(19, 111, 74, 0.13)" : theme.color.panelAlt};
+    background: rgba(255, 255, 255, 0.88);
   }
 `;
 
@@ -542,4 +667,167 @@ const SessionTitle = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+`;
+
+const AccountArea = styled.div`
+  position: relative;
+  min-width: 0;
+  padding-top: 12px;
+  border-top: 1px solid rgba(217, 225, 220, 0.86);
+`;
+
+const LoginButton = styled.button`
+  display: inline-flex;
+  width: 100%;
+  min-height: 46px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  border: 1px solid ${({ theme }) => theme.color.border};
+  border-radius: ${({ theme }) => theme.radius.md};
+  padding: 0 12px;
+  background: ${({ theme }) => theme.color.panel};
+  color: ${({ theme }) => theme.color.foreground};
+  font-weight: 850;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease;
+
+  &:hover {
+    border-color: rgba(19, 111, 74, 0.24);
+    background: rgba(255, 255, 255, 0.96);
+  }
+
+  &:disabled {
+    cursor: wait;
+    opacity: 0.7;
+  }
+`;
+
+const LoadingIcon = styled(LoaderCircle)`
+  animation: spin 900ms linear infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
+const AccountButton = styled.button`
+  display: grid;
+  width: 100%;
+  min-height: 50px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid transparent;
+  border-radius: ${({ theme }) => theme.radius.md};
+  padding: 6px 8px;
+  background: transparent;
+  color: ${({ theme }) => theme.color.foreground};
+  text-align: left;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease;
+
+  &:hover,
+  &[aria-expanded="true"] {
+    border-color: rgba(217, 225, 220, 0.88);
+    background: rgba(255, 255, 255, 0.9);
+  }
+`;
+
+const AccountAvatar = styled.span<{ $large?: boolean }>`
+  display: grid;
+  width: ${({ $large }) => ($large ? "56px" : "38px")};
+  height: ${({ $large }) => ($large ? "56px" : "38px")};
+  place-items: center;
+  border-radius: 999px;
+  background: #f5c21b;
+  color: #ffffff;
+  font-size: ${({ $large }) => ($large ? "20px" : "15px")};
+  font-weight: 900;
+`;
+
+const AccountText = styled.span`
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+`;
+
+const AccountName = styled.span`
+  overflow: hidden;
+  color: ${({ theme }) => theme.color.foreground};
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const AccountCaption = styled.span`
+  overflow: hidden;
+  color: ${({ theme }) => theme.color.muted};
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const AccountPanel = styled.div`
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 10px);
+  z-index: 28;
+  display: grid;
+  width: min(272px, calc(100vw - 36px));
+  gap: 8px;
+  border: 1px solid ${({ theme }) => theme.color.border};
+  border-radius: ${({ theme }) => theme.radius.md};
+  padding: 10px;
+  background: ${({ theme }) => theme.color.panel};
+  box-shadow: 0 20px 58px rgba(18, 32, 25, 0.16);
+`;
+
+const AccountPanelHeader = styled.div`
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 8px 8px 12px;
+`;
+
+const MenuItem = styled.button`
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  border-radius: ${({ theme }) => theme.radius.sm};
+  padding: 0 10px;
+  background: transparent;
+  color: ${({ theme }) => theme.color.foreground};
+  font-weight: 800;
+  text-align: left;
+
+  &:hover {
+    background: ${({ theme }) => theme.color.panelAlt};
+  }
+
+  &:disabled {
+    cursor: wait;
+    opacity: 0.58;
+  }
+`;
+
+const DangerMenuItem = styled(MenuItem)`
+  color: #ff4a4f;
+`;
+
+const MenuDivider = styled.div`
+  height: 1px;
+  margin: 2px 0;
+  background: ${({ theme }) => theme.color.border};
 `;

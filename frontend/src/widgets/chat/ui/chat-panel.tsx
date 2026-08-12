@@ -1,5 +1,6 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { ListChecks, Sparkles, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -14,6 +15,7 @@ import {
 } from "@/features/chat-stream/api/stream-chat-message";
 import { isLoginModalOpenAtom } from "@/features/auth/model/auth-modal.atom";
 import { useCurrentUser } from "@/features/auth/model/auth-query";
+import { conversationListQueryKey } from "@/features/conversation-list/model/conversation-list-query";
 import { ChatComposer } from "@/features/send-message/ui/chat-composer";
 import { Button } from "@/shared/ui/button";
 import { isSourceDrawerOpenAtom } from "@/widgets/source-drawer/model/source-drawer.atom";
@@ -42,6 +44,7 @@ const toolDisplayLabels: Record<ToolResultName, string> = {
 };
 
 export function ChatPanel() {
+  const queryClient = useQueryClient();
   const openSourceDrawer = useSetAtom(isSourceDrawerOpenAtom);
   const openLoginModal = useSetAtom(isLoginModalOpenAtom);
   const { data: user, isLoading: isCheckingAuth } = useCurrentUser();
@@ -225,8 +228,10 @@ export function ChatPanel() {
         ensureAssistantMessage("응답을 가져오는 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
         return;
       case "conversation.updated":
+        void queryClient.invalidateQueries({ queryKey: conversationListQueryKey });
         return;
       case "done":
+        void queryClient.invalidateQueries({ queryKey: conversationListQueryKey });
         setResponseStatus((current) => (current === "failed" ? current : "idle"));
         return;
       default:
@@ -510,7 +515,7 @@ const Panel = styled.main<{ $hasMessages: boolean }>`
   align-items: ${({ $hasMessages }) => ($hasMessages ? "stretch" : "center")};
   justify-content: center;
   min-width: 0;
-  min-height: calc(100vh - 72px);
+  min-height: 100vh;
   padding: ${({ $hasMessages }) => ($hasMessages ? "0 20px" : "48px 20px")};
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(247, 248, 243, 0.96)),
@@ -518,7 +523,6 @@ const Panel = styled.main<{ $hasMessages: boolean }>`
     ${({ theme }) => theme.color.background};
 
   @media (max-width: 720px) {
-    min-height: calc(100vh - 64px);
     padding: ${({ $hasMessages }) => ($hasMessages ? "0 14px" : "36px 14px")};
   }
 `;
@@ -527,11 +531,7 @@ const ChatWorkspace = styled.section`
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
   width: min(100%, 920px);
-  min-height: calc(100vh - 72px);
-
-  @media (max-width: 720px) {
-    min-height: calc(100vh - 64px);
-  }
+  min-height: 100vh;
 `;
 
 const StatusBadge = styled.span<{ $status: ResponseStatus }>`

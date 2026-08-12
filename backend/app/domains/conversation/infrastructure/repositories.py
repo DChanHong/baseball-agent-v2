@@ -106,6 +106,34 @@ class SqlAlchemyConversationRepository:
 
         return [ConversationMapper.to_domain(model) for model in models]
 
+    async def list_by_user_profile_id(
+        self,
+        user_profile_id: UUID,
+        *,
+        limit: int = 20,
+        offset: int = 0,
+    ) -> list[Conversation]:
+        """user_profile_id에 속한 대화방을 최근 메시지 순으로 조회합니다."""
+
+        statement = (
+            select(ChatConversationModel)
+            .where(
+                ChatConversationModel.user_profile_id == user_profile_id,
+                ChatConversationModel.deleted_at.is_(None),
+            )
+            .order_by(
+                ChatConversationModel.last_message_at.desc().nullslast(),
+                ChatConversationModel.created_at.desc(),
+            )
+            .limit(limit)
+            .offset(offset)
+        )
+
+        result = await self._session.execute(statement)
+        models = result.scalars().all()
+
+        return [ConversationMapper.to_domain(model) for model in models]
+
     async def save(
         self,
         conversation: Conversation,

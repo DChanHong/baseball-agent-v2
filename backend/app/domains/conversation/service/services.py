@@ -11,6 +11,7 @@ from app.domains.conversation.domain.repositories import (
 from app.domains.conversation.service.dto import (
     ConversationResultDto,
     CreateConversationCommand,
+    ListConversationsQuery,
 )
 
 
@@ -57,3 +58,30 @@ class CreateConversationService:
             raise
 
         return ConversationResultDto.from_entity(saved_conversation)
+
+
+class ListConversationsService:
+    """로그인 사용자의 대화방 목록을 조회하는 유스케이스입니다."""
+
+    def __init__(
+        self,
+        repository: ConversationRepository,
+    ) -> None:
+        self._repository = repository
+
+    async def execute(
+        self,
+        query: ListConversationsQuery,
+    ) -> list[ConversationResultDto]:
+        """대화방 목록을 최근 대화 순으로 반환합니다."""
+
+        conversations = await self._repository.list_by_user_profile_id(
+            query.user_profile_id,
+            limit=query.limit,
+            offset=query.offset,
+        )
+
+        return [
+            ConversationResultDto.from_entity(conversation)
+            for conversation in conversations
+        ]

@@ -37,3 +37,11 @@ class ConversationResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
     deleted_at: datetime | None
+
+
+class ConversationListResponse(BaseModel):
+    """대화방 목록 HTTP 응답 Schema입니다."""
+
+    conversations: list[ConversationResponse]
+    limit: int
+    offset: int

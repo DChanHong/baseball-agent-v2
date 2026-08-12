@@ -47,6 +47,17 @@ class ConversationRepository(Protocol):
 
         ...
 
+    async def list_by_user_profile_id(
+        self,
+        user_profile_id: UUID,
+        *,
+        limit: int = 20,
+        offset: int = 0,
+    ) -> list[Conversation]:
+        """로그인 사용자의 프로필 ID에 속한 대화방 목록을 최근 순으로 조회합니다."""
+
+        ...
+
     async def save(self, conversation: Conversation) -> Conversation:
         """변경된 대화방 상태를 저장합니다."""
 

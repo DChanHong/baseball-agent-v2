@@ -24,10 +24,10 @@ export function SourceDrawer() {
 const Aside = styled.aside<{ $isOpen: boolean }>`
   display: ${({ $isOpen }) => ($isOpen ? "grid" : "none")};
   position: fixed;
-  top: 72px;
+  top: 0;
   right: 0;
   bottom: 0;
-  z-index: 10;
+  z-index: 18;
   width: min(100vw, 360px);
   align-content: start;
   gap: 14px;
@@ -35,6 +35,12 @@ const Aside = styled.aside<{ $isOpen: boolean }>`
   padding: 18px;
   background: ${({ theme }) => theme.color.panel};
   box-shadow: ${({ theme }) => theme.shadow.panel};
+
+  @media (max-width: 720px) {
+    z-index: 26;
+    width: 100vw;
+    border-left: 0;
+  }
 `;
 
 const TopLine = styled.div`

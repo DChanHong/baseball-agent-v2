@@ -54,6 +54,7 @@ from app.domains.conversation.infrastructure.repositories import (
 )
 from app.domains.conversation.service.services import (
     CreateConversationService,
+    ListConversationsService,
 )
 
 # FastAPI가 요청마다 생성한 DB Session을 주입하는 공통 타입입니다.
@@ -74,6 +75,16 @@ def get_create_conversation_service(
         repository=repository,
         session=session,
     )
+
+
+def get_list_conversations_service(
+    session: DatabaseSession,
+) -> ListConversationsService:
+    """대화방 목록 조회 유스케이스에 필요한 의존성을 조립합니다."""
+
+    repository = SqlAlchemyConversationRepository(session)
+
+    return ListConversationsService(repository=repository)
 
 
 def get_auth_redirect_service() -> AuthRedirectService:
