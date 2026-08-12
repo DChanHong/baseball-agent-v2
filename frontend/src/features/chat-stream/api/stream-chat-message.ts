@@ -3,7 +3,6 @@ import type { ToolResultName } from "@/entities/tool-result/model/types";
 import { API_BASE_URL, fetchWithAuthRefresh } from "@/features/auth/api/auth-api";
 
 export type ChatStreamRequest = {
-  guestId: string;
   conversationId: string | null;
   message: string;
 };
@@ -264,7 +263,6 @@ export async function* streamChatMessage(
     },
     credentials: "include",
     body: JSON.stringify({
-      guest_id: request.guestId,
       conversation_id: request.conversationId,
       message: request.message,
     }),

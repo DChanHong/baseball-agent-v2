@@ -15,6 +15,7 @@ from app.agent.routing_schemas import ToolRoutingDecision, ToolRoutingUserContex
 from app.agent.routing_service import ToolRoutingService
 from app.agent.tool_executor import AgentToolExecutor
 from app.core.config import get_settings
+from app.domains.auth.service.dto import CurrentUserDto
 from app.domains.chat.controller.schemas import (
     AssistantCompletedEvent,
     AssistantDeltaEvent,
@@ -68,11 +69,19 @@ class ChatStreamService:
         self._tool_executor = tool_executor
         self._session = session
 
-    async def stream(self, request: ChatStreamRequest) -> AsyncIterator[str]:
+    async def stream(
+        self,
+        request: ChatStreamRequest,
+        *,
+        current_user: CurrentUserDto,
+    ) -> AsyncIterator[str]:
         """Execute one chat request and yield encoded SSE event chunks."""
 
         try:
-            async for event in self._stream_inner(request):
+            async for event in self._stream_inner(
+                request,
+                current_user=current_user,
+            ):
                 yield event
         except Exception:
             logger.exception("chat stream failed")
@@ -87,10 +96,15 @@ class ChatStreamService:
                 ),
             )
 
-    async def _stream_inner(self, request: ChatStreamRequest) -> AsyncIterator[str]:
+    async def _stream_inner(
+        self,
+        request: ChatStreamRequest,
+        *,
+        current_user: CurrentUserDto,
+    ) -> AsyncIterator[str]:
         now = datetime.now(UTC)
         conversation, created = await self._get_or_create_conversation(
-            guest_id=request.guest_id,
+            user_profile_id=current_user.id,
             conversation_id=request.conversation_id,
             now=now,
             title=_build_title(request.message),
@@ -112,6 +126,7 @@ class ChatStreamService:
             status=MessageStatus.COMPLETED,
             parent_message_id=None,
             metadata={},
+            user_profile_id=current_user.id,
         )
         await self._session.commit()
 
@@ -127,6 +142,7 @@ class ChatStreamService:
             status=MessageStatus.STREAMING,
             parent_message_id=user_message.id,
             metadata={},
+            user_profile_id=current_user.id,
         )
         await self._session.commit()
 
@@ -136,7 +152,10 @@ class ChatStreamService:
         )
 
         started_at = perf_counter()
-        decision = await self._route_message(request.message)
+        decision = await self._route_message(
+            request.message,
+            current_user=current_user,
+        )
         tool_payload: dict[str, object] | None = None
         tool_limitations: list[str] = []
 
@@ -268,7 +287,7 @@ class ChatStreamService:
     async def _get_or_create_conversation(
         self,
         *,
-        guest_id: UUID,
+        user_profile_id: UUID,
         conversation_id: UUID | None,
         now: datetime,
         title: str,
@@ -279,15 +298,15 @@ class ChatStreamService:
             )
             if conversation is None:
                 raise ValueError("conversation not found")
-            if conversation.guest_id != guest_id:
-                raise ValueError("conversation does not belong to guest")
+            if conversation.user_profile_id != user_profile_id:
+                raise ValueError("conversation does not belong to user profile")
             return conversation, False
 
         conversation = Conversation(
             id=uuid4(),
             user_id=None,
-            user_profile_id=None,
-            guest_id=guest_id,
+            user_profile_id=user_profile_id,
+            guest_id=None,
             title=title,
             status=ConversationStatus.ACTIVE,
             agent_type="baseball_general",
@@ -309,6 +328,7 @@ class ChatStreamService:
         status: MessageStatus,
         parent_message_id: UUID | None,
         metadata: dict[str, object],
+        user_profile_id: UUID,
     ) -> Message:
         now = datetime.now(UTC)
         sequence_no = await self._message_repository.get_next_sequence_no(
@@ -318,7 +338,7 @@ class ChatStreamService:
             id=uuid4(),
             conversation_id=conversation_id,
             user_id=None,
-            user_profile_id=None,
+            user_profile_id=user_profile_id,
             role=role,
             content=content,
             content_type=MessageContentType.MARKDOWN,
@@ -338,13 +358,18 @@ class ChatStreamService:
         )
         return await self._message_repository.add(message)
 
-    async def _route_message(self, message: str) -> ToolRoutingDecision:
+    async def _route_message(
+        self,
+        message: str,
+        *,
+        current_user: CurrentUserDto,
+    ) -> ToolRoutingDecision:
         today = datetime.now(KST).date()
         return await self._tool_routing_service.execute(
             message=message,
             user_context=ToolRoutingUserContext(
                 auth_status="authenticated",
-                favorite_team_id=None,
+                favorite_team_id=current_user.favorite_team,
                 today=today,
                 timezone="Asia/Seoul",
             ),

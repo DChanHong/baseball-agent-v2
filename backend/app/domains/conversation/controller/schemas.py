@@ -10,7 +10,6 @@ from app.domains.conversation.domain.enums import ConversationStatus
 class CreateConversationRequest(BaseModel):
     """대화방 생성 HTTP 요청 Schema입니다."""
 
-    guest_id: UUID
     title: str | None = Field(default=None, max_length=200)
     agent_type: str = Field(
         default="baseball_general",

@@ -12,10 +12,10 @@ class CreateConversationCommand:
     """
     대화방 생성 Service에 전달하는 입력 DTO입니다.
 
-    현재는 로그인 전 단계이므로 guest_id를 필수로 받습니다.
+    로그인 사용자의 애플리케이션 프로필 ID를 소유자로 받습니다.
     """
 
-    guest_id: UUID
+    user_profile_id: UUID
     title: str | None = None
     agent_type: str = "baseball_general"
     metadata: dict[str, Any] = field(default_factory=dict)

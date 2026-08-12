@@ -23,7 +23,6 @@ class ChatStreamRequest(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    guest_id: UUID
     conversation_id: UUID | None = None
     message: str = Field(min_length=1, max_length=4000)
 

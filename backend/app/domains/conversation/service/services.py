@@ -15,7 +15,7 @@ from app.domains.conversation.service.dto import (
 
 
 class CreateConversationService:
-    """비로그인 사용자의 새 대화방을 생성하는 유스케이스입니다."""
+    """로그인 사용자의 새 대화방을 생성하는 유스케이스입니다."""
 
     def __init__(
         self,
@@ -36,8 +36,8 @@ class CreateConversationService:
         conversation = Conversation(
             id=uuid4(),
             user_id=None,
-            user_profile_id=None,
-            guest_id=command.guest_id,
+            user_profile_id=command.user_profile_id,
+            guest_id=None,
             title=command.title,
             status=ConversationStatus.ACTIVE,
             agent_type=command.agent_type,

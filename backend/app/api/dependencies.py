@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import Depends
+from fastapi import Depends, HTTPException, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.agent.routing_service import ToolRoutingService
@@ -8,10 +8,15 @@ from app.agent.tool_executor import AgentToolExecutor
 from app.core.config import get_settings
 from app.core.database import get_db_session
 from app.core.llm import get_openai_client
+from app.domains.auth.domain.exceptions import (
+    AuthConfigurationError,
+    UnauthenticatedError,
+)
 from app.domains.auth.infrastructure.repositories import (
     SqlAlchemyUserProfileRepository,
 )
 from app.domains.auth.infrastructure.supabase_auth_client import SupabaseAuthClient
+from app.domains.auth.service.dto import CurrentUserDto
 from app.domains.auth.service.services import AuthRedirectService, AuthSessionService
 from app.domains.baseball.infrastructure.repositories import (
     SqlAlchemyKboGameRepository,
@@ -87,6 +92,34 @@ def get_auth_session_service(
         user_profile_repository=SqlAlchemyUserProfileRepository(session),
         session=session,
     )
+
+
+async def get_current_auth_user(
+    request: Request,
+    service: Annotated[AuthSessionService, Depends(get_auth_session_service)],
+) -> CurrentUserDto:
+    """Resolve the authenticated application profile from the access cookie."""
+
+    settings = get_settings()
+    access_token = request.cookies.get(settings.auth_access_cookie_name)
+    if not access_token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="unauthenticated",
+        )
+
+    try:
+        return await service.get_current_user(access_token)
+    except AuthConfigurationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="auth_not_configured",
+        ) from exc
+    except UnauthenticatedError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="unauthenticated",
+        ) from exc
 
 
 def get_list_kbo_games_service(

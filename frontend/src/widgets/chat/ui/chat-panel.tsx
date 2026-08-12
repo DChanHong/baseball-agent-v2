@@ -12,11 +12,8 @@ import {
   type ChatStreamEvent,
   type ChatStreamMessage,
 } from "@/features/chat-stream/api/stream-chat-message";
-import {
-  getOrCreateGuestId,
-  getStoredConversationId,
-  storeConversationId,
-} from "@/features/chat-stream/model/guest-session";
+import { isLoginModalOpenAtom } from "@/features/auth/model/auth-modal.atom";
+import { useCurrentUser } from "@/features/auth/model/auth-query";
 import { ChatComposer } from "@/features/send-message/ui/chat-composer";
 import { Button } from "@/shared/ui/button";
 import { isSourceDrawerOpenAtom } from "@/widgets/source-drawer/model/source-drawer.atom";
@@ -46,25 +43,22 @@ const toolDisplayLabels: Record<ToolResultName, string> = {
 
 export function ChatPanel() {
   const openSourceDrawer = useSetAtom(isSourceDrawerOpenAtom);
+  const openLoginModal = useSetAtom(isLoginModalOpenAtom);
+  const { data: user, isLoading: isCheckingAuth } = useCurrentUser();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [conversationId, setConversationId] = useState<string | null>(() =>
-    typeof window === "undefined" ? null : getStoredConversationId(),
-  );
+  const [conversationId, setConversationId] = useState<string | null>(null);
   const [responseStatus, setResponseStatus] = useState<ResponseStatus>("idle");
   const [isStreaming, setIsStreaming] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [failedRequestMessage, setFailedRequestMessage] = useState<string | null>(null);
   const [isActivityOpen, setIsActivityOpen] = useState(false);
   const [activeAssistantMessageId, setActiveAssistantMessageId] = useState<string | null>(null);
-  const guestIdRef = useRef<string | null>(null);
   const pendingUserMessageIdRef = useRef<string | null>(null);
   const activeAssistantMessageIdRef = useRef<string | null>(null);
   const lastSubmittedMessageRef = useRef<string | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
-    guestIdRef.current = getOrCreateGuestId();
-
     return () => {
       abortControllerRef.current?.abort();
     };
@@ -75,8 +69,11 @@ export function ChatPanel() {
       return;
     }
 
-    const guestId = guestIdRef.current ?? getOrCreateGuestId();
-    guestIdRef.current = guestId;
+    if (!user) {
+      openLoginModal(true);
+      setErrorMessage("로그인 후 채팅을 시작할 수 있습니다.");
+      return;
+    }
 
     const pendingUserMessageId = `local_user_${window.crypto.randomUUID()}`;
     const pendingAssistantMessageId = `local_assistant_${window.crypto.randomUUID()}`;
@@ -109,7 +106,6 @@ export function ChatPanel() {
     abortControllerRef.current = abortController;
 
     void consumeChatStream({
-      guestId,
       conversationId,
       message,
       signal: abortController.signal,
@@ -117,18 +113,16 @@ export function ChatPanel() {
   };
 
   const consumeChatStream = async ({
-    guestId,
     conversationId,
     message,
     signal,
   }: {
-    guestId: string;
     conversationId: string | null;
     message: string;
     signal: AbortSignal;
   }) => {
     try {
-      for await (const event of streamChatMessage({ guestId, conversationId, message }, signal)) {
+      for await (const event of streamChatMessage({ conversationId, message }, signal)) {
         applyStreamEvent(event);
       }
     } catch (error) {
@@ -153,7 +147,6 @@ export function ChatPanel() {
     switch (event.type) {
       case "conversation.created":
         setConversationId(event.conversationId);
-        storeConversationId(event.conversationId);
         return;
       case "message.created":
         applyMessageCreated(event.message);
@@ -424,7 +417,7 @@ export function ChatPanel() {
           </MessageList>
           <Dock>
             <ChatComposer
-              disabled={isStreaming}
+              disabled={isStreaming || isCheckingAuth}
               showSuggestions={false}
               onSendMessage={handleSendMessage}
             />
@@ -452,7 +445,10 @@ export function ChatPanel() {
               확인합니다.
             </Description>
           </Copy>
-          <ChatComposer disabled={isStreaming} onSendMessage={handleSendMessage} />
+          <ChatComposer
+            disabled={isStreaming || isCheckingAuth}
+            onSendMessage={handleSendMessage}
+          />
           {errorMessage ? <ErrorText>{errorMessage}</ErrorText> : null}
           <FooterActions>
             <Button type="button" variant="ghost" onClick={() => openSourceDrawer(true)}>
