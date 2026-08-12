@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import Settings
 from app.domains.auth.domain.exceptions import (
     AuthConfigurationError,
+    InvalidProfileUpdateError,
     UnauthenticatedError,
 )
 from app.domains.auth.infrastructure.repositories import (
@@ -81,6 +82,20 @@ class AuthRedirectService:
 class AuthSessionService:
     """Coordinates Supabase Auth sessions and application profiles."""
 
+    _kbo_team_ids = frozenset(
+        {
+            "LG",
+            "DOOSAN",
+            "KIWOOM",
+            "SSG",
+            "KT",
+            "KIA",
+            "SAMSUNG",
+            "LOTTE",
+            "HANWHA",
+            "NC",
+        }
+    )
     _nickname_prefixes = (
         "직관러",
         "야구친구",
@@ -132,6 +147,41 @@ class AuthSessionService:
 
         return profile
 
+    async def update_current_user(
+        self,
+        *,
+        access_token: str,
+        nickname: str | None,
+        favorite_team: str | None,
+        update_favorite_team: bool,
+    ) -> CurrentUserDto:
+        normalized_nickname = self._normalize_nickname(nickname)
+        normalized_favorite_team = self._normalize_favorite_team(favorite_team)
+
+        try:
+            auth_user = await self._supabase_auth_client.get_user(access_token)
+            profile = await self._user_profile_repository.find_by_auth_user_id(
+                auth_user.id
+            )
+
+            if profile is None:
+                raise UnauthenticatedError("Application profile was not found.")
+
+            updated_profile = await self._user_profile_repository.update_profile(
+                profile_id=profile.id,
+                nickname=normalized_nickname,
+                favorite_team=normalized_favorite_team,
+                update_favorite_team=update_favorite_team,
+            )
+            if updated_profile is None:
+                raise UnauthenticatedError("Application profile was not found.")
+
+            await self._session.commit()
+            return updated_profile
+        except Exception:
+            await self._session.rollback()
+            raise
+
     async def refresh_session(
         self,
         refresh_token: str,
@@ -177,6 +227,28 @@ class AuthSessionService:
         prefix = secrets.choice(self._nickname_prefixes)
         suffix = secrets.randbelow(9000) + 1000
         return f"{prefix}-{suffix}"
+
+    @staticmethod
+    def _normalize_nickname(nickname: str | None) -> str | None:
+        if nickname is None:
+            return None
+
+        normalized = nickname.strip()
+        if not normalized:
+            raise InvalidProfileUpdateError("nickname_required")
+
+        return normalized
+
+    @classmethod
+    def _normalize_favorite_team(cls, favorite_team: str | None) -> str | None:
+        if favorite_team is None:
+            return None
+
+        normalized = favorite_team.strip().upper()
+        if normalized not in cls._kbo_team_ids:
+            raise InvalidProfileUpdateError("invalid_favorite_team")
+
+        return normalized
 
 
 def _build_code_challenge(code_verifier: str) -> str:

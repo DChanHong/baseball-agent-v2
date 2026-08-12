@@ -8,11 +8,14 @@ from app.core.config import Settings, get_settings
 from app.domains.auth.controller.schemas import (
     CurrentUserResponse,
     CurrentUserResponseUser,
+    UpdateCurrentUserRequest,
 )
 from app.domains.auth.domain.exceptions import (
     AuthConfigurationError,
+    InvalidProfileUpdateError,
     UnauthenticatedError,
 )
+from app.domains.auth.infrastructure.repositories import NicknameAlreadyExistsError
 from app.domains.auth.service.dto import CurrentUserDto, SupabaseSessionDto
 from app.domains.auth.service.services import AuthRedirectService, AuthSessionService
 
@@ -182,14 +185,46 @@ async def logout(
     )
 
 
-@router.patch("/me", status_code=status.HTTP_501_NOT_IMPLEMENTED)
-async def update_current_user() -> None:
-    """Profile update placeholder for the next Auth implementation units."""
+@router.patch("/me", response_model=CurrentUserResponse)
+async def update_current_user(
+    payload: UpdateCurrentUserRequest,
+    request: Request,
+    service: AuthSessionServiceDependency,
+    settings: SettingsDependency,
+) -> CurrentUserResponse:
+    """Update the current authenticated application profile."""
 
-    raise HTTPException(
-        status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="auth_profile_update_not_implemented",
-    )
+    access_token = request.cookies.get(settings.auth_access_cookie_name)
+    if not access_token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="unauthenticated",
+        )
+
+    try:
+        user = await service.update_current_user(
+            access_token=access_token,
+            nickname=payload.nickname,
+            favorite_team=payload.favoriteTeam,
+            update_favorite_team="favoriteTeam" in payload.model_fields_set,
+        )
+    except UnauthenticatedError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="unauthenticated",
+        ) from exc
+    except InvalidProfileUpdateError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        ) from exc
+    except NicknameAlreadyExistsError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="nickname_already_exists",
+        ) from exc
+
+    return to_current_user_response(user)
 
 
 @router.delete("/me", status_code=status.HTTP_501_NOT_IMPLEMENTED)

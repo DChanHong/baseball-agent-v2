@@ -70,6 +70,34 @@ class SqlAlchemyUserProfileRepository:
         model.last_login_at = datetime.now(UTC)
         await self._session.flush()
 
+    async def update_profile(
+        self,
+        *,
+        profile_id: UUID,
+        nickname: str | None,
+        favorite_team: str | None,
+        update_favorite_team: bool,
+    ) -> CurrentUserDto | None:
+        statement = select(UserProfileModel).where(UserProfileModel.id == profile_id)
+        result = await self._session.execute(statement)
+        model = result.scalar_one_or_none()
+
+        if model is None:
+            return None
+
+        if nickname is not None:
+            model.nickname = nickname
+        if update_favorite_team:
+            model.favorite_team = favorite_team
+
+        try:
+            await self._session.flush()
+        except IntegrityError as exc:
+            raise NicknameAlreadyExistsError from exc
+
+        await self._session.refresh(model)
+        return self._to_dto(model)
+
     @staticmethod
     def _to_dto(model: UserProfileModel) -> CurrentUserDto:
         return CurrentUserDto(

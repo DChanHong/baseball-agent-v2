@@ -14,6 +14,23 @@ const currentUserSchema = z
 
 export type CurrentUser = z.infer<typeof currentUserSchema>;
 
+export type UpdateCurrentUserInput = {
+  nickname: string;
+  favoriteTeam: string | null;
+};
+
+export class AuthApiError extends Error {
+  status: number;
+  detail: string | null;
+
+  constructor(message: string, options: { status: number; detail: string | null }) {
+    super(message);
+    this.name = "AuthApiError";
+    this.status = options.status;
+    this.detail = options.detail;
+  }
+}
+
 export function startGoogleOAuth() {
   window.location.assign(`${API_BASE_URL}/api/v1/auth/google`);
 }
@@ -43,5 +60,37 @@ export async function logoutCurrentUser() {
 
   if (!response.ok) {
     throw new Error(`로그아웃에 실패했습니다. (${response.status})`);
+  }
+}
+
+export async function updateCurrentUser(input: UpdateCurrentUserInput): Promise<CurrentUser> {
+  const response = await fetch(`${API_BASE_URL}/api/v1/auth/me`, {
+    method: "PATCH",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(input),
+  });
+
+  if (!response.ok) {
+    const detail = await readErrorDetail(response);
+    throw new AuthApiError(`프로필을 저장하지 못했습니다. (${response.status})`, {
+      status: response.status,
+      detail,
+    });
+  }
+
+  const payload = (await response.json()) as unknown;
+  return currentUserSchema.parse(payload);
+}
+
+async function readErrorDetail(response: Response): Promise<string | null> {
+  try {
+    const payload = (await response.json()) as unknown;
+    const result = z.object({ detail: z.string() }).safeParse(payload);
+    return result.success ? result.data.detail : null;
+  } catch {
+    return null;
   }
 }

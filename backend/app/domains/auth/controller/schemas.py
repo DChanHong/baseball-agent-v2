@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class CurrentUserResponseUser(BaseModel):
@@ -15,3 +15,10 @@ class CurrentUserResponse(BaseModel):
     """Response body for GET /auth/me."""
 
     user: CurrentUserResponseUser
+
+
+class UpdateCurrentUserRequest(BaseModel):
+    """Request body for PATCH /auth/me."""
+
+    nickname: str | None = Field(default=None, max_length=32)
+    favoriteTeam: str | None = Field(default=None, max_length=30)
