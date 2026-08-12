@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useSetAtom } from "jotai";
-import { ChevronDown, LogIn, LogOut, UserRound } from "lucide-react";
+import { ChevronDown, LoaderCircle, LogIn, LogOut, UserRound } from "lucide-react";
 import styled from "styled-components";
 import { isLoginModalOpenAtom } from "@/features/auth/model/auth-modal.atom";
 import { useCurrentUser, useLogout } from "@/features/auth/model/auth-query";
@@ -90,12 +90,16 @@ export function AppHeader() {
       ) : (
         <LoginButton
           type="button"
-          aria-label="로그인"
+          aria-label={isLoading ? "로그인 상태 확인 중" : "로그인"}
           disabled={isLoading}
           onClick={() => openLoginModal(true)}
         >
-          <LogIn aria-hidden="true" size={17} />
-          <LoginLabel>로그인</LoginLabel>
+          {isLoading ? (
+            <LoadingIcon aria-hidden="true" size={17} />
+          ) : (
+            <LogIn aria-hidden="true" size={17} />
+          )}
+          <LoginLabel>{isLoading ? "확인 중" : "로그인"}</LoginLabel>
         </LoginButton>
       )}
     </Header>
@@ -221,6 +225,16 @@ const LoginButton = styled.button`
   @media (max-width: 420px) {
     width: 40px;
     padding: 0;
+  }
+`;
+
+const LoadingIcon = styled(LoaderCircle)`
+  animation: spin 900ms linear infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
   }
 `;
 

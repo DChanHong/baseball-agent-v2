@@ -20,7 +20,7 @@ from app.domains.auth.service.dto import CurrentUserDto, SupabaseSessionDto
 
 
 class OAuthStartDto:
-    """OAuth redirect URL plus temporary state that must be persisted in cookies."""
+    """OAuth redirect URL plus temporary values that must be persisted in cookies."""
 
     def __init__(
         self,
@@ -41,23 +41,24 @@ class AuthRedirectService:
         self._settings = settings
 
     def build_google_redirect(self) -> OAuthStartDto:
-        """Return the Supabase Google OAuth start URL and PKCE state."""
+        """Return the Supabase Google OAuth start URL and backend OAuth state."""
 
         self._ensure_configured()
         state = secrets.token_urlsafe(32)
         code_verifier = secrets.token_urlsafe(64)
         code_challenge = _build_code_challenge(code_verifier)
+        redirect_to = (
+            f"{self._settings.app_base_url}/api/v1/auth/callback?"
+            f"{urlencode({'oauth_state': state})}"
+        )
         query = urlencode(
             {
                 "provider": "google",
-                "redirect_to": (
-                    f"{self._settings.app_base_url}/api/v1/auth/callback"
-                ),
+                "redirect_to": redirect_to,
                 "flow_type": "pkce",
                 "scopes": "email profile",
                 "code_challenge": code_challenge,
                 "code_challenge_method": "s256",
-                "state": state,
             }
         )
         redirect_url = (

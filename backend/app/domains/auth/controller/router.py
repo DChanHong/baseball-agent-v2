@@ -76,7 +76,7 @@ async def handle_auth_callback(
         return RedirectResponse(f"{settings.frontend_app_url}?auth=error")
 
     auth_code = request.query_params.get("code")
-    returned_state = request.query_params.get("state")
+    returned_state = request.query_params.get("oauth_state")
     expected_state = request.cookies.get(settings.auth_oauth_state_cookie_name)
     code_verifier = request.cookies.get(settings.auth_oauth_verifier_cookie_name)
 
