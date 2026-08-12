@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { ToolResultName } from "@/entities/tool-result/model/types";
-import { API_BASE_URL } from "@/features/auth/api/auth-api";
+import { API_BASE_URL, fetchWithAuthRefresh } from "@/features/auth/api/auth-api";
 
 export type ChatStreamRequest = {
   guestId: string;
@@ -256,7 +256,7 @@ export async function* streamChatMessage(
   request: ChatStreamRequest,
   signal?: AbortSignal,
 ): AsyncGenerator<ChatStreamEvent> {
-  const response = await fetch(`${API_BASE_URL}/api/v1/chat`, {
+  const response = await fetchWithAuthRefresh(`${API_BASE_URL}/api/v1/chat`, {
     method: "POST",
     headers: {
       Accept: "text/event-stream",

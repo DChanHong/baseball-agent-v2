@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:4000";
+const AUTH_REFRESH_URL = `${API_BASE_URL}/api/v1/auth/refresh`;
 
 const currentUserSchema = z
   .object({
@@ -36,7 +37,7 @@ export function startGoogleOAuth() {
 }
 
 export async function fetchCurrentUser(): Promise<CurrentUser | null> {
-  const response = await fetch(`${API_BASE_URL}/api/v1/auth/me`, {
+  const response = await fetchWithAuthRefresh(`${API_BASE_URL}/api/v1/auth/me`, {
     credentials: "include",
   });
 
@@ -64,7 +65,7 @@ export async function logoutCurrentUser() {
 }
 
 export async function updateCurrentUser(input: UpdateCurrentUserInput): Promise<CurrentUser> {
-  const response = await fetch(`${API_BASE_URL}/api/v1/auth/me`, {
+  const response = await fetchWithAuthRefresh(`${API_BASE_URL}/api/v1/auth/me`, {
     method: "PATCH",
     credentials: "include",
     headers: {
@@ -83,6 +84,55 @@ export async function updateCurrentUser(input: UpdateCurrentUserInput): Promise<
 
   const payload = (await response.json()) as unknown;
   return currentUserSchema.parse(payload);
+}
+
+let refreshSessionPromise: Promise<boolean> | null = null;
+
+export async function fetchWithAuthRefresh(
+  input: RequestInfo | URL,
+  init?: RequestInit,
+): Promise<Response> {
+  const response = await fetch(input, withCredentials(init));
+
+  if (response.status !== 401 || isRefreshRequest(input)) {
+    return response;
+  }
+
+  const refreshed = await refreshCurrentSessionOnce();
+  if (!refreshed) {
+    return response;
+  }
+
+  return fetch(input, withCredentials(init));
+}
+
+async function refreshCurrentSessionOnce(): Promise<boolean> {
+  refreshSessionPromise ??= refreshCurrentSession().finally(() => {
+    refreshSessionPromise = null;
+  });
+
+  return refreshSessionPromise;
+}
+
+async function refreshCurrentSession(): Promise<boolean> {
+  const response = await fetch(AUTH_REFRESH_URL, {
+    method: "POST",
+    credentials: "include",
+  });
+
+  return response.ok;
+}
+
+function withCredentials(init?: RequestInit): RequestInit {
+  return {
+    ...init,
+    credentials: init?.credentials ?? "include",
+  };
+}
+
+function isRefreshRequest(input: RequestInfo | URL): boolean {
+  const url = typeof input === "string" ? input : input.toString();
+  return url === AUTH_REFRESH_URL;
 }
 
 async function readErrorDetail(response: Response): Promise<string | null> {
