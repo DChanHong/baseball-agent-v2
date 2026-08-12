@@ -7,9 +7,9 @@
 ## 2. 현재 구현 범위
 
 - [확인됨] 프론트엔드는 `frontend/`의 Next.js App Router 단일 페이지 앱이다. 라우트 진입점은 `frontend/src/app/page.tsx`이고 실제 화면은 `frontend/src/views/chat/ui/chat-page.tsx`가 조립한다.
-- [확인됨] 현재 최상위 화면 구조는 `AppHeader`, `ChatSidebar`, `ChatPanel`, `SourceDrawer`, `LoginModal`, `ProfileModal`이다.
-- [확인됨] 현재 구현된 전역 레이아웃은 fixed header, 접힘 가능한 좌측 sidebar, 중앙 채팅 패널, 우측 SourceDrawer 중심이다.
-- [사용자 결정] 다음 layout 개선에서는 fixed `AppHeader`를 완전히 제거하고, 로고/브랜드/로그인/계정 진입점을 `ChatSidebar`로 통합한다.
+- [확인됨] 현재 최상위 화면 구조는 `ChatSidebar`, `ChatPanel`, `SourceDrawer`, `LoginModal`, `ProfileModal`이다.
+- [확인됨] 현재 구현된 전역 레이아웃은 통합 좌측 sidebar, 중앙 채팅 패널, 우측 SourceDrawer 중심이다.
+- [확인됨] 2026-08-12 layout 개선에서 fixed `AppHeader`를 완전히 제거하고, 로고/브랜드/로그인/계정 진입점을 `ChatSidebar`로 통합했다.
 - [사용자 결정] 사이드바 디자인은 Manus 캡처를 벤치마킹하되, 버튼과 기능 구성을 그대로 복제하지 않는다.
 - [확인됨] 우측 출처 패널은 `SourceDrawer`로 존재하지만, 실제 출처 데이터와 연결되지 않은 빈 상태 안내 문구만 표시한다.
 - [확인됨] 로그인/프로필은 Jotai atom으로 열고 닫는 모달 UI만 존재하며, 저장/인증 API 연동은 없다.
@@ -23,7 +23,7 @@
 - [확인됨] 로그인과 프로필 입력은 로컬 UI만 존재하며 실제 인증, 저장, 서버 동기화는 구현되어 있지 않다.
 - [확인됨] `ChatComposer`의 파일 추가, 음성 입력, 일정 검색/원정 조사/추천 근거 토글은 1차 UI에서 제거됐다.
 - [확인됨] UI 개선 1차 범위의 좌측 사이드바는 구현됐고, 2026-08-12 기준 세션 데이터는 실제 `GET /api/v1/conversations` 목록 API와 연결됐다.
-- [사용자 결정] 이번 2026-08-12 문서 업데이트 범위는 layout 개선 계획까지다. 실제 컴포넌트 구현은 별도 작업으로 진행한다.
+- [확인됨] 2026-08-12 기준 layout 개선 계획 중 header/sidebar 통합, conversation list API 연동, SourceDrawer top offset 제거까지 구현됐다.
 - [사용자 결정] Manus의 `프로젝트` 섹션에 해당하는 별도 프로젝트/워크스페이스 기능은 이번 범위에 포함하지 않는다.
 
 ## 4. 사용자 흐름
@@ -31,13 +31,13 @@
 1. 사용자는 `/`로 진입한다.
 2. `RootLayout`이 styled-components registry와 app providers를 적용한다.
 3. `Home`이 `ChatPage`를 렌더링한다.
-4. 현재 구현에서는 사용자가 헤더에서 `프로필` 또는 `로그인` 모달을 열 수 있다.
+4. 현재 구현에서는 사용자가 사이드바 하단 계정 영역에서 `프로필` 또는 `로그인` 모달을 열 수 있다.
 5. 사용자는 hero 상태의 `ChatComposer`에 질문을 입력하고 전송한다.
 6. 첫 메시지 전송 후 화면은 메시지 리스트 + 하단 composer dock 구조로 전환된다.
 7. 프론트엔드는 guest id와 conversation id를 localStorage 기반으로 관리한다.
 8. 프론트엔드는 `POST /api/v1/chat` SSE 스트림을 읽고 message/tool/assistant 이벤트를 화면 상태에 반영한다.
 9. 사용자는 `출처 패널 열기` 버튼으로 우측 drawer를 열 수 있다.
-10. [구현 계획] 개선 후 사용자는 사이드바 하단의 로그인/계정 바에서 로그인 모달 또는 계정 패널을 연다.
+10. 사용자는 사이드바 하단의 로그인/계정 바에서 로그인 모달 또는 계정 패널을 연다.
 
 ## 5. 화면/UI 스펙
 
@@ -46,20 +46,18 @@
 - [확인됨] `frontend/src/views/chat/ui/chat-page.tsx`
 - 현재 구조:
   - `Shell`: `min-height: 100vh`
-  - `AppHeader`
-  - `Workspace`: `min-height: calc(100vh - 72px)`
+  - `Workspace`: `min-height: 100vh`
   - `ChatSidebar`
   - `ChatPanel`
   - `SourceDrawer`
   - `LoginModal`
   - `ProfileModal`
-- [확인됨] 헤더는 fixed top bar로 구현됐다.
-- [확인됨] 헤더 높이 기준은 72px로 여러 컴포넌트에서 반복 사용한다.
-- [사용자 결정] 다음 개선에서는 `AppHeader`를 제거한다.
-- [구현 계획] 개선 후 최상위 구조는 `ChatSidebar`, `ChatPanel`, `SourceDrawer`, `LoginModal`, `ProfileModal` 중심으로 단순화한다.
-- [구현 계획] `Shell`의 `padding-top: 72px`와 `Workspace`의 `calc(100vh - 72px)` 의존성을 제거한다.
-- [구현 계획] desktop에서는 좌측 통합 sidebar가 전체 높이를 차지하고, main chat은 남은 영역을 사용한다.
-- [구현 계획] mobile에서는 별도 상단 header를 두지 않고 floating menu button으로 off-canvas sidebar를 연다.
+- [확인됨] 이전 구현의 헤더는 fixed top bar였고, 높이 기준 72px가 여러 컴포넌트에서 반복 사용됐다.
+- [확인됨] 2026-08-12 개선에서 `AppHeader`를 제거했다.
+- [확인됨] 개선 후 최상위 구조는 `ChatSidebar`, `ChatPanel`, `SourceDrawer`, `LoginModal`, `ProfileModal` 중심으로 단순화됐다.
+- [확인됨] `Shell`의 `padding-top: 72px`와 `Workspace`의 `calc(100vh - 72px)` 의존성을 제거했다.
+- [확인됨] desktop에서는 좌측 통합 sidebar가 전체 높이를 차지하고, main chat은 남은 영역을 사용한다.
+- [확인됨] mobile에서는 별도 상단 header를 두지 않고 floating menu button으로 off-canvas sidebar를 연다.
 
 ### 5.2 Header
 
@@ -67,48 +65,52 @@
 - [확인됨] 좌측에는 `frontend/public/brand/flaming-baseball-logo.webp` 로고와 `KBO Mate`, `일정부터 예매까지, KBO 관람 도우미`가 표시된다.
 - [확인됨] 우측에는 현재 비로그인 상태 기준 `로그인` 버튼이 표시된다.
 - [확인됨] header는 fixed 처리되어 스크롤 시 상단에 유지된다.
-- [사용자 결정] 다음 개선에서는 header를 완전히 제거한다.
-- [사용자 결정] 기존 header의 로고/브랜드는 사이드바 상단으로 이동한다.
-- [사용자 결정] 기존 header의 로그인/계정 진입점은 사이드바 하단으로 이동한다.
-- [구현 계획] `AppHeader` 컴포넌트는 제거하거나 사용하지 않는 상태로 전환한다.
-- [구현 계획] header 제거 후에도 로그인 모달, 프로필 모달, logout mutation 등 기존 인증 관련 동작은 사이드바 계정 영역에서 재사용한다.
+- [확인됨] 2026-08-12 개선에서 header를 완전히 제거했다.
+- [확인됨] 기존 header의 로고/브랜드는 사이드바 상단으로 이동했다.
+- [확인됨] 기존 header의 로그인/계정 진입점은 사이드바 하단으로 이동했다.
+- [확인됨] `AppHeader` 컴포넌트는 더 이상 `ChatPage`에서 사용하지 않는다.
+- [확인됨] header 제거 후에도 로그인 모달, 프로필 모달, logout mutation 등 기존 인증 관련 동작은 사이드바 계정 영역에서 재사용한다.
 - [확인 필요] 로그인 후 이름/별명과 프로필 이미지를 어디서 가져올지 결정해야 한다.
 - [확인 필요] `마이페이지`를 별도 route로 만들지, modal/drawer로 열지 결정해야 한다.
 
 ### 5.3 Sidebar
 
 - [확인됨] `frontend/src/widgets/chat-sidebar/ui/chat-sidebar.tsx`
-- [확인됨] 사이드바는 ChatGPT 웹 버전과 유사하게 펼침/닫음 가능한 좌측 sidebar로 구현됐다.
-- [확인됨] 사이드바 상단에는 새 채팅 버튼을 배치한다.
+- [확인됨] 사이드바는 Manus 캡처를 벤치마킹한 통합 좌측 sidebar로 구현됐다.
+- [확인됨] 열린 상태에서는 넓은 사이드바 하나만 표시하고, 접힌 상태에서는 좁은 icon rail 하나만 표시한다.
+- [확인됨] 열린 사이드바와 좁은 rail을 동시에 표시하지 않는다.
+- [확인됨] 사이드바 상단에는 브랜드 로고/이름과 접기 버튼을 배치한다.
+- [확인됨] 새 채팅 버튼은 브랜드 row 아래 primary action으로 배치한다.
 - [확인됨] 새 채팅 버튼 아래에는 채팅 목록 세션만 표시한다.
 - [확인됨] 세션 목록은 `GET /api/v1/conversations?limit=50` 응답을 React Query로 조회한다.
 - [확인됨] 세션 목록은 `@tanstack/react-virtual` 기반 virtualization을 사용한다.
 - [확인됨] 사이드바가 닫힌 상태에서는 얇은 icon rail을 남긴다.
-- [확인됨] collapsed icon rail에는 새 채팅 버튼과 사이드바 펼치기 버튼만 표시한다.
+- [확인됨] collapsed icon rail에는 로고, 새 채팅 버튼, 사이드바 펼치기 버튼, 하단 로그인/avatar 버튼만 표시한다.
 - [확인됨] 채팅 목록 세션 item은 대화 제목만 표시한다.
 - [확인됨] 대화 제목은 1줄로 표시하고 overflow는 ellipsis 처리한다.
 - [확인됨] 1차 범위에서 마지막 메시지 시각, 삭제/rename action, streaming/error 상태는 세션 item에 표시하지 않는다.
 - [확인됨] active 세션은 배경색 강조와 굵은 글자로 표시한다.
 - [확인됨] 세션 item hover 상태는 연한 배경으로 표시한다.
+- [확인됨] 채팅 목록 스크롤바는 얇은 thumb 스타일로 표시한다.
 - [확인됨] 480px 이하에서는 floating hamburger와 off-canvas sidebar를 사용한다.
 - [확인됨] mock 세션은 제거됐고 실제 conversation summary API와 연결됐다.
-- [사용자 결정] 다음 개선의 사이드바는 Manus처럼 header와 sidebar가 통합된 단일 navigation surface로 만든다.
-- [사용자 결정] 사이드바 상단 구성은 `브랜드 로고/이름`, `검색 아이콘`, `사이드바 접기 버튼`, `새 채팅`을 우선한다.
-- [사용자 결정] 사이드바 주요 기능은 `새 채팅`, `채팅 목록`만 둔다.
+- [확인됨] 사이드바는 Manus처럼 header와 sidebar가 통합된 단일 navigation surface로 만든다.
+- [확인됨] 검색 아이콘은 2026-08-12 UI 확인 후 열린/접힌 상태 모두에서 제거했다.
+- [확인됨] 사이드바 주요 기능은 `새 채팅`, `채팅 목록`만 둔다.
 - [사용자 결정] Manus의 `프로젝트` 섹션은 이번 1차 계획에서는 제외한다. 참고로 Manus 캡처의 `프로젝트` 영역은 첫 번째 이미지 중간의 `프로젝트` 제목과 `새 프로젝트` 버튼이 있는 섹션이다.
-- [사용자 결정] 로그인/계정 바는 Manus처럼 사이드바 최하단에 고정한다.
-- [사용자 결정] collapsed sidebar도 Manus처럼 로고/주요 아이콘/하단 아바타가 남는 얇은 rail 형태를 따른다.
-- [구현 계획] expanded 상태 layout:
-  - 상단 브랜드 row: KBO Mate 로고, 서비스명, 검색 icon button, 접기 icon button
+- [확인됨] 로그인/계정 바는 Manus처럼 사이드바 최하단에 고정한다.
+- [확인됨] collapsed sidebar도 Manus처럼 로고/주요 아이콘/하단 아바타가 남는 얇은 rail 형태를 따른다.
+- [확인됨] expanded 상태 layout:
+  - 상단 브랜드 row: KBO Mate 로고, 서비스명, 접기 icon button
   - primary action: `새 채팅`
   - main section: `채팅 목록`
   - bottom account bar: 비로그인 `로그인`, 로그인 후 avatar/nickname과 계정 메뉴
-- [구현 계획] collapsed 상태 layout:
+- [확인됨] collapsed 상태 layout:
   - 좁은 rail 폭 유지
   - 로고 또는 앱 icon
-  - `새 채팅`, `검색`, `사이드바 펼치기` icon button
+  - `새 채팅`, `사이드바 펼치기` icon button
   - 하단 login/avatar icon
-- [구현 계획] mobile에서는 floating menu button으로 sidebar를 열고, 열린 sidebar는 off-canvas panel + scrim으로 표시한다.
+- [확인됨] mobile에서는 floating menu button으로 sidebar를 열고, 열린 sidebar는 off-canvas panel + scrim으로 표시한다.
 
 ### 5.4 Chat Hero State
 
@@ -220,7 +222,7 @@
 - [확인됨] `frontend/src/widgets/source-drawer/ui/source-drawer.tsx`
 - [확인됨] Jotai `isSourceDrawerOpenAtom`으로 열고 닫는다.
 - [확인됨] 열린 상태에서 fixed right drawer로 표시된다.
-- [확인됨] 위치는 `top: 72px`, `right: 0`, `bottom: 0`, width `min(100vw, 360px)`이다.
+- [확인됨] 위치는 `top: 0`, `right: 0`, `bottom: 0`, width `min(100vw, 360px)`이다.
 - [확인됨] 현재 내용은 빈 상태 안내뿐이다.
 - [사용자 결정] SourceDrawer는 1차 UI 개선에서 실제 출처/근거 패널로 살린다.
 - [사용자 결정] SourceDrawer는 사용된 출처, 원문 링크, 주의/참고를 모아 보여준다.
@@ -228,9 +230,9 @@
 - [사용자 결정] SourceDrawer에는 `출처 제목`, `원문 링크`, `주의/참고`를 표시한다.
 - [사용자 결정] `주의/참고`는 딱딱한 한계 고지가 아니라 부드러운 어투와 당구장 표시 같은 시각 표현으로 처리한다.
 - [사용자 결정] 출처 유형, 관련 tool 이름, 기준 시점, trust level은 1차 범위에서 제외하고 추후 확장 후보로 둔다.
-- [사용자 결정] header 제거 후 desktop SourceDrawer는 `top: 0`, `right: 0`, `bottom: 0` 기준으로 전체 높이를 사용한다.
-- [사용자 결정] mobile SourceDrawer는 full-screen drawer 또는 bottom sheet 계열로 전환한다.
-- [구현 계획] `SourceDrawer`의 `top: 72px` 의존성을 제거하고 통합 sidebar와 겹치지 않는 z-index/overlay 규칙을 다시 정한다.
+- [확인됨] header 제거 후 desktop SourceDrawer는 `top: 0`, `right: 0`, `bottom: 0` 기준으로 전체 높이를 사용한다.
+- [확인됨] mobile SourceDrawer는 우선 full-screen drawer 기준으로 전환했다.
+- [확인됨] `SourceDrawer`의 `top: 72px` 의존성을 제거하고 통합 sidebar와 겹치지 않도록 z-index를 조정했다.
 
 ### 5.10 Login/Profile Modal
 
@@ -244,7 +246,7 @@
 - [사용자 결정] 로그인 후에는 사이드바 하단에 이름 또는 별명과 원형 프로필을 표시한다.
 - [사용자 결정] 계정 dropdown/panel은 Manus처럼 큰 패널 형태를 따른다.
 - [사용자 결정] 계정 dropdown/panel에는 일단 `마이페이지`, `로그아웃`을 표시한다.
-- [구현 계획] 현재 `AppHeader`에 있는 `useCurrentUser`, `useLogout`, `isLoginModalOpenAtom`, `isProfileModalOpenAtom` 사용 흐름을 사이드바 하단 account bar로 이동한다.
+- [확인됨] 기존 `AppHeader`에 있던 `useCurrentUser`, `useLogout`, `isLoginModalOpenAtom`, `isProfileModalOpenAtom` 사용 흐름을 사이드바 하단 account bar로 이동했다.
 - [확인 필요] 실제 auth 연동 방식과 provider를 결정해야 한다.
 - [사용자 결정] 로그인 화면은 별도 route가 아니라 modal로 유지한다.
 
@@ -458,8 +460,8 @@ SSE 채팅의 로딩 처리는 이 UI의 핵심 경험으로 보고, assistant b
 ## 14. 미완성/개선 후보
 
 - [사용자 결정] 현재 문서와 기존 UI 텍스트의 `직관 도우미` 표현은 추후 더 포괄적인 `야구 도우미` 계열 명칭으로 바꿀 예정이다.
-- [확인됨] 앱 전체 레이아웃은 전역 fixed header + 접힘 가능한 좌측 sidebar + main chat + right source drawer 방향으로 1차 구현됐다.
-- [사용자 결정] 다음 layout 개선에서는 전역 header를 제거하고, Manus처럼 브랜드/주요 action/채팅 목록/계정 바를 사이드바에 통합한다.
+- [확인됨] 2026-08-10 1차 레이아웃은 전역 fixed header + 접힘 가능한 좌측 sidebar + main chat + right source drawer 방향으로 구현됐다.
+- [확인됨] 전역 header를 제거하고, Manus처럼 브랜드/주요 action/채팅 목록/계정 바를 사이드바에 통합했다.
 - [확인됨] 사이드바 1차 범위는 `새 채팅`, `채팅 목록 세션`으로 제한한다.
 - [사용자 결정] 통합 사이드바 개선 후에도 1차 기능 범위는 `새 채팅`, `채팅 목록`으로 제한한다.
 - [사용자 결정] 프로젝트/워크스페이스 섹션은 이번 범위에서 제외한다.
@@ -467,7 +469,7 @@ SSE 채팅의 로딩 처리는 이 UI의 핵심 경험으로 보고, assistant b
 - [확인됨] composer의 mode toggle, 자료 추가, 음성 입력은 1차 UI에서 제거됐다.
 - [확인 필요] 현재 클라이언트 CSS/UX는 MVP 수준이므로 tool card별 디자인과 모바일 active chat UX를 추가 보완한다.
 - [확인 필요] 모달은 접근성 기준을 보강한다.
-- [구현 계획] header 제거와 함께 `72px` top offset 의존성을 제거하고, SourceDrawer/Sidebar/Main의 높이 계산을 viewport 기준으로 재정리한다.
+- [확인됨] header 제거와 함께 `72px` top offset 의존성을 제거하고, SourceDrawer/Sidebar/Main의 높이 계산을 viewport 기준으로 재정리했다.
 - [확인 필요] active chat 상태에서 하단 composer dock이 모바일 safe area와 겹치지 않는지 확인한다.
 - [확인 필요] tool card 공통 디자인 규칙을 별도 spec으로 분리한다.
 
@@ -475,4 +477,4 @@ SSE 채팅의 로딩 처리는 이 UI의 핵심 경험으로 보고, assistant b
 
 1. 실제 auth 연동 방식과 provider를 결정해야 한다.
 2. 로그인 후 계정 패널의 상세 항목을 어디까지 노출할지 결정해야 한다. 현재 확정 항목은 `마이페이지`, `로그아웃`이다.
-3. mobile SourceDrawer를 full-screen drawer로 할지 bottom sheet로 할지 구현 전에 결정해야 한다.
+3. mobile SourceDrawer는 현재 full-screen drawer 기준으로 구현했으며, bottom sheet 전환 여부는 추후 UX 확인 후 결정한다.
