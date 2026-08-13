@@ -13,9 +13,9 @@ import {
   type ChatStreamEvent,
   type ChatStreamMessage,
 } from "@/features/chat-stream/api/stream-chat-message";
-import { isLoginModalOpenAtom } from "@/features/auth/model/auth-modal.atom";
 import { useCurrentUser } from "@/features/auth/model/auth-query";
 import { conversationListQueryKey } from "@/features/conversation-list/model/conversation-list-query";
+import { useGlobalModal } from "@/features/global-modal/model/use-global-modal";
 import { ChatComposer } from "@/features/send-message/ui/chat-composer";
 import { Button } from "@/shared/ui/button";
 import { isSourceDrawerOpenAtom } from "@/widgets/source-drawer/model/source-drawer.atom";
@@ -46,7 +46,7 @@ const toolDisplayLabels: Record<ToolResultName, string> = {
 export function ChatPanel() {
   const queryClient = useQueryClient();
   const openSourceDrawer = useSetAtom(isSourceDrawerOpenAtom);
-  const openLoginModal = useSetAtom(isLoginModalOpenAtom);
+  const { openLoginModal } = useGlobalModal();
   const { data: user, isLoading: isCheckingAuth } = useCurrentUser();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [conversationId, setConversationId] = useState<string | null>(null);
@@ -73,7 +73,7 @@ export function ChatPanel() {
     }
 
     if (!user) {
-      openLoginModal(true);
+      openLoginModal();
       setErrorMessage("로그인 후 채팅을 시작할 수 있습니다.");
       return;
     }

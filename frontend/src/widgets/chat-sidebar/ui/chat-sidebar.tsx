@@ -1,7 +1,6 @@
 "use client";
 
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { useSetAtom } from "jotai";
 import {
   ChevronDown,
   ChevronLeft,
@@ -16,10 +15,9 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import styled from "styled-components";
-import { isLoginModalOpenAtom } from "@/features/auth/model/auth-modal.atom";
 import { useCurrentUser, useLogout } from "@/features/auth/model/auth-query";
 import { useConversationList } from "@/features/conversation-list/model/conversation-list-query";
-import { isProfileModalOpenAtom } from "@/features/profile/model/profile-modal.atom";
+import { useGlobalModal } from "@/features/global-modal/model/use-global-modal";
 
 function subscribeToSidebarBreakpoint(callback: () => void) {
   const mediaQuery = window.matchMedia("(max-width: 720px)");
@@ -39,8 +37,7 @@ function getSidebarBreakpointServerSnapshot() {
 }
 
 export function ChatSidebar() {
-  const openLoginModal = useSetAtom(isLoginModalOpenAtom);
-  const openProfileModal = useSetAtom(isProfileModalOpenAtom);
+  const { openLoginModal, openProfileModal } = useGlobalModal();
   const { data: user, isLoading: isCheckingAuth } = useCurrentUser();
   const logoutMutation = useLogout();
   const {
@@ -119,13 +116,13 @@ export function ChatSidebar() {
 
   function openLogin() {
     setIsAccountPanelOpen(false);
-    openLoginModal(true);
+    openLoginModal();
     closeOnCompactPhone();
   }
 
   function openProfile() {
     setIsAccountPanelOpen(false);
-    openProfileModal(true);
+    openProfileModal();
     closeOnCompactPhone();
   }
 

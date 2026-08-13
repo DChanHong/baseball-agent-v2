@@ -1,18 +1,17 @@
 "use client";
 
-import { useAtom } from "jotai";
 import { Mail } from "lucide-react";
 import styled from "styled-components";
 import { startGoogleOAuth } from "@/features/auth/api/auth-api";
-import { isLoginModalOpenAtom } from "@/features/auth/model/auth-modal.atom";
+import { useGlobalModal } from "@/features/global-modal/model/use-global-modal";
 import { Button } from "@/shared/ui/button";
 import { Modal } from "@/shared/ui/modal";
 
 export function LoginModal() {
-  const [isOpen, setIsOpen] = useAtom(isLoginModalOpenAtom);
+  const { closeGlobalModal, isLoginModalOpen } = useGlobalModal();
 
   return (
-    <Modal isOpen={isOpen} title="로그인" onClose={() => setIsOpen(false)}>
+    <Modal isOpen={isLoginModalOpen} title="로그인" onClose={closeGlobalModal}>
       <Content>
         <Description>
           대화 기록과 선호 팀, 예산, 좌석 성향을 저장하기 위한 로그인 영역입니다.

@@ -1,12 +1,11 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { useAtom } from "jotai";
 import { Save } from "lucide-react";
 import styled from "styled-components";
 import { AuthApiError, type CurrentUser } from "@/features/auth/api/auth-api";
 import { useCurrentUser, useUpdateCurrentUser } from "@/features/auth/model/auth-query";
-import { isProfileModalOpenAtom } from "@/features/profile/model/profile-modal.atom";
+import { useGlobalModal } from "@/features/global-modal/model/use-global-modal";
 import { Button } from "@/shared/ui/button";
 import { Modal } from "@/shared/ui/modal";
 
@@ -24,12 +23,12 @@ const teamOptions = [
 ] as const;
 
 export function ProfileModal() {
-  const [isOpen, setIsOpen] = useAtom(isProfileModalOpenAtom);
+  const { closeGlobalModal, isProfileModalOpen } = useGlobalModal();
   const { data: user } = useCurrentUser();
 
   return (
-    <Modal isOpen={isOpen} title="나의 프로필" onClose={() => setIsOpen(false)}>
-      <ProfileForm user={user ?? null} onClose={() => setIsOpen(false)} />
+    <Modal isOpen={isProfileModalOpen} title="나의 프로필" onClose={closeGlobalModal}>
+      <ProfileForm user={user ?? null} onClose={closeGlobalModal} />
     </Modal>
   );
 }

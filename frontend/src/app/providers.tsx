@@ -8,6 +8,7 @@ import { ThemeProvider } from "styled-components";
 import { createQueryClient } from "@/shared/lib/query/create-query-client";
 import { GlobalStyle } from "@/shared/styles/global-style";
 import { theme } from "@/shared/styles/theme";
+import { GlobalModal } from "@/widgets/global-modal";
 
 type AppProvidersProps = {
   children: ReactNode;
@@ -22,6 +23,8 @@ export function AppProviders({ children }: AppProvidersProps) {
         <ThemeProvider theme={theme}>
           <GlobalStyle />
           {children}
+          <div id="modal-portal-root" />
+          <GlobalModal />
         </ThemeProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

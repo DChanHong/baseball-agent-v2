@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { createPortal } from "react-dom";
 import styled from "styled-components";
 import { Button } from "@/shared/ui/button";
 
@@ -16,7 +17,13 @@ export function Modal({ children, isOpen, title, onClose }: ModalProps) {
     return null;
   }
 
-  return (
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  const portalRoot = document.getElementById("modal-portal-root") ?? document.body;
+
+  return createPortal(
     <Overlay role="presentation" onMouseDown={onClose}>
       <Dialog
         role="dialog"
@@ -32,7 +39,8 @@ export function Modal({ children, isOpen, title, onClose }: ModalProps) {
         </Header>
         {children}
       </Dialog>
-    </Overlay>
+    </Overlay>,
+    portalRoot,
   );
 }
 

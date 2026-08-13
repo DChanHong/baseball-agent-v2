@@ -1,8 +1,6 @@
 "use client";
 
 import styled from "styled-components";
-import { LoginModal } from "@/features/auth/ui/login-modal";
-import { ProfileModal } from "@/features/profile/ui/profile-modal";
 import { ChatPanel } from "@/widgets/chat/ui/chat-panel";
 import { ChatSidebar } from "@/widgets/chat-sidebar/ui/chat-sidebar";
 import { SourceDrawer } from "@/widgets/source-drawer/ui/source-drawer";
@@ -15,8 +13,6 @@ export function ChatPage() {
         <ChatPanel />
         <SourceDrawer />
       </Workspace>
-      <LoginModal />
-      <ProfileModal />
     </Shell>
   );
 }

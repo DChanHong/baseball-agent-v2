@@ -1,16 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useSetAtom } from "jotai";
 import { ChevronDown, LoaderCircle, LogIn, LogOut, UserRound } from "lucide-react";
 import styled from "styled-components";
-import { isLoginModalOpenAtom } from "@/features/auth/model/auth-modal.atom";
 import { useCurrentUser, useLogout } from "@/features/auth/model/auth-query";
-import { isProfileModalOpenAtom } from "@/features/profile/model/profile-modal.atom";
+import { useGlobalModal } from "@/features/global-modal/model/use-global-modal";
 
 export function AppHeader() {
-  const openLoginModal = useSetAtom(isLoginModalOpenAtom);
-  const openProfileModal = useSetAtom(isProfileModalOpenAtom);
+  const { openLoginModal, openProfileModal } = useGlobalModal();
   const { data: user, isLoading } = useCurrentUser();
   const logoutMutation = useLogout();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,7 +33,7 @@ export function AppHeader() {
 
   function openProfile() {
     setIsMenuOpen(false);
-    openProfileModal(true);
+    openProfileModal();
   }
 
   function logout() {
@@ -92,7 +89,7 @@ export function AppHeader() {
           type="button"
           aria-label={isLoading ? "로그인 상태 확인 중" : "로그인"}
           disabled={isLoading}
-          onClick={() => openLoginModal(true)}
+          onClick={openLoginModal}
         >
           {isLoading ? (
             <LoadingIcon aria-hidden="true" size={17} />
