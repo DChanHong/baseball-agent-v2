@@ -10,9 +10,10 @@ type ModalProps = {
   isOpen: boolean;
   title: string;
   onClose: () => void;
+  showHeader?: boolean;
 };
 
-export function Modal({ children, isOpen, title, onClose }: ModalProps) {
+export function Modal({ children, isOpen, title, onClose, showHeader = true }: ModalProps) {
   if (!isOpen) {
     return null;
   }
@@ -31,12 +32,16 @@ export function Modal({ children, isOpen, title, onClose }: ModalProps) {
         aria-labelledby="modal-title"
         onMouseDown={(event) => event.stopPropagation()}
       >
-        <Header>
-          <Title id="modal-title">{title}</Title>
-          <Button type="button" variant="ghost" onClick={onClose} aria-label="모달 닫기">
-            닫기
-          </Button>
-        </Header>
+        {showHeader ? (
+          <Header>
+            <Title id="modal-title">{title}</Title>
+            <Button type="button" variant="ghost" onClick={onClose} aria-label="모달 닫기">
+              닫기
+            </Button>
+          </Header>
+        ) : (
+          <ScreenReaderTitle id="modal-title">{title}</ScreenReaderTitle>
+        )}
         {children}
       </Dialog>
     </Overlay>,
@@ -74,4 +79,13 @@ const Header = styled.div`
 const Title = styled.h2`
   margin: 0;
   font-size: 18px;
+`;
+
+const ScreenReaderTitle = styled.h2`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
 `;
