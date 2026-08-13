@@ -419,6 +419,24 @@ export function ChatPanel() {
                 </RetryButton>
               </ErrorBlock>
             ) : null}
+            {/*
+              Follow-up suggestions will render here after the backend returns
+              assistant-level suggested prompts.
+
+              <FollowUpList aria-label="추천 질문">
+                {followUpSuggestions.map((suggestion) => (
+                  <FollowUpButton
+                    key={suggestion}
+                    type="button"
+                    disabled={isStreaming || isCheckingAuth}
+                    onClick={() => handleSendMessage(suggestion)}
+                  >
+                    <span>{suggestion}</span>
+                    <ArrowRight aria-hidden="true" size={16} />
+                  </FollowUpButton>
+                ))}
+              </FollowUpList>
+            */}
           </MessageList>
           <Dock>
             <ChatComposer
@@ -668,6 +686,47 @@ const Description = styled.p`
 const FooterActions = styled.div`
   display: flex;
   justify-content: center;
+`;
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const FollowUpList = styled.div`
+  display: grid;
+  width: min(100%, 820px);
+  border-top: 1px solid ${({ theme }) => theme.color.border};
+`;
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const FollowUpButton = styled.button`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  border: 0;
+  border-bottom: 1px solid ${({ theme }) => theme.color.border};
+  padding: 0 4px;
+  background: transparent;
+  color: ${({ theme }) => theme.color.muted};
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: left;
+
+  span {
+    min-width: 0;
+  }
+
+  svg {
+    color: #a5aaa6;
+  }
+
+  &:hover {
+    color: ${({ theme }) => theme.color.foreground};
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
 `;
 
 const ErrorText = styled.p`

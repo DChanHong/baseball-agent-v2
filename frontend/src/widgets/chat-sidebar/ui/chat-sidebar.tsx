@@ -138,7 +138,7 @@ export function ChatSidebar() {
   }
 
   return (
-    <>
+    <SidebarFrame $isCollapsed={isCollapsed}>
       <FloatingMenuButton
         type="button"
         $isVisible={isCollapsed}
@@ -323,9 +323,20 @@ export function ChatSidebar() {
           </ExpandedPanel>
         )}
       </Sidebar>
-    </>
+    </SidebarFrame>
   );
 }
+
+const SidebarFrame = styled.div<{ $isCollapsed: boolean }>`
+  width: ${({ $isCollapsed }) => ($isCollapsed ? "58px" : "300px")};
+  min-height: 100vh;
+  transition: width 180ms ease;
+
+  @media (max-width: 720px) {
+    width: 0;
+    min-height: 0;
+  }
+`;
 
 const FloatingMenuButton = styled.button<{ $isVisible: boolean }>`
   position: fixed;
@@ -365,12 +376,14 @@ const CompactScrim = styled.button<{ $isVisible: boolean }>`
 `;
 
 const Sidebar = styled.aside<{ $isCollapsed: boolean }>`
-  position: sticky;
+  position: fixed;
   top: 0;
+  bottom: 0;
+  left: 0;
   z-index: 12;
   display: block;
   width: ${({ $isCollapsed }) => ($isCollapsed ? "58px" : "300px")};
-  height: 100vh;
+  height: 100dvh;
   border-right: 1px solid ${({ theme }) => theme.color.border};
   background: rgba(247, 247, 245, 0.96);
   backdrop-filter: blur(14px);
@@ -379,11 +392,6 @@ const Sidebar = styled.aside<{ $isCollapsed: boolean }>`
     width 180ms ease;
 
   @media (max-width: 720px) {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    height: 100vh;
     box-shadow: ${({ $isCollapsed, theme }) => ($isCollapsed ? "none" : theme.shadow.panel)};
   }
 

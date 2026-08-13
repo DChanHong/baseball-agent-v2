@@ -15,7 +15,7 @@ export function LoginModal() {
         <Title>로그인 또는 회원가입</Title>
         <Description>KBO Mate와 함께 관람 계획을 시작하세요</Description>
         <GoogleButton type="button" onClick={startGoogleOAuth}>
-          <GoogleMark aria-hidden="true">G</GoogleMark>
+          <GoogleMark src="/brand/google-logo.webp" alt="" aria-hidden="true" />
           <ButtonLabel>Google로 계속하기</ButtonLabel>
         </GoogleButton>
       </Content>
@@ -85,17 +85,10 @@ const GoogleButton = styled.button`
   }
 `;
 
-const GoogleMark = styled.span`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+const GoogleMark = styled.img`
   width: 20px;
   height: 20px;
-  border-radius: 999px;
-  color: #4285f4;
-  font-size: 18px;
-  font-weight: 800;
-  font-family: Arial, sans-serif;
+  object-fit: contain;
 `;
 
 const ButtonLabel = styled.span`
