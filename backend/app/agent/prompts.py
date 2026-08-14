@@ -43,6 +43,9 @@ TOOL_ROUTING_POLICY_PROMPT = """
 - 팀 역사, 선수 정보, KBO 일반 상식 중 RAG source 범위 밖 질문은 도구를 호출하지 않는다.
 - 일정/상태 조회에 팀이 필요하고 질문에 팀이 없으면 favorite_team_id를 기본 team_id로 쓴다.
 - 질문에 팀이 명시되어 있으면 favorite_team_id보다 질문의 팀을 우선한다.
+- user_context.conversation_context.selected_game이 있고 사용자가 "거기", "그 경기",
+  "어디서", "몇 시"처럼 직전 경기 조회를 가리키는 후속 질문을 하면
+  selected_game의 stadium_id, stadium_name, game_date, start_time을 우선 context로 사용한다.
 - 일정/상태 조회에 팀이 필요한데 질문에도 없고 favorite_team_id도 없으면
   needs_clarification=true, clarification_reason=team_required_for_schedule_lookup로 둔다.
 - 구장만 명시된 경기 유무 질문은 team_id=null로 두고 날짜만 추출한다.

@@ -8,11 +8,15 @@ from time import perf_counter
 from uuid import UUID, uuid4
 from zoneinfo import ZoneInfo
 
-from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.agent.routing_schemas import ToolRoutingDecision, ToolRoutingUserContext
+from app.agent.graph import BaseballAgentGraph
 from app.agent.routing_service import ToolRoutingService
+from app.agent.state import (
+    AgentConversationContext,
+    BaseballAgentInput,
+    BaseballAgentOutput,
+)
 from app.agent.tool_executor import AgentToolExecutor
 from app.core.config import get_settings
 from app.domains.auth.service.dto import CurrentUserDto
@@ -30,7 +34,6 @@ from app.domains.chat.controller.schemas import (
     StreamFailedEvent,
     ToolCompletedEvent,
     ToolFailedEvent,
-    ToolName,
     ToolStartedEvent,
 )
 from app.domains.chat.service.sse import encode_sse_event
@@ -59,14 +62,23 @@ class ChatStreamService:
         *,
         conversation_repository: SqlAlchemyConversationRepository,
         message_repository: SqlAlchemyMessageRepository,
-        tool_routing_service: ToolRoutingService,
-        tool_executor: AgentToolExecutor,
+        agent_graph: BaseballAgentGraph | None = None,
+        tool_routing_service: ToolRoutingService | None = None,
+        tool_executor: AgentToolExecutor | None = None,
         session: AsyncSession,
     ) -> None:
         self._conversation_repository = conversation_repository
         self._message_repository = message_repository
-        self._tool_routing_service = tool_routing_service
-        self._tool_executor = tool_executor
+        if agent_graph is None:
+            if tool_routing_service is None or tool_executor is None:
+                raise ValueError(
+                    "agent_graph or both tool_routing_service and tool_executor are required"
+                )
+            agent_graph = BaseballAgentGraph(
+                tool_routing_service=tool_routing_service,
+                tool_executor=tool_executor,
+            )
+        self._agent_graph = agent_graph
         self._session = session
 
     async def stream(
@@ -152,79 +164,78 @@ class ChatStreamService:
         )
 
         started_at = perf_counter()
-        decision = await self._route_message(
-            request.message,
-            current_user=current_user,
-        )
-        tool_payload: dict[str, object] | None = None
-        tool_limitations: list[str] = []
-
-        if decision.should_call_tool and decision.tool_name is not None:
-            tool_call_id = f"tool_{uuid4().hex[:12]}"
-            tool_input = _tool_input_payload(decision)
-
-            yield encode_sse_event(
-                "tool.started",
-                ToolStartedEvent(
-                    tool_call_id=tool_call_id,
-                    name=decision.tool_name,
-                    status="running",
-                    input=tool_input,
-                ),
+        graph_output: BaseballAgentOutput | None = None
+        async for graph_event in self._agent_graph.astream(
+            BaseballAgentInput(
+                conversation_id=conversation.id,
+                user_profile_id=current_user.id,
+                user_message=request.message,
+                today=datetime.now(KST).date(),
+                timezone="Asia/Seoul",
+                favorite_team_id=current_user.favorite_team,
+                context=_load_agent_context(conversation.metadata),
             )
-
-            try:
-                result = await self._tool_executor.execute(decision)
-            except Exception as exc:
-                logger.exception("tool execution failed tool_name=%s", decision.tool_name)
+        ):
+            if graph_event.kind == "tool.started":
+                if graph_event.tool_call_id is None or graph_event.tool_name is None:
+                    raise ValueError("tool.started graph event is missing tool identity")
+                tool_input = graph_event.tool_input or {}
+                yield encode_sse_event(
+                    "tool.started",
+                    ToolStartedEvent(
+                        tool_call_id=graph_event.tool_call_id,
+                        name=graph_event.tool_name,
+                        status="running",
+                        input=tool_input,
+                    ),
+                )
+            elif graph_event.kind == "tool.failed":
+                tool_payload = graph_event.tool_payload or {}
+                tool_input = graph_event.tool_input or {}
+                error = tool_payload.get("error")
+                error_message = "도구 실행 중 문제가 발생했습니다."
+                if isinstance(error, dict) and isinstance(error.get("message"), str):
+                    error_message = error["message"]
                 yield encode_sse_event(
                     "tool.failed",
                     ToolFailedEvent(
-                        tool_call_id=tool_call_id,
-                        name=decision.tool_name,
+                        tool_call_id=graph_event.tool_call_id or "tool_unknown",
+                        name=graph_event.tool_name or "find_kbo_game",
                         status="failed",
                         input=tool_input,
                         error=StreamError(
                             code="tool_execution_failed",
-                            message="도구 실행 중 문제가 발생했습니다.",
+                            message=error_message,
                         ),
                     ),
                 )
-                tool_payload = {
-                    "tool_call_id": tool_call_id,
-                    "name": decision.tool_name,
-                    "status": "failed",
-                    "input": tool_input,
-                    "result": None,
-                    "error": {"code": "tool_execution_failed", "message": str(exc)},
-                }
-            else:
-                result_payload = _model_payload(result)
-                tool_limitations = _extract_limitations(result_payload)
+            elif graph_event.kind == "tool.completed":
+                tool_payload = graph_event.tool_payload
+                if tool_payload is None:
+                    raise ValueError("tool.completed graph event is missing payload")
+                result_payload = tool_payload.get("result")
+                if not isinstance(result_payload, dict):
+                    raise ValueError("tool.completed graph event is missing result")
                 yield encode_sse_event(
                     "tool.completed",
                     ToolCompletedEvent(
-                        tool_call_id=tool_call_id,
-                        name=decision.tool_name,
+                        tool_call_id=graph_event.tool_call_id or "tool_unknown",
+                        name=graph_event.tool_name or "find_kbo_game",
                         status="completed",
-                        input=tool_input,
+                        input=graph_event.tool_input or {},
                         result=result_payload,
                     ),
                 )
-                tool_payload = {
-                    "tool_call_id": tool_call_id,
-                    "name": decision.tool_name,
-                    "status": "completed",
-                    "input": tool_input,
-                    "result": result_payload,
-                    "error": None,
-                }
+            elif graph_event.kind == "completed":
+                if graph_event.output is None:
+                    raise ValueError("completed graph event is missing output")
+                graph_output = graph_event.output
 
-        assistant_content = _build_assistant_content(
-            message=request.message,
-            decision=decision,
-            tool_payload=tool_payload,
-        )
+        if graph_output is None:
+            raise ValueError("agent graph did not produce a completed output")
+
+        assistant_content = graph_output.answer
+        tool_limitations = graph_output.tool_limitations
 
         for delta in _chunk_text(assistant_content):
             yield encode_sse_event(
@@ -243,17 +254,29 @@ class ChatStreamService:
             status=MessageStatus.COMPLETED,
             latency_ms=latency_ms,
             metadata={
-                "routing_decision": decision.model_dump(mode="json"),
-                "tool_results": [tool_payload] if tool_payload is not None else [],
+                "routing_decision": graph_output.routing_decision.model_dump(
+                    mode="json"
+                ),
+                "tool_results": (
+                    [graph_output.tool_payload]
+                    if graph_output.tool_payload is not None
+                    else []
+                ),
                 "limitations": tool_limitations,
+                "agent_context": graph_output.context.model_dump(mode="json"),
             },
             updated_at=completed_at,
         )
         assistant_message = await self._message_repository.save(assistant_message)
 
+        conversation_metadata = dict(conversation.metadata)
+        conversation_metadata["agent_context"] = graph_output.context.model_dump(
+            mode="json"
+        )
         conversation = replace(
             conversation,
             title=conversation.title or _build_title(request.message),
+            metadata=conversation_metadata,
             last_message_at=completed_at,
             updated_at=completed_at,
         )
@@ -358,23 +381,6 @@ class ChatStreamService:
         )
         return await self._message_repository.add(message)
 
-    async def _route_message(
-        self,
-        message: str,
-        *,
-        current_user: CurrentUserDto,
-    ) -> ToolRoutingDecision:
-        today = datetime.now(KST).date()
-        return await self._tool_routing_service.execute(
-            message=message,
-            user_context=ToolRoutingUserContext(
-                auth_status="authenticated",
-                favorite_team_id=current_user.favorite_team,
-                today=today,
-                timezone="Asia/Seoul",
-            ),
-        )
-
 
 def _to_stream_message(message: Message) -> ChatStreamMessage:
     role = "user" if message.role is MessageRole.USER else "assistant"
@@ -387,21 +393,16 @@ def _to_stream_message(message: Message) -> ChatStreamMessage:
     )
 
 
-def _tool_input_payload(decision: ToolRoutingDecision) -> dict[str, object]:
-    if decision.args is None:
-        return {}
-    return decision.args.model_dump(mode="json")
+def _load_agent_context(metadata: dict[str, object]) -> AgentConversationContext:
+    payload = metadata.get("agent_context")
+    if not isinstance(payload, dict):
+        return AgentConversationContext()
 
-
-def _model_payload(model: BaseModel) -> dict[str, object]:
-    return model.model_dump(mode="json")
-
-
-def _extract_limitations(payload: dict[str, object]) -> list[str]:
-    limitations = payload.get("limitations")
-    if not isinstance(limitations, list):
-        return []
-    return [item for item in limitations if isinstance(item, str)]
+    try:
+        return AgentConversationContext.model_validate(payload)
+    except Exception:
+        logger.warning("invalid agent context metadata ignored", exc_info=True)
+        return AgentConversationContext()
 
 
 def _build_title(message: str) -> str:
@@ -409,108 +410,8 @@ def _build_title(message: str) -> str:
     return normalized[:40] or "새 채팅"
 
 
-def _build_assistant_content(
-    *,
-    message: str,
-    decision: ToolRoutingDecision,
-    tool_payload: dict[str, object] | None,
-) -> str:
-    if decision.needs_clarification:
-        return _clarification_text(decision.clarification_reason)
-
-    if decision.unsupported_reason is not None:
-        return _unsupported_text(decision.unsupported_reason)
-
-    if not decision.should_call_tool:
-        return "질문은 확인했어요. 현재 MVP에서는 사용할 수 있는 도구 범위 안에서 답변을 준비하고 있습니다."
-
-    if tool_payload is None:
-        return "도구 호출이 필요했지만 결과를 만들지 못했습니다. 잠시 뒤 다시 시도해 주세요."
-
-    if tool_payload.get("status") == "failed":
-        return "도구 실행 중 문제가 생겨서 정확한 결과를 가져오지 못했습니다. 잠시 뒤 다시 시도해 주세요."
-
-    tool_name = tool_payload.get("name")
-    result = tool_payload.get("result")
-    if not isinstance(tool_name, str) or not isinstance(result, dict):
-        return "도구 결과를 확인했습니다."
-
-    return _tool_summary(tool_name=tool_name, result=result, fallback_message=message)
-
-
-def _clarification_text(reason: str | None) -> str:
-    if reason == "team_required_for_schedule_lookup":
-        return "어느 팀 경기를 볼지 알려주시면 일정과 경기 여부를 확인해드릴게요."
-    if reason == "stadium_required_for_stadium_guide_search":
-        return "어느 구장 기준인지 알려주시면 반입, 교통, 시설 정보를 찾아드릴게요."
-    if reason == "stadium_required_for_weather_lookup":
-        return "어느 구장 날씨를 볼지 알려주시면 직관 컨디션을 확인해드릴게요."
-    return "조금만 더 구체적으로 알려주시면 확인해드릴게요."
-
-
-def _unsupported_text(reason: str) -> str:
-    messages = {
-        "out_of_scope": "지금은 KBO 직관과 야구 관련 질문만 도와드릴 수 있어요.",
-        "weather_or_realtime_cancellation_prediction_required": (
-            "공식 우천 취소 여부는 구단/KBO의 확정 공지가 필요해요. "
-            "대신 구장 기준 날씨와 직관 준비 수준은 확인할 수 있습니다."
-        ),
-        "weather_forecast_range_not_supported": "현재 날씨 도구는 오늘부터 글피까지만 지원합니다.",
-        "ticket_inventory_tool_required": "실시간 잔여석은 아직 조회할 수 없어요. 예매처와 예매 방법 안내는 가능합니다.",
-        "opponent_team_filter_not_supported_yet": "두 팀 맞대결 일정 필터는 아직 지원하지 않습니다.",
-    }
-    return messages.get(reason, "현재 MVP에서 아직 지원하지 않는 요청입니다.")
-
-
-def _tool_summary(
-    *,
-    tool_name: ToolName | str,
-    result: dict[str, object],
-    fallback_message: str,
-) -> str:
-    if tool_name == "find_kbo_game":
-        total = result.get("total")
-        if total == 0:
-            return "조회 조건에 맞는 KBO 경기를 찾지 못했어요."
-        return f"경기 일정을 조회했습니다. 조건에 맞는 경기는 총 {total}건입니다."
-
-    if tool_name == "get_stadium_info":
-        stadium = result.get("stadium")
-        if not isinstance(stadium, dict):
-            return "구장 정보를 찾지 못했어요."
-        name = stadium.get("name_ko") or stadium.get("short_name") or "해당 구장"
-        address = stadium.get("address")
-        dome_text = "돔구장입니다" if stadium.get("is_dome") else "돔구장은 아닙니다"
-        if address:
-            return f"{name} 정보를 확인했습니다. 주소는 {address}이고, {dome_text}."
-        return f"{name} 정보를 확인했습니다. {dome_text}."
-
-    if tool_name == "get_weather_context":
-        stadium_name = result.get("stadium_name") or result.get("stadium_id") or "해당 구장"
-        visit_condition = result.get("visit_condition")
-        level = None
-        if isinstance(visit_condition, dict):
-            level = visit_condition.get("level")
-        return f"{stadium_name} 기준 날씨 정보를 확인했습니다. 직관 컨디션은 {level or '확인 필요'} 수준입니다."
-
-    if tool_name in {"search_stadium_guide", "search_ticketing_guide"}:
-        answerable = result.get("answerable")
-        items = result.get("items")
-        count = len(items) if isinstance(items, list) else 0
-        if not answerable:
-            return "관련 안내 문서를 찾지 못했어요. 공식 구단 안내를 함께 확인해 주세요."
-        return f"관련 안내 문서 {count}건을 찾았습니다. 카드에서 출처와 주요 내용을 확인할 수 있어요."
-
-    if tool_name == "search_baseball_knowledge":
-        answerable = result.get("answerable")
-        items = result.get("items")
-        count = len(items) if isinstance(items, list) else 0
-        if not answerable:
-            return "관련 야구 지식 문서를 찾지 못했어요."
-        return f"질문 '{fallback_message}'에 참고할 야구 지식 근거 {count}건을 찾았습니다."
-
-    return "도구 결과를 확인했습니다."
-
-
 def _chunk_text(text: str, *, chunk_size: int = 24) -> list[str]:
-    return [text[index : index + chunk_size] for index in range(0, len(text), chunk_size)]
+    return [
+        text[index : index + chunk_size]
+        for index in range(0, len(text), chunk_size)
+    ]

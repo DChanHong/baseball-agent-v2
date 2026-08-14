@@ -1,6 +1,8 @@
 import logging
+from typing import Any
 
-from openai import AsyncOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_openai import ChatOpenAI
 
 from app.agent.prompts import build_tool_routing_system_prompt
 from app.agent.routing_schemas import (
@@ -9,7 +11,6 @@ from app.agent.routing_schemas import (
     ToolRoutingUserContext,
 )
 from app.core.config import get_settings
-from app.core.llm import get_openai_client
 
 logger = logging.getLogger(__name__)
 
@@ -19,12 +20,21 @@ class ToolRoutingService:
 
     def __init__(
         self,
-        client: AsyncOpenAI | None = None,
+        chain: Any | None = None,
         model: str | None = None,
     ) -> None:
+        if chain is not None and model is not None:
+            self._model = model
+            self._chain = chain
+            return
+
         settings = get_settings()
-        self._client = client or get_openai_client()
         self._model = model or settings.openai_model
+        self._chain = chain or _build_routing_chain(
+            model=self._model,
+            api_key=settings.openai_api_key,
+            timeout=settings.openai_timeout_seconds,
+        )
 
     async def execute(
         self,
@@ -47,17 +57,18 @@ class ToolRoutingService:
         )
 
         try:
-            response = await self._client.responses.parse(
-                model=self._model,
-                instructions=build_tool_routing_system_prompt(),
-                input=request.model_dump_json(),
-                text_format=ToolRoutingDecision,
+            response = await self._chain.ainvoke(
+                {"request": request.model_dump_json()}
             )
         except Exception:
             logger.exception("tool routing failed model=%s", self._model)
             raise
 
-        decision = response.output_parsed
+        decision = (
+            response
+            if isinstance(response, ToolRoutingDecision)
+            else ToolRoutingDecision.model_validate(response)
+        )
 
         logger.info(
             (
@@ -74,3 +85,27 @@ class ToolRoutingService:
         )
 
         return decision
+
+
+def _build_routing_chain(
+    *,
+    model: str,
+    api_key: str,
+    timeout: float,
+):
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", build_tool_routing_system_prompt()),
+            ("human", "{request}"),
+        ]
+    )
+    chat_model = ChatOpenAI(
+        model=model,
+        api_key=api_key,
+        timeout=timeout,
+    )
+    return prompt | chat_model.with_structured_output(
+        ToolRoutingDecision,
+        method="json_schema",
+        strict=True,
+    )

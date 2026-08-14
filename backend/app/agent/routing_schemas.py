@@ -47,6 +47,34 @@ BaseballKnowledgeType = Literal[
 ]
 
 
+class SelectedGameRoutingContext(BaseModel):
+    """Compact selected game context available to the router."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    game_date: Date
+    start_time: Time | None
+    away_team_id: str
+    home_team_id: str
+    away_team_name: str
+    home_team_name: str
+    stadium_id: str
+    stadium_name: str
+    game_status: str
+
+
+class ToolRoutingConversationContext(BaseModel):
+    """Working context from previous turns, separate from message history."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    selected_game: SelectedGameRoutingContext | None = None
+    selected_stadium_id: str | None = None
+    selected_stadium_name: str | None = None
+    selected_team_id: str | None = None
+    last_tool_name: str | None = None
+
+
 class ToolRoutingUserContext(BaseModel):
     """User context available to the routing model."""
 
@@ -56,6 +84,7 @@ class ToolRoutingUserContext(BaseModel):
     favorite_team_id: KboTeamId | None
     today: Date
     timezone: str = Field(description="IANA timezone name. Example: Asia/Seoul.")
+    conversation_context: ToolRoutingConversationContext | None = None
 
 
 class ToolRoutingRequest(BaseModel):
