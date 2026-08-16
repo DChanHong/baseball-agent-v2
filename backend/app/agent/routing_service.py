@@ -1,6 +1,7 @@
 import logging
 from typing import Any
 
+from langchain_core.messages import SystemMessage
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 
@@ -95,7 +96,7 @@ def _build_routing_chain(
 ):
     prompt = ChatPromptTemplate.from_messages(
         [
-            ("system", build_tool_routing_system_prompt()),
+            SystemMessage(content=build_tool_routing_system_prompt()),
             ("human", "{request}"),
         ]
     )
