@@ -1,7 +1,8 @@
 # LangChain / LangGraph Adoption Plan
 
-> 상태: 초안
+> 상태: 1차 PoC 기준 업데이트
 > 작성일: 2026-08-13
+> 최근 업데이트: 2026-08-20
 > 목적: baseball-agent-v2 백엔드에 LangChain과 LangGraph를 점진적으로 도입하기 위한 범위와 순서 정의
 
 ## 1. 배경
@@ -31,7 +32,7 @@ search_ticketing_guide
 search_baseball_knowledge
 ```
 
-지금 구조의 장점은 Tool handler와 도메인 서비스가 비교적 명확히 분리되어 있다는 점이다. 반면 대화가 이어질 때 필요한 agent working context가 없다.
+지금 구조의 장점은 Tool handler와 도메인 서비스가 비교적 명확히 분리되어 있다는 점이다. 2026-08-20 현재는 1차 LangGraph PoC를 통해 단일 경기 조회 결과를 conversation context로 유지하는 흐름까지 들어왔다.
 
 대표 문제:
 
@@ -40,7 +41,7 @@ User: 롯데 오늘 야구 일정 알려줘
 Assistant: 경기 일정 안내
 User: 어디서 경기하는거지?
 Expected: 직전 find_kbo_game 결과의 stadium을 참조
-Current risk: 이전 경기 조회 결과를 안정적으로 참조하지 못함
+Current: 단일 `find_kbo_game` 결과는 `selected_game`으로 승격해 장소/시간/상대/홈원정/상태 follow-up에 사용할 수 있음
 ```
 
 메시지 DB를 매 요청마다 조회해서 이전 대화와 Tool result를 프롬프트에 직접 넣는 방식은 임시 해결은 될 수 있지만, prompt와 service 책임이 쉽게 지저분해진다. 따라서 대화 히스토리 저장소와 agent working memory의 책임을 분리한다.
@@ -101,6 +102,8 @@ validation 또는 fallback node
 
 LangGraph의 핵심 목적은 chat_messages 전체를 매번 prompt에 넣지 않고도, 다음 턴에서 필요한 작업 기억을 구조화해서 유지하는 것이다.
 
+현재 구현은 LangGraph checkpointer를 별도로 쓰지 않고, `chat_conversations.metadata.agent_context`에 compact working memory를 저장한다. 이는 기존 DB를 source of truth로 유지하면서 PoC 범위를 작게 가져가기 위한 선택이다.
+
 ## 4. DB와 Graph State 책임
 
 기존 Supabase/Postgres DB는 계속 source of truth로 둔다.
@@ -116,7 +119,7 @@ LangGraph state/checkpointer
 = 다음 질문 이해를 위한 agent working memory
 ```
 
-`conversation_id`는 LangGraph `thread_id`로 매핑한다.
+현재 PoC에서는 `conversation_id`를 LangGraph checkpointer `thread_id`로 직접 연결하지 않고, 요청마다 conversation metadata에서 `AgentConversationContext`를 복원해 graph input으로 전달한다.
 
 주의할 점:
 
@@ -129,7 +132,7 @@ LangGraph state/checkpointer
 
 ## 5. 1차 PoC 범위
 
-1차 목표는 아래 시나리오 하나를 안정적으로 해결하는 것이다.
+1차 목표는 아래 시나리오 하나를 안정적으로 해결하는 것이며, 2026-08-20 현재 API 테스트로 통과를 확인했다.
 
 ```text
 Turn 1
@@ -146,11 +149,11 @@ Assistant: 경기 장소를 자연어로 답변
 1차 PoC에서 검증할 것:
 
 ```text
-conversation_id -> thread_id 매핑이 자연스럽게 동작하는가
-find_kbo_game result를 selected_game state로 승격할 수 있는가
-후속 질문에서 메시지 DB 전체 조회 없이 selected_game을 참조할 수 있는가
-기존 SSE event contract를 유지할 수 있는가
-기존 AgentToolExecutor와 Tool handler를 재사용할 수 있는가
+[확인됨] find_kbo_game result를 selected_game state로 승격할 수 있는가
+[확인됨] 후속 질문에서 메시지 DB 전체 조회 없이 selected_game을 참조할 수 있는가
+[확인됨] 기존 SSE event contract를 유지할 수 있는가
+[확인됨] 기존 AgentToolExecutor와 Tool handler를 재사용할 수 있는가
+[보류] conversation_id -> LangGraph checkpointer thread_id 매핑이 필요한가
 ```
 
 ## 6. 1차 Graph State 초안
@@ -253,8 +256,8 @@ answer generation chain에서 citation/limitations 반영
 완료 기준:
 
 ```text
-find_kbo_game result에서 selected_game을 만들 수 있다.
-state serialization 기준이 정해져 있다.
+[완료] find_kbo_game result에서 selected_game을 만들 수 있다.
+[완료] state serialization 기준이 정해져 있다.
 ```
 
 ### Step 2. Graph skeleton 추가
@@ -274,8 +277,8 @@ answer_generate
 완료 기준:
 
 ```text
-기존 단일 질문 동작이 깨지지 않는다.
-기존 SSE event 순서가 유지된다.
+[완료] 기존 단일 질문 동작이 깨지지 않는다.
+[완료] 기존 SSE event 순서가 유지된다.
 ```
 
 ### Step 3. 1차 follow-up context 처리
@@ -285,9 +288,11 @@ answer_generate
 완료 기준:
 
 ```text
-롯데 오늘 경기 -> 어디서 경기하는거지 시나리오가 통과한다.
-message DB 전체를 prompt에 주입하지 않는다.
+[완료] 롯데 오늘 경기 -> 어디서 경기하는거지 시나리오가 통과한다.
+[완료] message DB 전체를 prompt에 주입하지 않는다.
 ```
+
+추가로 현재 구현은 장소뿐 아니라 시간, 상대, 홈/원정, 경기 상태 direct answer intent도 테스트한다.
 
 ### Step 4. LangChain routing chain 도입
 
@@ -296,9 +301,11 @@ message DB 전체를 prompt에 주입하지 않는다.
 완료 기준:
 
 ```text
-기존 routing 평가셋 결과가 유지되거나 개선된다.
-ToolRoutingDecision schema contract가 유지된다.
+[미완료] 기존 routing 평가셋 결과가 유지되거나 개선된다.
+[미완료] ToolRoutingDecision schema contract가 유지된다.
 ```
+
+현재 `ToolRoutingService`는 OpenAI SDK structured output을 유지한다. LangChain 이전은 MVP1 완료 이후 RAG/라우팅 평가 기반선이 생긴 뒤 진행한다.
 
 ### Step 5. LangChain answer generation chain 도입
 
@@ -307,10 +314,12 @@ ToolRoutingDecision schema contract가 유지된다.
 완료 기준:
 
 ```text
-Tool result에 근거한 자연어 답변을 생성한다.
-출처와 limitation을 답변에 반영한다.
-Tool result에 없는 정보는 추측하지 않는다.
+[미완료] Tool result에 근거한 자연어 답변을 생성한다.
+[미완료] 출처와 limitation을 답변에 반영한다.
+[미완료] Tool result에 없는 정보는 추측하지 않는다.
 ```
+
+현재는 템플릿 기반 요약을 유지한다. 이는 Tool card와 자연어 답변의 불일치를 줄이고 MVP1 수동 QA를 먼저 닫기 위한 선택이다.
 
 ### Step 6. 후속 Tool 확장
 
@@ -329,8 +338,10 @@ User: 좌석 추천해줘
 -> selected_stadium_id로 search_stadium_guide
 
 User: 몇 시 경기야?
--> selected_game.start_time 직접 답변
+-> [완료] selected_game.start_time 직접 답변
 ```
+
+현재 완료 범위는 selected_game에서 직접 답할 수 있는 질문까지다. selected_game을 다른 Tool 입력으로 자동 보강하는 흐름은 아직 남아 있다.
 
 ### Step 7. ambiguous context 처리
 
@@ -366,4 +377,3 @@ LangGraph는 conversation context와 agent workflow 레이어로 사용한다.
 기존 FastAPI, auth, DB schema, domain services, tool handlers, frontend SSE event contract는 유지한다.
 1차 PoC는 selected_game follow-up 시나리오로 작게 검증한다.
 ```
-

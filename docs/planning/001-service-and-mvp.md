@@ -2,13 +2,13 @@
 
 > 상태: MVP1 기준 업데이트
 > 작성일: 2026-07-27
-> 최근 업데이트: 2026-08-03
+> 최근 업데이트: 2026-08-20
 > 참고 프로젝트: `my-baseball-agent`
-> MVP1 구현 기준: 로그인 전 guest 채팅, 단일 `/api/v1/chat` 스트리밍 엔드포인트, Tool 결과 카드 렌더링 준비
+> MVP1 구현 기준: 로그인 사용자 채팅, 단일 `/api/v1/chat` 스트리밍 엔드포인트, LangGraph 기반 Tool 실행, Tool 결과 카드 렌더링
 
 ## 1. 문서 목적
 
-야구 팬의 직관 준비를 돕는 Agent가 어떤 문제를 해결할지 정의하고, MVP1에서 구현한 채팅/Tool 기본 틀과 이후 확장 순서를 정리한다.
+야구 팬의 직관 준비를 돕는 Agent가 어떤 문제를 해결할지 정의하고, 현재 MVP1에서 구현된 채팅/Tool/LangGraph 기본 틀과 1차 완료까지 남은 연결 작업을 정리한다.
 
 이 문서는 기존 프로젝트의 기능을 그대로 이식하기 위한 문서가 아니다. `my-baseball-agent`의 데이터 출처, 수집 방식, 실패 사례와 구현 아이디어를 참고하되 데이터 수집과 Tool 계약을 처음부터 다시 검토한다.
 
@@ -67,13 +67,13 @@
 
 이미 응원 팀이 있는 사용자는 기본 지식과 팀 탐색 단계를 건너뛸 수 있다.
 
-응원 팀 선택은 강제하지 않는다. MVP1에서는 로그인과 사용자 프로필 저장을 붙이지 않고, 사용자가 바로 질문을 시작할 수 있는 guest-first 채팅으로 구현한다.
+응원 팀 선택은 강제하지 않는다. 초기 문서는 guest-first 채팅을 기준으로 했지만, 2026-08-20 현재 구현은 로그인 사용자 기준으로 전환되어 있다. MVP1은 로그인 세션이 있는 사용자가 채팅을 시작하고, 사용자 프로필의 `favorite_team_id`를 라우팅 context로 활용하는 기준으로 정리한다.
 
-MVP1에서는 이 중 `로그인 전 채팅 시작 → Tool 라우팅 → Tool 실행 이벤트 스트리밍 → Tool 결과 카드 렌더링 준비 → 기본 assistant 응답 저장`까지의 틀을 마련했다. 선택형 응원 팀 온보딩, 로그인 사용자 프로필, 좌석 최종 추천은 후속 MVP에서 별도 범위와 Tool을 정의한다.
+MVP1에서는 이 중 `로그인 사용자 채팅 시작 → Tool 라우팅 → LangGraph Tool 실행 이벤트 스트리밍 → Tool 결과 카드 렌더링 → 기본 assistant 응답 저장 → 단일 경기 follow-up context 처리`까지의 틀을 마련했다. 선택형 응원 팀 온보딩, guest conversation 귀속, 좌석 최종 추천은 후속 MVP에서 별도 범위와 Tool을 정의한다.
 
-### 3.1 MVP1 guest 채팅 시작
+### 3.1 MVP1 로그인 사용자 채팅 시작
 
-로그인 전 사용자가 첫 채팅을 시작할 때 별도 가입이나 팀 선택을 요구하지 않는다.
+현재 MVP1은 로그인된 사용자가 첫 채팅을 시작하는 흐름을 기준으로 한다. 로그인하지 않은 사용자가 메시지를 보내면 프론트엔드는 로그인 모달을 열고 채팅 요청을 보내지 않는다.
 
 ```text
 직관할 경기를 함께 찾아볼게요.
@@ -84,12 +84,14 @@ MVP1에서는 이 중 `로그인 전 채팅 시작 → Tool 라우팅 → Tool �
 
 처리 원칙:
 
-- 첫 방문 시 frontend가 `guest_id`를 생성해 localStorage에 저장한다.
 - 새 채팅은 `conversation_id = null`로 `/api/v1/chat`을 호출한다.
+- 백엔드는 쿠키 기반 인증으로 현재 `user_profile_id`를 확인한다.
 - 백엔드는 conversation을 생성하고 SSE로 `conversation.created` 이벤트를 보낸다.
 - 이후 같은 대화는 `conversation_id`를 포함해 이어서 호출한다.
-- 로그인, 응원 팀 프로필 저장, 온보딩 노출 여부 저장은 MVP1 범위에서 제외한다.
+- 로그인/프로필 API는 이미 존재하므로 MVP1 채팅은 authenticated-first로 둔다.
+- guest-first 채팅과 guest conversation의 계정 귀속은 MVP1 완료 후 별도 확장으로 둔다.
 - 사용자가 질문에 팀, 날짜, 구장, 목적을 명시하면 해당 값을 현재 요청의 context로 사용한다.
+- 사용자 프로필에 `favorite_team_id`가 있으면 라우팅 context의 보조 기본값으로 사용한다.
 - 조건이 부족하면 Tool을 억지로 호출하지 않고 필요한 조건을 묻는다.
 
 예시:
@@ -109,14 +111,15 @@ MVP1 시작 흐름:
 
 | 시작 상태 | 사용자 행동 | 다음 행동 |
 |---|---|---|
-| 첫 방문 | 메시지 입력 | frontend가 `guest_id` 생성 후 `/api/v1/chat` 호출 |
+| 미로그인 | 메시지 입력 | frontend가 로그인 모달을 열고 채팅 요청을 중단 |
+| 로그인 후 첫 방문 | 메시지 입력 | `conversation_id = null`로 `/api/v1/chat` 호출 |
 | 새 대화 | 메시지 입력 | `conversation_id = null`로 conversation 생성 |
 | 기존 대화 | 메시지 입력 | 기존 `conversation_id`로 메시지 추가 |
 | Tool 실행 필요 | 질문 라우팅 성공 | `tool.started`와 `tool.completed` 이벤트 전송 |
 | Tool 결과 표시 | 이벤트 수신 | 채팅창 안에 Tool card 렌더링 |
 | 답변 생성 | Tool 결과 요약 | `assistant.delta`와 `assistant.completed` 이벤트 전송 |
 
-로그인 도입 후에는 `guest_id`로 만든 conversation을 사용자 계정에 귀속하는 흐름을 별도 설계한다.
+guest-first를 다시 도입한다면 `guest_id` 기반 conversation 생성과 로그인 후 계정 귀속 흐름을 별도 설계한다.
 
 ### 3.2 직관 정보 찾기 대화 흐름
 
@@ -150,15 +153,16 @@ MVP1에서는 온보딩 단계 없이 사용자의 첫 메시지에서 바로 �
 → 직관 흐름을 강제하지 않고 일반 야구 지식으로 답변
 ```
 
-Agent는 대화에서 확인된 값을 conversation context로 유지한다. MVP1에서는 명시적 profile 저장 없이 현재 대화에서 확인된 값만 사용한다.
+Agent는 대화에서 확인된 값을 conversation metadata의 `agent_context`로 유지한다. MVP1에서는 `find_kbo_game` 단일 결과를 `selected_game`으로 승격하고, 장소/시간/상대/홈원정/상태 follow-up 질문에 재사용한다.
 
 | context | 설명 |
 |---|---|
-| `favorite_team_id` | 로그인 이후 사용자 프로필에 저장할 응원 팀. MVP1에서는 사용하지 않음 |
-| `active_team_id` | 현재 질문이나 대화에서 다루는 팀 |
-| `selected_game_id` | 사용자가 현재 선택한 경기 |
+| `favorite_team_id` | 사용자 프로필에 저장된 응원 팀. 라우팅 context의 보조 기본값으로 사용 |
+| `selected_team_id` | 현재 질문이나 직전 Tool 결과에서 다루는 팀 |
+| `selected_game` | 단일 경기 조회 결과에서 승격한 compact game context |
 | `selected_stadium_id` | 선택한 경기 또는 질문의 구장 |
-| `visit_date` | 직관 예정일 |
+| `selected_stadium_name` | 선택한 경기 또는 질문의 구장명 |
+| `last_tool_name` | 직전 실행 Tool 이름 |
 
 로그인 이후에는 프로필의 응원 팀과 현재 대화의 팀을 구분한다. 사용자가 다른 팀의 경기나 구장을 물어도 프로필의 응원 팀을 자동 변경하지 않는다.
 
@@ -215,11 +219,11 @@ home_or_away
 
 초기 직관 Tool의 계약을 일반 야구 정보까지 미리 확장하지 않는다. 새로운 사용자 문제를 선택할 때마다 필요한 Tool, 데이터 출처, 갱신 주기와 검증 기준을 별도로 정의한다.
 
-## 4. MVP 1: guest 채팅과 Tool 실행 기반 직관 도우미
+## 4. MVP 1: 로그인 채팅과 Tool 실행 기반 직관 도우미
 
 ### 4.1 목표
 
-사용자가 로그인 없이 채팅창에 KBO 직관 관련 질문을 입력하면, 백엔드가 필요한 Tool을 선택해 실행하고, 프론트엔드가 Tool 실행 결과를 채팅창 안의 카드로 렌더링할 수 있는 기본 틀을 완성한다.
+사용자가 로그인 후 채팅창에 KBO 직관 관련 질문을 입력하면, 백엔드가 필요한 Tool을 선택해 LangGraph 흐름으로 실행하고, 프론트엔드가 SSE 이벤트를 받아 Tool 실행 결과와 assistant 답변을 채팅창 안에 렌더링하는 기본 경험을 완성한다.
 
 예시:
 
@@ -267,7 +271,6 @@ Tool 책임:
 
 | 필드 | 필수 여부 | 설명 |
 |---|---|---|
-| `guest_id` | 필수 | 로그인 전 사용자를 구분하는 client-generated id |
 | `conversation_id` | 선택 | 기존 대화를 이어갈 때 사용하는 id. 새 대화는 `null` |
 | `message` | 필수 | 사용자 자연어 메시지 |
 
@@ -277,7 +280,14 @@ Endpoint:
 POST /api/v1/chat
 ```
 
-MVP1에서는 `/api/v1/games`, `/api/v1/conversations`를 유지하되, 실제 채팅 UX는 `/api/v1/chat` 하나로 모으는 방향을 기준으로 한다.
+인증:
+
+```text
+현재 구현은 쿠키 기반 로그인 세션을 요구한다.
+백엔드는 `get_current_auth_user`로 현재 사용자 프로필을 확인한다.
+```
+
+MVP1에서는 `/api/v1/conversations` 목록 API와 `/api/v1/chat` SSE API를 함께 사용한다. 실제 메시지 전송은 `/api/v1/chat` 하나로 모으는 방향을 기준으로 한다.
 
 ### 4.4 Chat stream 출력
 
@@ -314,14 +324,14 @@ MVP1의 assistant 답변은 아직 최종 LLM 답변 품질을 목표로 하지 
 
 - 지도, 대중교통, 자동차 경로와 현장 동선
 - 좌석 검색과 추천
-- 로그인 필수화
-- 응원 팀 프로필 저장
+- guest-first 채팅
 - guest conversation의 user account 귀속
 - 외부 reranker
 - 하이브리드 서치
-- LangChain/LangGraph 전면 도입
+- LangChain routing/answer generation 전면 이전
 - 운영용 observability dashboard
 - LLM이 여러 Tool을 반복 호출하며 계획을 수정하는 Agent loop
+- 대화 이름 변경/삭제/검색 같은 대화 관리 고급 기능
 
 ### 4.6 MVP1 완료/진행 상태
 
@@ -329,23 +339,29 @@ MVP1의 assistant 답변은 아직 최종 LLM 답변 품질을 목표로 하지 
 
 ```text
 POST /api/v1/chat SSE endpoint 추가
-guest_id, conversation_id, message request schema 정의
+로그인 사용자 기준 conversation_id, message request schema 정의
 conversation/message 저장 흐름 연결
 Tool routing과 Tool executor 연결
+LangGraph route -> tool_execute -> state_update -> answer_generate skeleton 연결
+find_kbo_game 단일 결과 기반 selected_game follow-up context 처리
 tool.started / tool.completed / tool.failed 이벤트 정의
 assistant.delta / assistant.completed 이벤트 정의
 backend SSE contract 테스트 추가
 프론트엔드 Tool 결과 타입을 backend 이벤트 계약에 맞게 정리
 Tool별 card component 분리
+frontend POST /api/v1/chat fetch stream 연결
+실제 SSE 이벤트를 message state와 Tool card state에 반영
+conversation 목록 API와 sidebar 목록 조회 연결
 ```
 
 남은 MVP1 연결 항목:
 
 ```text
-frontend에서 POST /api/v1/chat fetch stream 연결
-실제 SSE 이벤트를 message state와 Tool card state에 반영
-guest_id localStorage helper 연결
-conversation_id 저장과 현재 대화 복원
+관련 문서의 MVP1 인증 정책을 authenticated-first 기준으로 정렬
+sidebar conversation 선택과 ChatPanel conversation_id/messages 상태 연결
+GET /api/v1/conversations/{conversation_id}/messages API 또는 동등한 메시지 복원 경로 추가
+새 채팅 버튼이 ChatPanel의 현재 conversation/message state를 초기화하도록 연결
+Source Drawer에 실제 sources/limitations 또는 Tool result 근거 연결
 수동 MVP 시나리오 검증
 ```
 
@@ -479,21 +495,23 @@ search_stadium_guide
 search_baseball_knowledge
 POST /api/v1/chat SSE
 Tool result card layout
+LangGraph selected_game follow-up context
 ```
 
-로그인 없이 질문을 시작하고, 필요한 Tool을 실행해 채팅창 안에서 결과를 확인할 수 있는 기반을 만든다.
+로그인 후 질문을 시작하고, 필요한 Tool을 실행해 채팅창 안에서 결과를 확인할 수 있는 기반을 만든다.
 
 ### 단계 2: MVP1 프론트 연결 마무리
 
 ```text
 SSE fetch stream hook
-guest_id localStorage helper
-conversation_id 복원
 message state reducer
 tool.started / tool.completed 기반 card 갱신
+conversation list sidebar
+conversation 선택과 message 복원
+source drawer 근거 표시
 ```
 
-프론트엔드 임시 card preview는 제거했고, 실제 backend event로 card를 렌더링하는 연결 작업이 남아 있다.
+프론트엔드 임시 card preview는 제거했고, 실제 backend event로 card를 렌더링하는 연결은 완료됐다. 1차 완료 전에는 sidebar 선택과 대화 복원, source drawer 실제 데이터 연결이 남아 있다.
 
 ### 단계 3: MVP2 검색 품질 개선
 
@@ -518,7 +536,7 @@ team_onboarding_seen_at
 team_preference_updated_at
 ```
 
-응원 팀 선택은 이 단계에서 다시 도입한다. 로그인 전 MVP1에서는 팀 선택을 강제하지 않는다.
+회원가입/로그인과 프로필 조회/수정은 MVP1 채팅 흐름에 이미 일부 포함되어 있다. 다만 guest conversation 귀속, 응원 팀 온보딩, 프로필 기반 추천 고도화는 이 단계에서 다시 다룬다.
 
 ### 단계 5: 응원 팀 탐색
 
@@ -562,14 +580,16 @@ KBO 팀 특징 탐색
 MVP1에서는 단일 `/api/v1/chat` endpoint와 SSE event stream을 사용한다.
 
 ```text
-frontend가 guest_id 확보
+frontend가 로그인 세션 확인
 → POST /api/v1/chat
 → conversation 생성 또는 조회
 → user message 저장
-→ ToolRoutingService가 Tool과 입력 결정
+→ BaseballAgentGraph 실행
+→ ToolRoutingService가 Tool과 입력 또는 direct_answer_intent 결정
 → tool.started event
 → AgentToolExecutor가 Tool 실행
 → tool.completed 또는 tool.failed event
+→ conversation metadata의 agent_context 갱신
 → assistant.delta event
 → assistant.completed event
 → conversation.updated event
@@ -589,7 +609,6 @@ frontend가 guest_id 확보
 
 ```json
 {
-  "guest_id": "guest_...",
   "conversation_id": null,
   "message": "다음 주 롯데 경기 알려줘"
 }
@@ -626,8 +645,10 @@ MVP1에서는 Tool card의 구조화 데이터와 assistant 자연어 답변을 
 
 ### 9.2 채팅 흐름 테스트 후보
 
-- 새 guest가 첫 메시지를 보내 conversation이 생성되는 경우
+- 미로그인 사용자가 메시지를 보내면 로그인 모달 또는 401 흐름으로 처리되는 경우
+- 로그인 사용자가 첫 메시지를 보내 conversation이 생성되는 경우
 - 기존 conversation에 메시지를 이어 보내는 경우
+- sidebar에서 기존 conversation을 선택해 메시지를 복원하는 경우
 - 팀과 날짜가 모두 있는 요청
 - 팀이 없어 추가 질문이 필요한 요청
 - 날짜가 없어 추가 질문이 필요한 요청
@@ -639,6 +660,7 @@ MVP1에서는 Tool card의 구조화 데이터와 assistant 자연어 답변을 
 - `tool.started` 후 `tool.completed`가 같은 `tool_call_id`로 도착하는지 확인
 - `tool.failed`를 카드 실패 상태로 표시하는지 확인
 - `assistant.delta`를 하나의 assistant message로 이어 붙이는지 확인
+- 단일 경기 조회 후 "어디서 해?", "몇 시야?", "상대가 누구야?" follow-up이 Tool 재호출 없이 답하는지 확인
 - Tool의 `no_result`를 자연어로 안내하는 경우
 - Tool 오류를 경기 없음으로 잘못 안내하지 않는지 확인
 
@@ -652,6 +674,8 @@ frontend lint/typecheck/build 통과
 POST /api/v1/chat route 등록 확인
 SSE event contract 테스트 존재
 Tool card component가 모든 MVP Tool name을 처리
+sidebar에서 기존 conversation을 선택해 메시지를 복원
+source/limitation 확인 경로 존재
 실제 stream 연결 후 대표 질문 수동 검증
 ```
 
@@ -661,24 +685,25 @@ Tool card component가 모든 MVP Tool name을 처리
 
 1. 프론트엔드 SSE stream parser 구현 방식
 2. message state와 Tool card state의 최종 구조
-3. conversation 목록 API를 바로 붙일지 localStorage cache를 먼저 둘지
+3. conversation 메시지 조회 API와 프론트 상태 연결 방식
 4. assistant 답변을 Tool 요약으로 둘지 LLM 답변 생성까지 붙일지
 5. RAG 평가셋의 우선 Tool
 6. 하이브리드 서치 실험 순서
-7. 로그인 도입 시점과 guest conversation 귀속 방식
-8. MVP2에서 LangChain/LangGraph를 비교할 최소 범위
+7. guest-first 채팅을 MVP1 이후 어느 단계에서 다시 도입할지
+8. guest conversation 귀속 방식
+9. MVP2에서 LangChain routing/answer generation을 도입할 최소 범위
 
 ## 11. 바로 다음 작업
 
-MVP1 문서 기준 바로 다음 작업은 프론트엔드와 실제 chat stream 연결이다.
+MVP1 문서 기준 바로 다음 작업은 채팅 화면의 대화 복원과 근거 표시를 마무리하는 것이다.
 
 ```text
-frontend SSE stream client 작성
-→ guest_id localStorage helper 연결
-→ chat message reducer 작성
-→ tool.started / tool.completed card 갱신
-→ assistant.delta 누적 렌더링
-→ 대표 질문 수동 검증
+관련 문서를 authenticated-first MVP 기준으로 정렬
+→ conversation 선택 상태를 ChatPanel과 공유
+→ conversation messages 조회 API 또는 동등한 복원 경로 추가
+→ 새 채팅/기존 채팅 전환 시 message state 정리
+→ Source Drawer에 sources/limitations 또는 Tool result 근거 연결
+→ 대표 질문 및 follow-up 수동 검증
 ```
 
 그 다음 작업은 `docs/planning/002-mvp2-backend-upgrade-plan.md`에 따라 RAG 평가셋과 baseline run을 만드는 것이다.

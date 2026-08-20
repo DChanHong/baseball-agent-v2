@@ -95,10 +95,87 @@ uv run pytest tests/api
 - RAG 검색 설정이 도구 코드에서 분리되어 조정 가능해졌다.
 - agent tool 목록과 실행 매핑이 registry 중심으로 정리됐다.
 - 라우팅 프롬프트와 few-shot이 코드 상수에서 분리되어 데이터처럼 관리 가능해졌다.
+- 2026-08-20 재검토 기준으로 LangGraph 1차 PoC, backend SSE contract, frontend SSE stream 연결, Tool card upsert, conversation list sidebar는 구현되어 있다.
 
-다만 아직 "RAG 프로젝트답게 운영된다"라고 보기에는 평가와 데이터 품질 관리가 더 필요하다.
+다만 1차 MVP 완료 판정 기준으로는 대화 복원, source drawer 실제 데이터 연결, 남은 문서의 authenticated-first 기준 정렬, 수동 QA가 아직 남아 있다. "RAG 프로젝트답게 운영된다"라고 보기에는 평가와 데이터 품질 관리도 더 필요하다.
 
-## 3. 남은 보완 작업 후보
+## 3. 1차 MVP 완료까지 남은 작업
+
+### 1순위: MVP 인증 정책 정렬
+
+현재 계획 문서는 authenticated-first 기준으로 업데이트했다. 다만 backend/frontend 보조 문서 일부는 guest-first 기준 설명이 남아 있을 수 있다.
+
+작업 후보:
+
+- `docs/backend/local-development-commands.md`, `docs/frontend/mvp-chat-ux-plan.md`도 같은 기준으로 후속 정리한다.
+- guest-first를 다시 도입할지 여부는 MVP1 이후 확장으로 분리한다.
+
+완료 기준:
+
+- planning 문서에서 `guest_id` 필수 흐름과 현재 로그인 필수 흐름이 충돌하지 않는다.
+- `/api/v1/chat`의 현재 인증 요구사항이 명확히 적혀 있다.
+
+### 2순위: 대화 이어가기 완성
+
+현재 conversation list sidebar는 있지만, sidebar의 선택 상태가 `ChatPanel`의 `conversationId`와 message state로 이어지는 흐름은 남아 있다.
+
+작업 후보:
+
+- sidebar active conversation state를 `ChatPanel`과 공유한다.
+- 기존 conversation 선택 시 해당 conversation의 messages를 조회해 렌더링한다.
+- 이를 위해 `GET /api/v1/conversations/{conversation_id}/messages` 또는 동등한 메시지 복원 API를 추가한다.
+- 새 채팅 버튼이 현재 `conversationId`와 message list를 초기화하도록 연결한다.
+
+완료 기준:
+
+- 사용자가 sidebar에서 이전 대화를 클릭하면 기존 메시지가 표시된다.
+- 이어서 질문하면 같은 `conversation_id`로 `/api/v1/chat` 요청이 나간다.
+- 새 채팅을 누르면 빈 채팅 화면에서 새 conversation을 시작한다.
+
+### 3순위: Source Drawer 실제 데이터 연결
+
+현재 source drawer는 UI placeholder이고, Tool result card에는 일부 근거가 표시된다.
+
+작업 후보:
+
+- `assistant.completed.sources` 또는 Tool result의 source/as_of/limitations를 drawer state로 모은다.
+- RAG Tool 결과는 문서 제목, 출처 URL, 기준 시점, limitation을 drawer에 표시한다.
+- 정형 Tool 결과는 source_name/source_url/source_collected_at이 있으면 같이 표시한다.
+
+완료 기준:
+
+- 대표 RAG 질문에서 drawer를 열면 실제 출처와 기준 시점을 확인할 수 있다.
+- 결과 없음 또는 외부 API 한계가 limitation으로 표시된다.
+
+### 4순위: MVP 수동 QA
+
+대표 질문:
+
+```text
+오늘 롯데 경기 있어?
+사직구장 주소 알려줘
+오늘 사직 비 와?
+사직 예매 어디서 해?
+고척돔 음식물 반입 가능해?
+보크가 뭐야?
+```
+
+follow-up 질문:
+
+```text
+롯데 오늘 경기 알려줘 -> 어디서 해?
+롯데 오늘 경기 알려줘 -> 몇 시야?
+롯데 오늘 경기 알려줘 -> 상대가 누구야?
+```
+
+완료 기준:
+
+- Tool routing이 기대 Tool로 연결된다.
+- Tool card가 running -> completed 또는 failed로 갱신된다.
+- assistant 답변이 Tool 결과와 충돌하지 않는다.
+- 에러가 발생해도 user message가 유지되고 재시도 경로가 보인다.
+
+## 4. 남은 보완 작업 후보
 
 ### 5차 추천: RAG/라우팅 평가 기반선 구축
 
@@ -169,16 +246,19 @@ uv run pytest tests/api
 
 - DB seed, migration, reset 변경은 별도 확인을 받고 진행한다.
 
-## 4. 다음 세션 시작 추천 순서
+## 5. 다음 세션 시작 추천 순서
 
 1. `git status --short`로 작업 트리가 깨끗한지 확인한다.
-2. `backend/scripts/evaluate_tool_routing.py`와 `data/kbo_schedule/evaluation/cases/find_kbo_game_cases.jsonl`를 읽는다.
-3. 현재 `ToolRoutingDecision` schema와 evaluation expected shape 차이를 확인한다.
-4. 평가 케이스에 `direct_answer_intent`를 추가한다.
-5. 평가 스크립트가 새 필드를 비교하도록 수정한다.
-6. `uv run pytest tests/api`로 회귀를 확인한다.
+2. 1차 MVP를 먼저 닫는다면 sidebar conversation 선택과 message 복원 흐름부터 구현한다.
+3. 이어서 Source Drawer에 실제 source/limitation 데이터를 연결한다.
+4. 대표 질문 6개와 follow-up 질문 3개를 수동 QA한다.
+5. RAG/라우팅 평가로 넘어간다면 `backend/scripts/evaluate_tool_routing.py`와 `data/kbo_schedule/evaluation/cases/find_kbo_game_cases.jsonl`를 읽는다.
+6. 현재 `ToolRoutingDecision` schema와 evaluation expected shape 차이를 확인한다.
+7. 평가 케이스에 `direct_answer_intent`를 추가한다.
+8. 평가 스크립트가 새 필드를 비교하도록 수정한다.
+9. `uv run pytest tests/api`로 회귀를 확인한다.
 
-## 5. 참고 커밋
+## 6. 참고 커밋
 
 ```text
 e5cac61 Extract routing prompt assets
