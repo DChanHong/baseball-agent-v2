@@ -46,6 +46,14 @@ BaseballKnowledgeType = Literal[
     "latest_kbo_rule",
 ]
 
+DirectAnswerIntent = Literal[
+    "selected_game_place",
+    "selected_game_time",
+    "selected_game_opponent",
+    "selected_game_home_away",
+    "selected_game_status",
+]
+
 
 class SelectedGameRoutingContext(BaseModel):
     """Compact selected game context available to the router."""
@@ -292,6 +300,14 @@ class ToolRoutingDecision(BaseModel):
         ]
         | None
     )
+    direct_answer_intent: DirectAnswerIntent | None = Field(
+        default=None,
+        description=(
+            "Intent to answer deterministically from conversation_context without a "
+            "tool call. Null for tool calls, clarification, unsupported, or generic "
+            "non-tool responses."
+        ),
+    )
 
     @model_validator(mode="after")
     def validate_decision_shape(self) -> ToolRoutingDecision:
@@ -335,6 +351,8 @@ class ToolRoutingDecision(BaseModel):
                 raise ValueError("tool calls cannot also require clarification")
             if self.unsupported_reason is not None:
                 raise ValueError("tool calls cannot have unsupported_reason")
+            if self.direct_answer_intent is not None:
+                raise ValueError("tool calls cannot have direct_answer_intent")
         else:
             if self.tool_name is not None:
                 raise ValueError("tool_name must be null when not calling a tool")
@@ -346,6 +364,12 @@ class ToolRoutingDecision(BaseModel):
 
         if not self.needs_clarification and self.clarification_reason is not None:
             raise ValueError("clarification_reason must be null without clarification")
+
+        if self.direct_answer_intent is not None:
+            if self.needs_clarification:
+                raise ValueError("direct answers cannot require clarification")
+            if self.unsupported_reason is not None:
+                raise ValueError("direct answers cannot have unsupported_reason")
 
         if not self.is_in_scope and self.unsupported_reason != "out_of_scope":
             raise ValueError("out-of-scope requests require unsupported_reason=out_of_scope")

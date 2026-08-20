@@ -10,8 +10,7 @@ from pydantic import BaseModel
 
 from app.agent.answering import (
     build_assistant_content,
-    build_selected_game_place_answer,
-    can_answer_selected_game_place,
+    build_selected_game_follow_up_answer,
     promote_context_from_tool_payload,
 )
 from app.agent.routing_schemas import ToolRoutingDecision, ToolRoutingUserContext
@@ -137,15 +136,6 @@ class BaseballAgentGraph:
 
     async def _route(self, state: BaseballAgentState) -> dict[str, Any]:
         context = state["context"]
-        if can_answer_selected_game_place(
-            message=state["user_message"],
-            context=context,
-        ):
-            return {
-                "routing_decision": _direct_answer_decision(),
-                "answer_mode": "contextual_direct",
-            }
-
         decision = await self._tool_routing_service.execute(
             message=state["user_message"],
             user_context=ToolRoutingUserContext(
@@ -156,7 +146,12 @@ class BaseballAgentGraph:
                 conversation_context=context.to_routing_context(),
             ),
         )
-        return {"routing_decision": decision, "answer_mode": "routed"}
+        answer_mode = (
+            "contextual_direct"
+            if decision.direct_answer_intent is not None
+            else "routed"
+        )
+        return {"routing_decision": decision, "answer_mode": answer_mode}
 
     async def _prepare_tool(self, state: BaseballAgentState) -> dict[str, Any]:
         decision = state["routing_decision"]
@@ -210,12 +205,25 @@ class BaseballAgentGraph:
 
     async def _answer_generate(self, state: BaseballAgentState) -> dict[str, Any]:
         context = state["context"]
-        if state.get("answer_mode") == "contextual_direct" and context.selected_game:
-            answer = build_selected_game_place_answer(context.selected_game)
+        decision = state["routing_decision"]
+        if (
+            state.get("answer_mode") == "contextual_direct"
+            and decision.direct_answer_intent is not None
+        ):
+            answer = build_selected_game_follow_up_answer(
+                intent=decision.direct_answer_intent,
+                context=context,
+            )
+            if answer is None:
+                answer = build_assistant_content(
+                    message=state["user_message"],
+                    decision=decision,
+                    tool_payload=state.get("tool_payload"),
+                )
         else:
             answer = build_assistant_content(
                 message=state["user_message"],
-                decision=state["routing_decision"],
+                decision=decision,
                 tool_payload=state.get("tool_payload"),
             )
 
@@ -233,18 +241,6 @@ def _next_after_route(state: BaseballAgentState) -> str:
     if decision.should_call_tool and decision.tool_name is not None:
         return "prepare_tool"
     return "answer_generate"
-
-
-def _direct_answer_decision() -> ToolRoutingDecision:
-    return ToolRoutingDecision(
-        is_in_scope=True,
-        should_call_tool=False,
-        tool_name=None,
-        args=None,
-        needs_clarification=False,
-        clarification_reason=None,
-        unsupported_reason=None,
-    )
 
 
 def _tool_input_payload(decision: ToolRoutingDecision) -> dict[str, Any]:

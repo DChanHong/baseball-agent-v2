@@ -4,7 +4,14 @@ from datetime import UTC, date, datetime, time
 from uuid import UUID
 
 import pytest
-from app.agent.routing_schemas import FindKboGameRoutingArgs, ToolRoutingDecision
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
+
+from app.agent.routing_schemas import (
+    DirectAnswerIntent,
+    FindKboGameRoutingArgs,
+    ToolRoutingDecision,
+)
 from app.api.dependencies import get_auth_session_service, get_chat_stream_service
 from app.domains.auth.service.dto import CurrentUserDto
 from app.domains.baseball.domain.enums import KboGameStatus
@@ -16,8 +23,6 @@ from app.domains.chat.controller.router import router as chat_router
 from app.domains.chat.controller.schemas import ChatStreamRequest
 from app.domains.chat.service.services import ChatStreamService
 from app.domains.conversation.domain.entities import Conversation, Message
-from fastapi import FastAPI
-from fastapi.testclient import TestClient
 
 PROFILE_ID = UUID("22222222-2222-4222-8222-222222222222")
 AUTH_USER_ID = UUID("11111111-1111-4111-8111-111111111111")
@@ -120,7 +125,9 @@ def make_current_user() -> CurrentUserDto:
     )
 
 
-def _direct_decision() -> ToolRoutingDecision:
+def _direct_decision(
+    direct_answer_intent: DirectAnswerIntent | None = None,
+) -> ToolRoutingDecision:
     return ToolRoutingDecision(
         is_in_scope=True,
         should_call_tool=False,
@@ -129,6 +136,7 @@ def _direct_decision() -> ToolRoutingDecision:
         needs_clarification=False,
         clarification_reason=None,
         unsupported_reason=None,
+        direct_answer_intent=direct_answer_intent,
     )
 
 
@@ -215,7 +223,12 @@ async def test_chat_stream_stores_new_conversation_and_messages_by_profile_id() 
 async def test_chat_stream_uses_selected_game_context_for_follow_up_place() -> None:
     conversation_repository = FakeConversationRepository()
     message_repository = FakeMessageRepository()
-    routing_service = FakeRoutingService(decisions=[_find_lotte_game_decision()])
+    routing_service = FakeRoutingService(
+        decisions=[
+            _find_lotte_game_decision(),
+            _direct_decision("selected_game_place"),
+        ]
+    )
     tool_executor = FakeToolExecutor(result=_single_lotte_game_result())
     session = FakeSession()
     service = ChatStreamService(
@@ -239,9 +252,15 @@ async def test_chat_stream_uses_selected_game_context_for_follow_up_place() -> N
     assert any(event.startswith("event: tool.started\n") for event in first_events)
     assert any(event.startswith("event: tool.completed\n") for event in first_events)
     assert tool_executor.calls == 1
+    assert "8월 14일 롯데 경기는 18:30" in message_repository.saved[-1].content
+    assert "한화와 예정되어 있습니다" in message_repository.saved[-1].content
     assert saved_conversation.metadata["agent_context"]["selected_game"][
         "stadium_name"
     ] == "대전 한화생명 볼파크"
+    assert (
+        saved_conversation.metadata["agent_context"]["selected_team_id"]
+        == "LOTTE"
+    )
 
     second_events = [
         event
@@ -257,11 +276,81 @@ async def test_chat_stream_uses_selected_game_context_for_follow_up_place() -> N
 
     assert not any(event.startswith("event: tool.started\n") for event in second_events)
     assert tool_executor.calls == 1
-    assert len(routing_service.user_contexts) == 1
+    assert len(routing_service.user_contexts) == 2
+    assert (
+        routing_service.user_contexts[-1].conversation_context.selected_game.stadium_id
+        == "DAEJEON"
+    )
     assert "대전 한화생명 볼파크" in second_assistant_message.content
     assert second_assistant_message.metadata["agent_context"]["selected_game"][
         "stadium_id"
     ] == "DAEJEON"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("message", "direct_answer_intent", "expected_parts"),
+    [
+        ("몇 시야?", "selected_game_time", ("18:30", "시작합니다")),
+        ("상대가 누구야?", "selected_game_opponent", ("롯데의 상대는 한화",)),
+        ("홈 경기야?", "selected_game_home_away", ("롯데는 원정 경기", "한화 홈 경기")),
+        ("상태가 뭐야?", "selected_game_status", ("예정 상태",)),
+        ("오늘 취소됐어?", "selected_game_status", ("예정 상태",)),
+    ],
+)
+async def test_chat_stream_uses_selected_game_context_for_follow_up_details(
+    message: str,
+    direct_answer_intent: DirectAnswerIntent,
+    expected_parts: tuple[str, ...],
+) -> None:
+    conversation_repository = FakeConversationRepository()
+    message_repository = FakeMessageRepository()
+    routing_service = FakeRoutingService(
+        decisions=[
+            _find_lotte_game_decision(),
+            _direct_decision(direct_answer_intent),
+        ]
+    )
+    tool_executor = FakeToolExecutor(result=_single_lotte_game_result())
+    session = FakeSession()
+    service = ChatStreamService(
+        conversation_repository=conversation_repository,
+        message_repository=message_repository,
+        tool_routing_service=routing_service,
+        tool_executor=tool_executor,
+        session=session,
+    )
+
+    async for _ in service.stream(
+        ChatStreamRequest(conversation_id=None, message="롯데 오늘 야구 일정 알려줘"),
+        current_user=make_current_user(),
+    ):
+        pass
+    conversation = conversation_repository.added[0]
+
+    follow_up_events = [
+        event
+        async for event in service.stream(
+            ChatStreamRequest(
+                conversation_id=conversation.id,
+                message=message,
+            ),
+            current_user=make_current_user(),
+        )
+    ]
+    assistant_message = message_repository.saved[-1]
+
+    assert not any(
+        event.startswith("event: tool.started\n") for event in follow_up_events
+    )
+    assert tool_executor.calls == 1
+    assert len(routing_service.user_contexts) == 2
+    assert (
+        routing_service.user_contexts[-1].conversation_context.selected_team_id
+        == "LOTTE"
+    )
+    for expected_part in expected_parts:
+        assert expected_part in assistant_message.content
 
 
 def test_chat_endpoint_requires_login_before_streaming() -> None:

@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import date
 
 import pytest
+
 from app.agent.routing_schemas import ToolRoutingDecision, ToolRoutingUserContext
 from app.agent.routing_service import ToolRoutingService
 

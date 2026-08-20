@@ -2,9 +2,18 @@ from __future__ import annotations
 
 from typing import Any
 
-from app.agent.routing_schemas import ToolRoutingDecision
+from app.agent.routing_schemas import DirectAnswerIntent, ToolRoutingDecision
 from app.agent.state import AgentConversationContext, SelectedGameContext
 from app.domains.chat.controller.schemas import ToolName
+
+_GAME_STATUS_LABELS = {
+    "scheduled": "예정",
+    "in_progress": "진행 중",
+    "completed": "종료",
+    "cancelled": "취소",
+    "postponed": "연기",
+    "unknown": "상태 확인 필요",
+}
 
 
 def build_assistant_content(
@@ -33,12 +42,66 @@ def build_assistant_content(
     if not isinstance(tool_name, str) or not isinstance(result, dict):
         return "도구 결과를 확인했습니다."
 
-    return _tool_summary(tool_name=tool_name, result=result, fallback_message=message)
+    tool_input = tool_payload.get("input")
+    selected_team_id = None
+    if isinstance(tool_input, dict) and isinstance(tool_input.get("team_id"), str):
+        selected_team_id = tool_input["team_id"]
+
+    return _tool_summary(
+        tool_name=tool_name,
+        result=result,
+        fallback_message=message,
+        selected_team_id=selected_team_id,
+    )
 
 
-def build_selected_game_place_answer(selected_game: SelectedGameContext) -> str:
-    matchup = f"{selected_game.away_team_name} vs {selected_game.home_team_name}"
-    return f"직전 조회한 {matchup} 경기는 {selected_game.stadium_name}에서 열립니다."
+def build_selected_game_follow_up_answer(
+    *,
+    intent: DirectAnswerIntent,
+    context: AgentConversationContext,
+) -> str | None:
+    selected_game = context.selected_game
+    if selected_game is None:
+        return None
+
+    matchup = _matchup_text(selected_game)
+    team_name = _selected_team_name(context)
+    opponent_name = _opponent_name(selected_game, context.selected_team_id)
+
+    if intent == "selected_game_place":
+        return f"직전 조회한 {matchup} 경기는 {selected_game.stadium_name}에서 열립니다."
+
+    if intent == "selected_game_time":
+        if selected_game.start_time is None:
+            return f"직전 조회한 {matchup} 경기의 시작 시간은 아직 확인되지 않았어요."
+        return f"직전 조회한 {matchup} 경기는 {_format_time(selected_game.start_time)}에 시작합니다."
+
+    if intent == "selected_game_opponent":
+        if team_name is not None and opponent_name is not None:
+            return f"{team_name}의 상대는 {opponent_name}입니다."
+        return f"직전 조회한 경기는 {matchup} 경기입니다."
+
+    if intent == "selected_game_home_away":
+        if context.selected_team_id == selected_game.home_team_id:
+            return (
+                f"{team_name or selected_game.home_team_name}는 홈 경기입니다. "
+                f"{selected_game.stadium_name}에서 열립니다."
+            )
+        if context.selected_team_id == selected_game.away_team_id:
+            return (
+                f"{team_name or selected_game.away_team_name}는 원정 경기입니다. "
+                f"{selected_game.home_team_name} 홈 경기로 {selected_game.stadium_name}에서 열립니다."
+            )
+        return (
+            f"직전 조회한 경기는 {selected_game.home_team_name} 홈 경기입니다. "
+            f"{selected_game.stadium_name}에서 열립니다."
+        )
+
+    if intent == "selected_game_status":
+        status = _game_status_label(selected_game.game_status)
+        return f"직전 조회한 {matchup} 경기는 현재 {status} 상태입니다."
+
+    return None
 
 
 def promote_context_from_tool_payload(
@@ -62,6 +125,11 @@ def promote_context_from_tool_payload(
     if not isinstance(game, dict):
         return context.model_copy(update={"last_tool_name": tool_name})
 
+    tool_input = tool_payload.get("input")
+    selected_team_id = None
+    if isinstance(tool_input, dict) and isinstance(tool_input.get("team_id"), str):
+        selected_team_id = tool_input["team_id"]
+
     selected_game = SelectedGameContext.model_validate(
         {
             "game_id": game["id"],
@@ -82,24 +150,9 @@ def promote_context_from_tool_payload(
             "selected_game": selected_game,
             "selected_stadium_id": selected_game.stadium_id,
             "selected_stadium_name": selected_game.stadium_name,
+            "selected_team_id": selected_team_id,
             "last_tool_name": tool_name,
         }
-    )
-
-
-def can_answer_selected_game_place(
-    *,
-    message: str,
-    context: AgentConversationContext,
-) -> bool:
-    if context.selected_game is None:
-        return False
-
-    normalized = "".join(message.strip().split())
-    place_markers = ("어디서", "어디", "장소", "구장", "경기장")
-    game_markers = ("경기", "야구", "거기")
-    return any(marker in normalized for marker in place_markers) and any(
-        marker in normalized for marker in game_markers
     )
 
 
@@ -132,11 +185,20 @@ def _tool_summary(
     tool_name: ToolName | str,
     result: dict[str, Any],
     fallback_message: str,
+    selected_team_id: str | None,
 ) -> str:
     if tool_name == "find_kbo_game":
         total = result.get("total")
         if total == 0:
             return "조회 조건에 맞는 KBO 경기를 찾지 못했어요."
+        games = result.get("games")
+        if total == 1 and isinstance(games, list) and len(games) == 1:
+            game = games[0]
+            if isinstance(game, dict):
+                return _single_game_summary(
+                    game=game,
+                    selected_team_id=selected_team_id,
+                )
         return f"경기 일정을 조회했습니다. 조건에 맞는 경기는 총 {total}건입니다."
 
     if tool_name == "get_stadium_info":
@@ -175,3 +237,123 @@ def _tool_summary(
         return f"질문 '{fallback_message}'에 참고할 야구 지식 근거 {count}건을 찾았습니다."
 
     return "도구 결과를 확인했습니다."
+
+
+def _single_game_summary(
+    *,
+    game: dict[str, Any],
+    selected_team_id: str | None,
+) -> str:
+    away_team_name = game.get("away_team_name")
+    home_team_name = game.get("home_team_name")
+    stadium_name = game.get("stadium_name")
+    status = _game_status_label(game.get("game_status"))
+    start_time = _format_time_value(game.get("start_time"))
+
+    if not all(isinstance(value, str) for value in (away_team_name, home_team_name)):
+        return "경기 일정을 조회했습니다. 조건에 맞는 경기는 총 1건입니다."
+
+    selected_team_name = _team_name_from_game(game, selected_team_id)
+    opponent_name = _opponent_name_from_game(game, selected_team_id)
+    date_text = _format_date_value(game.get("game_date"))
+    time_text = f" {start_time}" if start_time is not None else ""
+    stadium_text = f" {stadium_name}에서" if isinstance(stadium_name, str) else ""
+
+    if selected_team_name is not None and opponent_name is not None:
+        return (
+            f"{date_text}{selected_team_name} 경기는{time_text}{stadium_text} "
+            f"{opponent_name}와 {status}되어 있습니다."
+        )
+
+    return (
+        f"{date_text}{away_team_name} vs {home_team_name} 경기는{time_text}"
+        f"{stadium_text} {status}되어 있습니다."
+    )
+
+
+def _selected_team_name(context: AgentConversationContext) -> str | None:
+    selected_game = context.selected_game
+    if selected_game is None:
+        return None
+    if context.selected_team_id == selected_game.away_team_id:
+        return selected_game.away_team_name
+    if context.selected_team_id == selected_game.home_team_id:
+        return selected_game.home_team_name
+    return None
+
+
+def _team_name_from_game(
+    game: dict[str, Any],
+    selected_team_id: str | None,
+) -> str | None:
+    if selected_team_id == game.get("away_team_id") and isinstance(
+        game.get("away_team_name"),
+        str,
+    ):
+        return game["away_team_name"]
+    if selected_team_id == game.get("home_team_id") and isinstance(
+        game.get("home_team_name"),
+        str,
+    ):
+        return game["home_team_name"]
+    return None
+
+
+def _opponent_name(
+    selected_game: SelectedGameContext,
+    selected_team_id: str | None,
+) -> str | None:
+    if selected_team_id == selected_game.away_team_id:
+        return selected_game.home_team_name
+    if selected_team_id == selected_game.home_team_id:
+        return selected_game.away_team_name
+    return None
+
+
+def _opponent_name_from_game(
+    game: dict[str, Any],
+    selected_team_id: str | None,
+) -> str | None:
+    if selected_team_id == game.get("away_team_id") and isinstance(
+        game.get("home_team_name"),
+        str,
+    ):
+        return game["home_team_name"]
+    if selected_team_id == game.get("home_team_id") and isinstance(
+        game.get("away_team_name"),
+        str,
+    ):
+        return game["away_team_name"]
+    return None
+
+
+def _matchup_text(selected_game: SelectedGameContext) -> str:
+    return f"{selected_game.away_team_name} vs {selected_game.home_team_name}"
+
+
+def _game_status_label(status: Any) -> str:
+    return _GAME_STATUS_LABELS.get(str(status), "상태 확인 필요")
+
+
+def _format_time_value(value: Any) -> str | None:
+    if hasattr(value, "strftime"):
+        return value.strftime("%H:%M")
+    if isinstance(value, str) and value:
+        return value[:5]
+    return None
+
+
+def _format_time(value: Any) -> str:
+    return _format_time_value(value) or "시간 미정"
+
+
+def _format_date_value(value: Any) -> str:
+    if hasattr(value, "month") and hasattr(value, "day"):
+        return f"{value.month}월 {value.day}일 "
+    if isinstance(value, str) and len(value) >= 10:
+        try:
+            _, month, day = value[:10].split("-")
+            return f"{int(month)}월 {int(day)}일 "
+        except ValueError:
+            return ""
+    return ""
