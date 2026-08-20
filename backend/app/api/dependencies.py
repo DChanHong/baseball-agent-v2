@@ -32,6 +32,11 @@ from app.domains.baseball.tool.get_weather_context.handler import (
     GetWeatherContextToolHandler,
 )
 from app.domains.baseball.tool.get_weather_context.kma_client import KmaClient
+from app.domains.baseball.tool.rag_config import (
+    BASEBALL_KNOWLEDGE_RAG_CONFIG,
+    STADIUM_GUIDE_RAG_CONFIG,
+    TICKETING_GUIDE_RAG_CONFIG,
+)
 from app.domains.baseball.tool.search_baseball_knowledge.handler import (
     SearchBaseballKnowledgeToolHandler,
 )
@@ -162,6 +167,7 @@ def get_search_stadium_guide_tool_handler(
     return SearchStadiumGuideToolHandler(
         openai_client=get_openai_client(),
         retriever=PgVectorStadiumGuideRetriever(session),
+        retrieval_config=STADIUM_GUIDE_RAG_CONFIG,
     )
 
 
@@ -173,6 +179,7 @@ def get_search_ticketing_guide_tool_handler(
     return SearchTicketingGuideToolHandler(
         openai_client=get_openai_client(),
         retriever=PgVectorStadiumGuideRetriever(session),
+        retrieval_config=TICKETING_GUIDE_RAG_CONFIG,
     )
 
 
@@ -184,6 +191,7 @@ def get_search_baseball_knowledge_tool_handler(
     return SearchBaseballKnowledgeToolHandler(
         openai_client=get_openai_client(),
         retriever=PgVectorBaseballKnowledgeRetriever(session),
+        retrieval_config=BASEBALL_KNOWLEDGE_RAG_CONFIG,
     )
 
 

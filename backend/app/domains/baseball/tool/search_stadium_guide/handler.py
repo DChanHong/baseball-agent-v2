@@ -2,8 +2,11 @@ import logging
 
 from openai import AsyncOpenAI
 
+from app.domains.baseball.tool.rag_config import (
+    STADIUM_GUIDE_RAG_CONFIG,
+    RagRetrievalConfig,
+)
 from app.domains.baseball.tool.search_stadium_guide.retriever import (
-    DEFAULT_RELEVANCE_THRESHOLD,
     PgVectorStadiumGuideRetriever,
 )
 from app.domains.baseball.tool.search_stadium_guide.schemas import (
@@ -13,9 +16,6 @@ from app.domains.baseball.tool.search_stadium_guide.schemas import (
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_EMBEDDING_MODEL = "text-embedding-3-small"
-
-
 class SearchStadiumGuideToolHandler:
     """LLM의 search_stadium_guide tool 호출을 처리합니다."""
 
@@ -24,13 +24,11 @@ class SearchStadiumGuideToolHandler:
         *,
         openai_client: AsyncOpenAI,
         retriever: PgVectorStadiumGuideRetriever,
-        embedding_model: str = DEFAULT_EMBEDDING_MODEL,
-        relevance_threshold: float = DEFAULT_RELEVANCE_THRESHOLD,
+        retrieval_config: RagRetrievalConfig = STADIUM_GUIDE_RAG_CONFIG,
     ) -> None:
         self._openai_client = openai_client
         self._retriever = retriever
-        self._embedding_model = embedding_model
-        self._relevance_threshold = relevance_threshold
+        self._retrieval_config = retrieval_config
 
     async def execute(
         self,
@@ -51,9 +49,10 @@ class SearchStadiumGuideToolHandler:
             items = await self._retriever.search(
                 query_embedding=query_embedding,
                 stadium_id=tool_input.stadium_id,
+                document_types=self._retrieval_config.document_types,
                 guide_types=tool_input.guide_types,
-                top_k=tool_input.top_k,
-                relevance_threshold=self._relevance_threshold,
+                top_k=self._retrieval_config.effective_top_k(tool_input.top_k),
+                relevance_threshold=self._retrieval_config.relevance_threshold,
             )
         except Exception:
             logger.exception("search_stadium_guide tool failed")
@@ -81,7 +80,7 @@ class SearchStadiumGuideToolHandler:
 
     async def _embed_query(self, query: str) -> list[float]:
         response = await self._openai_client.embeddings.create(
-            model=self._embedding_model,
+            model=self._retrieval_config.embedding_model,
             input=query,
         )
         return response.data[0].embedding

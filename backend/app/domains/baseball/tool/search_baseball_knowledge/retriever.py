@@ -12,8 +12,6 @@ from app.domains.baseball.tool.search_baseball_knowledge.schemas import (
     BaseballKnowledgeType,
 )
 
-DEFAULT_RELEVANCE_THRESHOLD = 0.82
-
 
 def vector_literal(embedding: Sequence[float]) -> str:
     """Return a pgvector literal for a query embedding."""
@@ -31,12 +29,14 @@ class PgVectorBaseballKnowledgeRetriever:
         self,
         *,
         query_embedding: Sequence[float],
+        document_types: Sequence[str],
         knowledge_types: Sequence[BaseballKnowledgeType] | None = None,
         top_k: int = 5,
-        relevance_threshold: float = DEFAULT_RELEVANCE_THRESHOLD,
+        relevance_threshold: float = 0.82,
     ) -> list[BaseballKnowledgeSearchItem]:
         """선택적 document_type filter로 관련 야구 지식 chunk를 검색합니다."""
 
+        normalized_document_types = list(dict.fromkeys(document_types))
         normalized_knowledge_types = list(dict.fromkeys(knowledge_types or []))
         statement = text(
             """
@@ -57,7 +57,7 @@ class PgVectorBaseballKnowledgeRetriever:
               and team_id is null
               and embedding is not null
               and review_status != 'rejected'
-              and document_type in ('baseball_rule', 'common_play', 'latest_kbo_rule')
+              and document_type = any(:document_types)
               and (
                 cardinality(:knowledge_types) = 0
                 or document_type = any(:knowledge_types)
@@ -65,12 +65,16 @@ class PgVectorBaseballKnowledgeRetriever:
             order by embedding <=> cast(:query_embedding as extensions.vector)
             limit :top_k
             """
-        ).bindparams(bindparam("knowledge_types", type_=ARRAY(Text())))
+        ).bindparams(
+            bindparam("document_types", type_=ARRAY(Text())),
+            bindparam("knowledge_types", type_=ARRAY(Text())),
+        )
 
         result = await self._session.execute(
             statement,
             {
                 "query_embedding": vector_literal(query_embedding),
+                "document_types": normalized_document_types,
                 "knowledge_types": normalized_knowledge_types,
                 "top_k": top_k,
             },

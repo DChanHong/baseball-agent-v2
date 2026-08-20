@@ -2,8 +2,11 @@ import logging
 
 from openai import AsyncOpenAI
 
+from app.domains.baseball.tool.rag_config import (
+    BASEBALL_KNOWLEDGE_RAG_CONFIG,
+    RagRetrievalConfig,
+)
 from app.domains.baseball.tool.search_baseball_knowledge.retriever import (
-    DEFAULT_RELEVANCE_THRESHOLD,
     PgVectorBaseballKnowledgeRetriever,
 )
 from app.domains.baseball.tool.search_baseball_knowledge.schemas import (
@@ -13,7 +16,6 @@ from app.domains.baseball.tool.search_baseball_knowledge.schemas import (
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_EMBEDDING_MODEL = "text-embedding-3-small"
 WEATHER_CANCELLATION_TOPIC_IDS = {
     "basic_rule_regular_game",
     "basic_rule_suspended_game",
@@ -31,13 +33,11 @@ class SearchBaseballKnowledgeToolHandler:
         *,
         openai_client: AsyncOpenAI,
         retriever: PgVectorBaseballKnowledgeRetriever,
-        embedding_model: str = DEFAULT_EMBEDDING_MODEL,
-        relevance_threshold: float = DEFAULT_RELEVANCE_THRESHOLD,
+        retrieval_config: RagRetrievalConfig = BASEBALL_KNOWLEDGE_RAG_CONFIG,
     ) -> None:
         self._openai_client = openai_client
         self._retriever = retriever
-        self._embedding_model = embedding_model
-        self._relevance_threshold = relevance_threshold
+        self._retrieval_config = retrieval_config
 
     async def execute(
         self,
@@ -55,9 +55,10 @@ class SearchBaseballKnowledgeToolHandler:
             query_embedding = await self._embed_query(tool_input.query)
             items = await self._retriever.search(
                 query_embedding=query_embedding,
+                document_types=self._retrieval_config.document_types,
                 knowledge_types=tool_input.knowledge_types,
-                top_k=tool_input.top_k,
-                relevance_threshold=self._relevance_threshold,
+                top_k=self._retrieval_config.effective_top_k(tool_input.top_k),
+                relevance_threshold=self._retrieval_config.relevance_threshold,
             )
         except Exception:
             logger.exception("search_baseball_knowledge tool failed")
@@ -87,7 +88,7 @@ class SearchBaseballKnowledgeToolHandler:
 
     async def _embed_query(self, query: str) -> list[float]:
         response = await self._openai_client.embeddings.create(
-            model=self._embedding_model,
+            model=self._retrieval_config.embedding_model,
             input=query,
         )
         return response.data[0].embedding

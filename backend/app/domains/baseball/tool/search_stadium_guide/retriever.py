@@ -12,8 +12,6 @@ from app.domains.baseball.tool.search_stadium_guide.schemas import (
     StadiumGuideType,
 )
 
-DEFAULT_RELEVANCE_THRESHOLD = 0.65
-
 
 def vector_literal(embedding: Sequence[float]) -> str:
     """Return a pgvector literal for a query embedding."""
@@ -32,13 +30,15 @@ class PgVectorStadiumGuideRetriever:
         *,
         query_embedding: Sequence[float],
         stadium_id: str,
+        document_types: Sequence[str],
         guide_types: Sequence[StadiumGuideType] | None = None,
         top_k: int = 5,
-        relevance_threshold: float = DEFAULT_RELEVANCE_THRESHOLD,
+        relevance_threshold: float = 0.65,
     ) -> list[StadiumGuideSearchItem]:
         """stadium_id와 선택적 document_type filter로 관련 구장 안내 chunk를 검색합니다."""
 
         normalized_stadium_id = stadium_id.strip().upper()
+        normalized_document_types = list(dict.fromkeys(document_types))
         normalized_guide_types = list(dict.fromkeys(guide_types or []))
         statement = text(
             """
@@ -60,6 +60,7 @@ class PgVectorStadiumGuideRetriever:
             where stadium_id = :stadium_id
               and embedding is not null
               and review_status != 'rejected'
+              and document_type = any(:document_types)
               and (
                 cardinality(:guide_types) = 0
                 or document_type = any(:guide_types)
@@ -67,13 +68,17 @@ class PgVectorStadiumGuideRetriever:
             order by embedding <=> cast(:query_embedding as extensions.vector)
             limit :top_k
             """
-        ).bindparams(bindparam("guide_types", type_=ARRAY(Text())))
+        ).bindparams(
+            bindparam("document_types", type_=ARRAY(Text())),
+            bindparam("guide_types", type_=ARRAY(Text())),
+        )
 
         result = await self._session.execute(
             statement,
             {
                 "query_embedding": vector_literal(query_embedding),
                 "stadium_id": normalized_stadium_id,
+                "document_types": normalized_document_types,
                 "guide_types": normalized_guide_types,
                 "top_k": top_k,
             },

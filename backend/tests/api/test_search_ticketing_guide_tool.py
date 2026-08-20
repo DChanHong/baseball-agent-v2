@@ -3,6 +3,8 @@ from __future__ import annotations
 from datetime import date
 
 import pytest
+
+from app.domains.baseball.tool.rag_config import RagRetrievalConfig
 from app.domains.baseball.tool.search_stadium_guide.schemas import (
     StadiumGuideSearchItem,
 )
@@ -20,12 +22,17 @@ class FakeEmbeddingResponse:
 
 
 class FakeEmbeddings:
+    def __init__(self) -> None:
+        self.calls: list[dict[str, str]] = []
+
     async def create(self, *, model: str, input: str):
+        self.calls.append({"model": model, "input": input})
         return FakeEmbeddingResponse()
 
 
 class FakeOpenAIClient:
-    embeddings = FakeEmbeddings()
+    def __init__(self) -> None:
+        self.embeddings = FakeEmbeddings()
 
 
 class FakeRetriever:
@@ -38,6 +45,7 @@ class FakeRetriever:
         *,
         query_embedding,
         stadium_id,
+        document_types,
         guide_types=None,
         top_k=5,
         relevance_threshold=0.65,
@@ -46,6 +54,7 @@ class FakeRetriever:
             {
                 "query_embedding": query_embedding,
                 "stadium_id": stadium_id,
+                "document_types": document_types,
                 "guide_types": guide_types,
                 "top_k": top_k,
                 "relevance_threshold": relevance_threshold,
@@ -76,8 +85,9 @@ def ticketing_item() -> StadiumGuideSearchItem:
 @pytest.mark.asyncio
 async def test_search_ticketing_guide_filters_ticketing_document_type():
     retriever = FakeRetriever(items=[ticketing_item()])
+    openai_client = FakeOpenAIClient()
     handler = SearchTicketingGuideToolHandler(
-        openai_client=FakeOpenAIClient(),
+        openai_client=openai_client,
         retriever=retriever,
     )
 
@@ -94,10 +104,45 @@ async def test_search_ticketing_guide_filters_ticketing_document_type():
     assert result.stadium_id == "SAJIK"
     assert result.team_id == "LOTTE"
     assert result.items[0].document_type == "stadium_ticketing_guide"
+    assert retriever.calls[0]["document_types"] == ("stadium_ticketing_guide",)
     assert retriever.calls[0]["guide_types"] == ["stadium_ticketing_guide"]
     assert retriever.calls[0]["top_k"] == 3
+    assert retriever.calls[0]["relevance_threshold"] == 0.65
+    assert openai_client.embeddings.calls[0]["model"] == "text-embedding-3-small"
     assert "ticket_inventory_not_supported" in result.limitations
     assert "official_ticketing_source_should_be_checked" in result.limitations
+
+
+@pytest.mark.asyncio
+async def test_search_ticketing_guide_uses_injected_retrieval_config():
+    retriever = FakeRetriever(items=[ticketing_item()])
+    openai_client = FakeOpenAIClient()
+    handler = SearchTicketingGuideToolHandler(
+        openai_client=openai_client,
+        retriever=retriever,
+        retrieval_config=RagRetrievalConfig(
+            embedding_model="test-embedding-model",
+            default_top_k=2,
+            max_top_k=4,
+            relevance_threshold=0.42,
+            document_types=("custom_ticketing_type",),
+        ),
+    )
+
+    await handler.execute(
+        SearchTicketingGuideToolInput(
+            stadium_id="SAJIK",
+            team_id=None,
+            query="사직 예매 어디서 해?",
+            top_k=9,
+        )
+    )
+
+    assert openai_client.embeddings.calls[0]["model"] == "test-embedding-model"
+    assert retriever.calls[0]["document_types"] == ("custom_ticketing_type",)
+    assert retriever.calls[0]["guide_types"] == ["custom_ticketing_type"]
+    assert retriever.calls[0]["top_k"] == 4
+    assert retriever.calls[0]["relevance_threshold"] == 0.42
 
 
 @pytest.mark.asyncio

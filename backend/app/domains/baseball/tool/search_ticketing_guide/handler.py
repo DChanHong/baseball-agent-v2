@@ -2,11 +2,11 @@ import logging
 
 from openai import AsyncOpenAI
 
-from app.domains.baseball.tool.search_stadium_guide.handler import (
-    DEFAULT_EMBEDDING_MODEL,
+from app.domains.baseball.tool.rag_config import (
+    TICKETING_GUIDE_RAG_CONFIG,
+    RagRetrievalConfig,
 )
 from app.domains.baseball.tool.search_stadium_guide.retriever import (
-    DEFAULT_RELEVANCE_THRESHOLD,
     PgVectorStadiumGuideRetriever,
 )
 from app.domains.baseball.tool.search_ticketing_guide.schemas import (
@@ -16,9 +16,6 @@ from app.domains.baseball.tool.search_ticketing_guide.schemas import (
 
 logger = logging.getLogger(__name__)
 
-TICKETING_GUIDE_TYPE = "stadium_ticketing_guide"
-
-
 class SearchTicketingGuideToolHandler:
     """LLM의 search_ticketing_guide tool 호출을 처리합니다."""
 
@@ -27,13 +24,11 @@ class SearchTicketingGuideToolHandler:
         *,
         openai_client: AsyncOpenAI,
         retriever: PgVectorStadiumGuideRetriever,
-        embedding_model: str = DEFAULT_EMBEDDING_MODEL,
-        relevance_threshold: float = DEFAULT_RELEVANCE_THRESHOLD,
+        retrieval_config: RagRetrievalConfig = TICKETING_GUIDE_RAG_CONFIG,
     ) -> None:
         self._openai_client = openai_client
         self._retriever = retriever
-        self._embedding_model = embedding_model
-        self._relevance_threshold = relevance_threshold
+        self._retrieval_config = retrieval_config
 
     async def execute(
         self,
@@ -53,9 +48,10 @@ class SearchTicketingGuideToolHandler:
             items = await self._retriever.search(
                 query_embedding=query_embedding,
                 stadium_id=tool_input.stadium_id,
-                guide_types=[TICKETING_GUIDE_TYPE],
-                top_k=tool_input.top_k,
-                relevance_threshold=self._relevance_threshold,
+                document_types=self._retrieval_config.document_types,
+                guide_types=list(self._retrieval_config.document_types),
+                top_k=self._retrieval_config.effective_top_k(tool_input.top_k),
+                relevance_threshold=self._retrieval_config.relevance_threshold,
             )
         except Exception:
             logger.exception("search_ticketing_guide tool failed")
@@ -87,7 +83,7 @@ class SearchTicketingGuideToolHandler:
 
     async def _embed_query(self, query: str) -> list[float]:
         response = await self._openai_client.embeddings.create(
-            model=self._embedding_model,
+            model=self._retrieval_config.embedding_model,
             input=query,
         )
         return response.data[0].embedding
