@@ -7,32 +7,24 @@
 
 ## 1. 현재 사용자 처리 방식
 
-로그인과 `auth.users` 연동은 이후 단계에서 구현한다.
-
-현재 비로그인 사용자는 브라우저가 생성한 UUID를 `guest_id`로 전달한다.
+로그인은 Supabase Auth 기반으로 구현되어 있다. 비로그인 상태에서는 `/api/v1/chat`을 포함한 주요 API를 호출할 수 없다.
 
 ```text
-user_id  = NULL
-guest_id = 브라우저 UUID
+user_id  = auth.users.id  (로그인한 사용자)
+guest_id = NULL
 ```
 
-로그인 기능을 추가한 후에는 다음처럼 연결한다.
+인증 흐름:
 
 ```text
-user_id = auth.users.id
+Frontend
+→ Supabase Auth (이메일 로그인)
+→ Access Token 발급
+→ FastAPI 요청 시 Authorization: Bearer <token> 헤더 포함
+→ FastAPI가 Supabase JWT 검증 후 user_profile_id 추출
 ```
 
-로그인 완료 시 기존 guest 대화를 로그인 사용자에게 이전할 수 있다.
-
-```sql
-update public.chat_conversations
-set
-  user_id = :authenticated_user_id,
-  guest_id = null
-where guest_id = :current_guest_id;
-```
-
-현재 API에서 클라이언트가 Supabase 테이블을 직접 호출하지 않는다.
+API에서 클라이언트가 Supabase 테이블을 직접 호출하지 않는다.
 
 ```text
 Frontend
@@ -306,11 +298,14 @@ Swagger에서 API를 호출하는 순서:
 POST /api/v1/conversations
 ```
 
+로그인 후 발급된 Access Token이 필요하다. Supabase Studio → Authentication → Users에서 테스트 계정을 만들고, 로그인 후 토큰을 확인한다.
+
+Swagger에서 호출할 때는 상단 `Authorize` 버튼에 `Bearer <access_token>`을 입력한다.
+
 Swagger 요청 예:
 
 ```json
 {
-  "guest_id": "0198f1d1-7d2b-7000-8000-000000000002",
   "title": "Swagger 테스트 대화",
   "agent_type": "baseball_general",
   "metadata": {
@@ -326,8 +321,8 @@ Swagger 요청 예:
 curl --request POST \
   http://127.0.0.1:4000/api/v1/conversations \
   --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer <access_token>' \
   --data '{
-    "guest_id": "0198f1d1-7d2b-7000-8000-000000000003",
     "title": "curl 테스트 대화",
     "agent_type": "baseball_general",
     "metadata": {

@@ -1,8 +1,9 @@
 # MVP Chat UX Plan
 
-> 상태: 초안  
-> 목적: 로그인 전 1차 MVP에서 사용할 채팅 화면 레이아웃, 세션 흐름, API 계약을 정한다.  
+> 상태: 구현 완료 (2026-08-21 기준)
+> 목적: 1차 MVP 채팅 화면 레이아웃, 세션 흐름, API 계약 기록.
 > 범위: 프론트엔드 UX/상태/API 사용 방식. 백엔드 구현 상세는 별도 문서에서 다룬다.
+> 주의: 이 문서는 초안 당시 guest-first 기준으로 작성됐으나, 실제 구현은 authenticated-first로 확정됐다. guest_id 관련 내용은 현재 구현과 다르다.
 
 ## 1. MVP 목표
 
@@ -23,39 +24,33 @@ MVP에서 지원할 대표 질문:
 
 ## 2. 세션 정책
 
-로그인은 아직 붙이지 않는다.
-
-대신 브라우저 기준 guest session을 사용한다.
+Supabase Auth 기반 로그인이 적용되어 있다. 비로그인 상태에서는 채팅을 사용할 수 없다.
 
 ```text
-browser localStorage
-  -> guest_id
-  -> current_conversation_id
-  -> is_session_sidebar_collapsed
+Supabase Auth
+  → access_token / refresh_token (쿠키 저장)
+  → FastAPI: Authorization: Bearer <token>
+  → user_profile_id 기반 conversation 소유권 관리
 ```
 
 원칙:
 
-- 첫 방문 시 frontend가 UUID `guest_id`를 생성해 `localStorage`에 저장한다.
-- 새 채팅을 시작하면 `conversation_id=null`로 `/api/v1/chat`을 호출할 수 있다.
-- 서버가 새 conversation을 만들고 `conversation_id`를 응답한다.
-- 이후 같은 채팅창에서는 응답받은 `conversation_id`를 계속 보낸다.
-- conversation 목록은 같은 `guest_id`에 묶어 보여준다.
-- 로그인 도입 후에는 기존 `guest_id` conversation을 user account에 연결할 수 있게 남겨둔다.
+- 로그인한 사용자만 `/api/v1/chat` 및 대화 목록 API를 사용할 수 있다.
+- 새 채팅은 `conversation_id=null`로 시작하고, 서버가 새 conversation을 생성해 SSE로 `conversation.created` 이벤트를 보낸다.
+- 이후 같은 채팅창에서는 생성된 `conversation_id`를 계속 사용한다.
+- conversation 목록은 로그인한 사용자의 `user_profile_id`에 묶어 관리한다.
 
 ## 3. Chat API 계약
 
-1차 MVP는 단일 endpoint를 우선 사용한다.
-
 ```text
 POST /api/v1/chat
+Authorization: Bearer <access_token>
 ```
 
 요청:
 
 ```json
 {
-  "guest_id": "0f3cf263-cc8b-4f19-b6c0-675d34d7122b",
   "conversation_id": "4af9c95a-9580-4380-88bd-cf548c3ca932",
   "message": "오늘 사직 비 와?"
 }
@@ -65,44 +60,25 @@ POST /api/v1/chat
 
 ```json
 {
-  "guest_id": "0f3cf263-cc8b-4f19-b6c0-675d34d7122b",
   "conversation_id": null,
   "message": "오늘 롯데 경기 있어?"
 }
 ```
 
-응답 초안:
+응답은 SSE(Server-Sent Events) 스트리밍으로 반환된다.
 
-```json
-{
-  "conversation_id": "4af9c95a-9580-4380-88bd-cf548c3ca932",
-  "user_message": {
-    "id": "7dd08fd5-8d7a-49f1-9f52-3569ff4ecbef",
-    "role": "user",
-    "content": "오늘 사직 비 와?",
-    "sequence_no": 1,
-    "created_at": "2026-08-03T10:20:00+09:00"
-  },
-  "assistant_message": {
-    "id": "accc6762-7c13-46da-a75d-69ecb919fb91",
-    "role": "assistant",
-    "content": "사직 기준으로 현재 비는 오지 않는 것으로 조회됐어요...",
-    "sequence_no": 2,
-    "created_at": "2026-08-03T10:20:03+09:00"
-  },
-  "tool": {
-    "name": "get_weather_context",
-    "status": "completed",
-    "result": {}
-  },
-  "sources": [],
-  "limitations": [
-    "weather_forecast_not_game_cancellation_decision"
-  ]
-}
+주요 이벤트:
+
+```text
+conversation.created  → conversation_id 발급
+message.created       → user/assistant 메시지 ID 확정
+tool.started          → tool 실행 시작
+tool.completed        → tool 결과
+assistant.delta       → 답변 텍스트 청크
+assistant.completed   → 최종 답변
+conversation.updated  → conversation 목록 갱신 신호
+done                  → 스트림 종료
 ```
-
-MVP에서는 streaming을 붙이지 않는다. 답변 생성 완료 후 한 번에 응답한다.
 
 ## 4. 화면 레이아웃
 
@@ -187,7 +163,7 @@ mobile: overlay drawer
 
 ## 6. 세션 사이드바
 
-세션 사이드바는 로그인 전부터 만든다. 로그인 도입 후에도 같은 UI를 사용하고, 데이터 소스만 guest conversation에서 user conversation으로 바꾼다.
+세션 사이드바는 로그인한 사용자의 conversation 목록을 표시한다.
 
 표시 요소:
 
@@ -221,27 +197,14 @@ MVP 동작:
 → message workspace 폭 확장
 ```
 
-API 후보:
+구현된 API:
 
 ```text
-GET /api/v1/conversations?guest_id=...
-GET /api/v1/conversations/{conversation_id}/messages?guest_id=...
-```
+GET /api/v1/conversations
+Authorization: Bearer <access_token>
 
-단, 백엔드 MVP 속도를 위해 첫 구현에서는 conversation 목록 API가 준비되기 전까지 localStorage에 최근 conversation summary cache를 둘 수 있다.
-
-프론트 로컬 캐시 초안:
-
-```json
-{
-  "recent_conversations": [
-    {
-      "conversation_id": "4af9c95a-9580-4380-88bd-cf548c3ca932",
-      "title": "오늘 사직 비 와?",
-      "last_message_at": "2026-08-03T10:20:03+09:00"
-    }
-  ]
-}
+GET /api/v1/conversations/{conversation_id}/messages
+Authorization: Bearer <access_token>
 ```
 
 ## 7. 메시지 UI
@@ -276,11 +239,10 @@ Tool별 compact card:
 ### Local Storage
 
 ```text
-guest_id
-current_conversation_id
 is_session_sidebar_collapsed
-recent_conversations_cache
 ```
+
+인증 토큰은 Supabase Auth가 쿠키로 관리한다. guest_id와 conversation cache는 사용하지 않는다.
 
 ### Jotai
 
@@ -307,15 +269,13 @@ MVP에서는 conversation list API를 붙이는 것이 좋다. 단, 백엔드 �
 
 ```text
 사용자 입력
-→ guest_id 확인 또는 생성
-→ current_conversation_id 읽기
+→ 로그인 여부 확인 (미로그인 시 로그인 모달)
 → optimistic user message 표시
-→ POST /api/v1/chat
-→ 응답 conversation_id 저장
-→ recent_conversations_cache 갱신
-→ assistant message append
-→ tool/source/limitation 표시
-→ input focus 복구
+→ POST /api/v1/chat (SSE 스트림 시작)
+→ conversation.created → activeConversationId 갱신
+→ tool.started / tool.completed → tool card 갱신
+→ assistant.delta → 답변 텍스트 스트리밍
+→ done → 스트림 종료, conversation list invalidate
 ```
 
 실패 시:
@@ -329,8 +289,6 @@ network error
 
 ## 10. MVP에서 제외
 
-- 로그인
-- SSE streaming
 - 좌석 추천
 - 실시간 티켓 잔여석
 - 대화방 검색/삭제/이름 변경
@@ -402,11 +360,10 @@ frontend/src/
 
 ## 13. 결정 사항
 
-- 1차 MVP는 단일 `POST /api/v1/chat`로 간다.
-- 로그인 전 세션은 `guest_id + conversation_id`로 이어간다.
-- 프론트는 `guest_id`, 현재 `conversation_id`, sidebar 접힘 상태를 `localStorage`에 저장한다.
-- session sidebar는 로그인 전부터 만든다.
+- 1차 MVP는 `POST /api/v1/chat` SSE 스트리밍으로 구현됐다.
+- 인증은 Supabase Auth 기반 로그인 필수(authenticated-first)로 확정됐다.
+- 프론트는 sidebar 접힘 상태만 `localStorage`에 저장한다. guest_id는 사용하지 않는다.
 - sidebar는 데스크톱 고정 영역, 모바일 overlay drawer로 동작한다.
 - 좌석 추천 UI는 MVP에서 제외한다.
 - Tool 결과는 답변 아래 compact card로 표시한다.
-- 출처와 기준 시점은 drawer 또는 접이식 영역으로 분리한다.
+- 출처와 기준 시점은 Source Drawer로 분리한다 (현재 UI 구현, 데이터 연결 미완).
