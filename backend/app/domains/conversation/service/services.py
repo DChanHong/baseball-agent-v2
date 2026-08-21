@@ -5,13 +5,20 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.domains.conversation.domain.entities import Conversation
 from app.domains.conversation.domain.enums import ConversationStatus
+from app.domains.conversation.domain.exceptions import (
+    ConversationAccessDeniedError,
+    ConversationNotFoundError,
+)
 from app.domains.conversation.domain.repositories import (
     ConversationRepository,
+    MessageRepository,
 )
 from app.domains.conversation.service.dto import (
     ConversationResultDto,
     CreateConversationCommand,
+    ListConversationMessagesQuery,
     ListConversationsQuery,
+    MessageResultDto,
 )
 
 
@@ -58,6 +65,46 @@ class CreateConversationService:
             raise
 
         return ConversationResultDto.from_entity(saved_conversation)
+
+
+class ListConversationMessagesService:
+    """로그인 사용자의 대화방 메시지 목록을 조회하는 유스케이스입니다."""
+
+    def __init__(
+        self,
+        conversation_repository: ConversationRepository,
+        message_repository: MessageRepository,
+    ) -> None:
+        self._conversation_repository = conversation_repository
+        self._message_repository = message_repository
+
+    async def execute(
+        self,
+        query: ListConversationMessagesQuery,
+    ) -> list[MessageResultDto]:
+        """대화방 소유권을 확인한 후 메시지 목록을 반환합니다."""
+
+        conversation = await self._conversation_repository.find_by_id(
+            query.conversation_id,
+        )
+
+        if conversation is None:
+            raise ConversationNotFoundError(str(query.conversation_id))
+
+        if conversation.user_profile_id != query.user_profile_id:
+            raise ConversationAccessDeniedError(str(query.conversation_id))
+
+        messages = await self._message_repository.list_by_conversation_id(
+            query.conversation_id,
+            limit=query.limit,
+            offset=query.offset,
+        )
+
+        return [
+            MessageResultDto.from_entity(message)
+            for message in messages
+            if message.role.value in ("user", "assistant")
+        ]
 
 
 class ListConversationsService:

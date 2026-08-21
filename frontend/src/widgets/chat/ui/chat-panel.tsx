@@ -14,6 +14,7 @@ import {
   type ChatStreamMessage,
 } from "@/features/chat-stream/api/stream-chat-message";
 import { useCurrentUser } from "@/features/auth/model/auth-query";
+import { getConversationMessages } from "@/features/conversation-list/api/get-conversation-messages";
 import { conversationListQueryKey } from "@/features/conversation-list/model/conversation-list-query";
 import { useGlobalModal } from "@/features/global-modal/model/use-global-modal";
 import { ChatComposer } from "@/features/send-message/ui/chat-composer";
@@ -43,7 +44,12 @@ const toolDisplayLabels: Record<ToolResultName, string> = {
   search_baseball_knowledge: "야구 지식",
 };
 
-export function ChatPanel() {
+type ChatPanelProps = {
+  activeConversationId: string | null;
+  onConversationCreated: (id: string) => void;
+};
+
+export function ChatPanel({ activeConversationId, onConversationCreated }: ChatPanelProps) {
   const queryClient = useQueryClient();
   const openSourceDrawer = useSetAtom(isSourceDrawerOpenAtom);
   const { openLoginModal } = useGlobalModal();
@@ -60,12 +66,38 @@ export function ChatPanel() {
   const activeAssistantMessageIdRef = useRef<string | null>(null);
   const lastSubmittedMessageRef = useRef<string | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const conversationCreatedFromStreamRef = useRef(false);
 
   useEffect(() => {
     return () => {
       abortControllerRef.current?.abort();
     };
   }, []);
+
+  useEffect(() => {
+    if (conversationCreatedFromStreamRef.current) {
+      conversationCreatedFromStreamRef.current = false;
+      return;
+    }
+
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = null;
+    setMessages([]);
+    setConversationId(activeConversationId);
+    setResponseStatus("idle");
+    setIsStreaming(false);
+    setErrorMessage(null);
+    setFailedRequestMessage(null);
+    activeAssistantMessageIdRef.current = null;
+    pendingUserMessageIdRef.current = null;
+    setActiveAssistantMessageId(null);
+
+    if (!activeConversationId) return;
+
+    void getConversationMessages(activeConversationId).then((loaded) => {
+      setMessages(loaded);
+    });
+  }, [activeConversationId]);
 
   const handleSendMessage = (message: string) => {
     if (isStreaming) {
@@ -150,6 +182,10 @@ export function ChatPanel() {
     switch (event.type) {
       case "conversation.created":
         setConversationId(event.conversationId);
+        if (event.created) {
+          conversationCreatedFromStreamRef.current = true;
+          onConversationCreated(event.conversationId);
+        }
         return;
       case "message.created":
         applyMessageCreated(event.message);

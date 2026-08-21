@@ -4,7 +4,11 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.domains.conversation.domain.enums import ConversationStatus
+from app.domains.conversation.domain.enums import (
+    ConversationStatus,
+    MessageRole,
+    MessageStatus,
+)
 
 
 class CreateConversationRequest(BaseModel):
@@ -43,5 +47,28 @@ class ConversationListResponse(BaseModel):
     """대화방 목록 HTTP 응답 Schema입니다."""
 
     conversations: list[ConversationResponse]
+    limit: int
+    offset: int
+
+
+class MessageResponse(BaseModel):
+    """메시지 HTTP 응답 Schema입니다."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    conversation_id: UUID
+    role: MessageRole
+    content: str
+    sequence_no: int
+    status: MessageStatus
+    metadata: dict[str, Any]
+    created_at: datetime
+
+
+class MessageListResponse(BaseModel):
+    """메시지 목록 HTTP 응답 Schema입니다."""
+
+    messages: list[MessageResponse]
     limit: int
     offset: int

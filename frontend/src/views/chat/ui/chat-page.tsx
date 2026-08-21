@@ -1,16 +1,26 @@
 "use client";
 
+import { useState } from "react";
 import styled from "styled-components";
 import { ChatPanel } from "@/widgets/chat/ui/chat-panel";
 import { ChatSidebar } from "@/widgets/chat-sidebar/ui/chat-sidebar";
 import { SourceDrawer } from "@/widgets/source-drawer/ui/source-drawer";
 
 export function ChatPage() {
+  const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
+
   return (
     <Shell>
       <Workspace>
-        <ChatSidebar />
-        <ChatPanel />
+        <ChatSidebar
+          activeConversationId={activeConversationId}
+          onSelectConversation={setActiveConversationId}
+          onNewChat={() => setActiveConversationId(null)}
+        />
+        <ChatPanel
+          activeConversationId={activeConversationId}
+          onConversationCreated={setActiveConversationId}
+        />
         <SourceDrawer />
       </Workspace>
     </Shell>

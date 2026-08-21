@@ -3,8 +3,12 @@ from datetime import datetime
 from typing import Any, Self
 from uuid import UUID
 
-from app.domains.conversation.domain.entities import Conversation
-from app.domains.conversation.domain.enums import ConversationStatus
+from app.domains.conversation.domain.entities import Conversation, Message
+from app.domains.conversation.domain.enums import (
+    ConversationStatus,
+    MessageRole,
+    MessageStatus,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -90,4 +94,53 @@ class ConversationResultDto:
             created_at=conversation.created_at,
             updated_at=conversation.updated_at,
             deleted_at=conversation.deleted_at,
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class ListConversationMessagesQuery:
+    """대화방 메시지 목록 조회 Service 입력 DTO입니다."""
+
+    conversation_id: UUID
+    user_profile_id: UUID
+    limit: int = 100
+    offset: int = 0
+
+    def __post_init__(self) -> None:
+        if self.limit < 1 or self.limit > 200:
+            raise ValueError("limit은 1 이상 200 이하이어야 합니다.")
+
+        if self.offset < 0:
+            raise ValueError("offset은 0 이상이어야 합니다.")
+
+
+@dataclass(frozen=True, slots=True)
+class MessageResultDto:
+    """Service가 Controller에 반환하는 메시지 결과 DTO입니다."""
+
+    id: UUID
+    conversation_id: UUID
+    role: MessageRole
+    content: str
+    sequence_no: int
+    status: MessageStatus
+    metadata: dict[str, Any]
+    created_at: datetime
+
+    @classmethod
+    def from_entity(
+        cls,
+        message: Message,
+    ) -> "MessageResultDto":
+        """Domain Entity를 Service 결과 DTO로 변환합니다."""
+
+        return cls(
+            id=message.id,
+            conversation_id=message.conversation_id,
+            role=message.role,
+            content=message.content,
+            sequence_no=message.sequence_no,
+            status=message.status,
+            metadata=dict(message.metadata),
+            created_at=message.created_at,
         )

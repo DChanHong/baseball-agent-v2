@@ -36,7 +36,13 @@ function getSidebarBreakpointServerSnapshot() {
   return true;
 }
 
-export function ChatSidebar() {
+type ChatSidebarProps = {
+  activeConversationId: string | null;
+  onSelectConversation: (id: string) => void;
+  onNewChat: () => void;
+};
+
+export function ChatSidebar({ activeConversationId, onSelectConversation, onNewChat }: ChatSidebarProps) {
   const { openLoginModal, openProfileModal } = useGlobalModal();
   const { data: user, isLoading: isCheckingAuth } = useCurrentUser();
   const logoutMutation = useLogout();
@@ -51,7 +57,6 @@ export function ChatSidebar() {
     getSidebarBreakpointServerSnapshot,
   );
   const [userCollapsedState, setUserCollapsedState] = useState<boolean | null>(null);
-  const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [isAccountPanelOpen, setIsAccountPanelOpen] = useState(false);
   const sessionListRef = useRef<HTMLUListElement>(null);
   const accountRef = useRef<HTMLDivElement>(null);
@@ -84,27 +89,13 @@ export function ChatSidebar() {
     };
   }, [isAccountPanelOpen]);
 
-  useEffect(() => {
-    if (!user) {
-      setActiveSessionId(null);
-      return;
-    }
-
-    if (
-      activeSessionId &&
-      !conversationSummaries.some((conversation) => conversation.id === activeSessionId)
-    ) {
-      setActiveSessionId(null);
-    }
-  }, [activeSessionId, conversationSummaries, user]);
-
   function startNewChat() {
-    setActiveSessionId(null);
+    onNewChat();
     closeOnCompactPhone();
   }
 
   function selectSession(sessionId: string) {
-    setActiveSessionId(sessionId);
+    onSelectConversation(sessionId);
     closeOnCompactPhone();
   }
 
@@ -252,7 +243,7 @@ export function ChatSidebar() {
                         >
                           <SessionButton
                             type="button"
-                            $isActive={conversation.id === activeSessionId}
+                            $isActive={conversation.id === activeConversationId}
                             onClick={() => selectSession(conversation.id)}
                           >
                             <MessageSquare aria-hidden="true" size={16} />

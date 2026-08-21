@@ -59,6 +59,7 @@ from app.domains.conversation.infrastructure.repositories import (
 )
 from app.domains.conversation.service.services import (
     CreateConversationService,
+    ListConversationMessagesService,
     ListConversationsService,
 )
 
@@ -90,6 +91,20 @@ def get_list_conversations_service(
     repository = SqlAlchemyConversationRepository(session)
 
     return ListConversationsService(repository=repository)
+
+
+def get_list_conversation_messages_service(
+    session: DatabaseSession,
+) -> ListConversationMessagesService:
+    """대화방 메시지 목록 조회 유스케이스에 필요한 의존성을 조립합니다."""
+
+    conversation_repository = SqlAlchemyConversationRepository(session)
+    message_repository = SqlAlchemyMessageRepository(session)
+
+    return ListConversationMessagesService(
+        conversation_repository=conversation_repository,
+        message_repository=message_repository,
+    )
 
 
 def get_auth_redirect_service() -> AuthRedirectService:
