@@ -366,4 +366,4 @@ frontend/src/
 - sidebar는 데스크톱 고정 영역, 모바일 overlay drawer로 동작한다.
 - 좌석 추천 UI는 MVP에서 제외한다.
 - Tool 결과는 답변 아래 compact card로 표시한다.
-- 출처와 기준 시점은 Source Drawer로 분리한다 (현재 UI 구현, 데이터 연결 미완).
+- 출처와 기준 시점은 Source Drawer로 분리한다 (현재 UI placeholder 구현, 데이터 연결은 MVP1 제외 → 스펙업으로 이동).

@@ -332,6 +332,7 @@ MVP1의 assistant 답변은 아직 최종 LLM 답변 품질을 목표로 하지 
 - 운영용 observability dashboard
 - LLM이 여러 Tool을 반복 호출하며 계획을 수정하는 Agent loop
 - 대화 이름 변경/삭제/검색 같은 대화 관리 고급 기능
+- Source Drawer 실제 데이터 연결 (출처/기준 시점/한계 표시) → 스펙업으로 이동
 
 ### 4.6 MVP1 완료/진행 상태
 
@@ -357,11 +358,11 @@ conversation 목록 API와 sidebar 목록 조회 연결
 남은 MVP1 연결 항목:
 
 ```text
-관련 문서의 MVP1 인증 정책을 authenticated-first 기준으로 정렬
-sidebar conversation 선택과 ChatPanel conversation_id/messages 상태 연결
-GET /api/v1/conversations/{conversation_id}/messages API 또는 동등한 메시지 복원 경로 추가
-새 채팅 버튼이 ChatPanel의 현재 conversation/message state를 초기화하도록 연결
-Source Drawer에 실제 sources/limitations 또는 Tool result 근거 연결
+[완료] 관련 문서의 MVP1 인증 정책을 authenticated-first 기준으로 정렬
+[완료] sidebar conversation 선택과 ChatPanel conversation_id/messages 상태 연결
+[완료] GET /api/v1/conversations/{conversation_id}/messages API 또는 동등한 메시지 복원 경로 추가
+[완료] 새 채팅 버튼이 ChatPanel의 현재 conversation/message state를 초기화하도록 연결
+[MVP1 제외 → 스펙업] Source Drawer에 실제 sources/limitations 또는 Tool result 근거 연결
 수동 MVP 시나리오 검증
 ```
 

@@ -132,20 +132,9 @@ uv run pytest tests/api
 - 이어서 질문하면 같은 `conversation_id`로 `/api/v1/chat` 요청이 나간다.
 - 새 채팅을 누르면 빈 채팅 화면에서 새 conversation을 시작한다.
 
-### 3순위: Source Drawer 실제 데이터 연결
+### ~~3순위: Source Drawer 실제 데이터 연결~~ → MVP1 제외, 스펙업으로 이동 (2026-08-21)
 
-현재 source drawer는 UI placeholder이고, Tool result card에는 일부 근거가 표시된다.
-
-작업 후보:
-
-- `assistant.completed.sources` 또는 Tool result의 source/as_of/limitations를 drawer state로 모은다.
-- RAG Tool 결과는 문서 제목, 출처 URL, 기준 시점, limitation을 drawer에 표시한다.
-- 정형 Tool 결과는 source_name/source_url/source_collected_at이 있으면 같이 표시한다.
-
-완료 기준:
-
-- 대표 RAG 질문에서 drawer를 열면 실제 출처와 기준 시점을 확인할 수 있다.
-- 결과 없음 또는 외부 API 한계가 limitation으로 표시된다.
+채팅 흐름 완성을 우선하기로 결정. Source Drawer UI placeholder는 남겨두되, 실제 데이터 연결은 MVP1 범위에서 제외한다.
 
 ### 4순위: MVP 수동 QA
 
