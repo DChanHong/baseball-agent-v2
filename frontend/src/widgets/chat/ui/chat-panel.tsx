@@ -57,6 +57,7 @@ export function ChatPanel({ activeConversationId, onConversationCreated }: ChatP
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [responseStatus, setResponseStatus] = useState<ResponseStatus>("idle");
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [failedRequestMessage, setFailedRequestMessage] = useState<string | null>(null);
@@ -88,15 +89,20 @@ export function ChatPanel({ activeConversationId, onConversationCreated }: ChatP
     setIsStreaming(false);
     setErrorMessage(null);
     setFailedRequestMessage(null);
+    setIsLoadingHistory(activeConversationId !== null);
     activeAssistantMessageIdRef.current = null;
     pendingUserMessageIdRef.current = null;
     setActiveAssistantMessageId(null);
 
     if (!activeConversationId) return;
 
-    void getConversationMessages(activeConversationId).then((loaded) => {
-      setMessages(loaded);
-    });
+    void getConversationMessages(activeConversationId)
+      .then((loaded) => {
+        setMessages(loaded);
+      })
+      .finally(() => {
+        setIsLoadingHistory(false);
+      });
   }, [activeConversationId]);
 
   const handleSendMessage = (message: string) => {
@@ -436,8 +442,26 @@ export function ChatPanel({ activeConversationId, onConversationCreated }: ChatP
   };
 
   return (
-    <Panel $hasMessages={hasMessages}>
-      {hasMessages ? (
+    <Panel $hasMessages={hasMessages || isLoadingHistory}>
+      {isLoadingHistory ? (
+        <ChatWorkspace>
+          <SkeletonMessageList aria-busy="true" aria-label="대화 불러오는 중">
+            <SkeletonBubble $role="user" $width="38%" />
+            <SkeletonBubble $role="assistant" $width="72%" />
+            <SkeletonBubble $role="assistant" $width="55%" />
+            <SkeletonBubble $role="user" $width="28%" />
+            <SkeletonBubble $role="assistant" $width="80%" />
+          </SkeletonMessageList>
+          <Dock>
+            <ChatComposer disabled showSuggestions={false} onSendMessage={handleSendMessage} />
+            <FooterActions>
+              <Button type="button" variant="ghost" onClick={() => openSourceDrawer(true)}>
+                출처 패널 열기
+              </Button>
+            </FooterActions>
+          </Dock>
+        </ChatWorkspace>
+      ) : hasMessages ? (
         <ChatWorkspace>
           <MessageList aria-live="polite">
             {messages.map((message) => (
@@ -613,6 +637,34 @@ const StatusBadge = styled.span<{ $status: ResponseStatus }>`
   font-size: 12px;
   font-weight: 850;
   white-space: nowrap;
+`;
+
+const SkeletonMessageList = styled.div`
+  display: flex;
+  overflow-y: auto;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 0;
+  padding: 28px 0 18px;
+`;
+
+const SkeletonBubble = styled.div<{ $role: "user" | "assistant"; $width: string }>`
+  align-self: ${({ $role }) => ($role === "user" ? "flex-end" : "flex-start")};
+  width: ${({ $width }) => $width};
+  height: 44px;
+  border-radius: ${({ theme }) => theme.radius.md};
+  background: ${({ theme }) => theme.color.panelAlt};
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+
+  @keyframes skeleton-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
+  }
 `;
 
 const MessageList = styled.div`
