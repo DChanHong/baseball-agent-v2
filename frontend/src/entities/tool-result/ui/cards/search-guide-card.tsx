@@ -5,14 +5,17 @@ import type { ToolResult } from "@/entities/tool-result/model/types";
 import {
   EvidenceItem,
   EvidenceList,
+  EvidenceMeta,
   EvidenceText,
   EvidenceTitle,
   Summary,
   ToolCardShell,
 } from "@/entities/tool-result/ui/cards/tool-card-shell";
+import { SourceDisclosure } from "@/entities/tool-result/ui/cards/source-disclosure";
 import {
+  arrayValue,
+  displayValue,
   firstObjectItems,
-  joinedStrings,
   objectValue,
   stringValue,
 } from "@/entities/tool-result/ui/cards/tool-card-utils";
@@ -35,13 +38,31 @@ export function SearchGuideCard({ result }: Props) {
       </Summary>
       <EvidenceList>
         {items.map((item) => (
-          <EvidenceItem key={stringValue(item.chunk_id, stringValue(item.document_id))}>
-            <EvidenceTitle>{stringValue(item.title)}</EvidenceTitle>
-            <EvidenceText>{stringValue(item.content)}</EvidenceText>
-            <EvidenceText>{joinedStrings(item.source_urls)}</EvidenceText>
-          </EvidenceItem>
+          <GuideEvidenceItem key={stringValue(item.chunk_id, stringValue(item.document_id))} item={item} />
         ))}
       </EvidenceList>
     </ToolCardShell>
+  );
+}
+
+type GuideEvidenceItemProps = {
+  item: Record<string, unknown>;
+};
+
+function GuideEvidenceItem({ item }: GuideEvidenceItemProps) {
+  const sources = arrayValue(item.source_urls).filter(
+    (source): source is string => typeof source === "string" && Boolean(source.trim()),
+  );
+
+  return (
+    <EvidenceItem>
+      <EvidenceTitle>{displayValue(item.title, "관련 안내")}</EvidenceTitle>
+      <EvidenceText>{displayValue(item.content)}</EvidenceText>
+      {sources.length > 0 ? (
+        <EvidenceMeta>
+          <SourceDisclosure sources={sources} />
+        </EvidenceMeta>
+      ) : null}
+    </EvidenceItem>
   );
 }

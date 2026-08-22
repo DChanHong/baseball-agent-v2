@@ -11,6 +11,7 @@ import {
   Value,
 } from "@/entities/tool-result/ui/cards/tool-card-shell";
 import {
+  displayValue,
   joinedStrings,
   numberValue,
   objectValue,
@@ -51,19 +52,27 @@ export function WeatherContextCard({ result }: Props) {
       <DataGrid>
         <DataItem>
           <Label>기온</Label>
-          <Value>{temperature === null ? "-" : `${temperature}°C`}</Value>
+          <Value>{temperature === null ? "정보 없음" : `${temperature}°C`}</Value>
         </DataItem>
         <DataItem>
           <Label>강수 확률</Label>
-          <Value>{rainProbability === null ? "-" : `${rainProbability}%`}</Value>
+          <Value>{rainProbability === null ? "정보 없음" : `${rainProbability}%`}</Value>
         </DataItem>
         <DataItem>
           <Label>강수량</Label>
-          <Value>{stringValue(weather?.precipitation_mm)}mm</Value>
+          <Value>
+            {weather?.precipitation_mm === null || weather?.precipitation_mm === undefined
+              ? "정보 없음"
+              : `${displayValue(weather.precipitation_mm)}mm`}
+          </Value>
         </DataItem>
         <DataItem>
           <Label>습도</Label>
-          <Value>{stringValue(weather?.humidity_percent)}%</Value>
+          <Value>
+            {weather?.humidity_percent === null || weather?.humidity_percent === undefined
+              ? "정보 없음"
+              : `${displayValue(weather.humidity_percent)}%`}
+          </Value>
         </DataItem>
       </DataGrid>
       <Summary>{joinedStrings(visitCondition?.tips, "준비 팁은 추가 확인이 필요합니다.")}</Summary>

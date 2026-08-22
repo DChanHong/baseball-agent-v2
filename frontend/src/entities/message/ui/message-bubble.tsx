@@ -44,22 +44,25 @@ export function MessageBubble({ message, isStreaming = false }: MessageBubblePro
 const Bubble = styled.article<{ $isUser: boolean }>`
   width: min(100%, ${({ $isUser }) => ($isUser ? "720px" : "820px")});
   margin-left: ${({ $isUser }) => ($isUser ? "auto" : 0)};
-  border: 1px solid ${({ theme, $isUser }) => ($isUser ? theme.color.primary : theme.color.border)};
+  border: 1px solid ${({ theme, $isUser }) => ($isUser ? theme.color.primary : "transparent")};
   border-radius: ${({ theme }) => theme.radius.md};
-  padding: 16px;
-  background: ${({ theme, $isUser }) => ($isUser ? "#edf7f0" : theme.color.panel)};
+  padding: ${({ $isUser }) => ($isUser ? "13px 15px" : "2px 0")};
+  background: ${({ $isUser }) => ($isUser ? "#edf7f0" : "transparent")};
 `;
 
 const Body = styled.p`
   margin: 0;
-  line-height: 1.7;
+  color: ${({ theme }) => theme.color.foreground};
+  font-size: 15px;
+  line-height: 1.78;
   white-space: pre-wrap;
+  word-break: keep-all;
 `;
 
 const ToolList = styled.div`
   display: grid;
-  gap: 10px;
-  margin-top: 14px;
+  gap: 12px;
+  margin-top: 12px;
 
   &:first-child {
     margin-top: 0;
