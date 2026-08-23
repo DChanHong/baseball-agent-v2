@@ -2,12 +2,12 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useAtom } from "jotai";
-import { ArrowUp, Armchair, CloudSun, Sparkles, Ticket } from "lucide-react";
+import { ArrowUp, BookOpenText, CalendarDays, CloudSun, MapPinned, Sparkles } from "lucide-react";
 import { useRef, useState, type ReactNode } from "react";
 import styled from "styled-components";
 import { chatInputAtom } from "@/features/send-message/model/chat-input.atom";
 
-type SuggestionCategory = "seat" | "ticket" | "weather";
+type SuggestionCategory = "schedule" | "stadium" | "weather" | "rules";
 
 type ChatComposerProps = {
   disabled?: boolean;
@@ -16,20 +16,25 @@ type ChatComposerProps = {
 };
 
 const commandSuggestions: Record<SuggestionCategory, string[]> = {
-  seat: [
-    "잠실에서 LG 응원하기 좋은 좌석 추천해줘",
-    "사직구장 처음 가는데 시야 좋은 좌석 비교해줘",
-    "비 오는 날 고척돔 말고 야외 구장은 어디 앉는 게 좋아?",
+  schedule: [
+    "이번 주말 LG 경기 일정 알려줘",
+    "오늘 잠실에서 열리는 KBO 경기 있어?",
+    "다음 한화 홈경기 일정 알려줘",
   ],
-  ticket: [
-    "이번 주말 롯데 홈경기 예매 방법 알려줘",
-    "두산 원정석 예매할 때 공식 링크와 주의사항 알려줘",
-    "KBO 경기 예매 오픈 전에 준비할 체크리스트 만들어줘",
+  stadium: [
+    "잠실구장 기본 정보 알려줘",
+    "사직구장 처음 가는데 반입이랑 교통 팁 알려줘",
+    "고척돔은 돔구장인지 알려줘",
   ],
   weather: [
     "내일 문학구장 날씨 기준으로 준비물 알려줘",
-    "대구 원정 가는데 더위 피할 좌석과 이동 팁 알려줘",
-    "비 예보가 있을 때 취소 가능성과 좌석 선택 기준 알려줘",
+    "오늘 대구 구장 날씨 어때?",
+    "비 예보가 있을 때 야구장 갈 때 뭘 챙기면 좋아?",
+  ],
+  rules: [
+    "ABS가 뭐야?",
+    "우천취소는 보통 어떻게 결정돼?",
+    "KBO 연장전 규칙 알려줘",
   ],
 };
 
@@ -41,20 +46,25 @@ const categoryMeta: Record<
     title: string;
   }
 > = {
-  seat: {
-    icon: <Armchair size={20} />,
-    label: "좌석 추천",
-    title: "좌석 추천 질문",
+  schedule: {
+    icon: <CalendarDays size={20} />,
+    label: "경기 일정",
+    title: "경기 일정 질문",
   },
-  ticket: {
-    icon: <Ticket size={20} />,
-    label: "예매 안내",
-    title: "예매 안내 질문",
+  stadium: {
+    icon: <MapPinned size={20} />,
+    label: "구장 정보",
+    title: "구장 정보 질문",
   },
   weather: {
     icon: <CloudSun size={20} />,
-    label: "날씨 판단",
-    title: "날씨 기반 질문",
+    label: "날씨",
+    title: "날씨 질문",
+  },
+  rules: {
+    icon: <BookOpenText size={20} />,
+    label: "야구 규칙",
+    title: "야구 규칙 질문",
   },
 };
 
@@ -154,7 +164,7 @@ export function ChatComposer({
           <Input
             ref={inputRef}
             rows={1}
-            placeholder="ChatGPT에게 물어보세요"
+            placeholder="KBO 야구를 질문해보세요"
             value={value}
             disabled={disabled}
             onChange={(event) => {
@@ -298,13 +308,13 @@ const SendButton = styled.button<{ $disabled: boolean }>`
 
 const CommandGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
-  width: min(100%, 760px);
+  width: min(100%, 860px);
   pointer-events: auto;
 
   @media (max-width: 560px) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
   }
 `;
@@ -342,7 +352,7 @@ const CommandButton = styled.button<{ $active: boolean }>`
 `;
 
 const SuggestionWrap = styled(motion.div)`
-  width: min(100%, 760px);
+  width: min(100%, 860px);
   overflow: hidden;
   pointer-events: auto;
 `;

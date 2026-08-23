@@ -118,12 +118,12 @@
 - [확인됨] 메시지가 없으면 hero 형태로 표시된다.
 - 구성:
   - animated baseball logo
-  - `KBO Agent` eyebrow
-  - `오늘의 직관 판단을 한 번에 끝내세요` heading
-  - 경기 일정, 구장 정보, 날씨, 좌석 추천, 예매 가이드 설명
-  - `ChatComposer`
-  - `출처 패널 열기`
+  - `KBO Mate` eyebrow
+  - `KBO 야구, 무엇이 궁금하세요?` heading
+  - `경기 일정, 구장 정보, 날씨, 야구 규칙까지 궁금한 KBO 이야기를 질문해보세요.` description
+  - fixed floating `ChatComposer`
 - [확인됨] hero width는 `min(100%, 820px)`이다.
+- [변경됨] `출처 패널 열기`는 베타에서 제거됐다.
 
 ### 5.5 Chat Active State
 
@@ -155,15 +155,17 @@
 
 - [확인됨] `frontend/src/features/send-message/ui/chat-composer.tsx`
 - 입력:
-  - text input
+  - textarea
   - Enter 전송
+  - Shift+Enter 줄바꿈
   - disabled 상태에서는 전송 차단
 - action:
   - 전송 icon button
 - suggestion category:
-  - 좌석 추천
-  - 예매 안내
-  - 날씨 판단
+  - 경기 일정
+  - 구장 정보
+  - 날씨
+  - 야구 규칙
 - [확인됨] category 선택 시 질문 예시 목록이 펼쳐지고, 클릭하면 input에 채워진다.
 - [확인됨] 1차 composer 범위는 `입력창`, `전송 버튼`, `질문 예시`만 포함한다.
 - [확인됨] `일정 검색`, `원정 조사`, `추천 근거` 모드 토글은 제거됐다.

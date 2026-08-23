@@ -494,12 +494,11 @@ export function ChatPanel({ activeConversationId, onConversationCreated }: ChatP
           <Copy>
             <Eyebrow>
               <Sparkles size={15} />
-              KBO Agent
+              KBO Mate
             </Eyebrow>
-            <Heading>오늘의 직관 판단을 한 번에 끝내세요</Heading>
+            <Heading>KBO 야구, 무엇이 궁금하세요?</Heading>
             <Description>
-              경기 일정, 구장 정보, 날씨, 좌석 추천, 예매 가이드를 출처와 기준 시점까지 함께
-              확인합니다.
+              경기 일정, 구장 정보, 날씨, 야구 규칙까지 궁금한 KBO 이야기를 질문해보세요.
             </Description>
           </Copy>
           <ChatComposer
