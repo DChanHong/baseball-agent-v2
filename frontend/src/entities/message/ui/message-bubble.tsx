@@ -20,34 +20,82 @@ export function MessageBubble({ message, isStreaming = false }: MessageBubblePro
     return null;
   }
 
+  if (!isUser) {
+    return (
+      <AssistantFrame>
+        <AssistantProfile>
+          <AssistantLogo src="/brand/flaming-baseball-logo.webp" alt="" />
+          <AssistantName>KBO Mate</AssistantName>
+        </AssistantProfile>
+        <AssistantCard>
+          {hasContent ? <Body>{message.content}</Body> : null}
+          {shouldShowTyping ? (
+            <TypingIndicator $hasFollowingContent={hasToolResults} aria-label="답변 작성 중">
+              <TypingDot />
+              <TypingDot />
+              <TypingDot />
+            </TypingIndicator>
+          ) : null}
+          {hasToolResults ? (
+            <ToolList>
+              {toolResults.map((result) => (
+                <ToolResultCard key={result.id} result={result} />
+              ))}
+            </ToolList>
+          ) : null}
+        </AssistantCard>
+      </AssistantFrame>
+    );
+  }
+
   return (
-    <Bubble $isUser={isUser}>
+    <Bubble>
       {hasContent ? <Body>{message.content}</Body> : null}
-      {shouldShowTyping ? (
-        <TypingIndicator $hasFollowingContent={hasToolResults} aria-label="답변 작성 중">
-          <TypingDot />
-          <TypingDot />
-          <TypingDot />
-        </TypingIndicator>
-      ) : null}
-      {hasToolResults ? (
-        <ToolList>
-          {toolResults.map((result) => (
-            <ToolResultCard key={result.id} result={result} />
-          ))}
-        </ToolList>
-      ) : null}
     </Bubble>
   );
 }
 
-const Bubble = styled.article<{ $isUser: boolean }>`
-  width: min(100%, ${({ $isUser }) => ($isUser ? "720px" : "820px")});
-  margin-left: ${({ $isUser }) => ($isUser ? "auto" : 0)};
-  border: 1px solid ${({ theme, $isUser }) => ($isUser ? theme.color.primary : "transparent")};
+const Bubble = styled.article`
+  width: min(100%, 720px);
+  margin-left: auto;
+  border: 1px solid ${({ theme }) => theme.color.primary};
   border-radius: ${({ theme }) => theme.radius.md};
-  padding: ${({ $isUser }) => ($isUser ? "13px 15px" : "2px 0")};
-  background: ${({ $isUser }) => ($isUser ? "#edf7f0" : "transparent")};
+  padding: 13px 15px;
+  background: #edf7f0;
+`;
+
+const AssistantFrame = styled.article`
+  display: grid;
+  gap: 8px;
+  width: min(100%, 820px);
+`;
+
+const AssistantProfile = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  color: ${({ theme }) => theme.color.foreground};
+`;
+
+const AssistantLogo = styled.img`
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+`;
+
+const AssistantName = styled.span`
+  color: ${({ theme }) => theme.color.foreground};
+  font-size: 15px;
+  font-weight: 900;
+`;
+
+const AssistantCard = styled.div`
+  border: 1px solid ${({ theme }) => theme.color.border};
+  border-radius: ${({ theme }) => theme.radius.md};
+  padding: 15px 16px;
+  background: ${({ theme }) => theme.color.panel};
+  box-shadow: 0 8px 26px rgba(18, 32, 25, 0.05);
 `;
 
 const Body = styled.p`

@@ -251,7 +251,7 @@ const Input = styled.textarea`
   max-height: 128px;
   border: 0;
   outline: 0;
-  padding: 7px 0;
+  padding: 11px 4px 11px 0;
   resize: none;
   background: transparent;
   color: ${({ theme }) => theme.color.foreground};
@@ -265,6 +265,10 @@ const Input = styled.textarea`
 
   &:disabled {
     cursor: wait;
+  }
+
+  @media (max-width: 560px) {
+    padding: 9px 3px 9px 0;
   }
 `;
 
