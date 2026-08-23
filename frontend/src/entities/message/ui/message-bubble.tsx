@@ -58,10 +58,11 @@ export function MessageBubble({ message, isStreaming = false }: MessageBubblePro
 const Bubble = styled.article`
   width: min(100%, 720px);
   margin-left: auto;
-  border: 1px solid ${({ theme }) => theme.color.primary};
+  border: 1px solid #d8dadd;
   border-radius: ${({ theme }) => theme.radius.md};
   padding: 13px 15px;
-  background: #edf7f0;
+  background: #f4f5f6;
+  color: #111111;
 `;
 
 const AssistantFrame = styled.article`
@@ -100,7 +101,7 @@ const AssistantCard = styled.div`
 
 const Body = styled.p`
   margin: 0;
-  color: ${({ theme }) => theme.color.foreground};
+  color: inherit;
   font-size: 15px;
   line-height: 1.78;
   white-space: pre-wrap;
