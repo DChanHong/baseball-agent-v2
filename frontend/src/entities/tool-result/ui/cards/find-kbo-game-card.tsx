@@ -30,14 +30,14 @@ type Props = {
 
 export function FindKboGameCard({ result }: Props) {
   const payload = objectValue(result.result);
-  const games = firstObjectItems(payload?.games, 2);
+  const games = firstObjectItems(payload?.games);
   const total = stringValue(payload?.total, "0");
 
   return (
     <ToolCardShell icon={<CalendarDays size={18} />} title="경기 일정" status={result.status}>
       <Summary>{Number(total) > 0 ? `조건에 맞는 경기 ${total}건입니다.` : "조건에 맞는 경기가 없습니다."}</Summary>
-      {games.map((game) => (
-        <GameBlock key={stringValue(game.internal_game_key, stringValue(game.id))}>
+      {games.map((game, index) => (
+        <GameBlock key={`${stringValue(game.internal_game_key, stringValue(game.id))}_${index}`}>
           <Highlight>
             <HighlightTitle>
               {displayValue(game.away_team_name)} vs {displayValue(game.home_team_name)}

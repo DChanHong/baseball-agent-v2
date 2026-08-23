@@ -7,12 +7,12 @@
 ## 2. 현재 구현 범위
 
 - [확인됨] 프론트엔드는 `frontend/`의 Next.js App Router 단일 페이지 앱이다. 라우트 진입점은 `frontend/src/app/page.tsx`이고 실제 화면은 `frontend/src/views/chat/ui/chat-page.tsx`가 조립한다.
-- [확인됨] 현재 최상위 화면 구조는 `ChatSidebar`, `ChatPanel`, `SourceDrawer`, `LoginModal`, `ProfileModal`이다.
-- [확인됨] 현재 구현된 전역 레이아웃은 통합 좌측 sidebar, 중앙 채팅 패널, 우측 SourceDrawer 중심이다.
+- [확인됨] 현재 최상위 화면 구조는 `ChatSidebar`, `ChatPanel`, `GlobalModal`이다.
+- [확인됨] 현재 구현된 전역 레이아웃은 통합 좌측 sidebar와 중앙 채팅 패널 중심이다.
 - [확인됨] 2026-08-12 layout 개선에서 fixed `AppHeader`를 완전히 제거하고, 로고/브랜드/로그인/계정 진입점을 `ChatSidebar`로 통합했다.
 - [사용자 결정] 사이드바 디자인은 Manus 캡처를 벤치마킹하되, 버튼과 기능 구성을 그대로 복제하지 않는다.
-- [확인됨] 우측 출처 패널은 `SourceDrawer`로 존재하지만, 실제 출처 데이터와 연결되지 않은 빈 상태 안내 문구만 표시한다.
-- [확인됨] 로그인/프로필은 Jotai atom으로 열고 닫는 모달 UI만 존재하며, 저장/인증 API 연동은 없다.
+- [사용자 결정] `SourceDrawer` 코드와 atom은 추후 재사용 후보로 남기되, 베타에서는 호출부를 주석 처리해 비활성화한다.
+- [확인됨] 로그인/프로필은 Jotai atom으로 열고 닫는 모달 UI이며, Google 로그인/프로필 API 흐름과 연결되어 있다.
 - [확인됨] 채팅 입력은 실제 `/api/v1/chat` SSE 스트림 호출과 연결되어 있다.
 - [확인됨] tool 결과 렌더링은 `ToolResultCard`에서 completed 상태는 tool 이름별 카드 컴포넌트로 분기하고, running/failed 상태는 공통 `GenericToolCard`로 표시한다.
 
@@ -23,7 +23,7 @@
 - [확인됨] 로그인과 프로필 입력은 로컬 UI만 존재하며 실제 인증, 저장, 서버 동기화는 구현되어 있지 않다.
 - [확인됨] `ChatComposer`의 파일 추가, 음성 입력, 일정 검색/원정 조사/추천 근거 토글은 1차 UI에서 제거됐다.
 - [확인됨] UI 개선 1차 범위의 좌측 사이드바는 구현됐고, 2026-08-12 기준 세션 데이터는 실제 `GET /api/v1/conversations` 목록 API와 연결됐다.
-- [확인됨] 2026-08-12 기준 layout 개선 계획 중 header/sidebar 통합, conversation list API 연동, SourceDrawer top offset 제거까지 구현됐다.
+- [확인됨] 2026-08-12 이후 header/sidebar 통합과 conversation list API 연동이 구현됐다.
 - [사용자 결정] Manus의 `프로젝트` 섹션에 해당하는 별도 프로젝트/워크스페이스 기능은 이번 범위에 포함하지 않는다.
 
 ## 4. 사용자 흐름
@@ -36,8 +36,7 @@
 6. 첫 메시지 전송 후 화면은 메시지 리스트 + 하단 composer dock 구조로 전환된다.
 7. 프론트엔드는 guest id와 conversation id를 localStorage 기반으로 관리한다.
 8. 프론트엔드는 `POST /api/v1/chat` SSE 스트림을 읽고 message/tool/assistant 이벤트를 화면 상태에 반영한다.
-9. 사용자는 `출처 패널 열기` 버튼으로 우측 drawer를 열 수 있다.
-10. 사용자는 사이드바 하단의 로그인/계정 바에서 로그인 모달 또는 계정 패널을 연다.
+9. 사용자는 사이드바 하단의 로그인/계정 바에서 로그인 모달 또는 계정 패널을 연다.
 
 ## 5. 화면/UI 스펙
 
@@ -49,12 +48,11 @@
   - `Workspace`: `min-height: 100vh`
   - `ChatSidebar`
   - `ChatPanel`
-  - `SourceDrawer`
-  - `LoginModal`
-  - `ProfileModal`
+  - `GlobalModal`
 - [확인됨] 이전 구현의 헤더는 fixed top bar였고, 높이 기준 72px가 여러 컴포넌트에서 반복 사용됐다.
 - [확인됨] 2026-08-12 개선에서 `AppHeader`를 제거했다.
-- [확인됨] 개선 후 최상위 구조는 `ChatSidebar`, `ChatPanel`, `SourceDrawer`, `LoginModal`, `ProfileModal` 중심으로 단순화됐다.
+- [확인됨] 개선 후 최상위 구조는 `ChatSidebar`, `ChatPanel`, `GlobalModal` 중심으로 단순화됐다.
+- [사용자 결정] `SourceDrawer`는 삭제하지 않고 `ChatPage` 호출부 주석으로 비활성화한다.
 - [확인됨] `Shell`의 `padding-top: 72px`와 `Workspace`의 `calc(100vh - 72px)` 의존성을 제거했다.
 - [확인됨] desktop에서는 좌측 통합 sidebar가 전체 높이를 차지하고, main chat은 남은 영역을 사용한다.
 - [확인됨] mobile에서는 별도 상단 header를 두지 않고 floating menu button으로 off-canvas sidebar를 연다.
@@ -132,13 +130,11 @@
   - scrollable `MessageList`
   - 하단 `Dock`
   - dock 안의 `ChatComposer`
-  - `출처 패널 열기`
-  - 우측 하단 `작업 내역` 버튼과 activity panel
 - [확인됨] active workspace width는 `min(100%, 920px)`이다.
 - [확인됨] 메시지 리스트는 `aria-live="polite"`를 사용한다.
 - [사용자 결정] 개선 후 채팅창 상단에는 현재 대화 제목/상태 바를 두는 안을 검토했으나, 2026-08-10 구현에서는 최신 user message 아래 inline status bar를 제거하고 assistant bubble 내부 상태 표현으로 흡수했다.
 - [확인됨] 응답 상태는 기본 상태뿐 아니라 tool별 구체 상태도 내부 state로 관리한다.
-- [확인됨] 진행 상태는 assistant bubble 안의 typing indicator, tool card, 우측 하단 작업 내역 패널로 표시한다.
+- [확인됨] 진행 상태는 assistant bubble 안의 typing indicator와 tool card로 표시한다.
 - [확인됨] 응답 상태 문구는 다음 1차 문구를 사용한다.
   - idle: `준비됨`
   - streaming: `답변 작성 중`
@@ -176,12 +172,13 @@
 ### 5.7 Message Bubble
 
 - [확인됨] `frontend/src/entities/message/ui/message-bubble.tsx`
-- [확인됨] user message는 오른쪽 정렬, primary border, 연녹색 배경이다.
-- [확인됨] assistant message는 왼쪽 정렬, panel 배경이다.
+- [확인됨] user message는 오른쪽 정렬, 회색 border, 연회색 배경, black 계열 text다.
+- [확인됨] assistant message는 왼쪽 정렬이며, 로고 아이콘과 `KBO Mate` 프로필 row를 먼저 표시한다.
+- [확인됨] assistant 답변 본문은 border와 white panel background를 가진 카드로 감싼다.
 - [확인됨] tool result가 있으면 message body 아래 `ToolResultCard` 목록으로 렌더링한다.
 - [확인됨] assistant content가 비어 있고 streaming 중이면 assistant bubble 안에 점 3개 typing indicator를 표시한다.
 - [확인됨] content, tool result, typing indicator가 모두 없으면 빈 assistant bubble을 렌더링하지 않는다.
-- [사용자 결정] assistant 응답의 상세 출처/주의사항은 SourceDrawer에서 모아 보여주고, 메시지 본문과 tool card는 핵심 흐름과 요약을 우선한다.
+- [사용자 결정] 베타에서는 assistant 상세 출처 패널을 열지 않고, tool card 내부 출처 링크만 유지한다.
 
 ### 5.8 Tool Result Cards
 
@@ -197,10 +194,10 @@
 - [확인됨] running/failed status는 `GenericToolCard`로 표시한다.
 - [확인됨] completed status는 tool 이름별 카드 컴포넌트로 표시한다.
 - [사용자 결정] tool result card는 답변 흐름 안에서 핵심 결과 요약을 보여주는 역할로 둔다.
-- [사용자 결정] 상세 출처, 기준 시점, 한계, 원문 링크 모아보기는 SourceDrawer가 담당한다.
+- [사용자 결정] 상세 출처 패널은 베타 이후 재검토하며, 베타에서는 tool card 내부 출처 링크를 유지한다.
 - [사용자 결정] completed tool card에는 핵심 결과 요약을 표시한다.
 - [사용자 결정] completed tool card에는 `툴 이름`, `완료 상태`, `핵심 결과 1~3줄`을 표시한다.
-- [사용자 결정] 상세한 출처, 기준 시점, 한계, 원문 링크는 completed tool card가 아니라 SourceDrawer에서 확인하게 한다.
+- [사용자 결정] completed tool card 내부 출처 링크는 유지하되, 별도 SourceDrawer 호출은 베타에서 비활성화한다.
 - [제안 후 승인] failed tool card에는 재시도 버튼을 넣지 않는다.
 - [제안 후 승인] failed tool card에는 실패 상태와 짧은 사용자 친화적 메시지만 표시한다.
 - [사용자 결정] tool card 공통 구조는 `헤더 + 본문`으로 한다.
@@ -213,28 +210,19 @@
 
 ### 5.8.1 작업 내역 패널
 
-- [확인됨] `ChatPanel` 우측 하단에 `작업 내역` 버튼을 표시한다.
-- [확인됨] tool result가 있거나 streaming/error 상태일 때 버튼에 dot indicator를 표시한다.
-- [확인됨] 버튼을 누르면 activity panel을 열고 tool name과 running/completed/failed 상태를 보여준다.
-- [확인됨] activity panel은 tool 상세 결과가 아니라 진행 내역 요약만 담당한다.
-- [확인 필요] 모바일 composer와 작업 내역 버튼의 겹침 여부를 추가 QA해야 한다.
+- [변경됨] `ChatPanel` 우측 하단 `작업 내역` 버튼과 activity panel은 베타에서 제거됐다.
+- [확인됨] tool 진행 상태는 assistant message 내부 typing indicator와 tool card로만 표시한다.
+- [확인됨] 모바일 기기에서 fixed composer 겹침 여부를 확인했다.
 
 ### 5.9 Source Drawer
 
 - [확인됨] `frontend/src/widgets/source-drawer/ui/source-drawer.tsx`
-- [확인됨] Jotai `isSourceDrawerOpenAtom`으로 열고 닫는다.
-- [확인됨] 열린 상태에서 fixed right drawer로 표시된다.
-- [확인됨] 위치는 `top: 0`, `right: 0`, `bottom: 0`, width `min(100vw, 360px)`이다.
-- [확인됨] 현재 내용은 빈 상태 안내뿐이다.
-- [사용자 결정] SourceDrawer는 1차 UI 개선에서 실제 출처/근거 패널로 살린다.
-- [사용자 결정] SourceDrawer는 사용된 출처, 원문 링크, 주의/참고를 모아 보여준다.
-- [사용자 결정] SourceDrawer 1차 데이터는 단순하게 유지한다.
-- [사용자 결정] SourceDrawer에는 `출처 제목`, `원문 링크`, `주의/참고`를 표시한다.
-- [사용자 결정] `주의/참고`는 딱딱한 한계 고지가 아니라 부드러운 어투와 당구장 표시 같은 시각 표현으로 처리한다.
-- [사용자 결정] 출처 유형, 관련 tool 이름, 기준 시점, trust level은 1차 범위에서 제외하고 추후 확장 후보로 둔다.
-- [확인됨] header 제거 후 desktop SourceDrawer는 `top: 0`, `right: 0`, `bottom: 0` 기준으로 전체 높이를 사용한다.
-- [확인됨] mobile SourceDrawer는 우선 full-screen drawer 기준으로 전환했다.
-- [확인됨] `SourceDrawer`의 `top: 72px` 의존성을 제거하고 통합 sidebar와 겹치지 않도록 z-index를 조정했다.
+- [확인됨] `frontend/src/widgets/source-drawer/model/source-drawer.atom.ts`
+- [사용자 결정] SourceDrawer 코드는 삭제하지 않고 추후 재사용 후보로 남긴다.
+- [확인됨] `frontend/src/views/chat/ui/chat-page.tsx`에서 `SourceDrawer` import와 render 호출은 주석 처리되어 있다.
+- [확인됨] `frontend/src/widgets/chat/ui/chat-panel.tsx`에서 `출처 패널 열기` 버튼 호출부는 주석 처리되어 있다.
+- [확인됨] 베타 UI에서는 SourceDrawer가 렌더링되지 않는다.
+- [확인됨] tool card 내부 출처 링크는 유지한다.
 
 ### 5.10 Login/Profile Modal
 
@@ -242,14 +230,18 @@
 - [확인됨] `frontend/src/features/profile/ui/profile-modal.tsx`
 - [확인됨] 공통 modal은 `frontend/src/shared/ui/modal/modal.tsx`를 사용한다.
 - [확인됨] overlay click과 닫기 버튼으로 닫힌다.
-- [확인됨] focus trap, Escape close, submit handling, validation은 구현되어 있지 않다.
+- [확인됨] 열릴 때 dialog 내부 첫 focusable element로 focus를 이동한다.
+- [확인됨] 닫힐 때 이전 focus element로 focus를 복귀한다.
+- [확인됨] Tab/Shift+Tab focus trap을 적용한다.
+- [확인됨] Escape key로 모달을 닫는다.
+- [확인됨] 프로필 form은 submit handling과 닉네임 validation을 수행한다.
 - [사용자 결정] 로그인 기능은 곧 실제 기능으로 붙일 예정이다.
 - [사용자 결정] 1차 UI는 실제 로그인 기능이 연결될 것을 전제로 사이드바 하단의 비로그인/로그인 상태를 설계한다.
 - [사용자 결정] 로그인 후에는 사이드바 하단에 이름 또는 별명과 원형 프로필을 표시한다.
 - [사용자 결정] 계정 dropdown/panel은 Manus처럼 큰 패널 형태를 따른다.
 - [사용자 결정] 계정 dropdown/panel에는 일단 `마이페이지`, `로그아웃`을 표시한다.
 - [확인됨] 기존 `AppHeader`에 있던 `useCurrentUser`, `useLogout`, `isLoginModalOpenAtom`, `isProfileModalOpenAtom` 사용 흐름을 사이드바 하단 account bar로 이동했다.
-- [확인 필요] 실제 auth 연동 방식과 provider를 결정해야 한다.
+- [확인됨] 로그인 provider는 Google OAuth를 사용한다.
 - [사용자 결정] 로그인 화면은 별도 route가 아니라 modal로 유지한다.
 
 ## 6. API 계약
@@ -324,14 +316,13 @@
 - [확인됨] UI local state:
   - `messages`
   - `conversationId`
-  - `responseStatus`
+  - `responseStatus` setter
   - `isStreaming`
   - `errorMessage`
   - `failedRequestMessage`
-  - `isActivityOpen`
   - `activeAssistantMessageId`
   - composer input atom
-  - login/profile/source drawer open atom
+  - login/profile modal atom
 - [확인됨] localStorage 기반 guest/conversation 관리:
   - `frontend/src/features/chat-stream/model/guest-session.ts`
 - [확인됨] React Query provider는 존재하지만 현재 채팅 스트림 상태는 component local state 중심이다.
@@ -359,7 +350,7 @@ sequenceDiagram
   Backend-->>ChatPanel: tool.started/completed/failed
   Backend-->>ChatPanel: assistant.delta
   Backend-->>ChatPanel: assistant.completed
-  ChatPanel->>UI: assistant bubble, typing indicator, tool card, 작업 내역 갱신
+  ChatPanel->>UI: assistant bubble, typing indicator, tool card 갱신
 ```
 
 ## 9. 엣지 케이스와 실패 시나리오
@@ -371,13 +362,13 @@ sequenceDiagram
 - [확인됨] 빈 assistant placeholder는 content/tool/typing이 없으면 렌더링하지 않는다.
 - [확인됨] SSE event name이 unknown이거나 data가 없으면 무시한다.
 - [확인됨] SSE payload JSON parse/Zod parse 실패는 catch되어 error fallback으로 이어진다.
-- [확인 필요] 모바일에서 drawer가 열린 상태의 background scroll/overlay 처리가 필요하다.
-- [확인 필요] modal focus trap과 Escape close가 필요하다.
-- [확인 필요] composer input이 길어질 때 textarea 전환 또는 multi-line 입력을 지원할지 결정해야 한다.
+- [변경됨] SourceDrawer는 베타에서 렌더링되지 않으므로 drawer background scroll/overlay QA는 베타 범위에서 제외한다.
+- [확인됨] modal focus trap과 Escape close를 공통 `Modal`에 적용했다.
+- [확인됨] composer input은 textarea이며 Shift+Enter multi-line 입력을 지원한다.
 
 ## 10. SSE 로딩 UX
 
-SSE 채팅의 로딩 처리는 이 UI의 핵심 경험으로 보고, assistant bubble 내부와 작업 내역 패널에서 진행 상태를 표현한다.
+SSE 채팅의 로딩 처리는 이 UI의 핵심 경험으로 보고, assistant bubble 내부와 tool card에서 진행 상태를 표현한다.
 
 ### 10.1 전송 직후
 
@@ -391,7 +382,7 @@ SSE 채팅의 로딩 처리는 이 UI의 핵심 경험으로 보고, assistant b
 - [사용자 결정] tool 실행 상태는 채팅 메시지 안의 카드로도 보여준다.
 - [사용자 결정] tool running card를 표시해 사용자가 어떤 정보를 확인 중인지 볼 수 있게 한다.
 - [사용자 결정] tool card는 `running`, `completed`, `failed` 상태를 시각적으로 구분한다.
-- [확인됨] tool별 상태는 우측 하단 작업 내역 패널에도 요약 표시한다.
+- [변경됨] 우측 하단 작업 내역 패널은 베타에서 제거됐다.
 - [사용자 결정] running tool card에는 `툴 이름`, `상태 문구`, `로딩 표시`만 보여준다.
 - [사용자 결정] running tool card에는 stadium/date/time 같은 입력값 요약을 표시하지 않는다.
 - [사용자 결정] 여러 tool이 실행될 때 tool card는 SSE 이벤트가 도착한 순서대로 쌓는다.
@@ -448,10 +439,10 @@ SSE 채팅의 로딩 처리는 이 UI의 핵심 경험으로 보고, assistant b
   - `pnpm dev`
 - [확인됨] 개발 서버 기본 포트는 `next dev -p 3001`이다.
 - [확인 필요] 현재 frontend 전용 테스트 파일은 확인되지 않았다.
-- [확인 필요] UI 개선 후 최소 수동 검증 viewport:
+- [확인됨] 모바일 기기에서 fixed composer와 주요 채팅 UI를 확인했다.
+- [확인 필요] UI 개선 후 추가 수동 검증 viewport:
   - desktop: 1440x900
   - tablet: 1024x768
-  - mobile: 390x844
 
 ## 13. 로깅과 디버깅
 
@@ -462,21 +453,20 @@ SSE 채팅의 로딩 처리는 이 UI의 핵심 경험으로 보고, assistant b
 ## 14. 미완성/개선 후보
 
 - [사용자 결정] 현재 문서와 기존 UI 텍스트의 `직관 도우미` 표현은 추후 더 포괄적인 `야구 도우미` 계열 명칭으로 바꿀 예정이다.
-- [확인됨] 2026-08-10 1차 레이아웃은 전역 fixed header + 접힘 가능한 좌측 sidebar + main chat + right source drawer 방향으로 구현됐다.
+- [확인됨] 현재 레이아웃은 접힘 가능한 좌측 sidebar + main chat + fixed floating composer 방향으로 구현됐다.
 - [확인됨] 전역 header를 제거하고, Manus처럼 브랜드/주요 action/채팅 목록/계정 바를 사이드바에 통합했다.
 - [확인됨] 사이드바 1차 범위는 `새 채팅`, `채팅 목록 세션`으로 제한한다.
 - [사용자 결정] 통합 사이드바 개선 후에도 1차 기능 범위는 `새 채팅`, `채팅 목록`으로 제한한다.
 - [사용자 결정] 프로젝트/워크스페이스 섹션은 이번 범위에서 제외한다.
-- [확인 필요] SourceDrawer를 assistant/tool sources와 실제 연결한다. 현재 로컬 데이터 세팅 전이라 보류 메모에 기록했다.
+- [사용자 결정] SourceDrawer는 삭제하지 않고 주석 처리 상태로 보류한다.
 - [확인됨] composer의 mode toggle, 자료 추가, 음성 입력은 1차 UI에서 제거됐다.
 - [확인 필요] 현재 클라이언트 CSS/UX는 MVP 수준이므로 tool card별 디자인과 모바일 active chat UX를 추가 보완한다.
-- [확인 필요] 모달은 접근성 기준을 보강한다.
-- [확인됨] header 제거와 함께 `72px` top offset 의존성을 제거하고, SourceDrawer/Sidebar/Main의 높이 계산을 viewport 기준으로 재정리했다.
-- [확인 필요] active chat 상태에서 하단 composer dock이 모바일 safe area와 겹치지 않는지 확인한다.
+- [확인됨] 모달은 focus trap, Escape close, 초기 focus, focus 복귀를 지원한다.
+- [확인됨] header 제거와 함께 `72px` top offset 의존성을 제거하고, Sidebar/Main의 높이 계산을 viewport 기준으로 재정리했다.
+- [확인됨] active chat 상태에서 하단 composer가 모바일 기기에서 사용 가능한 것을 확인했다.
 - [확인 필요] tool card 공통 디자인 규칙을 별도 spec으로 분리한다.
 
 ## 15. 열린 질문
 
-1. 실제 auth 연동 방식과 provider를 결정해야 한다.
-2. 로그인 후 계정 패널의 상세 항목을 어디까지 노출할지 결정해야 한다. 현재 확정 항목은 `마이페이지`, `로그아웃`이다.
-3. mobile SourceDrawer는 현재 full-screen drawer 기준으로 구현했으며, bottom sheet 전환 여부는 추후 UX 확인 후 결정한다.
+1. 로그인 후 계정 패널의 상세 항목을 어디까지 노출할지 결정해야 한다. 현재 확정 항목은 `마이페이지`, `로그아웃`이다.
+2. SourceDrawer는 베타에서 렌더링하지 않고, 추후 출처 패널을 다시 살릴 때 UX를 재결정한다.

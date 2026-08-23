@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useEffect, useRef, type KeyboardEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 import { Button } from "@/shared/ui/button";
@@ -14,6 +14,28 @@ type ModalProps = {
 };
 
 export function Modal({ children, isOpen, title, onClose, showHeader = true }: ModalProps) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (!isOpen || typeof document === "undefined") {
+      return;
+    }
+
+    previousFocusRef.current =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null;
+
+    window.requestAnimationFrame(() => {
+      const firstFocusable = getFocusableElements(dialogRef.current)[0];
+      (firstFocusable ?? dialogRef.current)?.focus();
+    });
+
+    return () => {
+      previousFocusRef.current?.focus();
+      previousFocusRef.current = null;
+    };
+  }, [isOpen]);
+
   if (!isOpen) {
     return null;
   }
@@ -27,9 +49,12 @@ export function Modal({ children, isOpen, title, onClose, showHeader = true }: M
   return createPortal(
     <Overlay role="presentation" onMouseDown={onClose}>
       <Dialog
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
+        tabIndex={-1}
+        onKeyDown={(event) => handleDialogKeyDown(event, onClose)}
         onMouseDown={(event) => event.stopPropagation()}
       >
         {showHeader ? (
@@ -47,6 +72,59 @@ export function Modal({ children, isOpen, title, onClose, showHeader = true }: M
     </Overlay>,
     portalRoot,
   );
+}
+
+function handleDialogKeyDown(event: KeyboardEvent<HTMLDivElement>, onClose: () => void) {
+  if (event.key === "Escape") {
+    event.preventDefault();
+    onClose();
+    return;
+  }
+
+  if (event.key !== "Tab") {
+    return;
+  }
+
+  const focusableElements = getFocusableElements(event.currentTarget);
+
+  if (focusableElements.length === 0) {
+    event.preventDefault();
+    event.currentTarget.focus();
+    return;
+  }
+
+  const firstElement = focusableElements[0];
+  const lastElement = focusableElements[focusableElements.length - 1];
+
+  if (event.shiftKey && document.activeElement === firstElement) {
+    event.preventDefault();
+    lastElement.focus();
+    return;
+  }
+
+  if (!event.shiftKey && document.activeElement === lastElement) {
+    event.preventDefault();
+    firstElement.focus();
+  }
+}
+
+function getFocusableElements(container: HTMLElement | null): HTMLElement[] {
+  if (!container) {
+    return [];
+  }
+
+  return Array.from(
+    container.querySelectorAll<HTMLElement>(
+      [
+        "a[href]",
+        "button:not([disabled])",
+        "textarea:not([disabled])",
+        "input:not([disabled])",
+        "select:not([disabled])",
+        "[tabindex]:not([tabindex='-1'])",
+      ].join(","),
+    ),
+  ).filter((element) => !element.hasAttribute("hidden") && element.offsetParent !== null);
 }
 
 const Overlay = styled.div`

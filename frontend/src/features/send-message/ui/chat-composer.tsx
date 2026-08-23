@@ -225,7 +225,7 @@ const PromptCard = styled.div`
   align-items: center;
   gap: 10px;
   border: 1px solid ${({ theme }) => theme.color.border};
-  border-radius: 999px;
+  border-radius: 22px;
   padding: 8px 12px 8px 24px;
   background: ${({ theme }) => theme.color.panel};
   box-shadow:
@@ -236,6 +236,7 @@ const PromptCard = styled.div`
   @media (max-width: 560px) {
     gap: 8px;
     min-height: 58px;
+    border-radius: 18px;
     padding: 7px 8px 7px 18px;
   }
 `;

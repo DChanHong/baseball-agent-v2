@@ -39,11 +39,13 @@ export function booleanLabel(value: unknown, trueLabel: string, falseLabel: stri
   return value ? trueLabel : falseLabel;
 }
 
-export function firstObjectItems(value: unknown, limit: number): Record<string, unknown>[] {
-  return arrayValue(value).flatMap((item) => {
+export function firstObjectItems(value: unknown, limit?: number): Record<string, unknown>[] {
+  const items = arrayValue(value).flatMap((item) => {
     const objectItem = objectValue(item);
     return objectItem ? [objectItem] : [];
-  }).slice(0, limit);
+  });
+
+  return typeof limit === "number" ? items.slice(0, limit) : items;
 }
 
 export function joinedStrings(value: unknown, fallback = "-"): string {
