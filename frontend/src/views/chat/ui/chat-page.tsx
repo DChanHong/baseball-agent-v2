@@ -4,7 +4,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { ChatPanel } from "@/widgets/chat/ui/chat-panel";
 import { ChatSidebar } from "@/widgets/chat-sidebar/ui/chat-sidebar";
-import { SourceDrawer } from "@/widgets/source-drawer/ui/source-drawer";
+// import { SourceDrawer } from "@/widgets/source-drawer/ui/source-drawer";
 
 export function ChatPage() {
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
@@ -21,7 +21,7 @@ export function ChatPage() {
           activeConversationId={activeConversationId}
           onConversationCreated={setActiveConversationId}
         />
-        <SourceDrawer />
+        {/* <SourceDrawer /> */}
       </Workspace>
     </Shell>
   );

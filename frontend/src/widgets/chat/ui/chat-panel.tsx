@@ -1,8 +1,7 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { useSetAtom } from "jotai";
-import { ListChecks, Sparkles, X } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import type { ChatMessage } from "@/entities/message/model/types";
@@ -18,31 +17,10 @@ import { getConversationMessages } from "@/features/conversation-list/api/get-co
 import { conversationListQueryKey } from "@/features/conversation-list/model/conversation-list-query";
 import { useGlobalModal } from "@/features/global-modal/model/use-global-modal";
 import { ChatComposer } from "@/features/send-message/ui/chat-composer";
-import { Button } from "@/shared/ui/button";
-import { isSourceDrawerOpenAtom } from "@/widgets/source-drawer/model/source-drawer.atom";
+// import { Button } from "@/shared/ui/button";
+// import { isSourceDrawerOpenAtom } from "@/widgets/source-drawer/model/source-drawer.atom";
 
 type ResponseStatus = "idle" | "streaming" | "failed" | ToolResultName;
-
-const responseStatusLabels: Record<ResponseStatus, string> = {
-  idle: "준비됨",
-  streaming: "답변 작성 중",
-  failed: "응답 실패",
-  find_kbo_game: "경기 일정 확인 중",
-  get_stadium_info: "구장 정보 확인 중",
-  get_weather_context: "날씨 확인 중",
-  search_stadium_guide: "구장 가이드 검색 중",
-  search_ticketing_guide: "예매 정보 검색 중",
-  search_baseball_knowledge: "야구 지식 검색 중",
-};
-
-const toolDisplayLabels: Record<ToolResultName, string> = {
-  find_kbo_game: "경기 일정",
-  get_stadium_info: "구장 정보",
-  get_weather_context: "구장 날씨",
-  search_stadium_guide: "구장 가이드",
-  search_ticketing_guide: "예매 안내",
-  search_baseball_knowledge: "야구 지식",
-};
 
 type ChatPanelProps = {
   activeConversationId: string | null;
@@ -51,17 +29,16 @@ type ChatPanelProps = {
 
 export function ChatPanel({ activeConversationId, onConversationCreated }: ChatPanelProps) {
   const queryClient = useQueryClient();
-  const openSourceDrawer = useSetAtom(isSourceDrawerOpenAtom);
+  // const openSourceDrawer = useSetAtom(isSourceDrawerOpenAtom);
   const { openLoginModal } = useGlobalModal();
   const { data: user, isLoading: isCheckingAuth } = useCurrentUser();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [conversationId, setConversationId] = useState<string | null>(null);
-  const [responseStatus, setResponseStatus] = useState<ResponseStatus>("idle");
+  const [, setResponseStatus] = useState<ResponseStatus>("idle");
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [failedRequestMessage, setFailedRequestMessage] = useState<string | null>(null);
-  const [isActivityOpen, setIsActivityOpen] = useState(false);
   const [activeAssistantMessageId, setActiveAssistantMessageId] = useState<string | null>(null);
   const pendingUserMessageIdRef = useRef<string | null>(null);
   const activeAssistantMessageIdRef = useRef<string | null>(null);
@@ -430,9 +407,6 @@ export function ChatPanel({ activeConversationId, onConversationCreated }: ChatP
   };
 
   const hasMessages = messages.length > 0;
-  const currentStatusLabel = responseStatusLabels[responseStatus];
-  const activityItems = messages.flatMap((message) => message.toolResults ?? []);
-  const hasActivity = activityItems.length > 0 || isStreaming || errorMessage;
   const handleRetry = () => {
     if (!failedRequestMessage || isStreaming) {
       return;
@@ -454,11 +428,11 @@ export function ChatPanel({ activeConversationId, onConversationCreated }: ChatP
           </SkeletonMessageList>
           <Dock>
             <ChatComposer disabled showSuggestions={false} onSendMessage={handleSendMessage} />
-            <FooterActions>
+            {/* <FooterActions>
               <Button type="button" variant="ghost" onClick={() => openSourceDrawer(true)}>
                 출처 패널 열기
               </Button>
-            </FooterActions>
+            </FooterActions> */}
           </Dock>
         </ChatWorkspace>
       ) : hasMessages ? (
@@ -504,11 +478,11 @@ export function ChatPanel({ activeConversationId, onConversationCreated }: ChatP
               showSuggestions={false}
               onSendMessage={handleSendMessage}
             />
-            <FooterActions>
+            {/* <FooterActions>
               <Button type="button" variant="ghost" onClick={() => openSourceDrawer(true)}>
                 출처 패널 열기
               </Button>
-            </FooterActions>
+            </FooterActions> */}
           </Dock>
         </ChatWorkspace>
       ) : (
@@ -533,14 +507,14 @@ export function ChatPanel({ activeConversationId, onConversationCreated }: ChatP
             onSendMessage={handleSendMessage}
           />
           {errorMessage ? <ErrorText>{errorMessage}</ErrorText> : null}
-          <FooterActions>
+          {/* <FooterActions>
             <Button type="button" variant="ghost" onClick={() => openSourceDrawer(true)}>
               출처 패널 열기
             </Button>
-          </FooterActions>
+          </FooterActions> */}
         </Hero>
       )}
-      <ActivityButton
+      {/* <ActivityButton
         type="button"
         aria-expanded={isActivityOpen}
         aria-controls="chat-activity-panel"
@@ -581,12 +555,10 @@ export function ChatPanel({ activeConversationId, onConversationCreated }: ChatP
             )}
           </ActivityList>
         </ActivityPanel>
-      ) : null}
+      ) : null} */}
     </Panel>
   );
 }
-
-const toolLabel = (name: ToolResultName) => toolDisplayLabels[name];
 
 const Panel = styled.main<{ $hasMessages: boolean }>`
   display: flex;
@@ -612,40 +584,13 @@ const ChatWorkspace = styled.section`
   min-height: 100vh;
 `;
 
-const StatusBadge = styled.span<{ $status: ResponseStatus }>`
-  display: inline-flex;
-  flex: 0 0 auto;
-  min-height: 28px;
-  align-items: center;
-  border: 1px solid
-    ${({ $status, theme }) =>
-      $status === "failed" ? "rgba(217, 70, 53, 0.26)" : theme.color.border};
-  border-radius: 999px;
-  padding: 0 10px;
-  background: ${({ $status, theme }) =>
-    $status === "failed"
-      ? "rgba(217, 70, 53, 0.08)"
-      : $status === "idle"
-        ? theme.color.panel
-        : "rgba(19, 111, 74, 0.1)"};
-  color: ${({ $status, theme }) =>
-    $status === "failed"
-      ? theme.color.accent
-      : $status === "idle"
-        ? theme.color.muted
-        : theme.color.primary};
-  font-size: 12px;
-  font-weight: 850;
-  white-space: nowrap;
-`;
-
 const SkeletonMessageList = styled.div`
   display: flex;
   overflow-y: auto;
   flex-direction: column;
   gap: 14px;
   min-height: 0;
-  padding: 28px 0 18px;
+  padding: 28px 0 152px;
 `;
 
 const SkeletonBubble = styled.div<{ $role: "user" | "assistant"; $width: string }>`
@@ -673,15 +618,13 @@ const MessageList = styled.div`
   flex-direction: column;
   gap: 14px;
   min-height: 0;
-  padding: 28px 0 18px;
+  padding: 28px 0 152px;
 `;
 
 const Dock = styled.div`
   display: grid;
   justify-items: center;
-  gap: 12px;
-  padding: 14px 0 24px;
-  background: linear-gradient(180deg, rgba(247, 248, 243, 0), ${({ theme }) => theme.color.background} 22%);
+  padding: 0;
 `;
 
 const Hero = styled.section`
@@ -689,6 +632,7 @@ const Hero = styled.section`
   justify-items: center;
   gap: 24px;
   width: min(100%, 820px);
+  padding-bottom: 156px;
 `;
 
 const LogoWrap = styled.div`
@@ -771,10 +715,10 @@ const Description = styled.p`
   word-break: keep-all;
 `;
 
-const FooterActions = styled.div`
-  display: flex;
-  justify-content: center;
-`;
+// const FooterActions = styled.div`
+//   display: flex;
+//   justify-content: center;
+// `;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const FollowUpList = styled.div`
@@ -862,113 +806,4 @@ const RetryButton = styled.button`
     cursor: not-allowed;
     opacity: 0.55;
   }
-`;
-
-const ActivityButton = styled.button`
-  position: fixed;
-  right: 22px;
-  bottom: 22px;
-  z-index: 25;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 42px;
-  border: 1px solid rgba(19, 111, 74, 0.2);
-  border-radius: 999px;
-  padding: 0 14px;
-  background: ${({ theme }) => theme.color.panel};
-  color: ${({ theme }) => theme.color.primary};
-  font-size: 13px;
-  font-weight: 900;
-  box-shadow: ${({ theme }) => theme.shadow.panel};
-
-  @media (max-width: 560px) {
-    right: 14px;
-    bottom: 14px;
-  }
-`;
-
-const ActivityDot = styled.span`
-  width: 7px;
-  height: 7px;
-  border-radius: 999px;
-  background: ${({ theme }) => theme.color.accent};
-`;
-
-const ActivityPanel = styled.aside`
-  position: fixed;
-  right: 22px;
-  bottom: 74px;
-  z-index: 24;
-  display: grid;
-  gap: 12px;
-  width: min(340px, calc(100vw - 28px));
-  border: 1px solid ${({ theme }) => theme.color.border};
-  border-radius: ${({ theme }) => theme.radius.md};
-  padding: 14px;
-  background: ${({ theme }) => theme.color.panel};
-  box-shadow: ${({ theme }) => theme.shadow.panel};
-
-  @media (max-width: 560px) {
-    right: 14px;
-    bottom: 66px;
-  }
-`;
-
-const ActivityHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-`;
-
-const ActivityTitle = styled.h2`
-  margin: 0;
-  color: ${({ theme }) => theme.color.foreground};
-  font-size: 15px;
-`;
-
-const ActivityCloseButton = styled.button`
-  display: inline-grid;
-  width: 28px;
-  height: 28px;
-  place-items: center;
-  border: 0;
-  border-radius: 999px;
-  background: ${({ theme }) => theme.color.panelAlt};
-  color: ${({ theme }) => theme.color.muted};
-`;
-
-const ActivityList = styled.div`
-  display: grid;
-  gap: 8px;
-`;
-
-const ActivityItem = styled.div`
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  border: 1px solid ${({ theme }) => theme.color.border};
-  border-radius: ${({ theme }) => theme.radius.sm};
-  padding: 10px;
-  background: ${({ theme }) => theme.color.panelAlt};
-`;
-
-const ActivityName = styled.span`
-  min-width: 0;
-  overflow: hidden;
-  color: ${({ theme }) => theme.color.foreground};
-  font-size: 13px;
-  font-weight: 850;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const ActivityEmpty = styled.p`
-  margin: 0;
-  color: ${({ theme }) => theme.color.muted};
-  font-size: 13px;
-  font-weight: 750;
 `;
