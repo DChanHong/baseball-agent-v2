@@ -1,8 +1,10 @@
 # RAG 및 Tool 개발 진행 메모
 
-> 상태: 진행 중
+> 라벨: `ARCHIVE`  
+> 상태: MVP1 RAG/Tool 개발 진행 기록  
 > 시작일: 2026-07-26
 > 범위: pgvector 기반 설정, Tool 기획, 데이터 재수집, 임베딩, Tool별 검증
+> 현재 기준 문서는 `docs/embedding/*`, `docs/planning/003-langchain-langgraph-adoption-plan.md`, `docs/backend/folder-design/03-request-flow-walkthroughs.md`를 우선 참고한다.
 
 ## 1. 작업 목적
 

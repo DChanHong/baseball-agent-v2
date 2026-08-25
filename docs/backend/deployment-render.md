@@ -1,5 +1,8 @@
 # Render Backend Deployment Spec
 
+> 라벨: `CURRENT`  
+> 상태: 운영 Render 배포 기준
+
 ## Service
 
 - Platform: Render Web Service

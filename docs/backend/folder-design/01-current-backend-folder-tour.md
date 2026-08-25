@@ -1,5 +1,6 @@
 # 현재 Backend 폴더별 역할
 
+> 라벨: `REFERENCE`  
 > 대상: `backend/`의 현재 구현  
 > 전제: 기존 `folder-design.md`는 설계 원칙 문서이고, 이 문서는 지금 코드 읽기용 지도다.
 
@@ -469,4 +470,3 @@ tests/
 - 외부 API나 LLM을 실제 호출하지 않도록 fake/mock을 어떻게 넣는지 본다.
 - SSE event 이름과 payload contract가 어떻게 검증되는지 본다.
 - domain/service 계층이 깨졌을 때 어떤 테스트가 실패할지 상상해본다.
-

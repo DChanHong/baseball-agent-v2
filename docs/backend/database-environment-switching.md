@@ -1,5 +1,8 @@
 # Database Environment Switching
 
+> 라벨: `CURRENT`  
+> 기준 작업공간: `/Users/hong/Desktop/내꺼연습/baseball-agent-v2`
+
 로컬 개발 중 backend가 사용할 DB를 로컬 Supabase와 운영 Supabase 사이에서 전환할 때 참고한다.
 
 ## 기준

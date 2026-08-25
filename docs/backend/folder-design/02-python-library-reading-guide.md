@@ -1,5 +1,6 @@
 # Python 문법과 라이브러리 읽기 가이드
 
+> 라벨: `REFERENCE`  
 > 대상: `backend/`를 읽을 때 자주 만나는 Python 문법과 라이브러리  
 > 목적: 코드를 읽다가 막히는 지점을 줄이는 것
 
@@ -411,4 +412,3 @@ data: {"message_id": "...", "delta": "..."}
 | `service` | use case 실행 객체 |
 | `router` | HTTP endpoint 묶음 |
 | `dependency` | FastAPI가 endpoint 호출 전에 만들어 주는 객체 |
-
