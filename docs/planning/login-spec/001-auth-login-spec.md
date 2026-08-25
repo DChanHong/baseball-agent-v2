@@ -1,6 +1,8 @@
 # Auth and Login Spec v1
 
+> 라벨: `CURRENT`  
 > 작성일: 2026-08-10  
+> 최근 업데이트: 2026-08-25  
 > 목적: New Baseball MVP의 로그인, 세션, 사용자 프로필, 회원탈퇴 정책을 구현 전 기준 문서로 고정한다.
 
 ## 1. 결정 사항
@@ -27,7 +29,7 @@
 
 Supabase는 공식 Hosted Supabase 프로젝트를 사용한다.
 
-로컬 개발에서도 Auth 자체는 Hosted Supabase에 연결한다. 운영 도메인은 배포 시점에 Supabase Dashboard와 Google Cloud Console에 추가 등록한다.
+로컬 개발에서도 Auth 자체는 Hosted Supabase에 연결한다. 운영 도메인은 Supabase Dashboard와 Google Cloud Console에 등록되어 있다.
 
 ### 2.2 Google OAuth
 
@@ -35,8 +37,11 @@ MVP에서 지원하는 provider는 Google OAuth 하나다.
 
 등록해야 할 callback URL:
 
-- Local: `http://127.0.0.1:4000/api/v1/auth/callback`
-- Production: 배포 도메인 확정 후 추가
+- Local Supabase Redirect URL: `http://127.0.0.1:4000/api/v1/auth/callback**`
+- Production Supabase Redirect URL: `https://api.kbo-mate.dev-hong.it.kr/api/v1/auth/callback**`
+- Google Cloud Console authorized redirect URI: `https://ztopdfbdvspzatbrcwif.supabase.co/auth/v1/callback`
+
+FastAPI callback URL에는 `oauth_state` query string이 붙는다. Supabase Redirect URL allow list에는 `callback**`처럼 wildcard를 붙여 query string까지 허용한다.
 
 Google에서 받아오는 사용자 정보 중 앱 DB에 저장하는 값은 최소화한다.
 

@@ -1,5 +1,6 @@
 # ADR-001: Vector Store로 Supabase PostgreSQL + pgvector 사용
 
+- 라벨: `CURRENT`
 - 상태: 채택
 - 결정일: 2026-07-26
 - 적용 범위: RAG 문서 저장, embedding 저장, 유사도 검색, 검색 metadata filter
@@ -304,4 +305,3 @@ supabase/
 - HNSW 적용 시 품질과 latency 변화가 기록되어 있다.
 - FastAPI 외부에서 secret key가 노출되지 않는다.
 - FAISS 파일 없이 개발·테스트·배포할 수 있다.
-

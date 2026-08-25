@@ -1,29 +1,57 @@
-# 서비스 기획 문서
+# Planning Documentation Map
 
-이 폴더는 `new-baseball`에서 실제로 구현할 서비스와 Tool의 범위를 결정하는 기준 문서를 관리한다.
+> 라벨: `CURRENT`  
+> MVP1 완료 기준으로 planning 문서의 현재 역할을 정리한다.
 
-기존 `my-baseball-agent`는 데이터 출처와 구현 아이디어를 찾기 위한 참고 자료로 사용한다. 기존 코드와 Tool을 그대로 옮기지 않고, MVP에 필요한 기능부터 데이터 수집, 계약 작성, 구현, 검증 순서로 다시 만든다.
+## Labels
 
-## 문서 우선순위
+| Label | Meaning |
+|---|---|
+| `CURRENT` | 현재 MVP1 기준으로 바로 참고하는 문서 |
+| `MVP2` | 다음 업그레이드 계획 문서 |
+| `REFERENCE` | 데이터 수집, Tool 설계, 정책 판단에 참고하는 문서 |
+| `LONG_TERM` | MVP2 이후 장기 로드맵 |
 
-기획과 구현 범위가 기존 로드맵 또는 진행 메모와 충돌하면 이 폴더에서 가장 최근에 확정한 문서를 우선한다. 아키텍처 결정 기록(ADR)은 기술 선택의 근거로 참고하되, 아직 MVP에 포함되지 않은 기능을 구현 대상으로 간주하지 않는다.
+## Priority
 
-## 현재 문서
+기획과 구현 범위가 오래된 메모와 충돌하면 아래 우선순위를 따른다.
 
-| 문서 | 목적 | 상태 |
+1. 현재 운영 배포 스펙: `docs/deployment-production.md`
+2. MVP1 상태/UX/Auth 기준: `docs/planning/001-service-and-mvp.md`, `docs/frontend/mvp-chat-ux-plan.md`, `docs/planning/login-spec/001-auth-login-spec.md`
+3. Backend/Frontend 현재 구현 문서: `docs/backend/README.md`, `docs/frontend/frontend-layout-spec.md`
+4. MVP2 계획: `docs/planning/002-mvp2-backend-upgrade-plan.md`
+5. 날짜별 메모: `docs/memo/v1/*.md`
+
+## Current MVP1 Documents
+
+| File | Label | Role |
 |---|---|---|
-| [001-service-and-mvp.md](001-service-and-mvp.md) | 서비스, MVP, Tool 및 RAG 범위 정의 | MVP1 현재 기준 업데이트 |
-| [002-mvp2-backend-upgrade-plan.md](002-mvp2-backend-upgrade-plan.md) | 채팅/Tool 기본 틀 이후 RAG 검색 품질, 프롬프트, 관측성 개선 계획 | 초안 |
-| [003-langchain-langgraph-adoption-plan.md](003-langchain-langgraph-adoption-plan.md) | LangChain/LangGraph 점진 도입과 1차 PoC 상태 | PoC 기준 업데이트 |
-| [game-schedule/001-data-collection-and-db.md](game-schedule/001-data-collection-and-db.md) | KBO 경기 일정 수집 전략과 Supabase DB 정의 | 초안 |
+| `001-service-and-mvp.md` | `CURRENT` | 서비스 정의와 MVP1 완료/제외 범위 |
+| `login-spec/001-auth-login-spec.md` | `CURRENT` | Google OAuth, HttpOnly cookie 세션, 사용자 프로필 정책 |
+| `003-langchain-langgraph-adoption-plan.md` | `CURRENT` | LangGraph 1차 도입 상태와 후속 개선 후보 |
 
-## 작업 원칙
+## MVP2 Documents
 
-1. 사용자에게 제공할 가치와 시나리오를 먼저 정의한다.
-2. 한 단계에 필요한 최소 Tool만 선정한다.
-3. Tool의 입력과 출력 계약을 구현 전에 확정한다.
-4. 계약에 필요한 데이터만 수집한다.
-5. Fake 또는 소량의 수동 데이터로 전체 흐름을 먼저 검증할 수 있다.
-6. 실제 데이터 연결 후 정상·결과 없음·오류 사례를 검증한다.
-7. 완료 조건을 통과한 후 다음 Tool을 추가한다.
-8. 임베딩과 Vector Store는 의미 검색이 필요한 Tool에만 도입한다.
+| File | Label | Role |
+|---|---|---|
+| `002-mvp2-backend-upgrade-plan.md` | `MVP2` | RAG 검색 품질, 프롬프트, 관측성, 평가 개선 계획 |
+
+## Data And Tool Reference
+
+| File | Label | Role |
+|---|---|---|
+| `game-schedule/001-data-collection-and-db.md` | `REFERENCE` | KBO 경기 일정 수집 전략과 DB 기준 |
+| `stadium-guide/001-data-collection.md` | `REFERENCE` | 구장 가이드 데이터 수집과 정형/RAG 분리 기준 |
+
+## Related Roadmap
+
+| File | Label | Role |
+|---|---|---|
+| `../roadmap/001-supabase-pgvector.md` | `CURRENT` | pgvector 채택 ADR |
+| `../roadmap/roadmap.md` | `LONG_TERM` | 프로젝트 장기 로드맵 |
+
+## Cleanup Notes
+
+- MVP1은 운영 배포, Google OAuth 로그인, 채팅 응답 수신까지 1차 완료로 본다.
+- MVP1 제외 범위와 MVP2 후보는 `001-service-and-mvp.md`와 `002-mvp2-backend-upgrade-plan.md`에 분리한다.
+- guest-first 또는 Bearer token 기반 설명은 과거 설계 기록으로만 본다. 현재 기준은 Google OAuth + backend HttpOnly cookie 세션이다.

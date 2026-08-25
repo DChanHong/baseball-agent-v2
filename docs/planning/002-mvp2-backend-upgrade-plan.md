@@ -1,7 +1,9 @@
 # MVP2 Backend Upgrade Plan
 
-> 상태: 초안
+> 라벨: `MVP2`  
+> 상태: 계획 유지
 > 작성일: 2026-08-03
+> 최근 업데이트: 2026-08-25
 > 목적: MVP 채팅/Tool 기본 틀 이후 RAG, 검색 품질, 프롬프트, 관측성을 단계적으로 개선하기 위한 계획
 
 ## 1. 배경
@@ -13,7 +15,7 @@ MVP1 기획 문서는 `find_kbo_game` 단일 Tool과 로그인 사용자 온보�
 ```text
 POST /api/v1/chat
 SSE streaming
-guest_id 기반 conversation
+로그인 사용자 `user_profile_id` 기반 conversation
 Tool 실행 이벤트
 Tool 결과 card layout
 find_kbo_game
@@ -266,7 +268,7 @@ LangChain 전면 전환
 외부 reranker API 선도입
 ```
 
-로그인은 나중에 붙이기 어렵지 않게 `guest_id`와 `conversation_id` 흐름을 유지하고, 로그인 후 guest conversation을 user account에 귀속할 수 있는 구조만 고려한다.
+로그인은 MVP1에서 Google OAuth + HttpOnly cookie 기반으로 연결됐다. MVP2에서는 `user_profile_id`와 `conversation_id` 기반 소유권 검증을 유지하고, guest-first 채팅 재도입 여부는 별도 제품 판단으로 둔다.
 
 ## 6. 완료 조건
 

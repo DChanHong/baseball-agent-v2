@@ -1,14 +1,15 @@
 # 야구 직관 Agent 서비스 및 MVP 기획
 
-> 상태: MVP1 기준 업데이트
+> 라벨: `CURRENT`  
+> 상태: MVP1 1차 완료 기준 업데이트
 > 작성일: 2026-07-27
-> 최근 업데이트: 2026-08-20
+> 최근 업데이트: 2026-08-25
 > 참고 프로젝트: `my-baseball-agent`
-> MVP1 구현 기준: 로그인 사용자 채팅, 단일 `/api/v1/chat` 스트리밍 엔드포인트, LangGraph 기반 Tool 실행, Tool 결과 카드 렌더링
+> MVP1 구현 기준: 운영 배포, Google OAuth 로그인, 로그인 사용자 채팅, 단일 `/api/v1/chat` 스트리밍 엔드포인트, LangGraph 기반 Tool 실행, Tool 결과 카드 렌더링
 
 ## 1. 문서 목적
 
-야구 팬의 직관 준비를 돕는 Agent가 어떤 문제를 해결할지 정의하고, 현재 MVP1에서 구현된 채팅/Tool/LangGraph 기본 틀과 1차 완료까지 남은 연결 작업을 정리한다.
+야구 팬의 직관 준비를 돕는 Agent가 어떤 문제를 해결할지 정의하고, MVP1에서 구현된 채팅/Tool/LangGraph 기본 틀과 MVP2 이후로 넘긴 범위를 정리한다.
 
 이 문서는 기존 프로젝트의 기능을 그대로 이식하기 위한 문서가 아니다. `my-baseball-agent`의 데이터 출처, 수집 방식, 실패 사례와 구현 아이디어를 참고하되 데이터 수집과 Tool 계약을 처음부터 다시 검토한다.
 
@@ -336,6 +337,8 @@ MVP1의 assistant 답변은 아직 최종 LLM 답변 품질을 목표로 하지 
 
 ### 4.6 MVP1 완료/진행 상태
 
+2026-08-25 기준 MVP1은 운영 배포, Google OAuth 로그인, 채팅 API 응답 수신까지 1차 완료로 본다.
+
 완료된 항목:
 
 ```text
@@ -355,15 +358,17 @@ frontend POST /api/v1/chat fetch stream 연결
 conversation 목록 API와 sidebar 목록 조회 연결
 ```
 
-남은 MVP1 연결 항목:
+MVP1 완료/스펙업 정리:
 
 ```text
 [완료] 관련 문서의 MVP1 인증 정책을 authenticated-first 기준으로 정렬
 [완료] sidebar conversation 선택과 ChatPanel conversation_id/messages 상태 연결
 [완료] GET /api/v1/conversations/{conversation_id}/messages API 또는 동등한 메시지 복원 경로 추가
 [완료] 새 채팅 버튼이 ChatPanel의 현재 conversation/message state를 초기화하도록 연결
+[완료] 운영 배포와 Google OAuth 로그인 확인
+[완료] 운영 채팅 API 응답 수신 확인
 [MVP1 제외 → 스펙업] Source Drawer에 실제 sources/limitations 또는 Tool result 근거 연결
-수동 MVP 시나리오 검증
+[MVP2] RAG 검색 품질 평가와 프롬프트 개선
 ```
 
 ## 5. 데이터 수집 전략
@@ -680,31 +685,27 @@ source/limitation 확인 경로 존재
 실제 stream 연결 후 대표 질문 수동 검증
 ```
 
-## 10. 결정이 필요한 항목
+## 10. MVP2에서 결정할 항목
 
-아래 항목을 순서대로 결정한다.
+아래 항목은 MVP1 완료 이후 업그레이드 범위에서 결정한다.
 
-1. 프론트엔드 SSE stream parser 구현 방식
-2. message state와 Tool card state의 최종 구조
-3. conversation 메시지 조회 API와 프론트 상태 연결 방식
-4. assistant 답변을 Tool 요약으로 둘지 LLM 답변 생성까지 붙일지
-5. RAG 평가셋의 우선 Tool
-6. 하이브리드 서치 실험 순서
-7. guest-first 채팅을 MVP1 이후 어느 단계에서 다시 도입할지
-8. guest conversation 귀속 방식
-9. MVP2에서 LangChain routing/answer generation을 도입할 최소 범위
+1. assistant 답변을 Tool 요약에서 LLM answer generation으로 확장할 최소 범위
+2. RAG 평가셋의 우선 Tool
+3. 하이브리드 서치 실험 순서
+4. Source Drawer 또는 카드 내부 출처 UX의 최종 방향
+5. guest-first 채팅을 다시 도입할지 여부
+6. MVP2에서 LangChain routing/answer generation을 도입할 최소 범위
+7. 운영 관측 로그와 평가 run 파일의 저장 기준
 
 ## 11. 바로 다음 작업
 
-MVP1 문서 기준 바로 다음 작업은 채팅 화면의 대화 복원과 근거 표시를 마무리하는 것이다.
+MVP1은 1차 완료로 보고, 바로 다음 작업은 MVP2 baseline 정리다.
 
 ```text
-관련 문서를 authenticated-first MVP 기준으로 정렬
-→ conversation 선택 상태를 ChatPanel과 공유
-→ conversation messages 조회 API 또는 동등한 복원 경로 추가
-→ 새 채팅/기존 채팅 전환 시 message state 정리
-→ Source Drawer에 sources/limitations 또는 Tool result 근거 연결
-→ 대표 질문 및 follow-up 수동 검증
+MVP1 문서와 체크리스트 최신화
+→ 대표 질문 및 follow-up smoke 결과 기록
+→ RAG/Tool routing 평가 baseline 고정
+→ MVP2 백엔드 업그레이드 계획에 따라 검색 품질과 답변 품질 개선
 ```
 
 그 다음 작업은 `docs/planning/002-mvp2-backend-upgrade-plan.md`에 따라 RAG 평가셋과 baseline run을 만드는 것이다.
