@@ -1,5 +1,8 @@
 # 2026-07-30 작업 로그: 사직구장 RAG 임베딩 첫 실험
 
+> 상태: 첫 vertical slice 기록, 현재 확장 상태 보강
+> 최근 업데이트: 2026-08-27
+
 ## 오늘의 목표
 
 사직구장(`SAJIK`) 구장 가이드 문서를 최소 단위로 임베딩하고, Supabase local PostgreSQL + pgvector에서 검색 품질을 확인할 수 있는 기반을 만든다.
@@ -9,6 +12,8 @@
 경기 일정 조회는 정형 DB로 처리할 수 있지만, 구장별 입장, 반입, 교통, 좌석, 티켓 안내는 출처와 형식이 제각각이다.
 
 그래서 `kbo_stadiums` 같은 정형 테이블에는 최소 필드만 두고, 구장별 안내 문서는 RAG 대상으로 분리하기로 했다. 이번 작업은 그 첫 번째 실험으로 `SAJIK`만 대상으로 삼았다.
+
+현재는 이 첫 실험을 바탕으로 normalized 문서가 9개 구장 45개 문서까지 확장됐고, `stadium_guide_chunks.jsonl`도 45개 chunk 기준으로 생성되어 있다. 그래도 이 글은 의도적으로 SAJIK 5문서만 다룬 첫 폐루프 실험 기록으로 남긴다.
 
 ## 현재 결정
 
@@ -321,12 +326,12 @@ Top-K를 무작정 높이면 정답 포함 가능성은 올라가지만, 관련 
 
 ## 다음 작업 후보
 
-1. `top_k=3` 검색 결과를 LLM 답변 생성 단계에 연결한다.
-2. 출처 URL을 답변에 함께 노출하는 방식을 정한다.
-3. negative case는 검색 전에 stadium/team 추출 또는 clarification으로 막는다.
-4. `잠실 주차`처럼 다른 구장 질문이 SAJIK filter로 들어온 경우를 처리한다.
-5. 짧은 키워드형 질문은 Hybrid Search 또는 keyword boost 후보로 남긴다.
-6. SAJIK 답변 생성까지 검증한 뒤 나머지 구장으로 확장한다.
+1. [완료] `search_stadium_guide` Tool을 backend routing/chat stream에 연결한다.
+2. [완료] SAJIK 외 구장 normalized 문서와 chunk를 확장한다.
+3. [진행 후보] 출처 URL과 limitation을 답변/Source Drawer에 함께 노출하는 방식을 정한다.
+4. [진행 후보] negative case는 검색 전에 stadium/team 추출 또는 clarification으로 막는다.
+5. [진행 후보] `잠실 주차`처럼 구장 context가 충돌하는 질문을 처리한다.
+6. [MVP2 후보] 짧은 키워드형 질문은 Hybrid Search 또는 keyword boost 후보로 남긴다.
 
 ## 블로그에 살릴 포인트
 

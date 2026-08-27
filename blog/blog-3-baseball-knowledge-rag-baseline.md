@@ -1,16 +1,19 @@
 # 2026-08-02 작업 로그: 야구 지식 RAG Tool 초기 세팅과 개선 전 baseline
 
+> 상태: 1차 embedding_text 개선 결과까지 반영
+> 최근 업데이트: 2026-08-27
+
 ## 오늘의 목표
 
-`search_baseball_knowledge` Tool의 초기 구현 상태를 기록한다.
+`search_baseball_knowledge` Tool의 초기 구현 상태와 1차 검색 품질 개선 결과를 기록한다.
 
-이후 검색 품질 개선 작업을 진행하기 전에, 현재 데이터 구성, embedding 방식, Tool 연결 상태, 대표 질문 검색 결과를 baseline으로 남겨둔다.
+검색 품질 개선 작업을 진행하기 전에 남긴 baseline과, 이후 `embedding_text`를 조정했을 때 어떤 질문이 개선됐는지를 함께 남겨둔다.
 
 ## 왜 이 기록을 남기는가
 
 야구 지식 RAG는 단순히 "검색이 된다"와 "좋은 답변 근거를 찾는다" 사이의 차이가 크다.
 
-현재 Tool은 공식 PDF 기반 chunk를 pgvector에 넣고 실제 검색까지 동작하지만, 일부 질문에서 top-1 ranking이 기대와 다르게 나온다. 개선 전 상태를 남겨두면, 이후 chunk 구성이나 embedding text를 바꿨을 때 품질이 실제로 좋아졌는지 비교할 수 있다.
+초기 Tool은 공식 PDF 기반 chunk를 pgvector에 넣고 실제 검색까지 동작했지만, 일부 질문에서 top-1 ranking이 기대와 다르게 나왔다. 개선 전 상태를 남겨두면, 이후 chunk 구성이나 embedding text를 바꿨을 때 품질이 실제로 좋아졌는지 비교할 수 있다.
 
 ## 작업 전후 맥락
 
@@ -750,7 +753,7 @@ Agent routing 연결 완료
 1. POST /api/v1/chat SSE 스트리밍 엔드포인트 설계와 구현
 2. tool.started / tool.completed / assistant.delta 이벤트 계약
 3. 백엔드 Tool 결과 schema와 프론트 Tool 카드 layout 분리
-4. guest_id 기반 MVP 채팅 세션 흐름
+4. authenticated-first MVP 채팅 세션과 이후 guest conversation 귀속 설계
 5. RAG 품질 개선 전에 평가셋과 관측 로그를 먼저 만드는 이유
 ```
 
