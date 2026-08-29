@@ -1,6 +1,7 @@
 # 백엔드 로컬 개발 명령어
 
-> 기준 작업공간: `new-baseball/`
+> 라벨: `CURRENT`  
+> 기준 작업공간: `/Users/hong/Desktop/내꺼연습/baseball-agent-v2`
 > 구성: Supabase CLI + Docker + Python 3.13 + uv + FastAPI
 
 이 문서는 로컬 Supabase와 FastAPI를 실행하고 migration 및 API를 확인할 때 사용하는 명령을 정리한다.
@@ -18,10 +19,12 @@ guest_id = NULL
 
 ```text
 Frontend
-→ Supabase Auth (이메일 로그인)
-→ Access Token 발급
-→ FastAPI 요청 시 Authorization: Bearer <token> 헤더 포함
-→ FastAPI가 Supabase JWT 검증 후 user_profile_id 추출
+→ FastAPI /api/v1/auth/google
+→ Supabase Auth Google OAuth
+→ FastAPI /api/v1/auth/callback
+→ FastAPI가 HttpOnly cookie 세션 발급
+→ 이후 frontend fetch는 credentials: "include"로 cookie 포함
+→ FastAPI가 cookie의 access token으로 user_profile_id 추출
 ```
 
 API에서 클라이언트가 Supabase 테이블을 직접 호출하지 않는다.
@@ -45,13 +48,13 @@ Frontend
 모든 Supabase 명령은 프로젝트 루트에서 실행한다.
 
 ```bash
-cd /Users/root1/Desktop/agent-rebuild/new-baseball
+cd /Users/hong/Desktop/내꺼연습/baseball-agent-v2
 ```
 
 FastAPI 명령은 `backend` 디렉터리에서 실행한다.
 
 ```bash
-cd /Users/root1/Desktop/agent-rebuild/new-baseball/backend
+cd /Users/hong/Desktop/내꺼연습/baseball-agent-v2/backend
 ```
 
 ## 3. Docker 기본 확인
@@ -290,55 +293,42 @@ Swagger에서 API를 호출하는 순서:
 4. `Execute`를 누른다.
 5. Response status와 body를 확인한다.
 
-## 11. 대화방 생성 API 호출
+## 11. 인증/채팅 API 호출
 
-현재 구현된 API:
+브라우저 기반 Google OAuth는 다음 URL에서 시작한다.
 
 ```text
-POST /api/v1/conversations
+http://127.0.0.1:4000/api/v1/auth/google
 ```
 
-로그인 후 발급된 Access Token이 필요하다. Supabase Studio → Authentication → Users에서 테스트 계정을 만들고, 로그인 후 토큰을 확인한다.
-
-Swagger에서 호출할 때는 상단 `Authorize` 버튼에 `Bearer <access_token>`을 입력한다.
-
-Swagger 요청 예:
-
-```json
-{
-  "title": "Swagger 테스트 대화",
-  "agent_type": "baseball_general",
-  "metadata": {
-    "league": "KBO",
-    "source": "swagger"
-  }
-}
-```
-
-터미널에서 `curl`로 호출할 수도 있다.
+로그인 후 현재 사용자 확인:
 
 ```bash
-curl --request POST \
-  http://127.0.0.1:4000/api/v1/conversations \
+curl --include \
+  --cookie "nb_access_token=<access-token-cookie-value>" \
+  http://127.0.0.1:4000/api/v1/auth/me
+```
+
+실제 브라우저/프론트 테스트에서는 access token을 직접 읽지 않고, 브라우저가 HttpOnly cookie를 자동으로 포함한다.
+
+채팅 API는 로그인 cookie가 필요하다.
+
+```bash
+curl --request POST http://127.0.0.1:4000/api/v1/chat \
+  --cookie "nb_access_token=<access-token-cookie-value>" \
   --header 'Content-Type: application/json' \
-  --header 'Authorization: Bearer <access_token>' \
+  --header 'Accept: text/event-stream' \
   --data '{
-    "title": "curl 테스트 대화",
-    "agent_type": "baseball_general",
-    "metadata": {
-      "league": "KBO",
-      "source": "curl"
-    }
+    "conversation_id": null,
+    "message": "오늘 롯데 경기 있어?"
   }'
 ```
 
-프로젝트 정책에 따라 생성 성공 시 `200 OK`를 반환한다.
+대화 목록 API도 로그인 cookie가 필요하다.
 
-생성된 행은 Supabase Studio에서 확인한다.
-
-```text
-Table Editor
-→ public.chat_conversations
+```bash
+curl --cookie "nb_access_token=<access-token-cookie-value>" \
+  http://127.0.0.1:4000/api/v1/conversations?limit=50
 ```
 
 ## 12. 코드 검사와 포맷
@@ -426,7 +416,7 @@ git push origin main
 터미널 1:
 
 ```bash
-cd /Users/root1/Desktop/agent-rebuild/new-baseball
+cd /Users/hong/Desktop/내꺼연습/baseball-agent-v2
 supabase start
 supabase status
 ```
@@ -434,7 +424,7 @@ supabase status
 터미널 2:
 
 ```bash
-cd /Users/root1/Desktop/agent-rebuild/new-baseball/backend
+cd /Users/hong/Desktop/내꺼연습/baseball-agent-v2/backend
 uv sync
 uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 4000
 ```

@@ -1,5 +1,8 @@
 # New Baseball Agent 리빌드 로드맵
 
+> 라벨: `LONG_TERM`  
+> 상태: MVP2 이후 장기 로드맵. MVP1 현재 기준은 `docs/planning/001-service-and-mvp.md`를 우선 참고한다.
+
 > Python과 FastAPI를 기초부터 익히면서, 근거를 제시하는 RAG 기반 AI Agent 백엔드와 실제 사용 가능한 프론트엔드를 완성하는 포트폴리오 프로젝트
 
 ## 1. 이 문서의 목적

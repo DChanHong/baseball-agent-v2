@@ -11,24 +11,24 @@
 
 ## 다음에 이어서 할 것
 
-- [ ] 백엔드 배포용 `Dockerfile` 추가
-- [ ] Render Web Service 생성
-- [ ] Render build/start 설정 확인
-- [ ] Render production env 입력
-- [ ] Render 기본 배포 URL로 `/health` 확인
-- [ ] Render 기본 배포 URL로 `/health/db` 확인
-- [ ] Render custom domain에 `api.kbo-mate.dev-hong.it.kr` 추가
-- [ ] DNS에 Render가 안내하는 CNAME 또는 A record 추가
-- [ ] `https://api.kbo-mate.dev-hong.it.kr/health` 확인
-- [ ] `https://api.kbo-mate.dev-hong.it.kr/health/db` 확인
-- [ ] Vercel production redeploy
-- [ ] `https://kbo-mate.dev-hong.it.kr`에서 로그인 플로우 확인
-- [ ] 운영 채팅 end-to-end smoke test
-- [ ] 운영 RAG 검색 smoke test
-- [ ] 운영 일정 질문 smoke test
-- [ ] 운영 구장 가이드 질문 smoke test
-- [ ] 운영 야구 규칙 질문 smoke test
-- [ ] 운영 날씨 질문 smoke test
+- [x] 백엔드 배포용 `Dockerfile` 추가
+- [x] Render Web Service 생성
+- [x] Render build/start 설정 확인
+- [x] Render production env 입력
+- [x] Render 기본 배포 URL로 `/health` 확인
+- [x] Render 기본 배포 URL로 `/health/db` 확인
+- [x] Render custom domain에 `api.kbo-mate.dev-hong.it.kr` 추가
+- [x] DNS에 Render가 안내하는 CNAME 또는 A record 추가
+- [x] `https://api.kbo-mate.dev-hong.it.kr/health` 확인
+- [x] `https://api.kbo-mate.dev-hong.it.kr/health/db` 확인
+- [x] Vercel production redeploy
+- [x] `https://kbo-mate.dev-hong.it.kr`에서 로그인 플로우 확인
+- [x] 운영 채팅 end-to-end smoke test
+- [x] 운영 RAG 검색 smoke test
+- [x] 운영 일정 질문 smoke test
+- [x] 운영 구장 가이드 질문 smoke test
+- [x] 운영 야구 규칙 질문 smoke test
+- [x] 운영 날씨 질문 smoke test
 
 ## Render env 후보
 
@@ -64,5 +64,6 @@ KMA_SERVICE_KEY=<kma-service-key>
 
 - Google OAuth에는 Supabase callback URL을 넣는다.
 - Supabase Auth redirect allow list에는 백엔드 callback URL을 넣는다.
+- 백엔드 callback에는 `oauth_state` query string이 붙으므로 Supabase Redirect URL은 `https://api.kbo-mate.dev-hong.it.kr/api/v1/auth/callback**`처럼 wildcard를 붙인다.
 - 운영 DB에는 `supabase db reset`을 사용하지 않는다.
 - Render 무료 플랜은 cold start가 있을 수 있으므로 베타 테스트 시 첫 요청이 느릴 수 있다.

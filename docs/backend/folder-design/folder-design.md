@@ -1,6 +1,7 @@
 # New Baseball Agent 폴더 구조 설계
 
-> 상태: 확정  
+> 라벨: `REFERENCE`  
+> 상태: 구조 설계 기준. 일부 후반부 guest-first 예시는 로그인 도입 전 v1 설계 기록이다.  
 > 구조 원칙: 모노레포 + 도메인 중심 패키지 + Controller/Service/Domain/Infrastructure 계층 분리
 
 ## 1. 설계 목적
@@ -1206,6 +1207,8 @@ chat_conversations 행 SELECT FOR UPDATE
 메시지를 저장하는 모든 유스케이스는 동일한 transaction 안에서 순번 계산과 메시지 저장을 수행해야 한다.
 
 ### 21.7 로그인 전 소유권 기준
+
+> 참고: 이 섹션은 로그인 도입 전 guest-first 설계 기록이다. MVP1 현재 구현은 Google OAuth + HttpOnly cookie 기반 로그인 사용자 소유권을 사용한다.
 
 로그인 도입 전에는 브라우저가 생성한 UUID를 `guest_id`로 사용한다.
 

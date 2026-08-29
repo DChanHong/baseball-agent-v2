@@ -1,5 +1,6 @@
 # 백엔드 로깅 정책
 
+> 라벨: `REFERENCE`  
 > 상태: 초안  
 > 기준: Python 표준 `logging` + FastAPI + SQLAlchemy
 

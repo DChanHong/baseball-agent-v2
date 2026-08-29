@@ -40,6 +40,9 @@ engine = create_async_engine(
     # 커넥션 풀에서 연결을 꺼낼 때 연결이 유효한지 먼저 검사합니다.
     # 오래되어 끊어진 연결을 재사용하면서 발생하는 오류를 줄여줍니다.
     pool_pre_ping=True,
+    # Supabase transaction pooler는 prepared statement를 지원하지 않으므로
+    # asyncpg의 statement cache를 비활성화합니다.
+    connect_args={"statement_cache_size": 0},
 )
 
 

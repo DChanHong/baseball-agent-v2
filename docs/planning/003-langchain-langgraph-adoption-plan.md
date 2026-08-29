@@ -1,8 +1,9 @@
 # LangChain / LangGraph Adoption Plan
 
-> 상태: 1차 PoC 기준 업데이트
+> 라벨: `CURRENT`  
+> 상태: 1차 PoC 기준 업데이트. MVP2에서 routing/answer generation 개선 계속 진행
 > 작성일: 2026-08-13
-> 최근 업데이트: 2026-08-20
+> 최근 업데이트: 2026-08-25
 > 목적: baseball-agent-v2 백엔드에 LangChain과 LangGraph를 점진적으로 도입하기 위한 범위와 순서 정의
 
 ## 1. 배경

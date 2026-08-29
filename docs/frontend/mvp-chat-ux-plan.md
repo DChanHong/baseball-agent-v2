@@ -1,17 +1,15 @@
 # MVP Chat UX Plan
 
-> 상태: 구현 완료 (2026-08-21 기준)
-> 목적: 1차 MVP 채팅 화면 레이아웃, 세션 흐름, API 계약 기록.
-> 범위: 프론트엔드 UX/상태/API 사용 방식. 백엔드 구현 상세는 별도 문서에서 다룬다.
-> 주의: 이 문서는 초안 당시 guest-first 기준으로 작성됐으나, 실제 구현은 authenticated-first로 확정됐다. guest_id 관련 내용은 현재 구현과 다르다.
+> 라벨: `CURRENT`  
+> 상태: MVP1 구현 완료 및 운영 배포 확인  
+> 최근 업데이트: 2026-08-25  
+> 범위: 프론트엔드 채팅 UX, 인증 전제, 세션/대화 흐름, API 사용 방식
 
-## 1. MVP 목표
+## 1. MVP1 목표
 
-1차 MVP는 사용자가 한 화면에서 KBO 직관 관련 질문을 입력하고, Agent가 필요한 Tool을 사용해 답변하는 채팅 경험을 완성하는 것이다.
+MVP1의 목표는 사용자가 로그인한 뒤 한 화면에서 KBO 관련 질문을 입력하고, Agent가 필요한 Tool을 사용해 근거 있는 답변을 스트리밍으로 반환하는 채팅 경험을 완성하는 것이다.
 
-이번 단계에서는 Tool을 더 늘리지 않고, 이미 구현한 Tool을 실제 화면과 API 흐름에 연결한다.
-
-MVP에서 지원할 대표 질문:
+지원 대표 질문:
 
 ```text
 오늘 롯데 경기 있어?
@@ -22,29 +20,58 @@ MVP에서 지원할 대표 질문:
 보크가 뭐야?
 ```
 
-## 2. 세션 정책
+MVP1 완료 기준:
 
-Supabase Auth 기반 로그인이 적용되어 있다. 비로그인 상태에서는 채팅을 사용할 수 없다.
+- Google OAuth 로그인이 동작한다.
+- 로그인 후 현재 사용자 조회가 동작한다.
+- 채팅 메시지를 전송할 수 있다.
+- SSE로 assistant 답변과 tool 실행 상태를 받을 수 있다.
+- 경기 일정, 구장 정보, 날씨, 예매/구장 가이드, 야구 지식 Tool 결과를 카드로 볼 수 있다.
+- 대화 목록과 대화 메시지를 로그인 사용자 기준으로 불러올 수 있다.
+
+## 2. 인증과 세션 정책
+
+MVP1은 authenticated-first 정책이다. 비로그인 사용자는 채팅을 사용할 수 없다.
 
 ```text
-Supabase Auth
-  → access_token / refresh_token (쿠키 저장)
-  → FastAPI: Authorization: Bearer <token>
-  → user_profile_id 기반 conversation 소유권 관리
+Google OAuth
+-> Supabase Auth
+-> FastAPI backend callback
+-> HttpOnly cookie session
+-> frontend fetch with credentials: "include"
 ```
 
-원칙:
+프론트엔드는 access token과 refresh token을 직접 저장하거나 읽지 않는다. 세션 쿠키는 백엔드 API 도메인에 HttpOnly cookie로 저장된다.
 
-- 로그인한 사용자만 `/api/v1/chat` 및 대화 목록 API를 사용할 수 있다.
-- 새 채팅은 `conversation_id=null`로 시작하고, 서버가 새 conversation을 생성해 SSE로 `conversation.created` 이벤트를 보낸다.
-- 이후 같은 채팅창에서는 생성된 `conversation_id`를 계속 사용한다.
-- conversation 목록은 로그인한 사용자의 `user_profile_id`에 묶어 관리한다.
+운영 기준:
+
+```text
+Frontend: https://kbo-mate.dev-hong.it.kr
+Backend:  https://api.kbo-mate.dev-hong.it.kr
+```
+
+로그인 시작 URL:
+
+```text
+https://api.kbo-mate.dev-hong.it.kr/api/v1/auth/google
+```
+
+로그인 성공 후 프론트는 현재 사용자를 조회한다.
+
+```text
+GET /api/v1/auth/me
+credentials: "include"
+```
 
 ## 3. Chat API 계약
 
+채팅 전송:
+
 ```text
 POST /api/v1/chat
-Authorization: Bearer <access_token>
+credentials: "include"
+Accept: text/event-stream
+Content-Type: application/json
 ```
 
 요청:
@@ -56,7 +83,7 @@ Authorization: Bearer <access_token>
 }
 ```
 
-새 대화 시작 시:
+새 대화 시작:
 
 ```json
 {
@@ -65,305 +92,183 @@ Authorization: Bearer <access_token>
 }
 ```
 
-응답은 SSE(Server-Sent Events) 스트리밍으로 반환된다.
-
-주요 이벤트:
+주요 SSE 이벤트:
 
 ```text
-conversation.created  → conversation_id 발급
-message.created       → user/assistant 메시지 ID 확정
-tool.started          → tool 실행 시작
-tool.completed        → tool 결과
-assistant.delta       → 답변 텍스트 청크
-assistant.completed   → 최종 답변
-conversation.updated  → conversation 목록 갱신 신호
-done                  → 스트림 종료
+conversation.created
+message.created
+tool.started
+tool.completed
+tool.failed
+assistant.delta
+assistant.completed
+conversation.updated
+stream.failed
+done
 ```
 
-## 4. 화면 레이아웃
+프론트는 SSE payload를 Zod로 검증하고 UI 타입으로 변환한다.
 
-1차 화면은 채팅 작업에 집중한다.
+## 4. 화면 구조
+
+MVP1 최상위 화면:
 
 ```text
-┌──────────────────────────────────────────────────────────────┐
-│ Header                                                       │
-│ Baseball Agent                    새 채팅  사이드바  프로필 │
-├───────────────┬──────────────────────────────────────────────┤
-│ Session       │ Chat Workspace                               │
-│ Sidebar       │                                              │
-│               │  ┌────────────────────────────────────────┐  │
-│ - 새 채팅     │  │ Message List                           │  │
-│ - 오늘 사직.. │  │ - user message                         │  │
-│ - 예매 방법.. │  │ - assistant answer                     │  │
-│ - 보크 설명.. │  │ - tool result compact cards            │  │
-│               │  └────────────────────────────────────────┘  │
-│               │                                              │
-│               │  ┌────────────────────────────────────────┐  │
-│               │  │ Composer                               │  │
-│               │  │ [질문 입력...]                  [send] │  │
-│               │  └────────────────────────────────────────┘  │
-└───────────────┴──────────────────────────────────────────────┘
+ChatPage
+├── ChatSidebar
+├── ChatPanel
+└── GlobalModal
 ```
 
-Session Sidebar는 접을 수 있다.
+현재 화면 구성:
+
+- 좌측 통합 사이드바
+- 중앙 채팅 패널
+- 로그인 모달
+- 프로필 모달
+- Tool result compact card
+- SourceDrawer 코드는 보존하되 MVP1 UI에서는 렌더링하지 않음
+
+전역 fixed header는 제거됐고, 브랜드/새 채팅/대화 목록/계정 진입점은 사이드바로 통합됐다.
+
+## 5. Sidebar
+
+사이드바 역할:
+
+- 브랜드 표시
+- 새 채팅 시작
+- 로그인한 사용자의 최근 대화 목록 표시
+- 현재 대화 선택
+- 로그인/프로필/로그아웃 진입
+
+대화 목록 API:
 
 ```text
-expanded width: 260px
-collapsed width: 56px
-mobile: overlay drawer
+GET /api/v1/conversations?limit=50
+credentials: "include"
 ```
 
-접힌 상태에서는 아이콘 버튼만 표시한다.
+대화 메시지 API:
 
 ```text
-┌────┬──────────────────────────────────────────────┐
-│ +  │ Chat Workspace                               │
-│ ≡  │                                              │
-│ 1  │                                              │
-│ 2  │                                              │
-└────┴──────────────────────────────────────────────┘
+GET /api/v1/conversations/{conversation_id}/messages?limit=100
+credentials: "include"
 ```
 
-데스크톱에서는 출처/근거 패널을 오른쪽 drawer로 열 수 있다. Source Drawer는 Session Sidebar와 별개다.
-
-```text
-┌──────────────────────────────┬───────────────┐
-│ Chat                         │ Source Drawer │
-│                              │ - source URL  │
-│                              │ - as_of       │
-│                              │ - limitations │
-└──────────────────────────────┴───────────────┘
-```
-
-모바일에서는 drawer가 bottom sheet 또는 full-screen overlay로 열린다.
-
-## 5. 첫 화면 상태
-
-아직 메시지가 없을 때는 landing hero보다 실제 채팅 시작을 우선한다.
-
-표시 요소:
-
-- 짧은 서비스 제목
-- 입력창
-- 4~6개 예시 질문 chip
-- 왼쪽 session sidebar의 최근 대화 목록
-- 최근 대화가 있으면 sidebar에서 이어가기
-
-예시 질문:
-
-```text
-오늘 롯데 경기 있어?
-오늘 사직 비 와?
-사직 예매 어디서 해?
-고척돔 음식물 반입 가능해?
-보크가 뭐야?
-```
-
-좌석 추천 예시는 이번 MVP에서 제외한다.
-
-## 6. 세션 사이드바
-
-세션 사이드바는 로그인한 사용자의 conversation 목록을 표시한다.
-
-표시 요소:
-
-- 새 채팅 버튼
-- 접기/펼치기 버튼
-- 현재 conversation 강조
-- 최근 대화 목록
-- 각 대화의 제목 또는 첫 질문
-- 마지막 메시지 시각
-- 비어 있을 때 안내 문구
-
-MVP 동작:
+동작:
 
 ```text
 새 채팅 클릭
-→ current_conversation_id=null
-→ message list 초기화
-→ composer focus
+-> activeConversationId = null
+-> 메시지 영역 초기화
+-> 첫 전송 시 서버가 conversation.created 이벤트로 새 ID 반환
 ```
 
 ```text
 대화 항목 클릭
-→ current_conversation_id 변경
-→ 해당 conversation messages 조회
-→ message list 표시
+-> activeConversationId 변경
+-> 서버에서 메시지 목록 조회
+-> message list 표시
 ```
 
-```text
-사이드바 접기
-→ is_session_sidebar_collapsed=true 저장
-→ message workspace 폭 확장
-```
+## 6. Chat Panel
 
-구현된 API:
+첫 화면은 hero state로 표시된다.
 
-```text
-GET /api/v1/conversations
-Authorization: Bearer <access_token>
+- KBO Mate 브랜드
+- 질문 입력창
+- 예시 질문
 
-GET /api/v1/conversations/{conversation_id}/messages
-Authorization: Bearer <access_token>
-```
+메시지가 하나 이상 있거나 대화 내역을 불러오면 active chat workspace로 전환된다.
 
-## 7. 메시지 UI
+- scrollable message list
+- assistant typing indicator
+- tool result cards
+- inline error block
+- fixed/floating composer
 
-메시지 타입:
-
-| 타입 | UI |
-|---|---|
-| user | 오른쪽 정렬 말풍선 |
-| assistant | 왼쪽 정렬 답변 블록 |
-| tool result | assistant 답변 아래 compact card |
-| source | drawer 또는 접이식 source list |
-| limitation | 답변 하단의 작은 안내 문구 |
-
-Tool card는 길게 펼치지 않는다. MVP에서는 요약만 보여준다.
-
-Tool별 compact card:
-
-| Tool | 표시 정보 |
-|---|---|
-| `find_kbo_game` | 날짜, 팀, 구장, 경기 상태 |
-| `get_stadium_info` | 구장명, 주소, 돔 여부, 홈팀 |
-| `get_weather_context` | 기온, 강수, 습도, 바람, 직관 condition |
-| `search_ticketing_guide` | 예매처/방법 요약, 공식 출처 |
-| `search_stadium_guide` | 반입/교통/시설 요약, 출처 |
-| `search_baseball_knowledge` | 근거 요약, 문서 출처 |
-
-## 8. 상태 모델
-
-프론트엔드 상태는 세 층으로 나눈다.
-
-### Local Storage
-
-```text
-is_session_sidebar_collapsed
-```
-
-인증 토큰은 Supabase Auth가 쿠키로 관리한다. guest_id와 conversation cache는 사용하지 않는다.
-
-### Jotai
-
-```text
-chat_input
-is_session_sidebar_open
-is_session_sidebar_collapsed
-is_source_drawer_open
-selected_source_item
-optimistic_pending_message
-```
-
-### React Query
-
-```text
-conversation messages
-chat mutation result
-conversation list
-```
-
-MVP에서는 conversation list API를 붙이는 것이 좋다. 단, 백엔드 일정상 늦어지면 `recent_conversations_cache`로 sidebar UI를 먼저 완성한다.
-
-## 9. 전송 흐름
+전송 흐름:
 
 ```text
 사용자 입력
-→ 로그인 여부 확인 (미로그인 시 로그인 모달)
-→ optimistic user message 표시
-→ POST /api/v1/chat (SSE 스트림 시작)
-→ conversation.created → activeConversationId 갱신
-→ tool.started / tool.completed → tool card 갱신
-→ assistant.delta → 답변 텍스트 스트리밍
-→ done → 스트림 종료, conversation list invalidate
+-> 로그인 상태 확인
+-> 비로그인 시 로그인 모달
+-> optimistic user message 표시
+-> assistant placeholder 표시
+-> POST /api/v1/chat SSE 시작
+-> conversation.created 수신 시 activeConversationId 갱신
+-> tool.started/completed/failed 수신 시 tool card 갱신
+-> assistant.delta 수신 시 답변 누적
+-> done 수신 시 conversation list invalidate
 ```
 
-실패 시:
+## 7. Tool Result Cards
+
+MVP1에서 표시하는 Tool:
+
+| Tool | UI 요약 |
+|---|---|
+| `find_kbo_game` | 날짜, 팀, 구장, 경기 상태 |
+| `get_stadium_info` | 구장명, 주소, 돔 여부, 홈팀 |
+| `get_weather_context` | 날씨, 강수, 바람, 직관 condition |
+| `search_ticketing_guide` | 예매처/방법 요약, 공식 출처 |
+| `search_stadium_guide` | 반입/교통/시설 요약, 출처 |
+| `search_baseball_knowledge` | 야구 규칙/지식 요약, 문서 출처 |
+
+상태:
+
+- `running`: 확인 중 상태와 로딩 표시
+- `completed`: 핵심 결과 요약
+- `failed`: 짧은 실패 메시지
+
+Tool별 개별 재시도 버튼은 MVP1에 포함하지 않는다. 전체 응답 실패 시에는 메시지 영역의 `다시 시도` 버튼으로 마지막 사용자 메시지를 다시 전송한다.
+
+## 8. Source Drawer
+
+SourceDrawer 관련 코드는 남겨둔다.
 
 ```text
-network error
-→ user message는 유지
-→ assistant error block 표시
-→ 다시 시도 버튼 제공
+frontend/src/widgets/source-drawer/
 ```
 
-## 10. MVP에서 제외
+MVP1 운영 UI에서는 렌더링하지 않는다.
+
+이유:
+
+- Tool card 내부 출처 링크만으로 MVP1 검증이 가능하다.
+- 별도 출처 패널 UX는 MVP2에서 재설계할 수 있다.
+- 현재 우선순위는 로그인, 채팅, Tool card, 대화 저장 흐름이다.
+
+## 9. MVP1 제외 범위
 
 - 좌석 추천
 - 실시간 티켓 잔여석
+- 대화방 검색
+- 대화방 삭제
+- 대화방 이름 변경
+- 별도 설정 페이지
+- SourceDrawer 운영 노출
+- 복잡한 multi-tool timeline
+- Toast 시스템
+- 긴 메시지 리스트 virtualization
+
+## 10. MVP2 후보
+
+- SourceDrawer 재설계 및 출처 UX 강화
+- Tool card별 디자인 고도화
 - 대화방 검색/삭제/이름 변경
-- 프로필 저장
-- 복수 Tool chain을 UI에서 복잡하게 보여주는 timeline
+- 프로필/마이페이지 UX 확장
+- Toast 시스템
+- 모바일 active chat UX 추가 개선
+- 긴 대화 virtualization
+- 추천 후속 질문 UI
 
-단, 백엔드가 tool 결과를 반환하면 카드로 요약 표시는 한다.
+## 11. 삭제 여부
 
-## 11. 구현 순서
+이 문서는 삭제하지 않는다.
 
-1. `POST /api/v1/chat` 백엔드 계약 확정
-2. frontend Zod schema 작성
-3. `guest_id` localStorage helper 작성
-4. session sidebar 상태와 레이아웃 구현
-5. chat mutation hook 작성
-6. 현재 conversation 상태 저장
-7. message list UI 구현
-8. composer 전송 연결
-9. tool compact card 1차 구현
-10. source drawer 최소 구현
-11. conversation list API 또는 local cache 연결
-12. MVP 시나리오 6개로 수동 검증
+이유:
 
-## 12. 파일 배치 초안
-
-```text
-frontend/src/
-├── features/
-│   ├── manage-session-sidebar/
-│   │   ├── model/
-│   │   │   └── session-sidebar.atom.ts
-│   │   └── ui/
-│   │       └── session-sidebar-toggle.tsx
-│   └── send-message/
-│       ├── api/
-│       │   ├── send-chat-message.ts
-│       │   └── use-send-chat-message.ts
-│       ├── lib/
-│       │   └── guest-session.ts
-│       ├── model/
-│       │   └── chat-input.atom.ts
-│       └── ui/
-│           └── chat-composer.tsx
-├── entities/
-│   ├── conversation/
-│   │   └── model/
-│   │       └── types.ts
-│   ├── message/
-│   │   ├── model/
-│   │   │   └── types.ts
-│   │   └── ui/
-│   │       └── message-bubble.tsx
-│   └── tool-result/
-│       └── ui/
-│           └── tool-result-card.tsx
-└── widgets/
-    ├── session-sidebar/
-    │   ├── model/
-    │   │   └── recent-conversations-cache.ts
-    │   └── ui/
-    │       └── session-sidebar.tsx
-    ├── chat/
-    │   └── ui/
-    │       └── chat-panel.tsx
-    └── source-drawer/
-        └── ui/
-            └── source-drawer.tsx
-```
-
-## 13. 결정 사항
-
-- 1차 MVP는 `POST /api/v1/chat` SSE 스트리밍으로 구현됐다.
-- 인증은 Supabase Auth 기반 로그인 필수(authenticated-first)로 확정됐다.
-- 프론트는 sidebar 접힘 상태만 `localStorage`에 저장한다. guest_id는 사용하지 않는다.
-- sidebar는 데스크톱 고정 영역, 모바일 overlay drawer로 동작한다.
-- 좌석 추천 UI는 MVP에서 제외한다.
-- Tool 결과는 답변 아래 compact card로 표시한다.
-- 출처와 기준 시점은 Source Drawer로 분리한다 (현재 UI placeholder 구현, 데이터 연결은 MVP1 제외 → 스펙업으로 이동).
+- MVP1의 현재 채팅 UX와 API 사용 방식을 가장 짧게 설명하는 기준 문서다.
+- `frontend-layout-spec.md`보다 요약성이 높아 업그레이드 전 진입점으로 유용하다.
+- MVP2 작업 전 "현재 되는 것과 제외된 것"을 빠르게 확인할 수 있다.
