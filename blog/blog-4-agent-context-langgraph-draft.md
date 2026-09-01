@@ -1,15 +1,18 @@
-# 라이브러리 없이 만든 야구 Agent에 LangGraph를 작게 도입한 이유
+# [AI Agent] LangGraph 도입: Tool보다 먼저 정리해야 했던 Context
 
-> 상태: MVP1 1차 PoC 기준 업데이트
-> 작성일: 2026-08-13
-> 최근 업데이트: 2026-08-27
-> 주제: baseball-agent-v2 백엔드가 직접 구현한 Tool 기반 채팅 구조를 넘어, follow-up context 처리를 위해 LangGraph를 작게 도입한 과정
+## 개요
 
-## 시작점
+KBO Mate는 처음부터 LangGraph로 만든 Agent가 아니었습니다.
 
-KBO 직관 도우미 서비스 `baseball-agent-v2`는 처음부터 LangChain이나 LangGraph를 사용하지 않았다.
+먼저 FastAPI, Tool Router, Tool Handler, SSE, Supabase 저장 구조를 직접 만들고 나서, 대화가 이어질 때 필요한 context 문제가 드러났습니다.
 
-일부러 가장 기본적인 구조부터 직접 만들었다.
+이번 글에서는 KBO Mate에 LangGraph를 전면 도입하지 않고, `selected_game` 중심의 Compact Context를 처리하기 위해 작게 도입한 과정을 정리해보겠습니다.
+
+## 1. 시작점
+
+초기 KBO Mate 백엔드는 Agent 프레임워크 없이 직접 구성했습니다.
+
+당시 구조는 다음과 같았습니다.
 
 ```text
 FastAPI controller
@@ -17,14 +20,12 @@ ChatStreamService
 ToolRoutingService
 AgentToolExecutor
 domain service / repository / tool handler
-Supabase/Postgres conversation/message 저장
+Supabase PostgreSQL conversation/message 저장
 SSE streaming
 Next.js frontend
 ```
 
-처음에는 이 선택이 좋았다. Agent 라이브러리를 먼저 붙이면 편해 보이지만, 실제로 어떤 책임이 필요한지 모른 채 추상화부터 가져오게 된다. 반대로 직접 만들면 요청이 들어와서, 어떤 Tool이 선택되고, Tool 결과가 어떻게 프론트로 흘러가며, 메시지가 어디에 저장되는지 눈으로 확인할 수 있다.
-
-이 프로젝트에서는 먼저 다음 Tool들을 직접 구성했다.
+Tool도 직접 연결했습니다.
 
 ```text
 find_kbo_game
@@ -35,13 +36,15 @@ search_ticketing_guide
 search_baseball_knowledge
 ```
 
-경기 일정은 정형 DB 조회로 처리했고, 구장 가이드와 예매 가이드, 야구 지식은 pgvector 기반 RAG 검색으로 처리했다. 여기에 날씨 Tool까지 붙이면서 "LLM이 Tool을 고르고, Tool 결과를 프론트에 카드로 보여주는" 1차 Agent 백엔드는 어느 정도 만들어졌다.
+이 구조는 MVP 초반에는 충분했습니다.
 
-하지만 그 다음 문제가 나타났다.
+사용자 메시지가 들어오면 routing을 하고, 필요한 Tool을 실행하고, Tool 결과를 SSE event로 프론트엔드에 전달할 수 있었습니다.
 
-## 문제는 Tool 개수가 아니라 context였다
+하지만 Tool 개수가 늘어난 뒤에 더 중요한 문제가 보였습니다.
 
-대표적인 대화는 이렇다.
+## 2. 문제는 Tool 개수가 아니라 Context였습니다
+
+대표적인 대화는 다음과 같습니다.
 
 ```text
 User: 롯데 오늘 야구 일정 알려줘
@@ -49,9 +52,11 @@ Assistant: 오늘 롯데 경기 일정을 안내
 User: 어디서 경기하는거지?
 ```
 
-사람에게는 너무 자연스러운 질문이다. "어디서"는 직전 질문의 "롯데 오늘 경기"를 가리킨다.
+사람에게는 자연스러운 후속 질문입니다.
 
-그런데 현재 구조에서 routing input은 대체로 이런 정보만 가진다.
+`어디서`는 직전 질문에서 조회한 롯데 경기를 가리킵니다.
+
+그런데 첫 구현에서 routing input은 주로 현재 메시지와 사용자 기본 정보 중심이었습니다.
 
 ```text
 message
@@ -60,221 +65,294 @@ today
 timezone
 ```
 
-직전 Tool result에서 나온 `stadium_id`, `stadium_name`, `game_date`, `home_team_id`, `away_team_id`는 assistant message metadata에 저장되지만, 다음 턴의 작업 기억으로 구조화되어 있지는 않다.
+직전 Tool 결과에는 경기장, 경기일, 홈팀, 원정팀 정보가 있었지만, 다음 턴에서 바로 사용할 수 있는 working context로 정리되어 있지는 않았습니다.
 
-그래서 "어디서 경기하는거지?"라는 질문이 들어왔을 때 선택지는 애매해진다.
-
-```text
-1. chat_messages DB를 조회해서 이전 메시지와 Tool result를 프롬프트에 넣는다.
-2. prompt 안에서 LLM이 알아서 직전 경기 context를 찾게 한다.
-3. 서비스 코드 곳곳에서 이전 Tool result를 직접 파싱한다.
-```
-
-이 방식은 빨리 만들 수는 있다. 하지만 오래 가기 어렵다.
-
-DB는 영구 히스토리와 화면 렌더링의 기준이어야 한다. 매 요청마다 메시지 DB를 뒤져서 "현재 사용자가 말하는 그 경기"를 추론하는 책임까지 맡기면, prompt와 service 코드가 같이 복잡해진다.
-
-이 시점에서 필요한 것은 단순한 대화 로그가 아니라, Agent가 다음 턴에서 사용할 수 있는 working context였다.
-
-## LangChain과 LangGraph를 다시 보게 된 이유
-
-처음에는 라이브러리 없이 직접 만드는 편이 좋았다. 하지만 이제는 필요한 추상화가 선명해졌다.
-
-LangChain은 LLM 애플리케이션의 부품을 정리하는 데 적합하다.
+그래서 후속 질문을 처리하려면 선택지가 애매해졌습니다.
 
 ```text
-ChatModel wrapper
-PromptTemplate
-structured output
-embedding
-retriever
-RAG chain
-answer generation chain
+이전 chat_messages를 다시 읽어 LLM에게 넣는다.
+
+assistant message metadata 안의 Tool result를 서비스 코드에서 직접 파싱한다.
+
+프롬프트 안에서 LLM이 직전 경기 정보를 알아서 찾게 한다.
 ```
 
-현재 프로젝트에도 이미 이 역할들이 있다. 다만 직접 OpenAI SDK를 호출하고, prompt 문자열을 만들고, Pydantic schema로 routing decision을 받고 있다. 이것을 LangChain으로 옮기면 LLM 호출, prompt, structured output, RAG context formatting을 더 일관된 단위로 관리할 수 있다.
+모두 가능은 하지만, MVP 구조가 빨리 복잡해질 수 있었습니다.
 
-반면 LangGraph는 흐름과 상태를 다루기에 적합하다.
+이 시점에서 필요했던 것은 전체 대화 로그가 아니라, 다음 턴의 routing과 답변에 실제로 필요한 작은 context였습니다.
+
+## 3. Compact Context 설계
+
+현재 코드에서 Agent working memory는 `AgentConversationContext`로 정의했습니다.
+
+핵심 schema는 다음과 같습니다.
 
 ```text
-state
-node
-edge
-conditional edge
-checkpointer
-thread_id
+selected_game
+selected_stadium_id
+selected_stadium_name
+selected_team_id
+last_tool_name
 ```
 
-야구 직관 도우미에는 이 구조가 잘 맞는다.
+`selected_game` 안에는 다음 값만 저장합니다.
 
 ```text
-receive user message
--> load context
--> route
--> execute tool
--> update selected_game / selected_stadium
--> generate answer
--> persist message
--> stream event
+game_id
+game_date
+start_time
+away_team_id
+home_team_id
+away_team_name
+home_team_name
+stadium_id
+stadium_name
+game_status
 ```
 
-즉 LangChain은 부품이고, LangGraph는 흐름 제어판이다.
-
-다만 MVP1에서는 둘을 한꺼번에 전면 도입하지 않았다.
-
-현재까지 실제로 들어온 것은 LangGraph 기반 workflow skeleton과 `selected_game` context 처리다. LangChain structured routing과 LLM 기반 answer generation은 아직 OpenAI SDK 직접 호출/템플릿 요약을 대체하지 않았다. 이유는 단순하다. 먼저 SSE 계약, Tool card, 대화 저장, follow-up context가 흔들리지 않는지 확인하는 것이 더 중요했기 때문이다.
-
-## DB와 memory를 분리하기
-
-중요한 결정은 기존 DB를 버리지 않는 것이다.
-
-기존 Supabase/Postgres는 계속 source of truth로 둔다.
+이 context는 일반 message history와 역할이 다릅니다.
 
 ```text
 chat_messages
-= 사용자가 실제로 본 대화, assistant 답변, Tool 결과 metadata, 감사 로그
+→ 사용자가 실제로 본 대화, assistant 답변, Tool 결과 metadata를 저장합니다.
 
-chat_conversations
-= 대화방 정보, 제목, 요약, metadata, 소유권
+chat_conversations.metadata.agent_context
+→ 다음 request에서 복원할 compact working memory를 저장합니다.
 
-LangGraph state
-= 다음 질문을 이해하기 위한 Agent working memory
+LangGraph State
+→ 한 번의 Agent 실행 중 routing, Tool 실행, context update, answer generation에 사용합니다.
 ```
 
-예를 들어 첫 질문에서 `find_kbo_game`이 실행되어 다음 결과를 얻었다고 하자.
+즉, DB에 대화 전체를 저장하되, 다음 턴의 판단에는 compact context만 넘기는 구조입니다.
+
+## 4. 왜 Tool 결과 전체를 저장하지 않았나
+
+`find_kbo_game` 결과 전체를 memory에 저장할 수도 있었습니다.
+
+하지만 그렇게 하지 않았습니다.
+
+Tool 결과 전체를 계속 남기면 다음 문제가 생길 수 있기 때문입니다.
 
 ```text
-롯데 vs 두산
-2026-08-13
-18:30
-사직야구장
+불필요한 context가 계속 커진다.
+
+이전 Tool 결과의 세부 정보가 다음 질문에 과하게 영향을 줄 수 있다.
+
+RAG 검색 결과처럼 일회성 근거에 가까운 정보가 다음 턴에서 사실처럼 재사용될 수 있다.
+
+여러 경기 결과가 나온 경우 어떤 경기를 사용해야 하는지 더 애매해진다.
 ```
 
-이 결과는 메시지 metadata에도 저장된다. 하지만 동시에 graph state에는 더 작고 명확한 형태로 저장한다.
+그래서 현재 구현에서는 `find_kbo_game`이 성공했고, 결과가 정확히 1개일 때만 `selected_game`으로 승격합니다.
+
+반대로 다음 경우에는 `selected_game`을 새로 만들지 않습니다.
+
+```text
+Tool 실행이 실패한 경우
+
+find_kbo_game이 아닌 Tool인 경우
+
+find_kbo_game 결과가 0개인 경우
+
+find_kbo_game 결과가 여러 개인 경우
+```
+
+이 경우에는 필요하면 `last_tool_name` 정도만 갱신합니다.
+
+RAG 결과를 memory로 승격하지 않은 이유도 같습니다. 구장 안내나 야구 지식 검색 결과는 답변 근거로는 중요하지만, 다음 턴의 사용자 의도를 고정할 정도의 상태는 아니라고 봤습니다.
+
+## 5. LangGraph를 작게 도입한 이유
+
+LangGraph를 도입한 이유는 Agent를 더 화려하게 만들기 위해서가 아니었습니다.
+
+요청 하나가 들어왔을 때 다음 흐름을 명확한 node로 나누고 싶었습니다.
+
+```text
+route
+→ prepare_tool
+→ tool_execute
+→ state_update
+→ answer_generate
+```
+
+현재 그래프 흐름은 다음과 같습니다.
+
+```text
+START
+→ route
+→ 조건 분기
+  → prepare_tool
+  → tool_execute
+  → state_update
+  → answer_generate
+→ END
+```
+
+Tool을 호출하지 않아도 되는 경우에는 바로 답변 생성으로 갑니다.
+
+```text
+START
+→ route
+→ answer_generate
+→ END
+```
+
+이 구조가 필요한 이유는 상태 변경 지점을 분리하기 위해서였습니다.
+
+Tool 실행과 context 업데이트가 같은 곳에 섞이면, 어떤 Tool 결과가 memory로 승격됐는지 추적하기 어려워집니다. 그래서 `tool_execute`와 `state_update`를 나눴습니다.
+
+## 6. 저장과 복원
+
+현재 구현에서는 LangGraph checkpointer를 별도로 사용하지 않습니다.
+
+대신 기존 대화 DB를 그대로 유지하면서, conversation metadata에 compact context를 저장합니다.
+
+요청이 들어올 때는 다음 흐름으로 복원합니다.
+
+```text
+chat_conversations.metadata.agent_context 읽기
+→ AgentConversationContext로 validate
+→ BaseballAgentInput.context에 주입
+→ routing 시 conversation_context로 전달
+```
+
+응답이 끝나면 다시 저장합니다.
+
+```text
+graph_output.context
+→ assistant_message.metadata.agent_context 저장
+→ chat_conversations.metadata.agent_context 저장
+```
+
+metadata가 없거나 validation에 실패하면 빈 `AgentConversationContext`로 시작합니다.
+
+이 선택은 PoC 범위를 작게 유지하기 위한 것이었습니다. 대화 저장은 이미 Supabase PostgreSQL에 있었기 때문에, MVP 단계에서 LangGraph checkpointer까지 별도로 도입할 필요는 크지 않았습니다.
+
+## 7. 후속 질문 처리
+
+Compact Context가 있으면 다음 질문을 DB message history 전체 없이 처리할 수 있습니다.
+
+예를 들어 직전 `find_kbo_game` 결과가 하나였고, context에 다음 값이 저장되어 있다고 가정합니다.
 
 ```text
 selected_team_id = LOTTE
-selected_stadium_id = SAJIK
-selected_stadium_name = 사직야구장
-selected_game.game_date = 2026-08-13
-selected_game.start_time = 18:30
-selected_game.home_team_id = LOTTE
-selected_game.away_team_id = DOOSAN
+selected_stadium_id = DAEJEON
+selected_stadium_name = 대전 한화생명 볼파크
+
+selected_game.game_date = 2026-07-28
+selected_game.start_time = 18:30:00
+selected_game.away_team_id = LOTTE
+selected_game.home_team_id = HANWHA
+selected_game.away_team_name = 롯데
+selected_game.home_team_name = 한화
+selected_game.game_status = scheduled
 ```
 
-그러면 다음 질문이 들어왔을 때 전체 메시지 로그를 다시 해석할 필요가 줄어든다.
+그러면 routing 단계에서 다음과 같은 direct answer intent를 만들 수 있습니다.
 
 ```text
-User: 어디서 경기하는거지?
-Assistant: 오늘 롯데 경기는 사직야구장에서 열립니다.
+어디서 경기하는거지?
+→ selected_game_place
+
+몇 시야?
+→ selected_game_time
+
+상대가 누구야?
+→ selected_game_opponent
+
+홈 경기야?
+→ selected_game_home_away
+
+오늘 취소됐어?
+→ selected_game_status
 ```
 
-이것이 이번 도입의 핵심이다.
+이 경우 Tool을 다시 호출하지 않고, `answer_generate` 단계에서 context 기반 답변을 만듭니다.
 
-현재 구현에서는 LangGraph checkpointer를 별도로 영속 저장소로 쓰지는 않았다. 대신 기존 `chat_conversations.metadata.agent_context`에 compact working memory를 저장하고, 요청마다 이 값을 graph input으로 복원한다. DB를 계속 source of truth로 두면서 PoC 범위를 작게 유지하기 위한 선택이다.
+즉, 현재 Compact Context의 1차 목적은 복잡한 장기 기억이 아니라, 직전 경기 조회에 대한 후속 질문을 안정적으로 처리하는 것입니다.
 
-## 1차 목표를 작게 잡기
+## 8. SSE 계약 유지
 
-처음부터 모든 Agent 흐름을 LangGraph로 갈아엎지는 않는다.
+LangGraph를 도입하면서도 기존 SSE event 계약은 유지했습니다.
 
-1차 목표는 아래 하나였다.
+그래프 내부 event는 서비스 계층에서 SSE event로 변환됩니다.
+
+현재 흐름에서 중요한 event는 다음과 같습니다.
 
 ```text
-User: 롯데 오늘 야구 일정 알려줘
--> find_kbo_game 실행
--> selected_game 저장
-
-User: 어디서 경기하는거지?
--> selected_game.stadium_name 참조
--> 자연스럽게 답변
+tool.started
+tool.completed
+tool.failed
+assistant.delta
+assistant.completed
+conversation.updated
+done
 ```
 
-이 작은 시나리오로 검증할 수 있는 것이 많았다.
+Tool 실행 중 예외가 발생하면 Graph 전체를 바로 중단하지 않습니다.
+
+현재 구조에서는 `tool_execute`에서 예외를 잡고 `tool.failed` payload를 만든 뒤, 이후 `answer_generate`까지 진행합니다.
+
+사용자에게는 내부 exception을 그대로 던지는 대신 다음과 같은 실패 답변을 만들 수 있습니다.
 
 ```text
-[보류] conversation_id를 LangGraph checkpointer thread_id로 직접 매핑해야 하는가
-[확인] Tool result를 graph state로 승격할 수 있는가
-[확인] 기존 SSE event contract를 유지할 수 있는가
-[확인] 기존 AgentToolExecutor와 Tool handler를 재사용할 수 있는가
-[확인] DB 메시지 전체 조회 없이 follow-up 질문을 처리할 수 있는가
+도구 실행 중 문제가 생겨서 정확한 결과를 가져오지 못했습니다. 잠시 뒤 다시 시도해 주세요.
 ```
 
-MVP1에서는 단일 `find_kbo_game` 결과를 `selected_game`으로 승격하고, 장소/시간/상대/홈원정/상태 질문까지 direct answer intent로 처리하는 API 테스트를 추가했다.
+이 판단은 사용자 경험을 위해서였습니다.
 
-이 1차가 되면 확장은 자연스럽다.
+기술적으로 Tool이 실패했더라도 채팅 스트림 전체가 갑자기 끊기면 사용자는 상황을 이해하기 어렵습니다. 실패도 하나의 Agent 상태로 보고, 프론트엔드가 `tool.failed` 카드를 보여준 뒤 assistant 답변까지 받을 수 있게 했습니다.
+
+## 9. 현재 한계
+
+현재 구현은 의도적으로 작습니다.
+
+아직 다음 기능은 들어가 있지 않습니다.
 
 ```text
-User: 비 와?
--> selected_game.stadium_id + selected_game.game_date로 get_weather_context
+LangGraph checkpointer 기반 영속 memory
 
-User: 예매는 어디서 해?
--> selected_stadium_id / selected_team_id로 search_ticketing_guide
+여러 경기 후보를 selected_candidates로 저장하는 구조
 
-User: 좌석 추천해줘
--> selected_stadium_id로 search_stadium_guide
+selected_game을 이용해 get_weather_context 입력을 자동 보강하는 흐름
 
-User: 몇 시 경기야?
--> [완료] selected_game.start_time으로 직접 답변
+selected_stadium_id / selected_team_id를 이용해 ticketing 또는 stadium guide Tool 입력을 자동 보강하는 흐름
+
+Tool retry
+
+동일 Tool 반복 방지
+
+장기 사용자 memory
 ```
 
-현재 완료 범위는 `selected_game`에서 직접 답할 수 있는 질문까지다. `비 와?`, `예매는 어디서 해?`처럼 `selected_game`을 다른 Tool 입력으로 자동 보강하는 흐름은 MVP2 후보로 남겼다.
+또한 현재 graph는 여러 Tool을 반복 호출하는 agentic loop가 아닙니다.
 
-## 지금 구조에서 살릴 것
+한 request에서 routing 결과에 따라 최대 하나의 Tool을 실행하고, 이후 answer generation으로 끝나는 구조입니다.
 
-이번 도입은 리팩터링을 위한 리팩터링이 아니다.
+이 제한은 MVP 단계에서는 장점이었습니다. 어떤 질문에서 어떤 Tool이 호출되고, 어떤 context가 업데이트되는지 예측 가능해야 했기 때문입니다.
 
-살릴 것은 살린다.
+## 10. 정리
+
+이번 작업에서 LangGraph를 도입한 이유는 "Agent 프레임워크를 쓰기 위해서"가 아니었습니다.
+
+직접 만든 Tool 기반 구조에서 후속 질문 context 문제가 드러났고, 그 문제를 작게 풀기 위해 Graph State와 node 흐름을 도입했습니다.
+
+현재 구조에서 핵심은 다음과 같습니다.
 
 ```text
-FastAPI controller
-auth
-Supabase/Postgres schema
-conversation/message 저장
-SSE event contract
-domain service
-repository
-Tool handler
-AgentToolExecutor
-frontend Tool card
+DB message history는 대화 기록으로 유지한다.
+
+Compact Context는 다음 턴의 판단에 필요한 상태만 저장한다.
+
+Tool 결과 전체를 memory로 남기지 않는다.
+
+find_kbo_game 단일 결과만 selected_game으로 승격한다.
+
+LangGraph는 route / tool_execute / state_update / answer_generate 흐름을 분리한다.
+
+Tool 실패도 Graph 상태로 다루고, 답변 생성까지 이어간다.
 ```
 
-특히 Tool handler는 이미 도메인 서비스와 잘 분리되어 있다. LangGraph의 `tool_execute` node는 기존 `AgentToolExecutor.execute(decision)`을 그대로 호출하면 된다.
+결국 이 작업의 핵심은 더 많은 기억을 넣는 것이 아니라, 다음 질문에 필요한 기억만 남기는 것이었습니다.
 
-처음부터 LangChain generic agent로 모든 Tool을 넘기지 않는 이유도 여기에 있다. 이 서비스는 운영 가능한 명시적 흐름이 중요하다. 어떤 질문에서 어떤 Tool을 호출하고, 어떤 state가 업데이트되며, 어떤 이벤트가 프론트로 나가는지 직접 볼 수 있어야 한다.
-
-## 앞으로의 설계 방향
-
-도입 방향은 다음과 같다.
-
-```text
-LangChain
-= LLM 호출, prompt, structured output, retriever, answer generation chain
-
-LangGraph
-= route -> tool execute -> state update -> answer generation workflow
-
-기존 DB
-= 영구 대화 기록과 화면 렌더링의 source of truth
-
-Graph state
-= follow-up 질문 처리를 위한 working memory
-```
-
-가장 중요한 기준은 "라이브러리를 쓰는 것"이 아니라 "책임이 더 선명해지는가"다.
-
-처음에는 직접 구현했다. 그래서 Agent 백엔드에 어떤 부품이 필요한지 알게 됐다.
-
-이제는 context, structured output, RAG chain, workflow state가 필요하다. 그래서 LangGraph부터 작게 도입했고, LangChain은 routing과 answer generation 품질 개선 단계에서 점진 이전 대상으로 남겨두었다.
-
-이 순서가 마음에 든다. 추상화로 시작하지 않고, 필요가 생긴 뒤 추상화를 들여오는 방식이기 때문이다.
-
-## 다음 작업
-
-```text
-1. selected_game context를 get_weather_context 입력으로 보강
-2. selected_stadium_id / selected_team_id를 search_ticketing_guide 입력으로 보강
-3. 여러 경기 결과를 selected_candidates로 저장하고 clarification 처리
-4. LangChain structured routing chain으로 점진 이전
-5. Tool result 기반 LLM answer generation chain 도입
-6. 출처와 limitation을 자연어 답변에 반영
-```
+Agent에서 context는 많을수록 좋은 값이 아니라, 다음 판단을 안정적으로 만드는 만큼만 선별되어야 한다고 봤습니다.
