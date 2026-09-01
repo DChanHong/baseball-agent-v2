@@ -1,63 +1,139 @@
-# 2026-08-02 작업 로그: 야구 지식 RAG Tool 초기 세팅과 개선 전 baseline
+# [AI Agent] 야구 지식 RAG: 공식 규칙 PDF를 질문으로 검증하기
 
-> 상태: 1차 embedding_text 개선 결과까지 반영
-> 최근 업데이트: 2026-08-27
+## 개요
 
-## 오늘의 목표
+KBO Mate에서는 경기 일정, 날씨, 구장 정보뿐 아니라 야구 규칙과 플레이 상황도 설명할 수 있어야 했습니다.
+다만 야구 규칙은 단순한 정형 데이터가 아니라, 공식 규칙 PDF와 리그 규정처럼 문서 기반 근거가 중요한 영역이었습니다.
 
-`search_baseball_knowledge` Tool의 초기 구현 상태와 1차 검색 품질 개선 결과를 기록한다.
+이번 글에서는 `search_baseball_knowledge` Tool을 만들기 위해 공식 문서를 RAG 데이터로 준비하고, 실제 질문으로 검색 품질을 확인한 과정을 정리해보겠습니다.
 
-검색 품질 개선 작업을 진행하기 전에 남긴 baseline과, 이후 `embedding_text`를 조정했을 때 어떤 질문이 개선됐는지를 함께 남겨둔다.
+## 1. 작업 목표
 
-## 왜 이 기록을 남기는가
+이번 작업의 목표는 야구 지식 전체를 완벽하게 답변하는 것이 아니었습니다.
 
-야구 지식 RAG는 단순히 "검색이 된다"와 "좋은 답변 근거를 찾는다" 사이의 차이가 크다.
+먼저 공식 문서 기반 chunk를 만들고, `search_baseball_knowledge` Tool이 실제 질문에서 기대한 topic을 찾는지 확인하는 것이 목표였습니다.
 
-초기 Tool은 공식 PDF 기반 chunk를 pgvector에 넣고 실제 검색까지 동작했지만, 일부 질문에서 top-1 ranking이 기대와 다르게 나왔다. 개선 전 상태를 남겨두면, 이후 chunk 구성이나 embedding text를 바꿨을 때 품질이 실제로 좋아졌는지 비교할 수 있다.
-
-## 작업 전후 맥락
-
-야구 지식 RAG의 원본 PDF는 repo에 포함하지 않고, 로컬 디렉터리에서 재생성했다.
+당시 기준으로 작업 범위는 다음과 같이 잡았습니다.
 
 ```text
-/Users/root1/desktop/야구지식-RAG용
+KBO 공식 야구규칙과 리그 규정을 원천 문서로 사용한다.
+
+PDF 원본은 repo에 포함하지 않는다.
+
+pdfplumber 기반으로 page-level text를 추출한다.
+
+야구 지식 topic별 chunk를 생성한다.
+
+text-embedding-3-small 모델을 사용한다.
+
+embedding dimension은 1536으로 맞춘다.
+
+생성한 embedding은 기존 rag_documents / rag_chunks 테이블에 저장한다.
+
+검색 평가는 대표 질문으로 top-1 ranking을 확인한다.
 ```
 
-사용한 PDF:
+여기서 중요하게 본 것은 "공식 문서를 넣었다"가 아니었습니다.
+
+사용자가 실제로 물어볼 법한 표현으로 질문했을 때, 공식 문서 기반 근거가 제대로 검색되는지를 확인하는 것이 더 중요했습니다.
+
+## 2. 데이터 관리 기준
+
+야구 지식 RAG 데이터는 다음 위치에서 관리했습니다.
 
 ```text
-2024_야구규칙.pdf
-2025_야구규칙.pdf
-2026_야구규칙.pdf
-2024_리그규정.pdf
-2025_리그규정.pdf
-2026_리그규정.pdf
+data/baseball_knowledge/
+├── README.md
+├── sources.json
+├── raw/
+│   └── extracted_pdf/
+├── normalized/
+├── embedded_input/
+│   └── baseball_knowledge_chunks.jsonl
+└── evaluation/
+    ├── cases/
+    └── runs/
 ```
 
-실행한 파이프라인:
+다만 모든 파일을 git에 올리지는 않았습니다.
+
+`data/baseball_knowledge/.gitignore` 기준으로 다음 산출물은 commit 대상에서 제외했습니다.
+
+```text
+raw/              // PDF에서 추출한 page-level text 산출물
+embedded_input/   // embedding 입력으로 재생성되는 chunk JSONL
+evaluation/runs/  // 평가 실행 결과 산출물
+```
+
+이렇게 둔 이유는 PDF 원본과 추출 산출물은 용량과 재배포 이슈가 있고, embedding input과 평가 실행 결과는 스크립트로 다시 만들 수 있는 생성물에 가깝기 때문입니다.
+
+대신 repo에는 `sources.json`, 평가 케이스, 스크립트, Tool 구현 코드를 남겼습니다. 즉, 원천 파일 자체보다 재생성 가능한 파이프라인과 검증 기준을 남기는 방향으로 정리했습니다.
+
+## 3. 원본 Source 정리
+
+야구 지식 RAG에서 사용한 원천은 `data/baseball_knowledge/sources.json`에 정리했습니다.
+
+관리한 source는 다음과 같습니다.
+
+```text
+2024 공식야구규칙
+2025 공식야구규칙
+2026 공식야구규칙
+2024 KBO 리그 규정
+2025 KBO 리그 규정
+2026 KBO 리그 규정
+2026 주요 규정 및 규칙
+```
+
+각 source에서 핵심적으로 관리한 값은 다음과 같습니다.
+
+```text
+source_id       // 원천 문서를 식별하기 위한 내부 ID
+document_type   // 공식야구규칙, 리그규정, 최신 규정 페이지 등 문서 종류
+source_kind     // PDF인지 web page인지 구분하는 값
+source_url      // 근거 확인을 위한 원본 URL
+season_year     // 어느 시즌 기준 문서인지 나타내는 값
+extractor       // PDF 추출에 사용한 방식
+repo_tracked    // repo에 원본 파일을 포함하는지 여부
+```
+
+이 값을 따로 둔 이유는 야구 규칙이 시즌별로 달라질 수 있기 때문입니다.
+
+특히 피치클락, ABS, 체크스윙 판독처럼 최신 규정과 관련된 질문은 "어느 시즌 기준인가"가 중요합니다. 그래서 chunk를 만들기 전에 source 단계에서부터 문서의 기준 연도와 출처를 분리해두었습니다.
+
+## 4. Chunk 생성
+
+원본 PDF는 repo 밖의 로컬 경로에 두고, 필요할 때 extraction과 chunk 생성을 다시 실행하는 방식으로 정리했습니다.
+
+실행 흐름은 다음과 같았습니다.
+
+```text
+로컬 PDF 준비
+→ pdfplumber로 page-level text 추출
+→ topic 기준 chunk 생성
+→ embedding_text 생성
+→ OpenAI embedding 생성
+→ rag_documents / rag_chunks upsert
+```
+
+사용한 스크립트 흐름은 다음과 같습니다.
 
 ```bash
-cd /Users/root1/Desktop/agent-rebuild/new-baseball/backend
-uv run python scripts/baseball_knowledge/extract_pdf_pages.py --pdf-dir /Users/root1/desktop/야구지식-RAG용 --strict
+uv run python scripts/baseball_knowledge/extract_pdf_pages.py --pdf-dir "/Users/hong/Desktop/야구지식-RAG용" --strict
 uv run python scripts/baseball_knowledge/generate_chunks.py --strict
 uv run python scripts/baseball_knowledge/embed_chunks.py --dry-run
-uv run python scripts/baseball_knowledge/embed_chunks.py --env-file .env
+uv run python scripts/baseball_knowledge/embed_chunks.py
 ```
 
-## 현재 DB 상태
-
-새 테이블은 추가하지 않았다.
-
-기존 RAG 공용 테이블을 사용한다.
+생성된 chunk는 세 종류의 지식으로 나누었습니다.
 
 ```text
-public.rag_documents
-public.rag_chunks
+baseball_rule      // 기본 야구 규칙
+common_play        // 직관 중 자주 만나는 플레이 상황
+latest_kbo_rule    // 최신 KBO 규정
 ```
 
-embedding vector는 `rag_chunks.embedding`에 저장된다.
-
-upsert 결과:
+DB에 저장된 chunk 수는 다음과 같았습니다.
 
 ```text
 baseball_rule 10
@@ -66,42 +142,19 @@ latest_kbo_rule 8
 total 27
 ```
 
-embedding 설정:
+처음부터 모든 문장을 그대로 검색 대상으로만 쓰기보다, topic 단위로 묶어서 사용자가 물어볼 질문과 공식 문서 표현 사이의 간극을 줄이는 쪽을 선택했습니다.
 
-```text
-model: text-embedding-3-small
-dimensions: 1536
-```
+## 5. Tool 구현
 
-## 현재 Tool 구현 상태
-
-추가한 Tool:
+추가한 Tool 이름은 다음과 같습니다.
 
 ```text
 search_baseball_knowledge
 ```
 
-파일:
+Tool은 야구 규칙, 플레이 설명, 최신 KBO 규정 질문을 처리합니다.
 
-```text
-backend/app/domains/baseball/tool/search_baseball_knowledge/
-  __init__.py
-  schemas.py
-  retriever.py
-  handler.py
-```
-
-Agent 연결:
-
-```text
-backend/app/agent/routing_schemas.py
-backend/app/agent/tool_cards.py
-backend/app/agent/prompts.py
-backend/app/agent/tool_executor.py
-backend/app/api/dependencies.py
-```
-
-입력 schema:
+입력 schema는 다음 형태였습니다.
 
 ```json
 {
@@ -111,7 +164,7 @@ backend/app/api/dependencies.py
 }
 ```
 
-지원 `knowledge_types`:
+지원하는 `knowledge_types`는 다음 세 가지로 제한했습니다.
 
 ```text
 baseball_rule
@@ -119,7 +172,7 @@ common_play
 latest_kbo_rule
 ```
 
-검색 대상:
+검색 대상 조건도 명확히 제한했습니다.
 
 ```sql
 document_type in ('baseball_rule', 'common_play', 'latest_kbo_rule')
@@ -129,238 +182,141 @@ review_status != 'rejected'
 embedding is not null
 ```
 
-현재 relevance threshold:
+야구 지식은 특정 구장이나 특정 팀에 묶이는 정보가 아니기 때문에 `stadium_id`, `team_id`가 없는 chunk만 검색 대상으로 두었습니다.
+
+## 6. Threshold 설정
+
+야구 지식 Tool의 relevance threshold는 다음과 같이 잡았습니다.
 
 ```text
 0.82
 ```
 
-구장 가이드 RAG에서 쓰던 `0.65`로는 야구 지식 PDF chunk가 대부분 걸러졌다. 예를 들어 "보크가 뭐야?"의 정답 chunk distance가 약 `0.7444`라서, 야구 지식 Tool 전용 threshold를 더 넉넉하게 잡았다.
+구장 가이드 RAG에서 사용하던 `0.65`를 그대로 쓰지 않았습니다.
 
-## Routing 연결 확인
+야구 지식 PDF chunk는 공식 문서 표현이 많고, 사용자의 질문은 대부분 짧고 구어체입니다. 예를 들어 "보크가 뭐야?" 같은 질문은 공식 규칙 문서의 표현과 거리가 있습니다.
 
-기존 routing 평가셋에 `search_baseball_knowledge` 케이스를 추가했다.
+실제 초기 검색에서 "보크가 뭐야?"의 정답 chunk distance가 약 `0.7444` 수준으로 나왔기 때문에, 구장 안내와 같은 threshold를 쓰면 정답 문서가 걸러질 수 있었습니다.
 
-```text
-data/kbo_schedule/evaluation/cases/find_kbo_game_cases.jsonl
-```
+그래서 야구 지식 Tool은 별도 threshold를 두었습니다.
 
-평가 실행 결과:
+## 7. Routing 연결
 
-```text
-data/kbo_schedule/evaluation/runs/tool_routing/find_kbo_game/2026-08-02_032830_gpt-5-mini_baseball-knowledge-v1.json
-```
+`search_baseball_knowledge`는 Agent routing에도 연결했습니다.
 
-결과:
+추가한 routing 예시는 다음과 같습니다.
 
 ```text
-total=32
-exact_match_accuracy=0.9688
-failed_case_ids=fg_012
+보크가 뭐야?
+→ search_baseball_knowledge / common_play
+
+피치클락 위반하면 어떻게 돼?
+→ search_baseball_knowledge / latest_kbo_rule
+
+볼이랑 스트라이크가 뭐야?
+→ search_baseball_knowledge / baseball_rule
+
+비 오면 누가 경기 취소를 결정해?
+→ search_baseball_knowledge / latest_kbo_rule
 ```
 
-새로 추가한 야구 지식 routing 케이스는 모두 통과했다.
+기존 routing 평가 결과는 다음과 같았습니다.
 
 ```text
-보크가 뭐야? -> search_baseball_knowledge / common_play
-피치클락 위반하면 어떻게 돼? -> search_baseball_knowledge / latest_kbo_rule
-볼이랑 스트라이크가 뭐야? -> search_baseball_knowledge / baseball_rule
-비 오면 누가 경기 취소를 결정해? -> search_baseball_knowledge / latest_kbo_rule
+total: 32
+exact_match_accuracy: 0.9688
+failed_case_ids: fg_012
 ```
 
-실패한 `fg_012`는 기존 "8월 첫째 주" 날짜 해석 케이스라 이번 Tool과 직접 관련은 없다.
+새로 추가한 야구 지식 routing 케이스는 모두 통과했습니다.
 
-## 개선 전 검색 테스트 결과
+실패한 `fg_012`는 "키움 8월 첫째 주 경기 일정 알려줘"의 날짜 범위 해석 케이스였고, 야구 지식 Tool 자체와 직접 관련된 실패는 아니었습니다.
 
-아래 결과는 실제 OpenAI query embedding과 로컬 Supabase pgvector 검색으로 확인했다.
+## 8. 검색 평가 케이스
 
-### 보크가 뭐야?
+야구 지식 검색 평가는 실제 질문 형태로 만들었습니다.
+
+현재 repo에 남아 있는 평가 케이스는 `data/baseball_knowledge/evaluation/cases/search_baseball_knowledge_cases.jsonl` 기준 총 20개입니다.
+
+대표 케이스는 다음과 같습니다.
+
+```json
+{
+  "id": "bk_001",
+  "input": {
+    "query": "보크가 뭐야?",
+    "knowledge_types": ["common_play"],
+    "top_k": 5
+  },
+  "expected": {
+    "answerable": true,
+    "top1_topic_ids": ["common_play_balk"],
+    "top3_topic_ids": ["common_play_balk"],
+    "top1_document_type": "common_play",
+    "required_source_urls": true
+  },
+  "note": "보크 대표 질문은 보크 topic이 top1이어야 한다."
+}
+```
+
+평가 케이스에서 본 것은 단순히 answerable 여부만이 아니었습니다.
 
 ```text
-answerable: true
-limitations: []
-
-top1: 보크
-distance: 0.7444
-topic_id: common_play_balk
-
-top2: 태그아웃과 포스아웃
-distance: 0.7666
-
-top3: 병살과 더블플레이
-distance: 0.7726
+top1_topic_ids       // 가장 먼저 검색되어야 하는 topic
+top3_topic_ids       // top3 안에는 들어와야 하는 topic
+top1_document_type   // 기대한 문서 유형
+required_source_urls // 출처 URL 포함 여부
 ```
 
-판단:
+이 기준을 둔 이유는 RAG 검색에서 "무언가 검색됐다"와 "답변에 쓸 수 있는 근거가 검색됐다"는 다르기 때문입니다.
+
+## 9. 개선 전 검색 결과
+
+초기 검색은 실제 OpenAI query embedding과 로컬 Supabase pgvector 검색으로 확인했습니다.
+
+대표 질문 결과는 다음과 같았습니다.
 
 ```text
-정상. top1이 기대한 topic이다.
+보크가 뭐야?
+→ top1: 보크
+→ distance: 0.7444
+→ 판단: 정상
+
+피치클락 위반하면 어떻게 돼?
+→ top1: 피치클락
+→ distance: 0.6927
+→ 판단: 정상
+
+비 오면 누가 경기 취소를 결정해?
+→ top1: 기상 상황 경기취소
+→ top2: 경기 거행 여부 결정 권한
+→ top3: 체크스윙 판독
+→ 판단: top1/top2는 좋지만 top3에 관련이 약한 topic이 섞임
+
+볼이랑 스트라이크가 뭐야?
+→ top1: 주자 진루와 귀루
+→ top2: 볼과 스트라이크
+→ 판단: 기대 topic이 top2로 밀림
+
+인필드 플라이가 왜 선언돼?
+→ top1: 병살과 더블플레이
+→ top2: 인필드 플라이
+→ 판단: 기대 topic이 top2로 밀림
 ```
 
-### 피치클락 위반하면 어떻게 돼?
+이 결과를 보고 처음 확인한 문제는 chunk 본문 자체보다 `embedding_text` 구성이었습니다.
 
-```text
-answerable: true
-limitations: []
+공식 PDF 문장은 정확하지만, 초보자 질문 표현과는 거리가 있습니다. 사용자는 "공을 안 잡았는데 왜 아웃이야?"처럼 묻지만, 공식 문서는 규칙 조항 중심으로 설명합니다.
 
-top1: 피치클락
-distance: 0.6927
-topic_id: latest_rule_pitch_clock
+그래서 검색 입력에는 공식 근거만이 아니라, 검색용 요약과 질문 표현을 더 강하게 넣을 필요가 있었습니다.
 
-top2: ABS
-distance: 0.7314
+## 10. Embedding Text 개선
 
-top3: 체크스윙 판독
-distance: 0.7866
-```
+1차 개선에서는 chunk 수나 threshold를 바꾸지 않았습니다.
 
-판단:
+먼저 `embedding_text` 구성을 바꿨습니다.
 
-```text
-정상. top1이 기대한 topic이다.
-```
-
-### 비 오면 누가 경기 취소를 결정해?
-
-```text
-answerable: true
-limitations:
-- not_official_game_cancellation_decision
-
-top1: 기상 상황 경기취소
-distance: 0.5443
-topic_id: latest_rule_weather_cancel
-
-top2: 경기 거행 여부 결정 권한
-distance: 0.5551
-
-top3: 체크스윙 판독
-distance: 0.5752
-```
-
-판단:
-
-```text
-대체로 정상. top1/top2가 기대한 topic이다.
-다만 top3에 체크스윙 판독이 섞이는 것은 개선 여지가 있다.
-```
-
-### 볼이랑 스트라이크가 뭐야?
-
-```text
-answerable: true
-limitations: []
-
-top1: 주자 진루와 귀루
-distance: 0.7653
-topic_id: basic_rule_runner_advance
-
-top2: 볼과 스트라이크
-distance: 0.7704
-topic_id: basic_rule_strike_ball
-
-top3: 볼 인플레이와 볼 데드
-distance: 0.7760
-```
-
-판단:
-
-```text
-검색은 되지만 ranking 품질이 아쉽다.
-기대 topic인 "볼과 스트라이크"가 top2로 밀렸다.
-```
-
-### 인필드 플라이가 왜 선언돼?
-
-```text
-answerable: true
-limitations: []
-
-top1: 병살과 더블플레이
-distance: 0.7620
-topic_id: common_play_double_play
-
-top2: 인필드 플라이
-distance: 0.7645
-topic_id: common_play_infield_fly
-
-top3: 태그아웃과 포스아웃
-distance: 0.7882
-```
-
-판단:
-
-```text
-검색은 되지만 ranking 품질이 아쉽다.
-기대 topic인 "인필드 플라이"가 top2로 밀렸다.
-```
-
-## 현재 품질 이슈
-
-초기 chunk는 PDF 원문 page slice 중심이다.
-
-장점:
-
-```text
-공식 출처 기반이다.
-source page citation을 만들기 쉽다.
-topic별로 최소 검색은 가능하다.
-```
-
-문제:
-
-```text
-chunk 본문이 길다.
-PDF 원문에는 질문 의도와 직접 관련 없는 주변 조항이 많이 섞인다.
-초보자 질문 표현과 공식 문서 표현 사이의 간극이 있다.
-embedding distance가 전반적으로 높다.
-top1 ranking이 일부 질문에서 흔들린다.
-```
-
-현재 징후:
-
-```text
-"보크가 뭐야?" -> top1 성공
-"피치클락 위반하면 어떻게 돼?" -> top1 성공
-"볼이랑 스트라이크가 뭐야?" -> 기대 topic top2
-"인필드 플라이가 왜 선언돼?" -> 기대 topic top2
-```
-
-## 개선 후보
-
-다음 개선 작업에서 비교할 후보:
-
-```text
-1. embedding_text 앞쪽에 topic title, summary, keywords, example_questions를 더 강하게 배치한다.
-2. PDF 원문 전체보다 curated beginner explanation을 별도 chunk로 추가한다.
-3. topic_id, search_keywords, example_questions 기반 lexical boost를 추가한다.
-4. top_k 후보를 가져온 뒤 metadata keyword match로 re-rank한다.
-5. 긴 PDF page slice를 section 단위로 더 작게 나눈다.
-```
-
-우선순위는 `embedding_text` 개선과 lightweight re-ranking이다.
-
-## 개선 후에 추가할 내용
-
-아래 항목은 개선 작업 이후에 채운다.
-
-```text
-변경한 chunk 생성 방식:
-재임베딩 여부:
-변경 후 DB chunk 수:
-변경 후 threshold:
-동일 질문 재테스트 결과:
-top1 개선 여부:
-남은 실패 케이스:
-```
-
-## 1차 개선 후 결과
-
-### 변경한 chunk 생성 방식
-
-`embedding_text`를 PDF 원문 전체 중심에서 검색용 요약 중심으로 바꿨다.
-
-변경 전:
+변경 전 구조는 다음과 같았습니다.
 
 ```text
 제목
@@ -373,7 +329,7 @@ topic_id
 본문 전체
 ```
 
-변경 후:
+변경 후 구조는 다음과 같았습니다.
 
 ```text
 검색문서명
@@ -388,27 +344,27 @@ topic_id
 공식 근거 짧은 발췌
 ```
 
-핵심 변화:
+핵심 변화는 다음과 같습니다.
 
 ```text
-title, summary, keywords, example_questions를 embedding_text 앞쪽에 더 강하게 배치했다.
-example_questions 외에 "{title}가 뭐야?", "{title} 뜻 알려줘", "{title} 규칙 설명해줘" 같은 검색 패턴을 추가했다.
-긴 PDF 원문 전체를 embedding_text에 넣지 않고, 공식 근거 발췌를 2500자까지만 넣었다.
-답변/citation용 content는 기존처럼 전체 source page slice를 유지했다.
+title, summary, keywords, example_questions를 embedding_text 앞쪽에 배치했습니다.
+
+"{title}가 뭐야?", "{title} 뜻 알려줘", "{title} 규칙 설명해줘" 같은 검색 패턴을 추가했습니다.
+
+긴 PDF 원문 전체를 embedding_text에 넣지 않고, 공식 근거 발췌를 2500자까지만 넣었습니다.
+
+답변과 citation에 사용할 content는 기존처럼 source page slice를 유지했습니다.
 ```
 
-### 재임베딩 여부
+이렇게 한 이유는 검색용 텍스트와 답변 근거용 텍스트의 역할이 다르다고 봤기 때문입니다.
 
-`embedding_text`가 바뀌었으므로 OpenAI embedding을 다시 생성하고 같은 `chunk_id`로 upsert했다.
+검색에는 사용자의 질문 표현과 가까운 문장이 필요하고, 답변에는 공식 문서 기반 근거가 필요합니다. 두 목적을 하나의 긴 원문에만 맡기면 ranking이 흔들릴 수 있다고 판단했습니다.
 
-```bash
-cd /Users/root1/Desktop/agent-rebuild/new-baseball/backend
-uv run python scripts/baseball_knowledge/generate_chunks.py --strict
-uv run python scripts/baseball_knowledge/embed_chunks.py --dry-run
-uv run python scripts/baseball_knowledge/embed_chunks.py --env-file .env
-```
+## 11. 개선 후 검색 결과
 
-실행 결과:
+`embedding_text`가 바뀌었기 때문에 같은 `chunk_id`로 재임베딩 후 upsert했습니다.
+
+실행 결과는 다음과 같았습니다.
 
 ```text
 Wrote 27 chunks
@@ -416,237 +372,62 @@ Loaded 27 chunks
 Upserted 27 chunks into rag_documents/rag_chunks
 ```
 
-변경 후 DB chunk 수:
+chunk 수와 threshold는 그대로 유지했습니다.
 
 ```text
-baseball_rule 10
-common_play 9
-latest_kbo_rule 8
-total 27
+chunk 수: 27
+threshold: 0.82
 ```
 
-변경 후 threshold:
+동일 질문을 다시 확인한 결과는 다음과 같았습니다.
 
 ```text
-0.82
+보크가 뭐야?
+→ 개선 전 top1: 보크 / distance 0.7444
+→ 개선 후 top1: 보크 / distance 0.6660
+→ top1 유지, distance 개선
+
+피치클락 위반하면 어떻게 돼?
+→ 개선 전 top1: 피치클락 / distance 0.6927
+→ 개선 후 top1: 피치클락 / distance 0.6862
+→ top1 유지, distance 소폭 개선
+
+비 오면 누가 경기 취소를 결정해?
+→ 개선 전 top3: 체크스윙 판독 포함
+→ 개선 후 top1: 기상 상황 경기취소
+→ 개선 후 top2: 노게임과 서스펜디드
+→ 개선 후 top3: 경기 거행 여부 결정 권한
+→ 관련이 약한 체크스윙 판독이 빠짐
+
+볼이랑 스트라이크가 뭐야?
+→ 개선 전 top2: 볼과 스트라이크
+→ 개선 후 top1: 볼과 스트라이크 / distance 0.7111
+→ 기대 topic이 top1로 올라옴
+
+인필드 플라이가 왜 선언돼?
+→ 개선 전 top2: 인필드 플라이
+→ 개선 후 top1: 인필드 플라이 / distance 0.7256
+→ 기대 topic이 top1로 올라옴
 ```
 
-threshold는 아직 바꾸지 않았다. 이번 1차 개선은 embedding_text 구성 변경만으로 효과를 확인했다.
-
-### 동일 질문 재테스트 결과
-
-#### 보크가 뭐야?
-
-개선 전:
+대표 질문 5개 기준으로는 다음과 같이 정리할 수 있었습니다.
 
 ```text
-top1: 보크
-distance: 0.7444
+개선 전 top1 성공: 3/5
+개선 후 top1 성공: 5/5
 ```
 
-개선 후:
+## 12. Chunk 진단
 
-```text
-top1: 보크
-distance: 0.6660
-```
+1차 개선 후 바로 split이나 re-rank를 추가할지 판단하기 위해 chunk 상태도 확인했습니다.
 
-판단:
-
-```text
-top1 유지.
-distance 개선.
-```
-
-#### 피치클락 위반하면 어떻게 돼?
-
-개선 전:
-
-```text
-top1: 피치클락
-distance: 0.6927
-```
-
-개선 후:
-
-```text
-top1: 피치클락
-distance: 0.6862
-```
-
-판단:
-
-```text
-top1 유지.
-distance 소폭 개선.
-```
-
-#### 비 오면 누가 경기 취소를 결정해?
-
-개선 전:
-
-```text
-top1: 기상 상황 경기취소
-distance: 0.5443
-
-top2: 경기 거행 여부 결정 권한
-distance: 0.5551
-
-top3: 체크스윙 판독
-distance: 0.5752
-```
-
-개선 후:
-
-```text
-top1: 기상 상황 경기취소
-distance: 0.5342
-
-top2: 노게임과 서스펜디드
-distance: 0.5588
-
-top3: 경기 거행 여부 결정 권한
-distance: 0.5629
-```
-
-판단:
-
-```text
-top1 유지.
-top3에 섞였던 체크스윙 판독이 빠지고, 더 관련 있는 경기 중단/결정 권한 topic으로 바뀌었다.
-```
-
-#### 볼이랑 스트라이크가 뭐야?
-
-개선 전:
-
-```text
-top1: 주자 진루와 귀루
-distance: 0.7653
-
-top2: 볼과 스트라이크
-distance: 0.7704
-```
-
-개선 후:
-
-```text
-top1: 볼과 스트라이크
-distance: 0.7111
-
-top2: 득점 조건
-distance: 0.7646
-
-top3: 주자 진루와 귀루
-distance: 0.7661
-```
-
-판단:
-
-```text
-기대 topic이 top2에서 top1로 올라왔다.
-distance도 크게 개선됐다.
-```
-
-#### 인필드 플라이가 왜 선언돼?
-
-개선 전:
-
-```text
-top1: 병살과 더블플레이
-distance: 0.7620
-
-top2: 인필드 플라이
-distance: 0.7645
-```
-
-개선 후:
-
-```text
-top1: 인필드 플라이
-distance: 0.7256
-
-top2: 병살과 더블플레이
-distance: 0.7457
-```
-
-판단:
-
-```text
-기대 topic이 top2에서 top1로 올라왔다.
-distance도 개선됐다.
-```
-
-### 넓은 질문 확인
-
-질문:
-
-```text
-야구 규칙 알려줘
-```
-
-개선 후 결과:
-
-```text
-answerable: true
-
-top1: 야구 경기의 목적
-distance: 0.5210
-
-top2: 페어와 파울
-distance: 0.5566
-
-top3: 득점 조건
-distance: 0.5621
-
-top4: 아웃카운트
-distance: 0.5714
-
-top5: 볼 인플레이와 볼 데드
-distance: 0.5765
-```
-
-판단:
-
-```text
-넓은 야구 규칙 질문도 계속 정상 검색된다.
-```
-
-### 1차 개선 요약
-
-```text
-대표 질문 5개 중 top1 성공: 3/5 -> 5/5
-기존 top2 실패였던 "볼과 스트라이크", "인필드 플라이"가 top1로 개선됐다.
-재임베딩 후 chunk 수는 27개로 유지됐다.
-threshold는 0.82 그대로 유지했다.
-```
-
-남은 개선 후보:
-
-```text
-1. top2/top3에 남는 약한 관련 chunk를 줄이기 위해 threshold 재조정 검토
-2. metadata keyword 기반 lightweight re-rank 검토
-3. 초보자용 curated explanation chunk 추가 검토
-4. 검색 평가셋 15~20개를 별도 파일로 만들고 자동 평가 지표 관리
-```
-
-## Chunk 진단
-
-1차 개선 후 바로 추가 split이나 re-rank를 넣을지 판단하기 위해 현재 chunk 상태를 확인했다.
-
-진단 대상:
-
-```text
-data/baseball_knowledge/embedded_input/baseball_knowledge_chunks.jsonl
-```
-
-전체 chunk 수:
+전체 chunk 수는 다음과 같았습니다.
 
 ```text
 total_chunks: 27
 ```
 
-content 길이 기준 상위 chunk:
+긴 chunk는 일부 있었습니다.
 
 ```text
 보크                         content 6289 / embed 2750 / pages 7
@@ -658,7 +439,7 @@ content 길이 기준 상위 chunk:
 정식경기와 노게임             content 5504 / embed 2813 / pages 8
 ```
 
-split된 topic:
+split된 topic도 있었습니다.
 
 ```text
 주자 진루와 귀루: 2 chunks / total 11655 chars / 13 pages
@@ -667,94 +448,27 @@ split된 topic:
 노게임과 서스펜디드: 2 chunks / total 9260 chars / 15 pages
 ```
 
-대표 질문별 top 후보도 함께 봤다.
+하지만 대표 질문 5개는 모두 기대 topic이 top1이었고, top2/top3에 섞이는 chunk도 대부분 같은 규칙 범주 안에서 약하게 관련된 topic이었습니다.
+
+그래서 이 시점에서는 chunk split이나 re-rank를 즉시 넣기보다, `embedding_text` 개선만으로 baseline을 한 번 정리하는 쪽이 적절하다고 봤습니다.
+
+## 13. 정리
+
+이번 작업에서 확인한 것은 야구 지식 RAG의 핵심이 "공식 문서를 넣는 것"만은 아니라는 점이었습니다.
+
+공식 PDF는 신뢰할 수 있는 근거지만, 사용자의 질문은 공식 문서처럼 들어오지 않습니다. 그래서 검색 품질을 보려면 embedding vector 숫자보다 실제 질문을 기준으로 봐야 했습니다.
+
+이번 기준선에서는 다음 흐름을 확인했습니다.
 
 ```text
-보크가 뭐야?
-top1: 보크
-top2: 태그아웃과 포스아웃
-top3: 인필드 플라이
-
-볼이랑 스트라이크가 뭐야?
-top1: 볼과 스트라이크
-top2: 득점 조건
-top3: 주자 진루와 귀루
-
-인필드 플라이가 왜 선언돼?
-top1: 인필드 플라이
-top2: 병살과 더블플레이
-
-비 오면 누가 경기 취소를 결정해?
-top1: 기상 상황 경기취소
-top2: 노게임과 서스펜디드
-top3: 경기 거행 여부 결정 권한
+공식 문서 source 관리
+→ PDF page-level extraction
+→ topic 기반 chunk 생성
+→ embedding_text 개선
+→ pgvector 저장
+→ 실제 질문 기반 검색 평가
 ```
 
-진단:
+그리고 `embedding_text`를 검색 목적에 맞게 조정하는 것만으로도 대표 질문의 top1 결과가 개선되는 것을 확인했습니다.
 
-```text
-긴 chunk는 일부 존재한다.
-하지만 1차 개선 후 대표 질문 5개는 모두 기대 topic이 top1이다.
-top2/top3에 섞이는 chunk도 대부분 같은 규칙 범주 안에서 약하게 관련된 topic이다.
-현재 상태에서는 chunk split이나 re-rank를 즉시 넣을 정도의 큰 문제는 아니다.
-```
-
-이번에 하지 않기로 한 것:
-
-```text
-re-rank 도입
-threshold 재조정
-MAX_CONTENT_CHARS 하향
-topic 추가 분할
-curated explanation chunk 추가
-```
-
-보류 이유:
-
-```text
-대표 질문 기준 top1 품질이 이미 개선됐다.
-추가 split은 DB chunk 수와 평가 복잡도를 늘린다.
-re-rank는 외부 API나 수작업 boost 정책이 들어가므로 현재 단계에서는 과하다.
-먼저 검색 평가셋을 만든 뒤, 실제 실패 케이스가 쌓이면 그때 적용하는 편이 안전하다.
-```
-
-## 현재 결론
-
-`search_baseball_knowledge`는 초기 Tool로 사용할 수 있는 수준까지 왔다.
-
-현재 기준:
-
-```text
-PDF 기반 공식 출처 chunk 27개
-OpenAI embedding + Supabase pgvector upsert 완료
-Agent routing 연결 완료
-대표 검색 질문 5개 top1 성공
-넓은 "야구 규칙 알려줘" 질문도 정상 검색
-```
-
-다음 우선순위는 chunk를 더 쪼개는 것이 아니라, 검색 품질을 지속적으로 볼 수 있는 평가셋과 평가 스크립트를 만드는 것이다.
-
-후속 작업 후보:
-
-```text
-1. data/baseball_knowledge/evaluation/cases/search_baseball_knowledge_cases.jsonl 작성
-2. backend/scripts/baseball_knowledge/evaluate_search_baseball_knowledge.py 작성
-3. 현재 상태를 검색 품질 baseline run으로 저장
-4. 실패 케이스가 명확해진 뒤 chunk split, threshold, re-rank, curated chunk 중 선택
-```
-
-## 다음 블로그 정리 후보
-
-이번 글은 `search_baseball_knowledge`의 검색 품질 baseline과 1차 embedding_text 개선까지로 닫는다.
-
-이후 별도 글로 정리할 만한 내용:
-
-```text
-1. POST /api/v1/chat SSE 스트리밍 엔드포인트 설계와 구현
-2. tool.started / tool.completed / assistant.delta 이벤트 계약
-3. 백엔드 Tool 결과 schema와 프론트 Tool 카드 layout 분리
-4. authenticated-first MVP 채팅 세션과 이후 guest conversation 귀속 설계
-5. RAG 품질 개선 전에 평가셋과 관측 로그를 먼저 만드는 이유
-```
-
-아직 별도 글로 쓸 만큼 결과가 쌓인 것은 아니지만, 다음 개발 흐름은 "채팅 스트리밍 계약과 Tool 카드 렌더링" 또는 "RAG 검색 평가셋 자동화" 중 하나로 묶으면 좋다.
+다음 단계에서 더 중요한 것은 단순히 chunk를 더 많이 만드는 것이 아니라, 평가 케이스를 기준으로 어떤 실패가 남아 있는지 확인하면서 split, re-rank, citation 노출을 차례로 판단하는 일이라고 봅니다.
