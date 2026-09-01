@@ -125,6 +125,41 @@ SAJIK_stadium_ticketing_guide_20260729_chunk_000
 SAJIK_stadium_transport_guide_20260729_chunk_000
 ```
 
+실제 chunk JSONL은 아래와 같은 형태였습니다. 글에서는 전체 본문과 출처 URL을 모두 넣기보다, 어떤 값이 embedding 입력에 들어갔는지만 볼 수 있게 줄였습니다.
+
+```json
+{
+  "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+  "document_id": "SAJIK_stadium_transport_guide_20260729",
+  "stadium_id": "SAJIK",
+  "team_id": "LOTTE",
+  "document_type": "stadium_transport_guide",
+  "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+  "embedding_model": "text-embedding-3-small",
+  "embedding_dimensions": 1536,
+  "embedding_text": "제목: 사직야구장 지하철 버스 주차 교통 안내 초안\n문서유형: stadium_transport_guide\n구장: SAJIK\n팀: LOTTE\n핵심주제: 사직야구장 지하철, 도시철도, 버스, 자가용, 주차 관련 교통 안내\n검색키워드: 사직구장 가는 법, 사직야구장 지하철, 사직야구장 몇 호선, 가까운 지하철역, 사직역, 종합운동장역, 사직구장 주차\n본문:\n...",
+  "metadata": {
+    "topic_summary": "사직야구장 지하철, 도시철도, 버스, 자가용, 주차 관련 교통 안내",
+    "search_keywords": [
+      "사직구장 가는 법",
+      "사직야구장 지하철",
+      "사직야구장 몇 호선",
+      "가까운 지하철역",
+      "사직역",
+      "종합운동장역",
+      "사직구장 주차"
+    ]
+  },
+  "as_of": "2026-07-29",
+  "trust_level": "official",
+  "review_status": "needs_review",
+  "source_ids": ["lotte_sajik_stadium", "lotte_stadium_shop"],
+  "source_urls": ["..."]
+}
+```
+
+여기서 핵심은 원문 본문만 embedding하지 않았다는 점입니다. 제목, 문서유형, 구장, 팀, 핵심주제, 검색키워드, 본문을 조합해 `embedding_text`를 만들었습니다.
+
 문서 1개를 chunk 1개로 둔 것은 의도적인 baseline이었습니다.
 
 사직구장 문서가 아직 짧았고, 첫 실험에서는 chunking 알고리즘보다 "검색이 의도한 문서로 가는지"를 먼저 확인하고 싶었습니다.
@@ -279,6 +314,41 @@ failed_top1_case_ids: sajik_001
 실제 1등: stadium_facility_guide
 실제 2등: stadium_transport_guide
 ```
+
+평가 결과 JSON에는 질문별로 기대 문서와 실제 Top-K 결과를 함께 남겼습니다. 실패한 `sajik_001` 케이스를 줄이면 아래와 같습니다.
+
+```json
+{
+  "id": "sajik_001",
+  "query": "사직구장 지하철로 어떻게 가?",
+  "case_type": "positive",
+  "stadium_id": "SAJIK",
+  "expected_document_type": "stadium_transport_guide",
+  "top1_hit": false,
+  "top3_hit": true,
+  "retrieved_document_types": [
+    "stadium_facility_guide",
+    "stadium_transport_guide",
+    "stadium_seat_guide"
+  ],
+  "results": [
+    {
+      "rank": 1,
+      "document_type": "stadium_facility_guide",
+      "title": "사직야구장 시설 안내 초안",
+      "distance": 0.5743523667945026
+    },
+    {
+      "rank": 2,
+      "document_type": "stadium_transport_guide",
+      "title": "사직야구장 교통 안내 초안",
+      "distance": 0.5796893185459618
+    }
+  ]
+}
+```
+
+이렇게 저장해두면 단순히 정확도 숫자만 보는 것이 아니라, 어떤 질문에서 어떤 문서가 잘못 올라왔는지 바로 확인할 수 있었습니다.
 
 정답 문서가 Top-3 안에는 있었지만, Top-1은 아니었습니다.
 
