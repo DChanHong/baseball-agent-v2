@@ -57,8 +57,8 @@ class SqlAlchemyKboScheduleImportRepository:
                 if existing_game is not None
                 else False
             )
-            has_any_change = (
-                self._has_any_change(existing_game, payload)
+            has_imported_field_change = (
+                self._has_imported_field_change(existing_game, payload)
                 if existing_game is not None
                 else True
             )
@@ -96,11 +96,12 @@ class SqlAlchemyKboScheduleImportRepository:
             game_id = result.scalar_one()
 
             if has_existing_game:
-                updated_count += 1
+                if has_imported_field_change:
+                    updated_count += 1
             else:
                 inserted_count += 1
 
-            if has_existing_game and not has_any_change:
+            if has_existing_game and not has_imported_field_change:
                 unchanged_count += 1
 
             if existing_game is not None and has_tracked_change:
@@ -181,7 +182,7 @@ class SqlAlchemyKboScheduleImportRepository:
         )
 
     @staticmethod
-    def _has_any_change(
+    def _has_imported_field_change(
         existing_game: KboGameModel,
         payload: dict[str, Any],
     ) -> bool:
@@ -203,7 +204,6 @@ class SqlAlchemyKboScheduleImportRepository:
             "home_score",
             "source_name",
             "source_url",
-            "source_collected_at",
         ]
 
         return any(
