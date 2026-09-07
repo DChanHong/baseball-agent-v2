@@ -1,16 +1,29 @@
 {
-  "colgroup": [],
-  "headers": [],
-  "rows": [],
-  "tfoot": [],
-  "totalCnt": null,
-  "headerClass": null,
-  "tbodyClass": null,
-  "tfootClass": null,
-  "title": null,
-  "caption": null,
-  "result_cd": null,
-  "result_msg": null,
-  "code": null,
-  "msg": null
+  "source_name": "KBO Schedule.asmx/GetScheduleList",
+  "source_url": "https://www.koreabaseball.com/Schedule/Schedule.aspx",
+  "endpoint": "https://www.koreabaseball.com/ws/Schedule.asmx/GetScheduleList",
+  "request_params": {
+    "leId": "1",
+    "srIdList": "0,9,6",
+    "seasonId": "2026",
+    "gameMonth": "01",
+    "teamId": ""
+  },
+  "collected_at": "2026-09-07T10:47:33.155753+09:00",
+  "response_json": {
+    "colgroup": [],
+    "headers": [],
+    "rows": [],
+    "tfoot": [],
+    "totalCnt": null,
+    "headerClass": null,
+    "tbodyClass": null,
+    "tfootClass": null,
+    "title": null,
+    "caption": null,
+    "result_cd": null,
+    "result_msg": null,
+    "code": null,
+    "msg": null
+  }
 }

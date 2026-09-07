@@ -1,16 +1,2433 @@
 {
-  "colgroup": [],
-  "headers": [],
-  "rows": [],
-  "tfoot": [],
-  "totalCnt": null,
-  "headerClass": null,
-  "tbodyClass": null,
-  "tfootClass": null,
-  "title": null,
-  "caption": null,
-  "result_cd": null,
-  "result_msg": null,
-  "code": null,
-  "msg": null
+  "source_name": "KBO Schedule.asmx/GetScheduleList",
+  "source_url": "https://www.koreabaseball.com/Schedule/Schedule.aspx",
+  "endpoint": "https://www.koreabaseball.com/ws/Schedule.asmx/GetScheduleList",
+  "request_params": {
+    "leId": "1",
+    "srIdList": "0,9,6",
+    "seasonId": "2026",
+    "gameMonth": "10",
+    "teamId": ""
+  },
+  "collected_at": "2026-09-07T10:05:53.078483+09:00",
+  "response_json": {
+    "colgroup": [],
+    "headers": [],
+    "rows": [
+      {
+        "row": [
+          {
+            "Text": "10.01(목)",
+            "Class": "day",
+            "Scope": null,
+            "RowSpan": "4",
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<b>18:30</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>NC</span><em><span>vs</span></em><span>두산</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "잠실",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>18:30</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>한화</span><em><span>vs</span></em><span>삼성</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "대구",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>18:30</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>LG</span><em><span>vs</span></em><span>SSG</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "문학",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>18:30</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>KT</span><em><span>vs</span></em><span>KIA</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "광주",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "10.03(토)",
+            "Class": "day",
+            "Scope": null,
+            "RowSpan": "5",
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<b>14:00</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>KIA</span><em><span>vs</span></em><span>LG</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "잠실",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>14:00</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>두산</span><em><span>vs</span></em><span>삼성</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "대구",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>14:00</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>롯데</span><em><span>vs</span></em><span>KT</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "수원",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>14:00</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>SSG</span><em><span>vs</span></em><span>NC</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "창원",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>14:00</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>키움</span><em><span>vs</span></em><span>한화</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "대전",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "10.04(일)",
+            "Class": "day",
+            "Scope": null,
+            "RowSpan": "5",
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<b>14:00</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>KIA</span><em><span>vs</span></em><span>LG</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "잠실",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>14:00</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>두산</span><em><span>vs</span></em><span>삼성</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "대구",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>14:00</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>롯데</span><em><span>vs</span></em><span>KT</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "수원",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>14:00</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>SSG</span><em><span>vs</span></em><span>NC</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "창원",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>14:00</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>키움</span><em><span>vs</span></em><span>한화</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "대전",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "10.05(월)",
+            "Class": "day",
+            "Scope": null,
+            "RowSpan": "5",
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<b>14:00</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>KIA</span><em><span>vs</span></em><span>LG</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "잠실",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>14:00</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>두산</span><em><span>vs</span></em><span>삼성</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "대구",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>14:00</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>롯데</span><em><span>vs</span></em><span>KT</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "수원",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>14:00</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>SSG</span><em><span>vs</span></em><span>NC</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "창원",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>14:00</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>키움</span><em><span>vs</span></em><span>한화</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "대전",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "10.06(화)",
+            "Class": "day",
+            "Scope": null,
+            "RowSpan": "5",
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<b>18:30</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>NC</span><em><span>vs</span></em><span>LG</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "잠실",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>18:30</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>두산</span><em><span>vs</span></em><span>롯데</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "사직",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>18:30</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>삼성</span><em><span>vs</span></em><span>KIA</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "광주",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>18:30</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>SSG</span><em><span>vs</span></em><span>한화</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "대전",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>18:30</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>KT</span><em><span>vs</span></em><span>키움</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "고척",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "10.07(수)",
+            "Class": "day",
+            "Scope": null,
+            "RowSpan": "5",
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<b>18:30</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>두산</span><em><span>vs</span></em><span>LG</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "잠실",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>18:30</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>KIA</span><em><span>vs</span></em><span>롯데</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "사직",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>18:30</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>NC</span><em><span>vs</span></em><span>SSG</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "문학",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>18:30</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>삼성</span><em><span>vs</span></em><span>KT</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "수원",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      },
+      {
+        "row": [
+          {
+            "Text": "<b>18:30</b>",
+            "Class": "time",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "<span>한화</span><em><span>vs</span></em><span>키움</span>",
+            "Class": "play",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": "relay",
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "고척",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          },
+          {
+            "Text": "-",
+            "Class": null,
+            "Scope": null,
+            "RowSpan": null,
+            "ColSpan": null,
+            "Width": null,
+            "TypeObj": null
+          }
+        ],
+        "Class": null,
+        "OnClick": null,
+        "Style": null,
+        "Value": null,
+        "Id": null
+      }
+    ],
+    "tfoot": [],
+    "totalCnt": null,
+    "headerClass": null,
+    "tbodyClass": null,
+    "tfootClass": null,
+    "title": null,
+    "caption": null,
+    "result_cd": null,
+    "result_msg": null,
+    "code": null,
+    "msg": null
+  }
 }

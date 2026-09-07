@@ -3,6 +3,8 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+import pytest
+
 from app.domains.baseball.domain.enums import KboGameStatus
 from scripts.kbo_schedule_import.client import (
     KboScheduleRequest,
@@ -72,13 +74,7 @@ def test_normalize_kbo_schedule_payload_maps_cancelled_note() -> None:
 
 
 def test_normalize_kbo_schedule_payload_accepts_saved_raw_wrapper() -> None:
-    payload = {
-        "response_json": json.loads(
-            (REPOSITORY_ROOT / "data/kbo_schedule/raw/2026/09.json").read_text(
-                encoding="utf-8"
-            )
-        )
-    }
+    payload = {"response_json": _preview_payload("프리뷰")}
     collected_at = datetime(2026, 9, 4, 12, 0, tzinfo=KST)
 
     games = normalize_kbo_schedule_payload(
@@ -87,9 +83,53 @@ def test_normalize_kbo_schedule_payload_accepts_saved_raw_wrapper() -> None:
         collected_at=collected_at,
     )
 
-    assert len(games) == 30
-    assert games[0].game_date.isoformat() == "2026-09-01"
+    assert len(games) == 1
+    assert games[0].game_date.isoformat() == "2026-09-04"
     assert games[0].game_status == KboGameStatus.SCHEDULED
+
+
+def _preview_payload(relay_label: str) -> dict:
+    return {
+        "rows": [
+            {
+                "row": [
+                    {"Class": "day", "Text": "09.04(금)"},
+                    {"Class": "time", "Text": "18:30"},
+                    {
+                        "Class": "play",
+                        "Text": "<span>삼성</span><em><span>vs</span></em><span>LG</span>",
+                    },
+                    {
+                        "Class": "relay",
+                        "Text": (
+                            "<a href='/Schedule/GameCenter/Main.aspx?gameDate=20260904"
+                            "&gameId=20260904SSLG0&section=START_PIT'>"
+                            f"{relay_label}</a>"
+                        ),
+                    },
+                    {"Text": "잠실"},
+                    {"Text": "-"},
+                ]
+            }
+        ],
+    }
+
+
+@pytest.mark.parametrize("relay_label", ["프리뷰", "리뷰", ""])
+def test_relay_label_without_scores_does_not_mark_game_completed(
+    relay_label: str,
+) -> None:
+    games = normalize_kbo_schedule_payload(
+        _preview_payload(relay_label),
+        season_year=2026,
+        collected_at=datetime(2026, 9, 4, 15, 16, tzinfo=KST),
+    )
+
+    game = games[0]
+    assert game.game_status == KboGameStatus.SCHEDULED
+    assert game.away_score is None
+    assert game.home_score is None
+    assert game.source_game_id == "20260904SSLG0"
 
 
 def test_save_raw_schedule_response_writes_month_file(tmp_path: Path) -> None:

@@ -86,7 +86,6 @@ def normalize_kbo_schedule_payload(
         teams_and_scores = _parse_play_cell(_cell_text(play_cell))
         stadium_name = _parse_stadium_name(cells)
         note = _parse_note(cells)
-        relay_label = _plain_text(_cell_text(relay_cell)) if relay_cell else ""
         source_game_id = _parse_game_id(_cell_text(relay_cell)) if relay_cell else None
 
         games.append(
@@ -107,7 +106,6 @@ def normalize_kbo_schedule_payload(
                 stadium_name=stadium_name,
                 stadium_id=_stadium_id(stadium_name),
                 game_status=_map_game_status(
-                    relay_label=relay_label,
                     note=note,
                     away_score=teams_and_scores.away_score,
                     home_score=teams_and_scores.home_score,
@@ -298,7 +296,6 @@ def _stadium_id(stadium_name: str) -> str:
 
 def _map_game_status(
     *,
-    relay_label: str,
     note: str,
     away_score: int | None,
     home_score: int | None,
@@ -309,7 +306,6 @@ def _map_game_status(
     if away_score is not None and home_score is not None:
         return KboGameStatus.COMPLETED
 
-    if "리뷰" in relay_label:
-        return KboGameStatus.COMPLETED
-
+    # A relay link alone does not establish a result ("프리뷰" contains "리뷰").
+    # Completed games require both scores under kbo_games_score_status_check.
     return KboGameStatus.SCHEDULED
