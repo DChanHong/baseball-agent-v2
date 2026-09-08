@@ -20,6 +20,7 @@
 - 프론트엔드 구조가 궁금하면 `docs/frontend/folder-design.md`, `frontend/docs/stack-decisions.md`를 읽는다.
 - backend 실행/검증 명령이 필요하면 `docs/backend/local-development-commands.md`를 읽는다.
 - 데이터 폴더 구조는 `data/README.md`를 읽는다.
+- KBO 일정 수집 또는 DB 갱신 작업은 `.agent/commands/sync-kbo-schedule.md`를 따른다.
 
 ## 작업 원칙
 
