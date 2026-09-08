@@ -1,4 +1,4 @@
-# KBO Mate (baseball-agent-v2)
+# KBO Mate (baseball-agent-v2) - 개인프로젝트
 
 KBO Mate는 KBO 직관 준비를 돕는 RAG 기반 AI Agent MVP입니다. 사용자가 채팅으로 경기 일정, 구장 정보, 예매, 좌석, 준비물, 야구 규칙을 물어보면 FastAPI 백엔드가 질문 의도를 라우팅하고, 필요한 Tool 또는 RAG 검색 결과를 Next.js 프론트엔드에 스트리밍합니다.
 
