@@ -7,6 +7,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
 
+from app.agent.answer_schemas import GroundedAnswerDraft
 from app.agent.routing_schemas import (
     ToolRoutingConversationContext,
     ToolRoutingDecision,
@@ -84,6 +85,7 @@ class BaseballAgentOutput(BaseModel):
     tool_limitations: list[str]
     context: AgentConversationContext
     answer: str
+    answer_generation: GroundedAnswerDraft | None = None
 
 
 class BaseballAgentState(TypedDict, total=False):
@@ -102,4 +104,5 @@ class BaseballAgentState(TypedDict, total=False):
     tool_payload: dict[str, Any] | None
     tool_limitations: list[str]
     answer: str
+    answer_generation: GroundedAnswerDraft | None
     answer_mode: Literal["contextual_direct", "routed"]

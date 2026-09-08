@@ -10,6 +10,7 @@ from zoneinfo import ZoneInfo
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.agent.answer_generation_service import AnswerGenerationService
 from app.agent.graph import BaseballAgentGraph
 from app.agent.routing_service import ToolRoutingService
 from app.agent.state import (
@@ -65,6 +66,7 @@ class ChatStreamService:
         agent_graph: BaseballAgentGraph | None = None,
         tool_routing_service: ToolRoutingService | None = None,
         tool_executor: AgentToolExecutor | None = None,
+        answer_generation_service: AnswerGenerationService | None = None,
         session: AsyncSession,
     ) -> None:
         self._conversation_repository = conversation_repository
@@ -77,6 +79,7 @@ class ChatStreamService:
             agent_graph = BaseballAgentGraph(
                 tool_routing_service=tool_routing_service,
                 tool_executor=tool_executor,
+                answer_generation_service=answer_generation_service,
             )
         self._agent_graph = agent_graph
         self._session = session
@@ -264,6 +267,11 @@ class ChatStreamService:
                 ),
                 "limitations": tool_limitations,
                 "agent_context": graph_output.context.model_dump(mode="json"),
+                "answer_generation": (
+                    graph_output.answer_generation.model_dump(mode="json")
+                    if graph_output.answer_generation is not None
+                    else None
+                ),
             },
             updated_at=completed_at,
         )

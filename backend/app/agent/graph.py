@@ -8,6 +8,7 @@ from uuid import uuid4
 from langgraph.graph import END, START, StateGraph
 from pydantic import BaseModel
 
+from app.agent.answer_generation_service import AnswerGenerationService
 from app.agent.answering import (
     build_assistant_content,
     build_selected_game_follow_up_answer,
@@ -51,9 +52,11 @@ class BaseballAgentGraph:
         *,
         tool_routing_service: ToolRoutingService,
         tool_executor: AgentToolExecutor,
+        answer_generation_service: AnswerGenerationService | None = None,
     ) -> None:
         self._tool_routing_service = tool_routing_service
         self._tool_executor = tool_executor
+        self._answer_generation_service = answer_generation_service
         self._graph = self._compile_graph()
 
     async def astream(
@@ -108,6 +111,7 @@ class BaseballAgentGraph:
                         tool_limitations=state_update.get("tool_limitations", []),
                         context=state_update["context"],
                         answer=state_update["answer"],
+                        answer_generation=state_update.get("answer_generation"),
                     ),
                 )
 
@@ -206,6 +210,7 @@ class BaseballAgentGraph:
     async def _answer_generate(self, state: BaseballAgentState) -> dict[str, Any]:
         context = state["context"]
         decision = state["routing_decision"]
+        answer_generation = None
         if (
             state.get("answer_mode") == "contextual_direct"
             and decision.direct_answer_intent is not None
@@ -227,12 +232,31 @@ class BaseballAgentGraph:
                 tool_payload=state.get("tool_payload"),
             )
 
+            tool_payload = state.get("tool_payload")
+            if (
+                self._answer_generation_service is not None
+                and isinstance(tool_payload, dict)
+                and tool_payload.get("status") == "completed"
+            ):
+                try:
+                    answer_generation = await self._answer_generation_service.execute(
+                        message=state["user_message"],
+                        tool_payload=tool_payload,
+                        tool_limitations=state.get("tool_limitations", []),
+                    )
+                    answer = answer_generation.answer
+                except Exception:
+                    logger.exception(
+                        "grounded answer generation failed; using deterministic fallback"
+                    )
+
         return {
             "routing_decision": state["routing_decision"],
             "tool_payload": state.get("tool_payload"),
             "tool_limitations": state.get("tool_limitations", []),
             "context": context,
             "answer": answer,
+            "answer_generation": answer_generation,
         }
 
 

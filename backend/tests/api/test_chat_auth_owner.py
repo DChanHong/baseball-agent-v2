@@ -7,6 +7,7 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
+from app.agent.answer_schemas import GroundedAnswerDraft
 from app.agent.routing_schemas import (
     DirectAnswerIntent,
     FindKboGameRoutingArgs,
@@ -116,6 +117,21 @@ class FakeToolExecutor:
         return self.result
 
 
+class FakeAnswerGenerationService:
+    def __init__(self, answer: str) -> None:
+        self.answer = answer
+        self.calls = 0
+
+    async def execute(self, **_kwargs) -> GroundedAnswerDraft:
+        self.calls += 1
+        return GroundedAnswerDraft(
+            answerability="fully_answerable",
+            answer=self.answer,
+            used_evidence_refs=["E1"],
+            acknowledged_limitations=[],
+        )
+
+
 def make_current_user() -> CurrentUserDto:
     return CurrentUserDto(
         id=PROFILE_ID,
@@ -217,6 +233,41 @@ async def test_chat_stream_stores_new_conversation_and_messages_by_profile_id() 
     }
     assert routing_service.favorite_team_id == "LOTTE"
     assert session.rollbacks == 0
+
+
+@pytest.mark.asyncio
+async def test_chat_stream_uses_llm_generated_answer_for_completed_tool() -> None:
+    conversation_repository = FakeConversationRepository()
+    message_repository = FakeMessageRepository()
+    answer_generation_service = FakeAnswerGenerationService(
+        "근거를 사용해 LLM이 생성한 경기 답변입니다."
+    )
+    service = ChatStreamService(
+        conversation_repository=conversation_repository,
+        message_repository=message_repository,
+        tool_routing_service=FakeRoutingService(
+            decisions=[_find_lotte_game_decision()]
+        ),
+        tool_executor=FakeToolExecutor(result=_single_lotte_game_result()),
+        answer_generation_service=answer_generation_service,
+        session=FakeSession(),
+    )
+
+    async for _ in service.stream(
+        ChatStreamRequest(conversation_id=None, message="오늘 롯데 경기 있어?"),
+        current_user=make_current_user(),
+    ):
+        pass
+
+    assistant_message = message_repository.saved[-1]
+    assert assistant_message.content == "근거를 사용해 LLM이 생성한 경기 답변입니다."
+    assert answer_generation_service.calls == 1
+    assert assistant_message.metadata["answer_generation"] == {
+        "answerability": "fully_answerable",
+        "answer": "근거를 사용해 LLM이 생성한 경기 답변입니다.",
+        "used_evidence_refs": ["E1"],
+        "acknowledged_limitations": [],
+    }
 
 
 @pytest.mark.asyncio

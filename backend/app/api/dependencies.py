@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import Depends, HTTPException, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.agent.answer_generation_service import AnswerGenerationService
 from app.agent.routing_service import ToolRoutingService
 from app.agent.tool_executor import AgentToolExecutor
 from app.core.config import get_settings
@@ -259,5 +260,6 @@ def get_chat_stream_service(
         message_repository=SqlAlchemyMessageRepository(session),
         tool_routing_service=ToolRoutingService(),
         tool_executor=get_agent_tool_executor(session),
+        answer_generation_service=AnswerGenerationService(),
         session=session,
     )
