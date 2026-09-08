@@ -3,7 +3,7 @@
 > 라벨: `MVP2`  
 > 상태: 계획 유지
 > 작성일: 2026-08-03
-> 최근 업데이트: 2026-09-03
+> 최근 업데이트: 2026-09-08
 > 목적: MVP 채팅/Tool 기본 틀 이후 운영 데이터 최신성, 실사용 QA, 관측성, 평가, RAG, 보안, Agent orchestration을 단계적으로 개선하기 위한 계획
 
 ## 1. 배경
@@ -50,7 +50,7 @@ MVP2의 목표는 "Tool을 더 많이 붙이는 것"이 아니다.
 
 ## 3. 우선순위
 
-### 3.1 운영 데이터 파이프라인 먼저
+### 3.1 운영 데이터 수동 갱신 — 완료
 
 검색 품질이나 Agent 구조를 개선하기 전에, 정형 Tool이 의존하는 운영 데이터가 낡지 않도록 만든다.
 
@@ -67,7 +67,7 @@ KBO 공식 일정 API 수집
 → find_kbo_game Tool이 최신 DB 조회
 ```
 
-1차 구현 범위:
+현재 운영 범위:
 
 ```text
 특정 season_year/month 수동 sync
@@ -75,8 +75,9 @@ KBO 공식 일정 API 수집
 dry-run
 inserted / updated / unchanged / status_history count 출력
 source_collected_at 갱신
-Render Cron Job 또는 동등한 스케줄러 연결
 ```
+
+cron 또는 외부 스케줄러 연결은 비용 문제로 현재 MVP2 범위에서 제외한다. 일정 최신화가 필요할 때 월별 sync 또는 오늘 경기 sync를 수동 실행하는 것을 현재 운영 정책으로 확정한다. 자동 갱신은 트래픽과 운영 필요성이 확인된 뒤 다시 검토한다.
 
 보완 가능한 V2 역량:
 
@@ -90,7 +91,7 @@ find_kbo_game 회귀 테스트: 중간
 
 이 단계만으로 Advanced RAG, Citation, Security, Agentic Loop 전체를 해결하지는 못한다. 다만 운영형 Agent 프로젝트의 기반 작업으로 먼저 처리한다.
 
-### 3.2 실사용 QA와 실패 케이스 수집
+### 3.2 실사용 QA와 실패 케이스 수집 — 초기 구축 완료, 지속 운영
 
 MVP1은 구현 완료 상태지만 실제 사용 관점의 충분한 검증은 아직 부족하다.
 
@@ -475,7 +476,7 @@ Human-in-the-loop은 KBO Mate에서 억지로 넣지 않는다. 실제 action to
 
 ## 4. 단계별 작업안
 
-### Step 0. 경기 일정 갱신 파이프라인
+### Step 0. 경기 일정 수동 갱신 파이프라인 — 완료
 
 KBO 일정/상태를 수집하고 `kbo_games`에 갱신하는 worker 또는 CLI를 만든다.
 
@@ -489,7 +490,14 @@ KBO 일정 API client
 기존 kbo_schedule_import upsert 로직 재사용
 dry-run
 sync 결과 요약 출력
-Render Cron Job 또는 동등한 스케줄러 연결
+```
+
+운영 결정:
+
+```text
+cron/외부 스케줄러는 비용 문제로 보류
+필요 시 월별 sync 또는 오늘 경기 sync를 수동 실행
+자동 갱신은 향후 운영 개선 후보로 관리
 ```
 
 검증:
@@ -502,7 +510,7 @@ Render Cron Job 또는 동등한 스케줄러 연결
 find_kbo_game이 갱신된 데이터로 응답하는지 확인
 ```
 
-### Step 1. 실사용 QA와 실패 케이스 후보 수집
+### Step 1. 실사용 QA와 실패 케이스 후보 수집 — 초기 구축 완료
 
 사용자가 실제 서비스처럼 질문을 던지고 결과를 기록한다.
 
@@ -512,6 +520,8 @@ find_kbo_game이 갱신된 데이터로 응답하는지 확인
 실패 유형 라벨링
 평가셋 승격 후보 표시
 ```
+
+2026-09-08 첫 smoke QA에서 대표 질문 6개와 follow-up 3개를 실행했다. 결과는 `passed 4 / ambiguous 3 / failed 2`였으며 candidate 5개를 만들고, 영향도가 있는 4개를 정식 chat evaluation case에 연결했다. 이후 개선 작업마다 같은 case를 재실행하며 run과 candidate를 계속 누적한다.
 
 ### Step 2. LangChain / LangGraph Deep Dive
 
@@ -684,7 +694,7 @@ Human-in-the-loop action tool
 MVP2 완료 기준:
 
 ```text
-KBO 경기 일정/상태 갱신 파이프라인이 수동 실행과 스케줄 실행 기준으로 동작한다.
+KBO 경기 일정/상태 갱신 파이프라인을 필요할 때 수동 실행할 수 있다.
 find_kbo_game이 갱신된 DB 데이터와 source_collected_at을 기반으로 응답한다.
 실사용 QA 결과와 실패 케이스 후보가 문서 또는 데이터 파일로 남아 있다.
 한 chat 요청의 route → tool → retrieval → answer 흐름을 trace로 추적할 수 있다.
@@ -706,9 +716,11 @@ Prompt Injection, Tool Abuse, Data Leakage, Source Trust 관련 security case가
 가장 먼저 할 일:
 
 ```text
-1. KBO 경기 일정 갱신 파이프라인 구현 범위를 확정한다.
-2. 현재 import_kbo_schedule.py와 kbo_schedule_import 모듈을 기준으로 수집→정규화→upsert 구조를 설계한다.
-3. DB migration 추가 여부를 결정한다. raw snapshot table은 유용하지만 초기 sync CLI에서는 선택 사항으로 둔다.
-4. Render Cron Job 또는 GitHub Actions schedule 중 1차 스케줄러를 결정한다.
-5. dry-run, 오늘 경기 sync, 상태 변경 이력 검증 기준을 먼저 만든다.
+1. 기존 대표 질문과 follow-up 질문으로 1차 실사용 QA를 실행한다.
+2. 결과를 passed / ambiguous / failed로 분류한다.
+3. 실패와 애매 사례를 data/chat/evaluation/candidates에 기록한다.
+4. 반복성과 영향도가 높은 사례를 evaluation case로 승격한다.
+5. 작업 로그와 milestone run을 남기고 3.3 구조 검토로 전달할 요구사항을 정리한다.
 ```
+
+상세 실행 계획은 `docs/work/2026-09-08-mvp2-3-2-manual-qa-evaluation-dataset-plan.md`를 따른다.

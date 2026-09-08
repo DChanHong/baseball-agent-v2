@@ -4,7 +4,9 @@
 
 ```text
 data/
+├── chat/
 ├── kbo_schedule/
+├── baseball_knowledge/
 └── stadium_guide/
 ```
 
@@ -14,4 +16,5 @@ data/
 - `processed/` 또는 `normalized/`는 서비스와 스크립트가 읽기 쉬운 정규화 데이터를 보관한다.
 - `evaluation/cases/`는 사람이 검토 가능한 평가 데이터셋을 보관한다.
 - `evaluation/runs/`는 평가 실행 결과를 보관한다.
+- `evaluation/candidates/`는 실행 결과에서 발견한 검토 대기 사례를 보관한다.
 - API key, 사용자 개인정보, 실제 사용자 대화 전문은 저장하지 않는다.

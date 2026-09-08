@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "manual_chat_qa_run.schema.json",
+  "title": "ManualChatQARun",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "executed_at",
+    "environment",
+    "question_set_version",
+    "summary",
+    "results"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "run_id": { "type": "string", "minLength": 1 },
+    "executed_at": { "type": ["string", "null"], "format": "date-time" },
+    "environment": { "enum": ["local", "hosted"] },
+    "question_set_version": { "type": "string", "minLength": 1 },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "passed", "ambiguous", "failed", "not_run"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "passed": { "type": "integer", "minimum": 0 },
+        "ambiguous": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "not_run": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "scenario_id",
+          "case_id",
+          "category",
+          "sanitized_input",
+          "expected_tool",
+          "observed_tool",
+          "result",
+          "failure_labels",
+          "observed_behavior",
+          "notes"
+        ],
+        "properties": {
+          "scenario_id": { "type": "string", "minLength": 1 },
+          "case_id": { "type": "string", "minLength": 1 },
+          "category": { "type": "string", "minLength": 1 },
+          "sanitized_input": { "type": "string", "minLength": 1 },
+          "expected_tool": { "type": ["string", "null"] },
+          "observed_tool": { "type": ["string", "null"] },
+          "result": { "enum": ["passed", "ambiguous", "failed", "not_run"] },
+          "failure_labels": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+          "observed_behavior": { "type": ["string", "null"] },
+          "notes": { "type": ["string", "null"] }
+        }
+      }
+    }
+  }
+}

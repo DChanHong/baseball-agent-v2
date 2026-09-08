@@ -106,6 +106,54 @@ Supabase pgvector에 최소 임베딩 실험을 해본다.
 각 정보의 출처도 구단 공식 사이트, KBO 공통 안내, 시설 안내로 나뉘었다.
 ```
 
+## QA / 평가 작업일 때 추가 기록
+
+> 일반 구현 작업에서는 생략한다. 수동 QA, 평가셋 작성, baseline 비교 작업에서만 사용한다.
+
+### QA 실행 정보
+
+```text
+run_id:
+실행 환경:
+질문 세트 버전:
+전체 질문 수:
+passed:
+ambiguous:
+failed:
+not_run:
+candidate 생성 수:
+evaluation case 승격 수:
+```
+
+### 발견한 실패 유형
+
+```text
+failure_type:
+관련 scenario_id:
+기대 동작:
+실제 동작:
+추정 원인:
+재현 여부:
+```
+
+### 데이터셋 변경
+
+```text
+추가한 candidate:
+승격한 evaluation case:
+보류한 candidate:
+폐기한 candidate:
+변경 사유:
+```
+
+### 다음 실행에서 검증할 가설
+
+```text
+예:
+- 경기 취소 질문에서 공식 상태가 없으면 limitation이 표시되는가
+- 짧은 follow-up에서 selected_game context가 유지되는가
+```
+
 ## 커밋 메모
 
 ```text
@@ -116,4 +164,3 @@ Supabase pgvector에 최소 임베딩 실험을 해본다.
 
 커밋 메시지 후보:
 ```
-

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "manual_chat_qa_candidate.schema.json",
+  "title": "ManualChatQACandidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "source_run_id",
+    "scenario_id",
+    "sanitized_input",
+    "result",
+    "failure_type",
+    "expected_behavior",
+    "observed_behavior",
+    "suspected_layer",
+    "severity",
+    "review_status",
+    "promotion_decision",
+    "notes"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "candidate_id": { "type": "string", "minLength": 1 },
+    "source_run_id": { "type": "string", "minLength": 1 },
+    "scenario_id": { "type": "string", "minLength": 1 },
+    "sanitized_input": { "type": "string", "minLength": 1 },
+    "result": { "enum": ["ambiguous", "failed"] },
+    "failure_type": {
+      "enum": [
+        "tool_routing",
+        "tool_input",
+        "structured_data_freshness",
+        "rag_retrieval",
+        "rag_grounding",
+        "answer_quality",
+        "answer_policy",
+        "source_limitation",
+        "ui_sse",
+        "security_policy",
+        "runtime_error"
+      ]
+    },
+    "expected_behavior": { "type": "string", "minLength": 1 },
+    "observed_behavior": { "type": "string", "minLength": 1 },
+    "suspected_layer": {
+      "enum": [
+        "routing",
+        "tool_input",
+        "structured_data",
+        "retrieval",
+        "answer_generation",
+        "frontend",
+        "streaming",
+        "security_policy",
+        "runtime",
+        "unknown"
+      ]
+    },
+    "severity": { "enum": ["low", "medium", "high", "critical"] },
+    "review_status": { "enum": ["needs_review", "promoted", "rejected", "deferred"] },
+    "promotion_decision": { "type": ["string", "null"] },
+    "notes": { "type": ["string", "null"] }
+  }
+}

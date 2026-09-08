@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "chat_mvp_case.schema.json",
+  "title": "ChatMVPEvaluationCase",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "case_id",
+    "category",
+    "input",
+    "context",
+    "expected",
+    "tags",
+    "source_candidate_id",
+    "review_status"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "case_id": { "type": "string", "minLength": 1 },
+    "category": {
+      "enum": [
+        "game_schedule",
+        "stadium_info",
+        "weather",
+        "ticketing",
+        "stadium_guide",
+        "baseball_knowledge",
+        "follow_up",
+        "unsupported",
+        "answer_policy",
+        "security"
+      ]
+    },
+    "input": { "type": "string", "minLength": 1 },
+    "context": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["auth_status", "favorite_team_id", "today", "timezone"],
+      "properties": {
+        "auth_status": { "const": "authenticated" },
+        "favorite_team_id": { "type": ["string", "null"] },
+        "today": { "type": "string", "format": "date" },
+        "timezone": { "const": "Asia/Seoul" },
+        "selected_game": { "type": ["object", "null"] },
+        "selected_stadium_id": { "type": ["string", "null"] },
+        "selected_team_id": { "type": ["string", "null"] }
+      }
+    },
+    "expected": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "is_in_scope",
+        "should_call_tool",
+        "tool_name",
+        "tool_input",
+        "answer_policy",
+        "required_sources",
+        "forbidden_claims",
+        "ui_expectations"
+      ],
+      "properties": {
+        "is_in_scope": { "type": "boolean" },
+        "should_call_tool": { "type": "boolean" },
+        "tool_name": {
+          "type": ["string", "null"],
+          "enum": [
+            "find_kbo_game",
+            "get_stadium_info",
+            "get_weather_context",
+            "search_ticketing_guide",
+            "search_stadium_guide",
+            "search_baseball_knowledge",
+            null
+          ]
+        },
+        "tool_input": { "type": ["object", "null"] },
+        "answer_policy": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "required_sources": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "forbidden_claims": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "ui_expectations": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "tags": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "source_candidate_id": { "type": ["string", "null"] },
+    "review_status": { "enum": ["draft", "approved", "retired"] }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "expected": { "properties": { "should_call_tool": { "const": true } } } } },
+      "then": { "properties": { "expected": { "required": ["tool_name", "tool_input"] } } }
+    }
+  ]
+}

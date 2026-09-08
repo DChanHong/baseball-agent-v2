@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "run_id": "manual_qa_20260908_v1",
+  "executed_at": "2026-09-08T17:38:21+09:00",
+  "environment": "local",
+  "question_set_version": "mvp2_manual_qa_v1",
+  "summary": {
+    "total": 9,
+    "passed": 4,
+    "ambiguous": 3,
+    "failed": 2,
+    "not_run": 0
+  },
+  "results": [
+    {
+      "scenario_id": "smoke_001",
+      "case_id": "chat_game_001",
+      "category": "game_schedule",
+      "sanitized_input": "오늘 롯데 경기 있어?",
+      "expected_tool": "find_kbo_game",
+      "observed_tool": "find_kbo_game",
+      "result": "passed",
+      "failure_labels": [],
+      "observed_behavior": "9월 8일 롯데-NC 경기 1건을 조회했고 시간, 구장, 상태가 답변과 카드에서 일치했다.",
+      "notes": "Tool card completed."
+    },
+    {
+      "scenario_id": "smoke_002",
+      "case_id": "chat_stadium_001",
+      "category": "stadium_info",
+      "sanitized_input": "사직구장 주소 알려줘",
+      "expected_tool": "get_stadium_info",
+      "observed_tool": "get_stadium_info",
+      "result": "failed",
+      "failure_labels": ["source_limitation"],
+      "observed_behavior": "구장 정보 Tool은 완료됐지만 주소가 정보 없음으로 표시되어 요청한 주소를 제공하지 못했다.",
+      "notes": "홈팀과 지역은 표시됐으나 주소와 돔 여부 데이터가 비어 있었다."
+    },
+    {
+      "scenario_id": "smoke_003",
+      "case_id": "chat_weather_001",
+      "category": "weather",
+      "sanitized_input": "오늘 사직 비 와?",
+      "expected_tool": "get_weather_context",
+      "observed_tool": "get_weather_context",
+      "result": "ambiguous",
+      "failure_labels": ["answer_quality"],
+      "observed_behavior": "KMA 초단기실황을 근거로 기온, 강수량, 습도와 경기 진행 한계를 안내했지만 문장 끝 구두점이 비정상적으로 조합됐다.",
+      "notes": "Tool card completed and weather cancellation was not asserted."
+    },
+    {
+      "scenario_id": "smoke_004",
+      "case_id": "chat_ticket_001",
+      "category": "ticketing",
+      "sanitized_input": "사직 예매 어디서 해?",
+      "expected_tool": "search_ticketing_guide",
+      "observed_tool": "search_ticketing_guide",
+      "result": "ambiguous",
+      "failure_labels": ["answer_quality"],
+      "observed_behavior": "카드에는 공식 예매 경로가 있었지만 최종 자연어 답변은 관련 문서를 찾았다는 안내에 머물렀다.",
+      "notes": "출처 목록에 동일 도메인이 중복 표시됐다."
+    },
+    {
+      "scenario_id": "smoke_005",
+      "case_id": "chat_guide_001",
+      "category": "stadium_guide",
+      "sanitized_input": "고척돔 음식물 반입 가능해?",
+      "expected_tool": "search_stadium_guide",
+      "observed_tool": "search_stadium_guide",
+      "result": "failed",
+      "failure_labels": ["rag_retrieval", "rag_grounding"],
+      "observed_behavior": "카드는 주류, 캔, 병, PET 음료 제한만 설명했고 질문의 핵심인 음식물 반입 가능 여부를 답하지 못했다.",
+      "notes": "검색 결과와 최종 답변 모두 음식물 정책 근거가 부족했다."
+    },
+    {
+      "scenario_id": "smoke_006",
+      "case_id": "chat_knowledge_001",
+      "category": "baseball_knowledge",
+      "sanitized_input": "보크가 뭐야?",
+      "expected_tool": "search_baseball_knowledge",
+      "observed_tool": "search_baseball_knowledge",
+      "result": "ambiguous",
+      "failure_labels": ["answer_quality"],
+      "observed_behavior": "보크 정의가 카드의 첫 근거로 정확히 표시됐지만 최종 자연어 답변은 근거를 찾았다는 안내에 머물렀다.",
+      "notes": "요청과 무관한 추가 근거도 함께 노출됐다."
+    },
+    {
+      "scenario_id": "smoke_007",
+      "case_id": "chat_followup_001",
+      "category": "follow_up",
+      "sanitized_input": "롯데 오늘 경기 알려줘 → 어디서 해?",
+      "expected_tool": null,
+      "observed_tool": null,
+      "result": "passed",
+      "failure_labels": [],
+      "observed_behavior": "직전 롯데-NC 경기의 구장을 창원으로 답했고 추가 Tool card는 생성되지 않았다.",
+      "notes": "단일 경기 조회 후 동일 대화에서 실행했다."
+    },
+    {
+      "scenario_id": "smoke_008",
+      "case_id": "chat_followup_002",
+      "category": "follow_up",
+      "sanitized_input": "롯데 오늘 경기 알려줘 → 몇 시야?",
+      "expected_tool": null,
+      "observed_tool": null,
+      "result": "passed",
+      "failure_labels": [],
+      "observed_behavior": "직전 롯데-NC 경기의 시작 시간을 18:30으로 답했고 추가 Tool card는 생성되지 않았다.",
+      "notes": "단일 경기 조회 후 동일 대화에서 실행했다."
+    },
+    {
+      "scenario_id": "smoke_009",
+      "case_id": "chat_followup_003",
+      "category": "follow_up",
+      "sanitized_input": "롯데 오늘 경기 알려줘 → 상대가 누구야?",
+      "expected_tool": null,
+      "observed_tool": null,
+      "result": "passed",
+      "failure_labels": [],
+      "observed_behavior": "선택된 팀 롯데의 상대를 NC로 답했고 추가 Tool card는 생성되지 않았다.",
+      "notes": "단일 경기 조회 후 동일 대화에서 실행했다."
+    }
+  ]
+}
