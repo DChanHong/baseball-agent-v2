@@ -12,7 +12,7 @@
     "samsung_lapark_ticket_price",
     "samsung_lapark_ticket_method",
     "samsung_lapark_ticket_refund",
-    "daegu_kbo_ticket_map"
+    "kbo_ticket_map"
   ],
   "content": "삼성 홈경기 예매는 티켓링크를 중심으로 안내된다. 삼성 공식 예매방법 페이지는 인터넷 예매, 전화예매, 현장판매, ATM 예매 경로를 안내한다. 예매취소/환불 페이지는 경기 시작 4시간 전, 취소수수료, 우천 취소, 현장 환불 제한 등 조건을 안내하므로 티켓 답변에서 함께 참조해야 한다.",
   "metadata": {

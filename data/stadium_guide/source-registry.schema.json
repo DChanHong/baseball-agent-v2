@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Stadium guide source registry",
+  "type": "object",
+  "required": ["schema_version", "as_of", "description", "sources"],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "as_of": {"type": "string", "format": "date"},
+    "description": {"type": "string"},
+    "sources": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/source"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "source": {
+      "type": "object",
+      "required": [
+        "source_id",
+        "title",
+        "url",
+        "source_type",
+        "document_types",
+        "refresh_policy",
+        "trust_level"
+      ],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "title": {"type": "string", "minLength": 1},
+        "url": {"type": "string", "format": "uri", "pattern": "^https://"},
+        "source_type": {"type": "string"},
+        "stadium_ids": {"type": "array", "items": {"type": "string"}},
+        "team_ids": {"type": "array", "items": {"type": "string"}},
+        "stadium_id": {"type": ["string", "null"], "deprecated": true},
+        "team_id": {"type": ["string", "null"], "deprecated": true},
+        "document_types": {"type": "array", "items": {"type": "string"}},
+        "collector_type": {"enum": ["http", "browser"], "default": "http"},
+        "parser_name": {"type": "string", "default": "visible_text"},
+        "refresh_policy": {"enum": ["monthly", "before_season", "before_game_series", "manual"]},
+        "trust_level": {"type": "string"},
+        "enabled": {"type": "boolean", "default": true},
+        "local_raw_file": {"type": "string"},
+        "notes": {"type": "string"}
+      },
+      "anyOf": [
+        {"required": ["stadium_ids", "team_ids"]},
+        {"required": ["stadium_id", "team_id"]}
+      ],
+      "additionalProperties": false
+    }
+  }
+}

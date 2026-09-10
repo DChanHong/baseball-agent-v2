@@ -11,7 +11,7 @@
   "sources": [
     "heroes_gocheok_ticket_normal",
     "heroes_gocheok_ticket_purchase",
-    "gocheok_kbo_ticket_map"
+    "kbo_ticket_map"
   ],
   "content": "키움 홈경기는 구단 홈페이지와 인터파크/NOL 계열 예매처를 확인한다. 공식 안내는 인터넷, 전화, 모바일, 현장 예매 경로와 수수료, 예매/취소 가능 시간을 구분해 안내한다. 모바일 티켓은 별도 수령 없이 입장 가능하지만 캡처나 이미지는 입장 불가로 안내되어 있다.",
   "metadata": {

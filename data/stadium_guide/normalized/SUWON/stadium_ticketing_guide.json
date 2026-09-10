@@ -11,7 +11,7 @@
   "sources": [
     "kt_ticket_reservation",
     "kt_2026_ticket_policy",
-    "suwon_kbo_ticket_map"
+    "kbo_ticket_map"
   ],
   "content": "kt 공식 일반티켓 안내는 wizzap 앱, 티켓링크 콜센터, kt wiz 홈페이지 티켓 예매, 티켓링크, 현장 매표소를 예매/구매 경로로 안내한다. 티켓 정책은 시즌별 변동 가능성이 있으므로 2026 티켓정책 공지를 함께 확인해야 한다.",
   "metadata": {

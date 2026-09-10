@@ -10,7 +10,7 @@
   "review_status": "needs_review",
   "sources": [
     "hanwha_ticket_info",
-    "daejeon_kbo_ticket_map"
+    "kbo_ticket_map"
   ],
   "content": "한화이글스 공식 사이트는 TICKET 메뉴와 티켓 안내 페이지를 제공하며, 해당 페이지에는 예매하기와 2026 TICKET 이미지가 제공된다. KBO 리그 티켓 안내는 구단별 예매처 매핑의 리그 공식 출처로 사용한다. 현재 수집된 한화 공식 티켓 raw는 이미지 중심이거나 단순 fetch에서 제한 응답을 반환하므로, 예매 오픈 시간, 취소/환불 조건, 좌석별 요금은 추가 브라우저 검수 또는 공식 이미지 수동 검수가 필요하다.",
   "metadata": {

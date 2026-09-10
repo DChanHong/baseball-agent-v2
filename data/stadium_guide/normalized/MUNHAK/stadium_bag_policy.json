@@ -9,7 +9,7 @@
   "trust_level": "official",
   "review_status": "needs_review",
   "sources": [
-    "munhak_kbo_safe_campaign"
+    "kbo_safe_campaign"
   ],
   "content": "SSG 구장 전용 반입 정책 페이지는 현재 수집 범위에서 확인되지 않았다. 따라서 KBO SAFE 캠페인의 전 구장 공통 안전 기준을 우선 적용하고, SSG 공식 홈구장 안내 또는 공지에서 구장별 예외를 추가 확인해야 한다.",
   "metadata": {

@@ -9,7 +9,7 @@
   "trust_level": "official",
   "review_status": "needs_review",
   "sources": [
-    "changwon_kbo_safe_campaign",
+    "kbo_safe_campaign",
     "changwon_ncpark_safety_reopen",
     "nc_dinos_notice_alternate_home"
   ],

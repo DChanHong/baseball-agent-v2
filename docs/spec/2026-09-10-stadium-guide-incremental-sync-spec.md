@@ -734,13 +734,29 @@ backend API tests: 59 passed
 
 ### Phase 2. 수집과 후보 생성
 
-1. source registry schema 확장과 공통 출처 통합
-2. 공통 HTTP collector 작성
-3. 고척 출처 parser 작성
-4. 필요한 브라우저 adapter 작성
-5. raw 저장과 source check 기록
-6. 변경 분류와 문서별 후보 생성
-7. LLM normalized 초안 생성
+1. [x] source registry schema 확장과 공통 출처 통합
+2. [x] 공통 HTTP collector 작성
+3. [x] 고척 출처 parser 작성
+4. [x] 필요한 브라우저 adapter 작성
+5. [x] raw 저장과 source check 기록
+6. [x] 변경 분류와 문서별 후보 생성
+7. [x] LLM normalized 초안 생성
+
+실제 고척 음식물 수집 결과:
+
+```text
+source_id: heroes_gocheok_faq
+HTTP status: 200
+classification: CREATE
+candidate_id: SGC_20260910T055139_cd999a2da2
+candidate status: pending
+first run: source check 1, candidate 1, raw snapshot 1
+idempotent rerun: source check 1 추가, 기존 candidate 재사용, raw snapshot 추가 없음
+RAG documents/chunks before and after: 5/5
+```
+
+Phase 2에서는 후보를 승인하거나 임베딩하지 않았다. 브라우저 adapter는 선택적으로
+구현했지만 첫 고척 FAQ는 일반 HTTP 수집으로 충분해 사용하지 않았다.
 
 ### Phase 3. 검수와 로컬 적용
 
@@ -787,7 +803,8 @@ backend API tests: 59 passed
 
 ## 24. 열린 항목
 
-- [확인 필요] 고척 음식물 반입을 직접 설명하는 최신 공식 출처와 문구
+- [x] 고척 음식물 반입 공식 출처: 키움 히어로즈 관람 FAQ
+- [Phase 3] pending 후보의 문서 유형 범위와 문장별 근거 검수
 - [확인 필요] 고척 공식 페이지 중 브라우저 adapter가 필요한 URL
 - [확인 필요] normalized 문서가 `manual_required`로 전환되는 최대 길이 기준
 - [확인 필요] 기존 45개 legacy 문서의 구장별 검수 순서

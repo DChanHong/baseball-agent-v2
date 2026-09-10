@@ -1,0 +1,628 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,use-scalable=no">
+	<meta property="og:url" content="https://www.facebook.com/heroesbaseballclub">
+	<title>Q&amp;A</title>
+	<link href="/html/front/mobile_2018/css/font.css" rel="stylesheet" type="text/css">
+	<link href="/html/front/mobile_2018/css/default.css" rel="stylesheet" type="text/css">
+	<link href="/html/front/mobile_2018/css/swiper-9.0.5.css" rel="stylesheet" type="text/css">
+	<link href="/html/front/mobile_2018/css/layout_2023.css" rel="stylesheet" type="text/css">
+	<link href="/html/front/mobile_2018/css/index_2023.css?v=260413" rel="stylesheet" type="text/css">
+	
+	<script src="/html/front/mobile/js/jquery-1.12.0.min.js" type="text/javascript"></script>
+	<script src="/html/front/mobile/js/jquery.bxslider.min.js" type="text/javascript"></script>
+	<script src="/html/front/mobile_2018/js/swiper-9.0.5.js" type="text/javascript"></script>
+	<script src="/html/front/mobile_2018/js/jquery.heroes.ui.js" type="text/javascript"></script>
+	<script src="/html/front/mobile/js/common.js" type="text/javascript"></script>
+	<!-- 유튜브를  위한 JS -->
+	<script src="/html/front/web_2018/js/u2_auth.js"></script>
+	<script src="/html/front/web_2018/js/u2_top.js"></script>
+	<script src="https://apis.google.com/js/client.js?onload=googleApiClientReady"></script>
+	<script type="text/javascript" src="/html/admin/plugins/validate/jquery.validate-min.js"></script>
+	<script>
+	$(function(){
+			var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+			 
+		    if ( varUA.indexOf('android') > -1) {
+		        //안드로이드
+		        console.log("android");
+		        $("#btnApp").attr("href","https://play.google.com/store/apps/details?id=kr.co.heroesbaseball.mapp");
+		   
+		    } else if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
+		        //IOS
+		        console.log("ios");
+		        $("#btnApp").attr("href","https://apps.apple.com/us/app/%EC%84%9C%EC%9A%B8%ED%9E%88%EC%96%B4%EB%A1%9C%EC%A6%88/id1612572328");
+		        
+		        
+		    } else {
+		        //아이폰, 안드로이드 외
+		         console.log("other");
+		         $("#btnApp").attr("href","https://play.google.com/store/apps/details?id=kr.co.heroesbaseball.mapp");
+		    }
+	});
+	</script>
+	<link href="/html/front/mobile/css/fans.css" rel="stylesheet" type="text/css">
+<script src="/html/front/mobile_2018/js/swiper-9.0.5.js" type="text/javascript"></script>
+	
+	<!-- Google tag (gtag.js) 0509-->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-73ZPB9EN52"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	
+	  gtag('config', 'G-73ZPB9EN52');
+	</script>
+</head>
+<body id="body" class="main">
+	<script type="text/javascript">
+		var popupChk;
+		$(document).ready(function(){
+			
+		});
+		function openMainPopup(no, w, h, t, l, scroll_x, scroll_y){
+			window.open("/mobile/popup.do?no="+no, "MAIN_POPUP_"+no);//, "width="+w+", height="+h+", top="+t+", left="+l+", fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=yes");
+		}
+	</script>
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('.movie-arg .close').on('click', function(e){
+				e.preventDefault();
+				//$(".movie-arg .video .youMov").html("");
+				$(".movie-arg").hide();
+			});
+			/* var movielayerChk = getCookie("movie-layer");
+			if(movielayerChk != "Y"){
+				$('.movie-arg').show();
+			}
+			$('.movie-arg .btnYoutube').on('click', function(e){
+				e.preventDefault();
+				$(".movie-arg .video .youMov").css({"z-index":2}).html('<iframe id="youtubeIframe" width="100%" height="100%" src="https://www.youtube.com/embed/SnJbOVYxai0?wmode=opaque&autoplay=1&controls=1&autohide=1&showinfo=0&loop=1&mute=0&enablejsapi=1&rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>');
+			}); */
+			$(document).on('click','.youtube2020Type .thum', function(e){
+				e.preventDefault();
+				$('.movie-arg').show();
+				var iframelink =  $("#iframelink").val();
+				$(".movie-arg .video .youMov").css({"z-index":2}).html(iframelink);
+			});
+		});
+		
+		function movieClosePopup(no){
+			setCookie(no, "Y", 1);
+			$('.movie-arg .close').trigger('click');
+		}
+
+		$(document).ready(function(){
+			$('.layer-pop-arg .close').on('click', function(e){
+				e.preventDefault();
+				$(".layer-pop-arg").hide();
+			});
+			var layerChk = getCookie("layer-pop-args");
+			if(layerChk != "Y"){
+				$('.layer-pop-arg').show();
+			}
+		});
+		function layerClosePopup(no){
+			setCookie(no, "Y", 1);
+			$('.layer-pop-arg .close').trigger('click');
+		}
+
+	</script>
+	<!-- <script>
+		$(function(){
+				var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+				
+				if ( varUA.indexOf('android') > -1) {
+					//안드로이드
+					//console.log("android");
+					$("#btnApp").attr("href","https://play.google.com/store/apps/details?id=kr.co.heroesbaseball.mapp");
+				} else if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
+					//IOS
+					//console.log("ios");
+					$("#btnApp").attr("href","https://apps.apple.com/us/app/%EC%84%9C%EC%9A%B8%ED%9E%88%EC%96%B4%EB%A1%9C%EC%A6%88/id1612572328");
+					
+					
+				} else {
+					//아이폰, 안드로이드 외
+					//console.log("other");
+					$("#btnApp").attr("href","https://play.google.com/store/apps/details?id=kr.co.heroesbaseball.mapp");
+				}
+		});
+	</script> -->
+	
+	
+	
+	<header>
+		<div class="topArea">
+			<h1><a href="/mobile/index.do">Nexen Heroes</a></h1>
+			<a href="#gnb" class="btnMenu">메뉴</a>
+			
+			<!-- <a href="#" target="_blank" id="btnApp" class="btnAppDownload">APP</a> -->
+		</div>
+		<div id="search">
+			<form action="/mobile/site/search.do" method="get">
+				<button type="button"><img src="/html/front/mobile/images/common/btnCloseSearch.png" alt="검색닫기"></button>
+				<input type="text" title="검색어 입력" name="q" placeholder="검색어 입력">
+				<button type="submit"><img src="/html/front/mobile/images/common/btnSearch.png" alt="검색"></button>
+			</form>
+		</div>
+	</header>
+
+	
+
+
+
+
+	<!-- S : webapp\WEB-INF\views\jsp\layout\mobile_gnb.jsp -->
+	<div id="gnb">
+		<div class="gnbBack"></div>
+		<div class="gnbInner">
+			<div class="gnbHeader">
+				<div class="btnLeft">
+					<button type="button" class="btnHome" onclick="location.href='/mobile/index.do'">HOME</button>
+				</div>
+				<div class="btnRight">
+					
+					<button type="button" class="btnLineBeige" onclick="location.href='/mobile/user/login.do'">로그인</button>
+					<button type="button" class="btnLineBeige" onclick="location.href='/mobile/user/signup/agreement.do'">회원가입</button>
+					
+					
+				</div>
+			</div>
+			<ul>
+				<li>
+					<a href="#">HEROES</a>
+					<ul>
+						<li><a href="/mobile/heroes/introduce/introduce.do">구단 인사말</a></li>
+						<!-- <li><a href="/mobile/heroes/people/people.do">구단 사람들</a></li> -->
+						<li><a href="/mobile/heroes/bi/bi.do">구단 BI</a></li>
+						<li><a href="/mobile/heroes/sponsor/sponsor.do">구단 파트너</a></li>
+						<li><a href="/mobile/heroes/stadium/skydome.do">구장안내</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="#">PLAYERS</a>
+					<ul>
+						<li><a href="/mobile/players/all/list.do">전체</a></li>
+						<li><a href="/mobile/players/coach/list.do">코칭스탭</a></li>
+						<li><a href="/mobile/players/pitcher/list.do">투수</a></li>
+						<li><a href="/mobile/players/catcher/list.do">포수</a></li>
+						<li><a href="/mobile/players/infielder/list.do">내야수</a></li>
+						<li><a href="/mobile/players/outfielder/list.do">외야수</a></li>
+						<li><a href="/mobile/players/rookie/list.do">신인선수</a></li>
+						<li><a href="/mobile/players/military/list.do">군입대선수</a></li>
+						
+					</ul>
+				</li>
+				<li>
+					<a href="#">GAMES</a>
+					<ul>
+						<li><a href="/mobile/games/schedule/list.do">경기일정 및 결과</a></li>
+						<li><a href="/mobile/games/playerHistory/list.do">선수 등록 현황</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="#">STATS</a>
+					<ul>
+						<li><a href="/mobile/stats/team/list1.do">팀순위</a></li>
+						<li><a href="/mobile/stats/pitcher/list.do">투수성적</a></li>
+						<li><a href="/mobile/stats/batter/list.do">타자성적</a></li>
+						<li><a href="/mobile/stats/allPitcher/list.do">전체투수</a></li>
+						<li><a href="/mobile/stats/allBatter/list.do">전체타자</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="#">STORY</a>
+					<ul>
+						<li><a href="/mobile/story/heroesNews/list.do">구단 소식</a></li>
+						<li><a href="/mobile/story/webzine/list.do">히어로즈 웹진</a></li>
+						
+						<li><a href="/mobile/story/movie/youtube-list.do">히어로즈 영상</a></li>
+						<li><a href="/mobile/story/photo/list.do">히어로즈 사진</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="#">FANS</a>
+					<ul>
+						<li><a href="/mobile/fans/heroesBbs/list.do">영웅게시판</a></li>
+						<li><a href="/mobile/fans/download/wallPaper-list.do">다운로드</a></li>
+		
+						<li><a href="/mobile/fans/cheer/introTeam-list.do">응원단</a></li>
+
+						<li><a href="/mobile/fans/enterhero/list.do">엔터히어로</a></li>
+		
+						<!-- <li><a href="/mobile/fans/sns/list.do">SNS</a></li> -->
+						<li><a href="/mobile/fans/qna/list.do">안내 및 Q&amp;A</a></li>
+						<li><a href="/mobile/fans/LostItems/list.do">유실물</a></li>
+						<!-- <li><a href="/mobile/fans/link/list.do">관련사이트</a></li> -->
+						
+					</ul>
+				</li>
+				<!-- 
+				<li>
+					<a href="#">EVENTS</a>
+					<ul>
+						<li><a href="javascript:alert('준비 중 입니다.');">이벤트소개</a></li>
+						<li><a href="javascript:alert('준비 중 입니다.');">스케쥴</a></li>
+						<li><a href="javascript:alert('준비 중 입니다.');">참여신청</a></li>
+					</ul>
+				</li>
+				 -->
+				<li>
+					<a href="#">TICKET</a>
+					<ul>
+						<!-- S : 230309 -->
+						<li><a href="/mobile/ticket/normal/view.do">일일티켓</a></li>
+						<!-- <li><a href="/mobile/ticket/season/viewGame.do">경기권</a></li> -->
+						<!-- <li><a href="/mobile/ticket/season/view3game.do">주중/주말 3경기권</a></li> -->
+						<li><a href="/mobile/ticket/season/viewSeason.do">연간회원</a></li>
+						<li><a href="/mobile/ticket/membership/viewMembership.do">멤버십</a></li>
+						<li><a href="/mobile/ticket/group/view.do">단체관람</a></li>
+						<li><a href="/mobile/ticket/skybox/view.do">스카이박스</a></li>
+						<li><a href="/mobile/ticket/season/viewGoyang.do">고양히어로즈 티켓</a></li>
+						
+						<!-- <li><a href="javascript:alert('준비 중 입니다.');">일일티켓</a></li>
+						<li><a href="javascript:alert('준비 중 입니다.');">8경기티켓</a></li>
+						<li><a href="javascript:alert('준비 중 입니다.');">연간회원</a></li>
+						<li><a href="javascript:alert('준비 중 입니다.');">멤버십</a></li>
+						<li><a href="javascript:alert('준비 중 입니다.');">단체관람</a></li>
+						<li><a href="javascript:alert('준비 중 입니다.');">스카이박스</a></li>
+						<li><a href="javascript:alert('준비 중 입니다.');">고양히어로즈</a></li> -->
+						<!-- E : 230309 -->
+					</ul>
+				</li>
+	
+			</ul>
+		</div>
+		<button type="button" class="btnLineClose">닫기</button>
+	</div>
+	<!-- E : webapp\WEB-INF\views\jsp\layout\mobile_gnb.jsp -->
+
+	<script type="text/javascript">
+$(document).ready(function(){	
+	//var swiper1 = new Swiper(".tab-box .swiper-container",{
+	//		slidesPerView: 3.3,
+			//centeredSlides: false,
+			//spaceBetween: 0,
+			//speed: 1000,
+			//grabCursor: false,
+	//		loop: false,
+			/* autoplay: {
+				delay: 3000,
+				disableOnInteraction: false,
+			},
+			pagination:{
+				el: ".tab-box .swiper-container .swiper-pagination",
+			} */
+	//	});
+});
+
+function loginMsg()
+{
+	if(confirm("로그인 후 이용가능하십니다.\n\n로그인 하시겠습니까?"))
+		location.href = "../../user/login.do";
+}
+
+function selectTypeFaq(data){
+	//$("#searchCode").val(data.dataset.code);
+	//$(".boardSearch").find("button").trigger('click');
+}
+
+</script>
+
+	<h2 class="subject">안내 및 Q&amp;A</h2>
+
+
+
+	<div class="tab-box flex">
+		<div class="tabBtn">
+			<a href="list.do" onclick="selectTypeFaq(this)"  class="on">
+							전체
+			</a>
+		</div>
+		
+				<div class="tabBtn">
+					<a href="list.do?searchCode=A00" onclick="selectTypeFaq(this)"  data-code="A00" > 
+						티켓
+					</a>
+				</div>
+		
+				<div class="tabBtn">
+					<a href="list.do?searchCode=B00" onclick="selectTypeFaq(this)"  data-code="B00" > 
+						스카이박스
+					</a>
+				</div>
+		
+				<div class="tabBtn">
+					<a href="list.do?searchCode=C00" onclick="selectTypeFaq(this)"  data-code="C00" > 
+						MD
+					</a>
+				</div>
+		
+				<div class="tabBtn">
+					<a href="list.do?searchCode=D00" onclick="selectTypeFaq(this)"  data-code="D00" > 
+						주차 관련
+					</a>
+				</div>
+		
+				<div class="tabBtn">
+					<a href="list.do?searchCode=F00" onclick="selectTypeFaq(this)"  data-code="F00" > 
+						기타
+					</a>
+				</div>
+		
+		
+	</div>
+	
+	<div class="qna-pointInfo">
+		<div class="inner">
+			<p class="tit">공지</p>
+			<p>
+				키움히어로즈 광고 및 제휴 문의, 스카이박스 예매, 티켓 예매, 채용 
+				등을 문의하기 위해 유선 전화연결이 어려울 경우, 전화 대신 아래 
+				메일로 문의 남겨주시면 각 담당별로 더 수월한 소통이 가능합니다.
+
+			</p>
+			<ul class="qna-pointInfo-list">
+				<li>
+					티켓 :  ticket@heroesbaseball.co.kr
+				</li>
+				<li>
+					스카이박스 :  skybox@heroesbaseball.co.kr
+				</li>
+				<li>
+					광고 :  partnership@heroesbaseball.co.kr
+				</li>
+				<li>
+					채용 :  recruit@heroesbaseball.co.kr
+				</li>
+				<li>
+					MD / 콜라보 : md@heroesbaseball.co.kr
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="qna">
+		<ul>
+			
+			<li>
+				<h3><a href="#a_20"> 유실물 찾는 방법이 궁금해요.</a></h3>
+				<div id="a_20">
+					[유실물 찾는 방법]<br />먼저 구단 홈페이지에서 유실물 센터로 습득이 되었는지 확인 후, 찾아가시면 됩니다.<br /><br /><br />[유실물 페이지 확인 방법]<br />홈페이지 상단 탭 클릭 > FANS > 유실물<br />- 방문하신 일자 익일에 유실물 페이지는 업데이트 되는 점 참고 부탁드립니다.<br /><br /><br />[유실물 센터 유의사항]<br />- 운영일자 : 키움히어로즈 고척스카이돔 홈경기 진행 시<br />- 장소 : 1층 VIP 주차장 중앙출입구 안내데스크(입장기준 우측)<br /><br /><br />[운영시간] <br />- 18:30 경기 : 14:00부터 경기종료까지<br />- 17:00 경기 : 12:30부터 경기종료까지<br />- 14:00 경기 : 11:00부터 경기종료까지<br /><br /><br />[수령절차] <br />- 분실물 확인 : 분실경위, 물품 생김새 등<br />- 본인확인 : 신분증
+				</div>
+			</li>
+			
+			<li>
+				<h3><a href="#a_19">체크인 리워드 누락 관련 건</a></h3>
+				<div id="a_19">
+					6월 리워드 시스템 도입 이후로는 검표 완료 직접 하셔야 리워드 제공 가능합니다.<br /><br />리워드 보정 관련하여 궁금하실 경우, 멤버십코드(T로 시작하는 예매번호)와 이용자 이름, 연락처, 누락된 경기일 티켓 번호와 함께 <br />하기 번호로 문의 부탁드립니다.<br /><br />인터파크 고객센터 유선 문의(1544-1555, 스포츠 2번)<br />
+				</div>
+			</li>
+			
+			<li>
+				<h3><a href="#a_18">야구장 전광판 용어가 궁금해요</a></h3>
+				<div id="a_18">
+					용어	뜻<br />H	안타<br />E	에러, 실책<br />BB	볼넷<br />R	득점, 실점<br />AB	타수<br />PA	타석<br />K	탈삼진<br />SO	삼진<br />AVG	타율<br />SLG	장타율<br />OBP	출루율<br />OPS	장타율 + 출루율<br />IP	투구 이닝<br />HR	홈런<br />ERA	방어율<br />WHIP	이닝 당 출루 허용률 (피안타+볼넷)/ 이닝<br />F/C	야수 선택<br />
+				</div>
+			</li>
+			
+			<li>
+				<h3><a href="#a_17">스카이박스에  36개월 미만 유아는 무료 입장 가능한가요?</a></h3>
+				<div id="a_17">
+					네 가능합니다. 무료 추가입장을 허용하며 입장시 증빙 서류를 지참 하셔야 합니다.<br /><br />36개월 미만 유아 (건강보험증, 등본 등 증명서류 제시)<br />· 36개월 미만 유아는 보호자 동반 시 전 구역 무료 입장이 가능하나, 좌석의 권한은 제공되지 않습니다.<br />· 지정 좌석 점유 필요 시 입장권 별도 구매<br />
+				</div>
+			</li>
+			
+			<li>
+				<h3><a href="#a_16">스카이박스 주차 가능 대수는 몇대인가요?</a></h3>
+				<div id="a_16">
+					9인실은 (3대) 14인실은 (4대) 20인실은 (6대) 입니다.
+				</div>
+			</li>
+			
+			<li>
+				<h3><a href="#a_15">연간 회원권은 예매 따로 안해도 되나요? 지류 티켓 뽑을 수 있나요?</a></h3>
+				<div id="a_15">
+					연간회원은 회원 카드로만 입장 가능하시며, 별도 예매 진행하지 않습니다.<br /><br />지류 티켓 발권은 불가합니다.
+				</div>
+			</li>
+			
+			<li>
+				<h3><a href="#a_14">캔 반입 가능한가요?</a></h3>
+				<div id="a_14">
+					올 시즌부터는 캔 반입이 허용이 되며, 1인당 총 용량은 1리터까지 입니다.<br />  (맥주 1.6L 피처, 컵와인, 팩소주, 플라스틱용기 소주 반입 불가) <br /><br />주류는 8도 이하의 주류만 반입이 가능합니다.<br /><br />총 용량 1리터 기준: 맥주 500ml 2캔 가능, 맥주 1L 피처 1개 가능, 생수 1.8L반입 불가) ▶ KBO SAFE캠페인 내용을 따릅니다
+				</div>
+			</li>
+			
+			<li>
+				<h3><a href="#a_13">구장 내 음식물 섭취 가능한가요?</a></h3>
+				<div id="a_13">
+					구장 내 음식물 섭취는 모두 가능합니다.<br /><br />최초 입장 시에는 음식물 반입 가능하며, 병에만 담겨있지 않으면 됩니다. 단, 재입장 시에는 외부 음식 반입은 제한됩니다.<br /><br />주류는 8도 이하의 주류만 반입이 가능합니다. 올 시즌부터는 캔 반입도 허용이 되며, 1인당 총 용량은 1리터까지 입니다.<br />  (맥주 1.6L 피처, 컵와인, 팩소주, 플라스틱용기 소주 반입 불가) <br /><br />총 용량 1리터 기준: 맥주 500ml 2캔 가능, 맥주 1L 피처 1개 가능, 생수 1.8L반입 불가) ▶ KBO SAFE캠페인 내용을 따릅니다
+				</div>
+			</li>
+			
+			<li>
+				<h3><a href="#a_12">선예매는 멤버십을 구매한 본인의 계정에서만 할 수 있는 걸까요?</a></h3>
+				<div id="a_12">
+					선예매는 본인 계정에서만 인증 후 사용 가능합니다.
+				</div>
+			</li>
+			
+			<li>
+				<h3><a href="#a_11">청소년 기준이 몇살인가요?</a></h3>
+				<div id="a_11">
+					청소년은 중학생~ 고등학생까지 입니다. (14세~19세)
+				</div>
+			</li>
+			
+		</ul>
+
+		<script type="text/javascript">
+		//<![CDATA[
+	 		var link = $('div.qna ul > li > h3 > a');
+
+	 		link.bind('click', function(e){
+	 			e.preventDefault();
+	 			
+	 			if(!$(this).hasClass('on')){
+	 				$($(this).addClass('on').attr('href')).slideDown(200);		 				
+	 			}else{
+	 				$($(this).removeClass('on').attr('href')).slideUp(200);		 				
+	 			}
+	 		});
+		//]]>
+		</script>
+		
+		
+			
+				<a href="javascript:" class="boardWrite" onclick="loginMsg()">1:1 문의하기</a>
+			
+			
+				
+
+		<div class="pageNav">
+			<span class="prev"><a href="javascript:" ><span>&lt;&lt;</span> </a><a href="javascript:" ><span>&lt;</span></a></span><span class="page"><a href="javascript:" class="on">1</a><a href="list.do?cPage=2" >2</a></span><span class="next"><a href="list.do?cPage=2" ><span>&gt;</span></a><a href="javascript:" > <span>&gt;&gt;</span></a></span>
+		</div>
+	</div>
+
+ 	
+	
+	
+
+	
+
+
+
+<!-- S : webapp\WEB-INF\views\jsp\layout\mobile_footer.jsp -->
+	<a href="#body">TOP</a>
+	<div class="sponsor">
+		<a href="http://m.kiwoom.com" target="_blank">키움증권</a>
+		<div class="sponsorBanner">
+			<ul>
+			
+				<li><a href="http://www.sgc.co.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2021/04/01/0183a2cf-e12d-45d8-9e4d-a2b60293ae42.png" alt="SGC" /></a></li>
+			
+				<li><a href="http://www.nike.co.kr" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2016/03/30/d0f609ed-b245-4859-845f-953d376a5ae1.png" alt="나이키" /></a></li>
+			
+				<li><a href="https://www.saramin.co.kr/zf_user/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2021/09/03/c5e4d0f9-e4b9-4ba6-982f-516c339f3b12.png" alt="사람인" /></a></li>
+			
+				<li><a href="http://www.baekjosink.com/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2022/04/01/5fed0284-ad3b-498b-9a6d-0167ebcf3ddd.png" alt="백조씽크" /></a></li>
+			
+				<li><a href="https://www.lexus.co.kr/?utm_campaign=kiwoom&utm_source=digital&utm_medium=1&utm_content=1" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/04/01/6ed128a8-5e87-4dc1-8c44-89101063ac7e.png" alt="LEXUS" /></a></li>
+			
+				<li><a href="https://nol-universe.com/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/04/15/9bb6718c-92d3-4552-aa07-4e46d87e2be1.png" alt="놀유니버스" /></a></li>
+			
+				<li><a href="https://www.verygoodtour.com/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/f07d8fe3-569c-41bd-83f8-31dea5c519b7.png" alt="참좋은여행" /></a></li>
+			
+				<li><a href="https://healthhelper.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/20e8ac9e-e285-4541-a868-3a8ff80f6dab.png" alt="맥스컷" /></a></li>
+			
+				<li><a href="https://www.tving.com" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2024/03/26/2742c9af-70ec-4ebd-bf11-52ecec2f1705.png" alt="티빙" /></a></li>
+			
+				<li><a href="http://www.dkpco.co.kr" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2020/04/17/0a1f7ea5-43cc-4f78-a77c-131ac7ce782c.png" alt="동광제약" /></a></li>
+			
+				<li><a href="https://www.wesang.com/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/06/09/562ac94a-aa71-4065-ae11-31f75d0bfb9b.png" alt="요기요" /></a></li>
+			
+				<li><a href="https://www.mirae-n.com/main/mn-main-01.frm" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2024/04/13/f7620e78-9828-4ddd-8f69-d8e918a8cfdc.png" alt="미래엔" /></a></li>
+			
+				<li><a href="https://www.herbalife.com/ko-kr" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/03/17/9ec4bdbe-54e7-4fac-aac7-361c625431e5.png" alt="허벌라이프" /></a></li>
+			
+				<li><a href="https://www.panasonic.co.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2020/04/17/afaccacb-364c-4ddf-a232-d746cd92a821.png" alt="파나소닉" /></a></li>
+			
+				<li><a href="https://www.naver.com/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/03/14/f0a4f908-e79e-4a4d-9e13-d616d62db255.png" alt="네이버" /></a></li>
+			
+				<li><a href="https://www.hitejinro.com/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2022/04/14/5f671889-f215-4a81-9da8-1751e67a2d75.png" alt="하이트진로" /></a></li>
+			
+				<li><a href="https://flex.team/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2023/10/16/01e83640-a08f-4d77-9d92-9eabe59d0bcd.png" alt="flex" /></a></li>
+			
+				<li><a href="https://ganongbio.com/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/19ca5b0d-21da-455d-bcb1-2bab5766a2c1.png" alt="가농바이오" /></a></li>
+			
+				<li><a href="https://shop.drleo.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/48e6be2c-d149-4aed-a309-7f87f9811553.png" alt="래오이경제" /></a></li>
+			
+				<li><a href="https://wonangsink.com/kor/main/0000_home.php" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/82f26300-db5f-4f36-9519-8afdb71919e0.png" alt="원앙" /></a></li>
+			
+				<li><a href="https://www.mexicana.co.kr/intro.asp" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/30/d288e812-aef9-4f23-b027-597cd0f5e492.png" alt="멕시카나" /></a></li>
+			
+				<li><a href="https://preedlife.com/pc/main" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/07/09/13377d2a-de1f-4963-8633-988d70329528.png" alt="웅진프리드라이프" /></a></li>
+			
+				<li><a href="https://greenfoodmaker.co.kr/default/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/24/9b288e7d-5ca3-4ecc-91cd-f10609852aef.png" alt="그린푸드메이커" /></a></li>
+			
+				<li><a href="http://www.teianmotors.com" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2023/03/23/1cbf0598-d199-4d1a-9f11-a765851d7366.png" alt="태안모터스" /></a></li>
+			
+				<li><a href="https://www.lh.or.kr" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2023/04/06/e3649c2d-df6d-4b76-92ad-053b99bbd610.png" alt="한국토지주택공사" /></a></li>
+			
+				<li><a href="https://www.bhc.co.kr" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/03/17/0fc975ba-c94a-447f-b17a-3fabdf358437.png" alt="BHC" /></a></li>
+			
+				<li><a href="yby.co.kr" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/30/65df0f1a-4129-4378-83f2-195a190e22e9.png" alt="육회바른연어" /></a></li>
+			
+				<li><a href="https://www.emetlife.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/35e5c3dd-5dd9-438e-9ac0-4fc5d488420c.png" alt="메트라이프" /></a></li>
+			
+				<li><a href="https://www.deepo.co.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/131e48f1-6b56-423d-b37b-48f6ec7c58cc.png" alt="디에포" /></a></li>
+			
+				<li><a href="ttangttang.co.kr" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/76827b21-7abd-4250-936f-ff0f155b86b3.png" alt="땅땅치킨" /></a></li>
+			
+				<li><a href="http://www.hyundaipharm.co.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2018/03/20/ddf5589a-b0a7-44cf-8d9a-eff25716911c.png" alt="현대약품" /></a></li>
+			
+				<li><a href="http://www.ht.co.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2018/03/20/497c980e-6049-4dc8-98d2-88536731dd11.png" alt="해태제과" /></a></li>
+			
+				<li><a href="http://www.songlimga.com/index.do" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/736c1fdc-eea7-4f9f-8c98-cb8bcdc934ab.png" alt="송림가" /></a></li>
+			
+				<li><a href="https://aju.volvocars.co.kr/?lead_source=ETC_P" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/03/17/d28e41d6-a6b5-4917-b472-d640af2b9492.png" alt="아주오토리움" /></a></li>
+			
+				<li><a href="https://www.ejadam.co.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/03/17/5f0a7152-2465-4129-8de5-264a8a97230f.png" alt="자담치킨" /></a></li>
+			
+				<li><a href="http://www.kimeye.com" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2018/03/20/125fbe9c-a7c4-4501-8be2-5e2e6bfab730.png" alt="김안과병원" /></a></li>
+			
+				<li><a href="https://mawangpork.com/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/03/14/9016772b-ad2c-48a9-b37c-10f417af0fd7.png" alt="마왕족발" /></a></li>
+			
+				<li><a href="https://smartstore.naver.com/mzkorea " target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2023/05/10/dade689c-77cb-4217-83b8-28e6957eb4dc.png" alt="앰지코리아" /></a></li>
+			
+				<li><a href="https://myungranghotdog.com" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2026/03/27/a5806446-ca28-41d9-9f30-2947679e6cee.png" alt="명랑핫도그" /></a></li>
+			
+				<li><a href="https://www.gurohope.or.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2024/03/26/3aea018c-cbd4-4b6c-af44-212c4db81fd3.png" alt="구로희망복지재단" /></a></li>
+			
+				<li><a href="http://www.goyang.go.kr " target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2020/04/17/81f71f17-e277-438b-a95e-014b243971d2.png" alt="고양시청" /></a></li>
+			
+				<li><a href="https://www.bumin.co.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/04/15/49ab00bb-b96f-4317-9463-fea5beb414f2.png" alt="부민병원" /></a></li>
+			
+				<li><a href="http://www.hanaromf.com/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2018/03/20/ec067faa-fdb1-4365-8f02-3772df785b92.png" alt="하나로의료재단" /></a></li>
+			
+				<li><a href="https://www.pic.co.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/03/21/12f02972-a952-4287-a990-86fc96b9b761.png" alt="PIC 리조트" /></a></li>
+			
+				<li><a href="http://www.pulmuonewater.com" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2022/04/01/ae3c016f-de5f-4660-bcc8-242076d7976f.png" alt="풀무원샘물" /></a></li>
+			
+				<li><a href="https://www.freshdelmonte.co.kr/" target="_blank" title="새 창 열림"><img src="/files/sponcor.1//2025/03/14/5fc8bc9f-b106-42fb-aaee-f26bc25c8f70.png" alt="델몬트코리아" /></a></li>
+			
+			</ul>
+		</div>
+	</div>
+
+<footer>
+	<div class="footNav">
+		<a href="/mobile/site/privacyStatement.do">개인정보처리방침</a>
+		<a href="/mobile/site/termsOfUse.do">이용약관</a>
+		<a href="/mobile/fans/qna/list.do">안내 및 Q&amp;A</a>
+		<a href="/mobile/site/sitemap.do">사이트맵</a>
+	</div>
+
+	<div class="address">
+		서울특별시 구로구 경인로 430<br />
+		(고척동, 고척스카이돔구장내)<br />
+		T.02-3660-1000 F.02-3660-1099
+	</div>
+
+	<address>Copyright (C) Heroes, All Rights Reserved.</address>	
+</footer>
+<!-- E : webapp\WEB-INF\views\jsp\layout\mobile_footer.jsp -->
+
+
+	<div id="background"></div>
+</body>
+</html>

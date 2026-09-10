@@ -238,11 +238,9 @@ Supabase schema lint: 오류 없음
 
 ## 11. Phase 2: 공식 출처 수집과 후보 생성
 
-<!-- Phase 2 구현 후 아래 내용을 실제 파일명, 명령, 실행 결과로 교체한다. -->
-
 Phase 2에서는 등록된 공식 출처를 다시 수집하고 변경 후보를 만드는 흐름을 구현합니다.
 
-예상 흐름:
+구현한 흐름:
 
 ```text
 sources.json 검증
@@ -259,28 +257,24 @@ sources.json 검증
 ### 구현 기록
 
 ```text
-구현 날짜:
-관련 커밋:
-추가한 주요 파일:
-수집 대상 source_id:
-HTTP 수집 성공:
-브라우저 adapter 사용:
-manual_required:
+구현 날짜: 2026-09-10
+관련 커밋: 작성 시점 미커밋
+추가한 주요 파일: sync_stadium_guides.py, stadium_guide_sync 패키지
+수집 대상 source_id: heroes_gocheok_faq
+HTTP 수집 성공: 1
+브라우저 adapter 사용: 0
+manual_required: 0
 ```
 
 ### 처음 예상과 달랐던 점
 
-<!-- 페이지 구조, 인코딩, 동적 렌더링, 본문 추출 실패 등을 기록한다. -->
-
 ```text
--
--
--
+- 키움 공식 FAQ는 일반 HTTP 수집으로 본문을 얻을 수 있었다.
+- 음식물·재입장 근거만 남기는 전용 parser가 필요했다.
+- 로컬 후보 실행 때 DATABASE_URL을 로컬 주소로 명시했다.
 ```
 
 ## 12. 첫 적용 사례: 고척 음식물 반입
-
-<!-- 실제 공식 출처 확인 전에는 반입 가능 여부를 확정해서 적지 않는다. -->
 
 첫 적용에서는 다음 문서를 구분해 갱신합니다.
 
@@ -294,13 +288,15 @@ KBO_common_stadium_bag_policy
 
 | 항목 | 결과 |
 |---|---|
-| 확인한 공식 출처 | 작성 예정 |
-| 수집 방식 | 작성 예정 |
-| 변경 분류 | 작성 예정 |
-| 기존 content hash | 작성 예정 |
-| 후보 content hash | 작성 예정 |
-| LLM 후보 생성 결과 | 작성 예정 |
-| 검수 결과 | 작성 예정 |
+| 확인한 공식 출처 | 키움 히어로즈 고척스카이돔 관람 FAQ |
+| 수집 방식 | 일반 HTTP + heroes_gocheok_faq parser |
+| 변경 분류 | CREATE |
+| 기존 content hash | 없음 |
+| 후보 content hash | b1bea021d356845c44431ef0a6af07fc79f54e6a442c9da8fa4bb7c8eb1b15c7 |
+| LLM 후보 생성 결과 | pending 후보 1개 |
+| 검수 결과 | Phase 3에서 진행 |
+
+같은 명령을 다시 실행했을 때 기존 candidate ID를 재사용했고 raw snapshot도 1개로 유지됐다. 실행 기록과 출처 검사는 매 실행마다 남았지만 RAG 문서와 청크는 실행 전후 각각 5개로 같았다.
 
 ### 실제 diff
 
@@ -458,8 +454,8 @@ upsert는 같은 key의 row를 저장하는 방법이다.
 
 ## 19. 발행 전 체크리스트
 
-- [ ] Phase 2 수집 결과를 실제 수치로 교체했다.
-- [ ] 고척 공식 출처와 기준일을 확인했다.
+- [x] Phase 2 수집 결과를 실제 수치로 교체했다.
+- [x] 고척 공식 출처와 기준일을 확인했다.
 - [ ] CREATE·UPDATE·UNCHANGED 분류 결과를 기록했다.
 - [ ] 실제 embedding 호출 수를 기록했다.
 - [ ] 로컬 평가 결과 파일과 수치를 기록했다.
