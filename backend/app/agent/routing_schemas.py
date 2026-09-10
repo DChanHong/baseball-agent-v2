@@ -38,6 +38,9 @@ StadiumGuideType = Literal[
     "stadium_seat_guide",
     "stadium_ticketing_guide",
     "stadium_transport_guide",
+    "stadium_food_guide",
+    "stadium_entry_guide",
+    "stadium_accessibility_guide",
 ]
 
 BaseballKnowledgeType = Literal[

@@ -138,7 +138,7 @@ SEARCH_STADIUM_GUIDE_TOOL_CARD = """
 도구명: search_stadium_guide
 
 역할:
-- KBO 홈구장의 좌석, 반입 정책, 교통, 주차, 편의시설 안내를 RAG 문서에서 검색한다.
+- KBO 홈구장의 좌석, 반입 정책, 음식, 입장, 접근성, 교통, 주차, 편의시설 안내를 RAG 문서에서 검색한다.
 - 검색 결과는 답변 생성에 사용할 근거 chunk, 출처 URL, 기준 시점, 신뢰 등급을 포함한다.
 
 입력:
@@ -160,10 +160,13 @@ SEARCH_STADIUM_GUIDE_TOOL_CARD = """
 - CHANGWON: 창원NC파크, NC 홈구장
 
 guide_types:
-- stadium_bag_policy: 반입 금지 물품, 캔/병/음식물, 안전 정책, 준비물
+- stadium_bag_policy: 반입 금지 물품, 캔/병/주류/PET 제한, 안전 정책, 준비물
 - stadium_facility_guide: 편의시설, 매장, 구장샵, 화장실, 수유실 등
 - stadium_seat_guide: 좌석 종류, 원정석, 응원석, 시야, 좌석 구역
 - stadium_transport_guide: 지하철, 버스, 주차, 교통, 길찾기
+- stadium_food_guide: 외부 음식 반입, 취식, 구장 내 식음 매장
+- stadium_entry_guide: 게이트, 입장 시간, 티켓 확인, 재입장, 입장 동선
+- stadium_accessibility_guide: 휠체어석, 장애인 주차, 엘리베이터, 접근 가능한 출입구
 
 호출해야 하는 경우:
 - "사직구장 처음 가는데 뭐 챙겨야 해?"

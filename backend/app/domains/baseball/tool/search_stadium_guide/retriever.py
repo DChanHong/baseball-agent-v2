@@ -43,29 +43,41 @@ class PgVectorStadiumGuideRetriever:
         statement = text(
             """
             select
-              chunk_id,
-              document_id,
-              document_type,
-              stadium_id,
-              team_id,
-              title,
-              content,
-              source_urls,
-              as_of,
-              trust_level,
-              review_status,
-              metadata,
-              embedding <=> cast(:query_embedding as extensions.vector) as distance
-            from public.rag_chunks
-            where stadium_id = :stadium_id
-              and embedding is not null
-              and review_status != 'rejected'
-              and document_type = any(:document_types)
+              chunks.chunk_id,
+              chunks.document_id,
+              chunks.document_type,
+              chunks.stadium_id,
+              chunks.team_id,
+              chunks.title,
+              chunks.content,
+              chunks.source_urls,
+              chunks.as_of,
+              chunks.trust_level,
+              chunks.review_status,
+              chunks.metadata,
+              chunks.embedding <=> cast(:query_embedding as extensions.vector) as distance
+            from public.rag_chunks as chunks
+            join public.rag_documents as documents
+              on documents.document_id = chunks.document_id
+            where (
+                chunks.stadium_id = :stadium_id
+                or chunks.stadium_id is null
+              )
+              and documents.is_active
+              and documents.logical_document_id is not null
+              and (
+                chunks.review_status = 'approved'
+                or documents.legacy_unreviewed
+              )
+              and chunks.embedding is not null
+              and chunks.document_type = any(:document_types)
               and (
                 cardinality(:guide_types) = 0
-                or document_type = any(:guide_types)
+                or chunks.document_type = any(:guide_types)
               )
-            order by embedding <=> cast(:query_embedding as extensions.vector)
+            order by
+              chunks.embedding <=> cast(:query_embedding as extensions.vector),
+              (chunks.stadium_id = :stadium_id) desc
             limit :top_k
             """
         ).bindparams(

@@ -9,6 +9,7 @@ from app.agent.prompts import (
 )
 from app.agent.routing_schemas import (
     DirectAnswerIntent,
+    StadiumGuideType,
     ToolRoutingDecision,
     ToolRoutingRequest,
 )
@@ -48,3 +49,18 @@ def test_tool_routing_system_prompt_includes_tool_cards_and_examples() -> None:
     assert "도구명: search_stadium_guide" in system_prompt
     assert '"direct_answer_intent":"selected_game_place"' in system_prompt
     assert '"tool_name":"get_weather_context"' in system_prompt
+
+
+def test_tool_routing_supports_extended_stadium_guide_types() -> None:
+    guide_types = set(get_args(StadiumGuideType))
+
+    assert {
+        "stadium_food_guide",
+        "stadium_entry_guide",
+        "stadium_accessibility_guide",
+    }.issubset(guide_types)
+
+    system_prompt = build_tool_routing_system_prompt()
+    assert "stadium_food_guide" in system_prompt
+    assert "stadium_entry_guide" in system_prompt
+    assert "stadium_accessibility_guide" in system_prompt

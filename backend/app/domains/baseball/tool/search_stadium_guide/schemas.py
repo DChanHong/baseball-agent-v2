@@ -11,6 +11,9 @@ StadiumGuideType = Literal[
     "stadium_seat_guide",
     "stadium_ticketing_guide",
     "stadium_transport_guide",
+    "stadium_food_guide",
+    "stadium_entry_guide",
+    "stadium_accessibility_guide",
 ]
 
 
@@ -84,7 +87,7 @@ class StadiumGuideSearchItem(BaseModel):
     chunk_id: str
     document_id: str
     document_type: StadiumGuideType
-    stadium_id: str
+    stadium_id: str | None
     team_id: str | None
     title: str
     content: str
