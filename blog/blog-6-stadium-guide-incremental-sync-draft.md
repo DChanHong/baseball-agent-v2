@@ -1,8 +1,8 @@
 # [AI Agent] RAG 데이터를 운영하기: 전체 재임베딩에서 증분 갱신으로
 
-> 상태: Phase 4 문서 정비 완료, 운영 반영 전
+> 상태: Phase 5 운영 반영과 검증 완료
 > 기준 spec: `docs/spec/2026-09-10-stadium-guide-incremental-sync-spec.md`
-> 구현 범위: 공식 출처 수집, 변경 분류, 검수, 증분 임베딩, 로컬 평가
+> 구현 범위: 공식 출처 수집, 변경 분류, 검수, 증분 임베딩, 로컬 평가, 운영 승격과 롤백
 
 ## 개요
 
@@ -424,10 +424,10 @@ verify_candidates=0
 verify_documents=0
 ```
 
-변경 범위 lint와 type check가 통과했고 백엔드 API 테스트는 68개가
+변경 범위 lint와 type check가 통과했고 백엔드 API 테스트는 69개가
 통과했다.
 
-## 17. 운영 반영 전에 발견한 schema 불일치
+## 17. 운영 반영에서 발견한 schema 불일치
 
 로컬 작업 후 백엔드가 운영 DB를 바라보는 상태에서 키움 예매 안내를
 검색했더니 Tool 실패와 전체 채팅 스트림 실패가 이어졌다. 운영 DB에는
@@ -443,8 +443,8 @@ verify_documents=0
 → 화면에 Tool 오류와 stream 오류가 연속 표시
 ```
 
-이 문제는 새 데이터의 품질 문제가 아니라 코드와 DB 배포 순서 문제다.
-운영에서는 다음 순서를 지켜야 한다.
+이 문제는 새 데이터의 품질 문제가 아니라 코드와 DB 배포 순서 문제였다.
+다음 순서로 복구하고 운영 반영을 진행했다.
 
 1. 운영 DB 백업과 migration 상태 확인
 2. revision migration 적용
@@ -453,8 +453,27 @@ verify_documents=0
 5. 예매·음식물·반입·입장 질문 검색 검증
 6. 같은 승격 명령을 다시 실행해 멱등성 확인
 
-도구의 DB 조회가 실패해도 fallback 답변은 저장할 수 있도록 transaction
-복구 처리도 운영 반영 전에 보강해야 한다.
+도구의 DB 조회가 실패하면 즉시 transaction을 rollback한 뒤 fallback
+답변을 저장하도록 보강했다. Supabase transaction pooler에서 prepared
+statement 이름이 충돌하지 않도록 asyncpg의 prepared statement cache를
+끄고 매 statement에 고유 이름을 사용하도록 연결 설정도 수정했다.
+
+운영 migration 전후 문서와 chunk 수는 68/72로 유지됐다. 이후 로컬에서
+평가를 통과한 4개 revision을 승격한 결과는 다음과 같다.
+
+```text
+운영 rag_documents: 68 → 72
+운영 rag_chunks: 72 → 76
+운영 completed promotion: 4
+로컬·운영 content hash 일치: 4/4
+로컬·운영 embedding 일치: 4/4
+중복 활성 revision: 0
+로컬 candidate 상태: promoted 4
+```
+
+고척에는 기존 legacy bag 문서가 있어 candidate의 revision 번호 1과
+충돌했다. 기존 문서를 삭제하는 대신 legacy 전용 번호로 옮겨 비활성
+보존하고, 검증한 `GOCHEOK_stadium_bag_policy_r0001`을 활성화했다.
 
 ## 18. 설계에서 실제 구현으로 바뀐 부분
 
@@ -490,20 +509,29 @@ upsert는 저장 방식이고 변경 분류는 운영 정책이다.
 DB migration과 애플리케이션 배포 순서도 RAG 품질의 일부다.
 ```
 
-## 20. 다음 작업
+## 20. 운영 검증 결과와 다음 작업
 
-다음 단계는 운영 반영이다.
+운영 반영 후 같은 네 candidate를 다시 승격했을 때 모두
+`already_promoted=true`를 반환했고 문서와 chunk 수는 늘지 않았다.
 
-1. Tool 실패 후 채팅 transaction 복구 처리 보강
-2. 운영 migration 사전 점검과 적용
-3. 로컬에서 통과한 동일 revision 4개 운영 승격
-4. 운영 RAG 검색과 출처·기준일 확인
-5. 재실행 멱등성과 이전 revision 롤백 경로 확인
-6. 고척 외 구장의 문서 유형별 coverage 점검
-7. legacy 문서를 승인 revision으로 점진적으로 교체
+```text
+키움 예매 질문: 기존 GOCHEOK ticketing 문서 검색 성공, distance 0.4888
+고척 음식물 질문: 신규 food revision 검색 성공, distance 0.5973
+승격 재실행: 4/4 멱등
+```
 
-운영 반영 전까지 로컬의 `ready_for_production` 상태와 평가 결과를 승격
-근거로 보존한다.
+고척 bag을 이전 legacy revision으로 되돌리는 롤백도 운영 transaction
+안에서 실행했다. transaction 안에서는 legacy 문서가 활성화됐고,
+검증 transaction을 rollback한 뒤 신규 revision이 다시 활성 상태로
+유지됐으며 테스트용 deployment row도 남지 않았다.
+
+이제 남은 작업은 고척 외 구장으로 같은 흐름을 확대하는 것이다.
+
+1. 구장별 문서 유형 coverage 점검
+2. 공식 출처 parser 확대
+3. legacy 문서를 승인 revision으로 점진적으로 교체
+4. 필요할 때 실제 롤백 명령과 deployment 이력 점검
+5. 문서가 길어질 때 multi-chunk 전략 재검토
 
 ## 21. 문서 점검
 
@@ -512,6 +540,7 @@ DB migration과 애플리케이션 배포 순서도 RAG 품질의 일부다.
 - [x] 로컬 평가 결과와 실패·수정 과정을 기록했다.
 - [x] 멱등성과 rollback transaction 검증 결과를 기록했다.
 - [x] 구현 과정에서 달라진 설계를 반영했다.
-- [x] 운영 미반영 상태와 다음 절차를 명시했다.
+- [x] 운영 migration, 승격과 Tool 검증 결과를 기록했다.
+- [x] 운영 승격 재실행과 rollback rehearsal 결과를 기록했다.
 - [x] 미완성 placeholder와 HTML 주석을 제거했다.
 - [x] 비밀값과 로컬 인증 정보를 포함하지 않았다.

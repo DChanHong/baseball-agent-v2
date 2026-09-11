@@ -117,6 +117,11 @@ class FakeToolExecutor:
         return self.result
 
 
+class FailingToolExecutor:
+    async def execute(self, decision: ToolRoutingDecision):
+        raise RuntimeError("database query failed")
+
+
 class FakeAnswerGenerationService:
     def __init__(self, answer: str) -> None:
         self.answer = answer
@@ -268,6 +273,37 @@ async def test_chat_stream_uses_llm_generated_answer_for_completed_tool() -> Non
         "used_evidence_refs": ["E1"],
         "acknowledged_limitations": [],
     }
+
+
+@pytest.mark.asyncio
+async def test_chat_stream_rolls_back_failed_tool_before_saving_fallback() -> None:
+    conversation_repository = FakeConversationRepository()
+    message_repository = FakeMessageRepository()
+    session = FakeSession()
+    service = ChatStreamService(
+        conversation_repository=conversation_repository,
+        message_repository=message_repository,
+        tool_routing_service=FakeRoutingService(
+            decisions=[_find_lotte_game_decision()]
+        ),
+        tool_executor=FailingToolExecutor(),
+        session=session,
+    )
+
+    events = [
+        event
+        async for event in service.stream(
+            ChatStreamRequest(conversation_id=None, message="오늘 롯데 경기 있어?"),
+            current_user=make_current_user(),
+        )
+    ]
+
+    assert session.rollbacks == 1
+    assert any(event.startswith("event: tool.failed\n") for event in events)
+    assert any(event.startswith("event: assistant.completed\n") for event in events)
+    assert any(event.startswith("event: done\n") for event in events)
+    assert not any(event.startswith("event: stream.failed\n") for event in events)
+    assert message_repository.saved[-1].status.value == "completed"
 
 
 @pytest.mark.asyncio

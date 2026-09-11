@@ -272,7 +272,7 @@ completed_local_deployments=4
 `chunk_index` 중복은 없다. 네 후보를 다시 `apply-local`해도 모두
 `already_applied=true`로 반환되어 문서와 청크 수가 늘지 않았다.
 
-운영 DB 승격은 수행하지 않았다. Phase 4에서 Blog 6을 실제 구현·평가
-결과와 운영 전 발견한 schema 불일치까지 반영해 정비했다. 다음 단계는
-Tool 실패 후 transaction 복구를 보강하고, 별도 승인 하에 운영 migration과
-revision 승격을 수행하는 Phase 5다.
+Phase 5에서 Tool 실패 후 transaction 복구와 운영 승격·롤백 명령을
+구현했다. 운영 DB에 revision migration을 적용하고 로컬 평가를 통과한
+4개 revision을 승격했다. 로컬·운영 hash와 embedding은 모두 일치했고,
+운영 Tool 검색, 승격 재실행 멱등성과 transaction 기반 롤백을 확인했다.

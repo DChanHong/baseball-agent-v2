@@ -1,6 +1,7 @@
 # 비동기 제너레이터 함수의 반환 타입을 표현할 때 사용합니다.
 # get_db_session()이 AsyncSession을 하나씩 제공한다는 것을 나타냅니다.
 from collections.abc import AsyncIterator
+from uuid import uuid4
 
 # SQLAlchemy의 비동기 데이터베이스 기능입니다.
 from sqlalchemy.ext.asyncio import (
@@ -42,7 +43,11 @@ engine = create_async_engine(
     pool_pre_ping=True,
     # Supabase transaction pooler는 prepared statement를 지원하지 않으므로
     # asyncpg의 statement cache를 비활성화합니다.
-    connect_args={"statement_cache_size": 0},
+    connect_args={
+        "statement_cache_size": 0,
+        "prepared_statement_cache_size": 0,
+        "prepared_statement_name_func": lambda: f"__asyncpg_{uuid4()}__",
+    },
 )
 
 

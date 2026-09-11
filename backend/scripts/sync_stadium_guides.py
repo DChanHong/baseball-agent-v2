@@ -18,6 +18,7 @@ if str(BACKEND_ROOT) not in sys.path:
 from scripts.stadium_guide_sync.application import LocalCandidateApplier, OpenAIEmbedder
 from scripts.stadium_guide_sync.evaluation import PgVectorCandidateEvaluator
 from scripts.stadium_guide_sync.llm import OpenAICandidateGenerator
+from scripts.stadium_guide_sync.production import ProductionPromotionService
 from scripts.stadium_guide_sync.registry import load_registry, select_sources
 from scripts.stadium_guide_sync.repository import StadiumGuideSyncRepository
 from scripts.stadium_guide_sync.review import (
@@ -89,6 +90,11 @@ def parse_args() -> argparse.Namespace:
     candidate_reject.add_argument("--reason", required=True)
     apply_local = subparsers.add_parser("apply-local")
     apply_local.add_argument("candidate_id")
+    promote_production = subparsers.add_parser("promote-production")
+    promote_production.add_argument("candidate_id")
+    rollback_production = subparsers.add_parser("rollback-production")
+    rollback_production.add_argument("--logical-document-id", required=True)
+    rollback_production.add_argument("--revision-id", required=True)
     return parser.parse_args()
 
 
@@ -102,6 +108,16 @@ def local_database_url(args: argparse.Namespace) -> str:
             f"{args.command} uses the local DB only; "
             "set DATABASE_URL to a localhost Supabase URL"
         )
+    return normalize_database_url(database_url)
+
+
+def production_database_url(args: argparse.Namespace) -> str:
+    load_env_file(args.env_file.resolve())
+    database_url = os.environ.get("PROD_DATABASE_URL")
+    if not database_url:
+        raise SystemExit("PROD_DATABASE_URL is required.")
+    if is_local_database_url(database_url):
+        raise SystemExit(f"{args.command} requires a non-local PROD_DATABASE_URL")
     return normalize_database_url(database_url)
 
 
@@ -231,6 +247,51 @@ async def run_apply_local(args: argparse.Namespace) -> None:
         print(f"evaluation_output={result.evaluation.output_path}")
 
 
+async def run_promote_production(args: argparse.Namespace) -> None:
+    local_url = local_database_url(args)
+    production_url = production_database_url(args)
+    local = await asyncpg.connect(local_url)
+    production = await asyncpg.connect(production_url, statement_cache_size=0)
+    try:
+        result = await ProductionPromotionService(
+            local_connection=local,
+            production_connection=production,
+        ).promote(args.candidate_id)
+    finally:
+        await production.close()
+        await local.close()
+    print(f"candidate_id={result.candidate_id}")
+    print(f"revision_id={result.revision_id}")
+    print(f"logical_document_id={result.logical_document_id}")
+    print(
+        "previous_active_revision_id="
+        f"{result.previous_active_revision_id or '-'}"
+    )
+    print(f"already_promoted={str(result.already_promoted).lower()}")
+
+
+async def run_rollback_production(args: argparse.Namespace) -> None:
+    production_url = production_database_url(args)
+    production = await asyncpg.connect(production_url, statement_cache_size=0)
+    try:
+        result = await ProductionPromotionService(
+            local_connection=production,
+            production_connection=production,
+        ).rollback(
+            logical_document_id=args.logical_document_id,
+            revision_id=args.revision_id,
+        )
+    finally:
+        await production.close()
+    print(f"logical_document_id={result.logical_document_id}")
+    print(f"revision_id={result.revision_id}")
+    print(
+        "previous_active_revision_id="
+        f"{result.previous_active_revision_id or '-'}"
+    )
+    print(f"already_active={str(result.already_active).lower()}")
+
+
 async def main() -> None:
     args = parse_args()
     if args.command == "collect":
@@ -239,6 +300,10 @@ async def main() -> None:
         await run_candidates(args)
     elif args.command == "apply-local":
         await run_apply_local(args)
+    elif args.command == "promote-production":
+        await run_promote_production(args)
+    elif args.command == "rollback-production":
+        await run_rollback_production(args)
 
 
 if __name__ == "__main__":

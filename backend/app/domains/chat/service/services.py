@@ -193,6 +193,9 @@ class ChatStreamService:
                     ),
                 )
             elif graph_event.kind == "tool.failed":
+                # A failed SQL-backed tool leaves PostgreSQL's transaction aborted.
+                # Clear it before persisting the deterministic fallback answer.
+                await self._session.rollback()
                 tool_payload = graph_event.tool_payload or {}
                 tool_input = graph_event.tool_input or {}
                 error = tool_payload.get("error")
