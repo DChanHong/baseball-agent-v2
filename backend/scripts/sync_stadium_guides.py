@@ -8,20 +8,30 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 import asyncpg
+from openai import AsyncOpenAI
 
 BACKEND_ROOT = Path(__file__).resolve().parents[1]
 REPOSITORY_ROOT = BACKEND_ROOT.parent
 if str(BACKEND_ROOT) not in sys.path:
     sys.path.insert(0, str(BACKEND_ROOT))
 
+from scripts.stadium_guide_sync.application import LocalCandidateApplier, OpenAIEmbedder
+from scripts.stadium_guide_sync.evaluation import PgVectorCandidateEvaluator
 from scripts.stadium_guide_sync.llm import OpenAICandidateGenerator
 from scripts.stadium_guide_sync.registry import load_registry, select_sources
 from scripts.stadium_guide_sync.repository import StadiumGuideSyncRepository
-from scripts.stadium_guide_sync.schemas import SUPPORTED_DOCUMENT_TYPES
+from scripts.stadium_guide_sync.review import (
+    candidate_detail,
+    format_candidate_detail,
+    format_candidate_list,
+)
+from scripts.stadium_guide_sync.schemas import SUPPORTED_DOCUMENT_TYPES, CandidateStatus
 from scripts.stadium_guide_sync.service import StadiumGuideSyncService
 
 DEFAULT_REGISTRY = REPOSITORY_ROOT / "data" / "stadium_guide" / "sources.json"
 DEFAULT_RAW_ROOT = REPOSITORY_ROOT / "data" / "stadium_guide" / "raw"
+DEFAULT_CASES_ROOT = REPOSITORY_ROOT / "data/stadium_guide/evaluation/cases"
+DEFAULT_RUNS_ROOT = REPOSITORY_ROOT / "data/stadium_guide/evaluation/runs/candidate"
 
 
 def load_env_file(path: Path) -> None:
@@ -60,22 +70,46 @@ def parse_args() -> argparse.Namespace:
         "--document-type",
         choices=sorted(SUPPORTED_DOCUMENT_TYPES),
     )
+    candidates = subparsers.add_parser("candidates")
+    candidate_commands = candidates.add_subparsers(
+        dest="candidate_command", required=True
+    )
+    candidate_list = candidate_commands.add_parser("list")
+    candidate_list.add_argument(
+        "--status", choices=[status.value for status in CandidateStatus]
+    )
+    candidate_list.add_argument("--limit", type=int, default=50)
+    candidate_show = candidate_commands.add_parser("show")
+    candidate_show.add_argument("candidate_id")
+    candidate_approve = candidate_commands.add_parser("approve")
+    candidate_approve.add_argument("candidate_id")
+    candidate_approve.add_argument("--note")
+    candidate_reject = candidate_commands.add_parser("reject")
+    candidate_reject.add_argument("candidate_id")
+    candidate_reject.add_argument("--reason", required=True)
+    apply_local = subparsers.add_parser("apply-local")
+    apply_local.add_argument("candidate_id")
     return parser.parse_args()
 
 
-async def run_collect(args: argparse.Namespace) -> None:
+def local_database_url(args: argparse.Namespace) -> str:
     load_env_file(args.env_file.resolve())
     database_url = os.environ.get("DATABASE_URL")
-    api_key = os.environ.get("OPENAI_API_KEY")
     if not database_url:
         raise SystemExit("DATABASE_URL is required.")
-    if not api_key:
-        raise SystemExit("OPENAI_API_KEY is required.")
     if not is_local_database_url(database_url):
         raise SystemExit(
-            "collect stores review candidates in the local DB only; "
+            f"{args.command} uses the local DB only; "
             "set DATABASE_URL to a localhost Supabase URL"
         )
+    return normalize_database_url(database_url)
+
+
+async def run_collect(args: argparse.Namespace) -> None:
+    database_url = local_database_url(args)
+    api_key = os.environ.get("OPENAI_API_KEY")
+    if not api_key:
+        raise SystemExit("OPENAI_API_KEY is required.")
 
     registry = load_registry(args.registry.resolve())
     sources = select_sources(
@@ -94,7 +128,7 @@ async def run_collect(args: argparse.Namespace) -> None:
         "all": args.all,
         "document_type": args.document_type,
     }
-    connection = await asyncpg.connect(normalize_database_url(database_url))
+    connection = await asyncpg.connect(database_url)
     try:
         repository = StadiumGuideSyncRepository(connection)
         generator = OpenAICandidateGenerator(
@@ -126,10 +160,85 @@ async def run_collect(args: argparse.Namespace) -> None:
     )
 
 
+async def run_candidates(args: argparse.Namespace) -> None:
+    database_url = local_database_url(args)
+    registry = load_registry(args.registry.resolve())
+    connection = await asyncpg.connect(database_url)
+    try:
+        repository = StadiumGuideSyncRepository(connection)
+        if args.candidate_command == "list":
+            status = CandidateStatus(args.status) if args.status else None
+            rows = await repository.list_candidates(status=status, limit=args.limit)
+            print(format_candidate_list(rows))
+        elif args.candidate_command == "show":
+            detail = await candidate_detail(
+                repository=repository,
+                registry=registry,
+                repository_root=REPOSITORY_ROOT,
+                candidate_id=args.candidate_id,
+            )
+            print(format_candidate_detail(detail))
+        else:
+            decision = (
+                CandidateStatus.APPROVED
+                if args.candidate_command == "approve"
+                else CandidateStatus.REJECTED
+            )
+            note = args.note if decision == CandidateStatus.APPROVED else args.reason
+            candidate = await repository.review_candidate(
+                candidate_id=args.candidate_id,
+                decision=decision,
+                review_note=note,
+            )
+            print(f"candidate_id={candidate.candidate_id}")
+            print(f"status={candidate.status.value}")
+    finally:
+        await connection.close()
+
+
+async def run_apply_local(args: argparse.Namespace) -> None:
+    database_url = local_database_url(args)
+    api_key = os.environ.get("OPENAI_API_KEY")
+    if not api_key:
+        raise SystemExit("OPENAI_API_KEY is required.")
+    registry = load_registry(args.registry.resolve())
+    client = AsyncOpenAI(api_key=api_key)
+    connection = await asyncpg.connect(database_url)
+    try:
+        repository = StadiumGuideSyncRepository(connection)
+        evaluator = PgVectorCandidateEvaluator(
+            connection=connection,
+            client=client,
+            cases_root=DEFAULT_CASES_ROOT,
+            output_root=DEFAULT_RUNS_ROOT,
+        )
+        result = await LocalCandidateApplier(
+            repository=repository,
+            registry=registry,
+            embedder=OpenAIEmbedder(client),
+            evaluator=evaluator,
+        ).apply(args.candidate_id)
+    finally:
+        await connection.close()
+        await client.close()
+    print(f"candidate_id={result.candidate_id}")
+    print(f"revision_id={result.revision_id}")
+    print(f"status={result.status.value}")
+    print(f"already_applied={str(result.already_applied).lower()}")
+    if result.evaluation:
+        print(f"evaluation_run_id={result.evaluation.run_id}")
+        print(f"evaluation_passed={str(result.evaluation.passed).lower()}")
+        print(f"evaluation_output={result.evaluation.output_path}")
+
+
 async def main() -> None:
     args = parse_args()
     if args.command == "collect":
         await run_collect(args)
+    elif args.command == "candidates":
+        await run_candidates(args)
+    elif args.command == "apply-local":
+        await run_apply_local(args)
 
 
 if __name__ == "__main__":

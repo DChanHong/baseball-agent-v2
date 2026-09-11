@@ -78,6 +78,10 @@ async def test_retriever_filters_active_revisions_and_includes_common_documents(
     assert "chunks.review_status = 'approved'" in statement
     assert "documents.legacy_unreviewed" in statement
     assert "chunks.stadium_id is null" in statement
+    assert statement.index("(chunks.stadium_id = :stadium_id) desc") < statement.index(
+        "chunks.embedding <=> cast(:query_embedding as extensions.vector)",
+        statement.index("order by"),
+    )
     assert session.parameters is not None
     assert session.parameters["stadium_id"] == "GOCHEOK"
     assert items[0].stadium_id is None

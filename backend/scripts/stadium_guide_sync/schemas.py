@@ -121,3 +121,51 @@ class ChangeOperation(StrEnum):
     DELETE_CANDIDATE = "DELETE_CANDIDATE"
     RE_EMBED = "RE_EMBED"
     MANUAL_REQUIRED = "MANUAL_REQUIRED"
+
+
+class CandidateStatus(StrEnum):
+    PENDING = "pending"
+    APPROVED = "approved"
+    REJECTED = "rejected"
+    APPLIED_LOCAL = "applied_local"
+    EVALUATION_FAILED = "evaluation_failed"
+    READY_FOR_PRODUCTION = "ready_for_production"
+    PROMOTED = "promoted"
+
+
+class CandidatePayload(BaseModel):
+    schema_version: str
+    logical_document_id: str
+    revision_id: str | None = None
+    revision_number: int | None = None
+    document_type: str
+    stadium_id: str | None
+    team_id: str | None
+    title: str = Field(min_length=1)
+    as_of: date
+    trust_level: str
+    review_status: str
+    sources: list[str]
+    content: str = Field(min_length=1)
+    content_hash: str
+    metadata: dict[str, object] = Field(default_factory=dict)
+
+
+class CandidateRecord(BaseModel):
+    candidate_id: str
+    run_id: str
+    logical_document_id: str
+    operation: ChangeOperation
+    previous_revision_id: str | None
+    candidate_revision_id: str | None
+    previous_content_hash: str | None
+    candidate_content_hash: str | None
+    candidate_payload: dict[str, object]
+    diff_summary: dict[str, object]
+    source_ids: list[str]
+    status: CandidateStatus
+    reviewed_at: datetime | None
+    review_note: str | None
+    created_at: datetime
+    updated_at: datetime
+    previous_content: str = ""
