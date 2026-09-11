@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from typing import Protocol
+
+from openai import AsyncOpenAI
 
 from .evaluation import CandidateEvaluator, EvaluationResult
 from .raw_storage import sha256_text
@@ -24,7 +27,11 @@ class ApplyLocalResult:
 
 
 class OpenAIEmbedder:
-    def __init__(self, client: object, model: str = "text-embedding-3-small") -> None:
+    def __init__(
+        self,
+        client: AsyncOpenAI,
+        model: str = "text-embedding-3-small",
+    ) -> None:
         self._client = client
         self._model = model
 
@@ -74,6 +81,9 @@ class LocalCandidateApplier:
                 f"candidate must be approved before apply-local: {candidate.status.value}"
             )
 
+        if candidate.status == CandidateStatus.APPROVED:
+            await self._repository.assert_candidate_current(candidate)
+
         operation = candidate.operation
         payload: CandidatePayload | None = None
         embedding_text: str | None = None
@@ -104,10 +114,20 @@ class LocalCandidateApplier:
             else candidate.logical_document_id.split("_", 1)[1]
         )
         stadium_id = payload.stadium_id if payload else None
-        evaluation = await self._evaluator.evaluate(
-            stadium_id=stadium_id,
-            document_type=document_type,
-        )
+        try:
+            evaluation = await self._evaluator.evaluate(
+                stadium_id=stadium_id,
+                document_type=document_type,
+            )
+        except Exception as exc:
+            evaluation_run_id = f"SGE_{datetime.now(UTC):%Y%m%dT%H%M%S}_error"
+            await self._repository.record_evaluation_error(
+                candidate_id=candidate_id,
+                revision_id=revision_id,
+                evaluation_run_id=evaluation_run_id,
+                error_code=type(exc).__name__,
+            )
+            raise
         reviewed = await self._repository.finalize_evaluation(
             candidate_id=candidate_id,
             revision_id=revision_id,

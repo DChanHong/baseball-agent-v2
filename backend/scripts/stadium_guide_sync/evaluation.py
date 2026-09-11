@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Protocol
+from uuid import uuid4
 
 import asyncpg
 from openai import AsyncOpenAI
@@ -70,6 +71,13 @@ def summarize(results: list[dict[str, object]]) -> dict[str, object]:
     }
 
 
+def _summary_ids(summary: dict[str, object], key: str) -> set[str]:
+    values = summary[key]
+    if not isinstance(values, list):
+        raise TypeError(f"evaluation summary {key} must be a list")
+    return {str(value) for value in values}
+
+
 class PgVectorCandidateEvaluator:
     def __init__(
         self,
@@ -120,6 +128,9 @@ class PgVectorCandidateEvaluator:
                 top_distance is not None
                 and top_distance <= self._relevance_threshold
             )
+            top_result_metadata_complete = bool(
+                rows and rows[0]["source_urls"] and rows[0]["as_of"]
+            )
             is_positive = case["case_type"] == "positive"
             expected = case["expected_document_type"]
             results.append(
@@ -135,6 +146,7 @@ class PgVectorCandidateEvaluator:
                     ),
                     "top_distance": top_distance,
                     "top_result_is_relevant": relevant,
+                    "top_result_metadata_complete": top_result_metadata_complete,
                     "results": [
                         {
                             **dict(row),
@@ -154,20 +166,34 @@ class PgVectorCandidateEvaluator:
         target_passed = (
             not target_summary["failed_top1_case_ids"]
             and not target_summary["failed_top3_case_ids"]
+            and all(
+                bool(result["top_result_metadata_complete"])
+                for result in target_results
+            )
         )
         regression_passed = (
-            set(regression_summary["failed_top1_case_ids"]) <= {"sajik_011"}
+            _summary_ids(regression_summary, "failed_top1_case_ids")
+            <= {"sajik_011"}
             and not regression_summary["failed_top3_case_ids"]
-            and set(regression_summary["negative_cases_over_threshold"]) <= {"sajik_008"}
+            and _summary_ids(regression_summary, "negative_cases_over_threshold")
+            <= {"sajik_008"}
         )
         passed = bool(target_passed and regression_passed)
-        run_id = f"SGE_{datetime.now(UTC):%Y%m%dT%H%M%S}_{document_type}"
+        run_id = (
+            f"SGE_{datetime.now(UTC):%Y%m%dT%H%M%S}_"
+            f"{document_type}_{uuid4().hex[:8]}"
+        )
         summary: dict[str, object] = {
             "passed": passed,
             "target": target_summary,
             "regression": regression_summary,
             "evaluated_stadium_id": stadium_id,
             "evaluated_document_type": document_type,
+            "target_cases_missing_source_or_as_of": [
+                result["id"]
+                for result in target_results
+                if not result["top_result_metadata_complete"]
+            ],
         }
         output = {
             "run_id": run_id,
@@ -210,7 +236,7 @@ class PgVectorCandidateEvaluator:
                   and d.logical_document_id is not null
                   and (c.review_status = 'approved' or d.legacy_unreviewed)
                   and c.embedding is not null
-                order by (c.stadium_id = $2) desc,
+                order by (c.stadium_id = $2) desc nulls last,
                          c.embedding <=> $1::extensions.vector
                 limit 3
                 """,

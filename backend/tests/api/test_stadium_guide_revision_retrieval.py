@@ -78,7 +78,9 @@ async def test_retriever_filters_active_revisions_and_includes_common_documents(
     assert "chunks.review_status = 'approved'" in statement
     assert "documents.legacy_unreviewed" in statement
     assert "chunks.stadium_id is null" in statement
-    assert statement.index("(chunks.stadium_id = :stadium_id) desc") < statement.index(
+    assert statement.index(
+        "(chunks.stadium_id = :stadium_id) desc nulls last"
+    ) < statement.index(
         "chunks.embedding <=> cast(:query_embedding as extensions.vector)",
         statement.index("order by"),
     )

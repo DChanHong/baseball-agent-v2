@@ -9,6 +9,7 @@ from scripts.stadium_guide_sync.evaluation import EvaluationResult
 from scripts.stadium_guide_sync.parser import parse_collected_source
 from scripts.stadium_guide_sync.raw_storage import save_raw_snapshot, sha256_text
 from scripts.stadium_guide_sync.registry import load_registry, select_sources
+from scripts.stadium_guide_sync.review import content_diff
 from scripts.stadium_guide_sync.schemas import (
     ActiveDocument,
     CandidateRecord,
@@ -74,11 +75,10 @@ def test_gocheok_faq_parser_keeps_food_and_reentry_evidence() -> None:
     )
     body = """
     <html><body><script>음식물 fake</script>
-    <h2>구장 내 음식물 섭취 가능한가요?</h2>
-    <p>구장 내 음식물 섭취는 모두 가능합니다.</p>
-    <p>최초 입장 시 음식물 반입 가능하며 병에만 담겨있지 않으면 됩니다.
-    재입장 시에는 외부 음식 반입은 제한됩니다.</p>
-    <h2>캔 반입 가능한가요?</h2><p>총 1L 이내입니다.</p>
+    <li><h3><a href="#a_13">구장 내 음식물 섭취 가능한가요?</a></h3><div id="a_13">
+    구장 내 음식물 섭취는 모두 가능합니다. 최초 입장 시 음식물 반입 가능하며
+    병에만 담겨있지 않으면 됩니다. 재입장 시에는 외부 음식 반입은 제한됩니다.</div></li>
+    <li><h3><a href="#a_14">캔 반입 가능한가요?</a></h3><div id="a_14">총 1L 이내입니다.</div></li>
     </body></html>
     """
     collected = CollectedSource(
@@ -94,6 +94,84 @@ def test_gocheok_faq_parser_keeps_food_and_reentry_evidence() -> None:
     assert "음식물" in parsed
     assert "재입장" in parsed
     assert "fake" not in parsed
+
+
+def test_gocheok_faq_parser_excludes_neighboring_faq_and_footer() -> None:
+    source = SourceDefinition.model_validate(
+        {
+            "source_id": "heroes_gocheok_faq",
+            "title": "고척 FAQ",
+            "url": "https://example.com/faq",
+            "source_type": "official_team",
+            "stadium_ids": ["GOCHEOK"],
+            "team_ids": ["KIWOOM"],
+            "document_types": ["stadium_food_guide"],
+            "parser_name": "heroes_gocheok_faq",
+            "refresh_policy": "monthly",
+            "trust_level": "official",
+        }
+    )
+    body = """
+    <ul>
+      <li><h3><a href="#a_14">캔 반입 가능한가요?</a></h3>
+        <div id="a_14">캔 반입은 1인당 1리터까지 가능합니다.</div></li>
+      <li><h3><a href="#a_13">구장 내 음식물 섭취 가능한가요?</a></h3>
+        <div id="a_13">최초 입장 시 음식물 반입이 가능하고 재입장 시 제한됩니다.</div></li>
+      <li><h3><a href="#a_12">선예매 질문</a></h3>
+        <div id="a_12">선예매는 본인 계정만 가능합니다.</div></li>
+    </ul>
+    <footer>서울특별시 구로구 T.02-3660-1000</footer>
+    """
+    parsed = parse_collected_source(
+        CollectedSource(
+            source=source,
+            collected_at=datetime.now(UTC),
+            body=body,
+            status_code=200,
+            collector_type="http",
+        )
+    )
+
+    assert "캔 반입" in parsed
+    assert "재입장" in parsed
+    assert "선예매" not in parsed
+    assert "02-3660-1000" not in parsed
+
+
+def test_kbo_safe_parser_keeps_policy_blocks_and_excludes_site_navigation() -> None:
+    registry = load_registry(
+        REPOSITORY_ROOT / "data" / "stadium_guide" / "sources.json"
+    )
+    source = next(
+        item for item in registry.sources if item.source_id == "kbo_safe_campaign"
+    )
+    body = (
+        REPOSITORY_ROOT
+        / "data/stadium_guide/raw/2026-09-11/COMMON/"
+        "kbo_safe_campaign_8de456e3bd9d.html"
+    ).read_text(encoding="utf-8")
+
+    parsed = parse_collected_source(
+        CollectedSource(
+            source=source,
+            collected_at=datetime.now(UTC),
+            body=body,
+            status_code=200,
+            collector_type="http",
+        )
+    )
+
+    assert "가로 45cm x 세로 45cm x 폭 20cm" in parsed
+    assert "구단별 예외 규정" in parsed
+    assert "로그인" not in parsed
+    assert "개인정보 처리방침" not in parsed
+
+
+def test_candidate_diff_splits_multiple_sentences_on_one_line() -> None:
+    diff = content_diff("첫 문장입니다. 둘째 문장입니다.", "첫 문장입니다. 새 문장입니다.")
+
+    assert "-둘째 문장입니다." in diff
+    assert "+새 문장입니다." in diff
 
 
 def test_classifier_distinguishes_create_update_unchanged_and_delete() -> None:
@@ -201,6 +279,9 @@ async def test_apply_local_embeds_only_the_approved_candidate(tmp_path: Path) ->
         async def candidate(self, candidate_id: str) -> CandidateRecord:
             assert candidate_id == "candidate-1"
             return candidate
+
+        async def assert_candidate_current(self, value: CandidateRecord) -> None:
+            assert value == candidate
 
         async def apply_candidate_revision(self, **kwargs: object) -> tuple[str, bool]:
             assert kwargs["candidate_id"] == "candidate-1"

@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import re
+from datetime import datetime
 from difflib import unified_diff
 from pathlib import Path
+from typing import cast
 
 from .parser import ParseError, parse_collected_source
 from .repository import StadiumGuideSyncRepository
@@ -9,9 +12,16 @@ from .schemas import CandidateRecord, CollectedSource, SourceRegistry
 
 
 def content_diff(previous: str, candidate: str) -> str:
+    def sentences(value: str) -> list[str]:
+        return [
+            sentence.strip()
+            for sentence in re.split(r"(?<=[.!?。])\s+|\n+", value)
+            if sentence.strip()
+        ]
+
     lines = unified_diff(
-        previous.splitlines(),
-        candidate.splitlines(),
+        sentences(previous),
+        sentences(candidate),
         fromfile="previous",
         tofile="candidate",
         lineterm="",
@@ -34,7 +44,9 @@ async def candidate_detail(
     source_index = {source.source_id: source for source in registry.sources}
     checks = {
         str(check["source_id"]): check
-        for check in await repository.latest_source_checks(candidate.source_ids)
+        for check in await repository.source_checks_for_run(
+            candidate.run_id, candidate.source_ids
+        )
     }
     sources: list[dict[str, object]] = []
     for source_id in candidate.source_ids:
@@ -48,7 +60,7 @@ async def candidate_detail(
                 body = raw_path.read_text(encoding="utf-8")
                 collected = CollectedSource(
                     source=source,
-                    collected_at=check["collected_at"],  # type: ignore[arg-type]
+                    collected_at=cast(datetime, check["collected_at"]),
                     body=body,
                     status_code=200,
                     collector_type="review",
@@ -62,7 +74,9 @@ async def candidate_detail(
                 "title": source.title if source else None,
                 "url": source.url if source else check.get("source_url") if check else None,
                 "collected_at": (
-                    check["collected_at"].isoformat() if check else None
+                    cast(datetime, check["collected_at"]).isoformat()
+                    if check
+                    else None
                 ),
                 "normalized_text_hash": (
                     check.get("normalized_text_hash") if check else None
@@ -124,7 +138,10 @@ def format_candidate_detail(detail: dict[str, object]) -> str:
     if not limitations:
         lines.append("(none)")
     lines.extend(["", "[diff]", str(detail["diff"]), "", "[sources]"])
-    for source in detail["sources"]:  # type: ignore[union-attr]
+    sources = detail["sources"]
+    assert isinstance(sources, list)
+    for source in sources:
+        assert isinstance(source, dict)
         lines.extend(
             [
                 f"source_id: {source['source_id']}",

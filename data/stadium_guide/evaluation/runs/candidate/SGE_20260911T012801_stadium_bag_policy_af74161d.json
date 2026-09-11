@@ -1,0 +1,1152 @@
+{
+  "run_id": "SGE_20260911T012801_stadium_bag_policy_af74161d",
+  "embedding_model": "text-embedding-3-small",
+  "relevance_threshold": 0.65,
+  "summary": {
+    "passed": false,
+    "target": {
+      "total_cases": 3,
+      "positive_cases": 3,
+      "negative_cases": 0,
+      "top1_hits": 3,
+      "top3_hits": 3,
+      "failed_top1_case_ids": [],
+      "failed_top3_case_ids": [],
+      "negative_cases_over_threshold": []
+    },
+    "regression": {
+      "total_cases": 15,
+      "positive_cases": 12,
+      "negative_cases": 3,
+      "top1_hits": 2,
+      "top3_hits": 11,
+      "failed_top1_case_ids": [
+        "sajik_001",
+        "sajik_004",
+        "sajik_005",
+        "sajik_006",
+        "sajik_007",
+        "sajik_011",
+        "sajik_012",
+        "sajik_013",
+        "sajik_014",
+        "sajik_015"
+      ],
+      "failed_top3_case_ids": [
+        "sajik_011"
+      ],
+      "negative_cases_over_threshold": []
+    },
+    "evaluated_stadium_id": null,
+    "evaluated_document_type": "stadium_bag_policy",
+    "target_cases_missing_source_or_as_of": []
+  },
+  "cases": [
+    {
+      "id": "gocheok_bag_001",
+      "query": "고척돔에 캔이나 병을 가져갈 수 있어?",
+      "stadium_id": "GOCHEOK",
+      "expected_document_type": "stadium_bag_policy",
+      "case_type": "positive",
+      "note": "용기 제한 질문은 구장별 반입 정책이 공통 정책보다 먼저 검색되어야 한다.",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.7828935820884579,
+      "top_result_is_relevant": false,
+      "top_result_metadata_complete": true,
+      "results": [
+        {
+          "chunk_id": "KBO_common_stadium_bag_policy_r0001_chunk_000",
+          "document_id": "KBO_common_stadium_bag_policy_r0001",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": null,
+          "title": "KBO 공통 경기장 반입물품·가방 안내 (SAFE 캠페인 기준)",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-09-11",
+          "review_status": "approved",
+          "distance": 0.7828935820884579
+        }
+      ]
+    },
+    {
+      "id": "gocheok_bag_002",
+      "query": "고척돔에서 술을 반입할 수 있어?",
+      "stadium_id": "GOCHEOK",
+      "expected_document_type": "stadium_bag_policy",
+      "case_type": "positive",
+      "note": "주류 반입 질문은 반입 정책 문서가 검색되어야 한다.",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.7350209192102629,
+      "top_result_is_relevant": false,
+      "top_result_metadata_complete": true,
+      "results": [
+        {
+          "chunk_id": "KBO_common_stadium_bag_policy_r0001_chunk_000",
+          "document_id": "KBO_common_stadium_bag_policy_r0001",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": null,
+          "title": "KBO 공통 경기장 반입물품·가방 안내 (SAFE 캠페인 기준)",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-09-11",
+          "review_status": "approved",
+          "distance": 0.7350209192102629
+        }
+      ]
+    },
+    {
+      "id": "gocheok_bag_003",
+      "query": "고척돔 PET 음료 제한이 어떻게 돼?",
+      "stadium_id": "GOCHEOK",
+      "expected_document_type": "stadium_bag_policy",
+      "case_type": "positive",
+      "note": "PET 용량 질문은 반입 정책 문서가 검색되어야 한다.",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.6278699159076486,
+      "top_result_is_relevant": true,
+      "top_result_metadata_complete": true,
+      "results": [
+        {
+          "chunk_id": "KBO_common_stadium_bag_policy_r0001_chunk_000",
+          "document_id": "KBO_common_stadium_bag_policy_r0001",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": null,
+          "title": "KBO 공통 경기장 반입물품·가방 안내 (SAFE 캠페인 기준)",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-09-11",
+          "review_status": "approved",
+          "distance": 0.6278699159076486
+        }
+      ]
+    },
+    {
+      "id": "sajik_001",
+      "query": "사직구장 지하철로 어떻게 가?",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_transport_guide",
+      "case_type": "positive",
+      "note": "대중교통 질문은 교통 안내 문서가 상위에 와야 한다.",
+      "top1_hit": false,
+      "top3_hit": true,
+      "top_distance": 0.8161929676930308,
+      "top_result_is_relevant": false,
+      "top_result_metadata_complete": true,
+      "results": [
+        {
+          "chunk_id": "KBO_common_stadium_bag_policy_r0001_chunk_000",
+          "document_id": "KBO_common_stadium_bag_policy_r0001",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": null,
+          "title": "KBO 공통 경기장 반입물품·가방 안내 (SAFE 캠페인 기준)",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-09-11",
+          "review_status": "approved",
+          "distance": 0.8161929676930308
+        },
+        {
+          "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_stadium_shop"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.5621263150863317
+        },
+        {
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 시설 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_stadium_shop"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.5701584644053945
+        }
+      ]
+    },
+    {
+      "id": "sajik_002",
+      "query": "사직구장 반입 금지 물품 알려줘",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_bag_policy",
+      "case_type": "positive",
+      "note": "반입 제한과 안전 정책 질문은 반입 정책 문서가 상위에 와야 한다.",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.5790679678564434,
+      "top_result_is_relevant": true,
+      "top_result_metadata_complete": true,
+      "results": [
+        {
+          "chunk_id": "KBO_common_stadium_bag_policy_r0001_chunk_000",
+          "document_id": "KBO_common_stadium_bag_policy_r0001",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": null,
+          "title": "KBO 공통 경기장 반입물품·가방 안내 (SAFE 캠페인 기준)",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-09-11",
+          "review_status": "approved",
+          "distance": 0.5790679678564434
+        },
+        {
+          "chunk_id": "SAJIK_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 반입 및 안전 정책 초안",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.5071401102625251
+        },
+        {
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 시설 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_stadium_shop"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.6103152671897119
+        }
+      ]
+    },
+    {
+      "id": "sajik_003",
+      "query": "사직구장에 캔 음료 들고 가도 돼?",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_bag_policy",
+      "case_type": "positive",
+      "note": "캔 음료 반입 가능 여부는 KBO SAFE 기반 반입 정책 문서가 검색되어야 한다.",
+      "top1_hit": true,
+      "top3_hit": true,
+      "top_distance": 0.7570416077153166,
+      "top_result_is_relevant": false,
+      "top_result_metadata_complete": true,
+      "results": [
+        {
+          "chunk_id": "KBO_common_stadium_bag_policy_r0001_chunk_000",
+          "document_id": "KBO_common_stadium_bag_policy_r0001",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": null,
+          "title": "KBO 공통 경기장 반입물품·가방 안내 (SAFE 캠페인 기준)",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-09-11",
+          "review_status": "approved",
+          "distance": 0.7570416077153166
+        },
+        {
+          "chunk_id": "SAJIK_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 반입 및 안전 정책 초안",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.6243640597671347
+        },
+        {
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 시설 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_stadium_shop"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.6827213369352472
+        }
+      ]
+    },
+    {
+      "id": "sajik_004",
+      "query": "사직구장 좌석 종류 알려줘",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_seat_guide",
+      "case_type": "positive",
+      "note": "좌석 구역 종류 질문은 좌석 안내 문서가 상위에 와야 한다.",
+      "top1_hit": false,
+      "top3_hit": true,
+      "top_distance": 0.6792326083595812,
+      "top_result_is_relevant": false,
+      "top_result_metadata_complete": true,
+      "results": [
+        {
+          "chunk_id": "KBO_common_stadium_bag_policy_r0001_chunk_000",
+          "document_id": "KBO_common_stadium_bag_policy_r0001",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": null,
+          "title": "KBO 공통 경기장 반입물품·가방 안내 (SAFE 캠페인 기준)",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-09-11",
+          "review_status": "approved",
+          "distance": 0.6792326083595812
+        },
+        {
+          "chunk_id": "SAJIK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 좌석 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_sajik_seat_guide",
+            "lotte_sajik_ticket_price"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=340",
+            "https://www.giantsclub.com/html/?pcode=339"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.46992672968545823
+        },
+        {
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 시설 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_stadium_shop"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.5552360098836617
+        }
+      ]
+    },
+    {
+      "id": "sajik_005",
+      "query": "사직구장 바베큐석은 어디야?",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_seat_guide",
+      "case_type": "positive",
+      "note": "바베큐석은 좌석 안내 문서 content에 포함되어 있으므로 좌석 안내 문서가 검색되어야 한다.",
+      "top1_hit": false,
+      "top3_hit": true,
+      "top_distance": 0.7521594939827151,
+      "top_result_is_relevant": false,
+      "top_result_metadata_complete": true,
+      "results": [
+        {
+          "chunk_id": "KBO_common_stadium_bag_policy_r0001_chunk_000",
+          "document_id": "KBO_common_stadium_bag_policy_r0001",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": null,
+          "title": "KBO 공통 경기장 반입물품·가방 안내 (SAFE 캠페인 기준)",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-09-11",
+          "review_status": "approved",
+          "distance": 0.7521594939827151
+        },
+        {
+          "chunk_id": "SAJIK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 좌석 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_sajik_seat_guide",
+            "lotte_sajik_ticket_price"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=340",
+            "https://www.giantsclub.com/html/?pcode=339"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.6047472572284475
+        },
+        {
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 시설 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_stadium_shop"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.6309869219430894
+        }
+      ]
+    },
+    {
+      "id": "sajik_006",
+      "query": "롯데 홈경기 예매는 어디서 해?",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_ticketing_guide",
+      "case_type": "positive",
+      "note": "예매처와 티켓 안내 질문은 티켓 안내 문서가 상위에 와야 한다.",
+      "top1_hit": false,
+      "top3_hit": true,
+      "top_distance": 0.7659956773207612,
+      "top_result_is_relevant": false,
+      "top_result_metadata_complete": true,
+      "results": [
+        {
+          "chunk_id": "KBO_common_stadium_bag_policy_r0001_chunk_000",
+          "document_id": "KBO_common_stadium_bag_policy_r0001",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": null,
+          "title": "KBO 공통 경기장 반입물품·가방 안내 (SAFE 캠페인 기준)",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-09-11",
+          "review_status": "approved",
+          "distance": 0.7659956773207612
+        },
+        {
+          "chunk_id": "SAJIK_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 티켓 및 예매 안내 초안",
+          "source_ids": [
+            "kbo_ticket_map",
+            "lotte_ticket_purchase_guide",
+            "lotte_sajik_ticket_price",
+            "lotte_ticket_discount"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/kbo/league/map.aspx",
+            "https://www.giantsclub.com/m/?pcode=539",
+            "https://www.giantsclub.com/html/?pcode=339",
+            "https://www.giantsclub.com/html/?pcode=341"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.6325269556928994
+        },
+        {
+          "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_stadium_shop"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.7267472184581212
+        }
+      ]
+    },
+    {
+      "id": "sajik_007",
+      "query": "사직구장 자이언츠샵 위치 알려줘",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_facility_guide",
+      "case_type": "positive",
+      "note": "구장샵 위치 질문은 시설 안내 문서가 상위에 와야 한다.",
+      "top1_hit": false,
+      "top3_hit": true,
+      "top_distance": 0.7475251603964267,
+      "top_result_is_relevant": false,
+      "top_result_metadata_complete": true,
+      "results": [
+        {
+          "chunk_id": "KBO_common_stadium_bag_policy_r0001_chunk_000",
+          "document_id": "KBO_common_stadium_bag_policy_r0001",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": null,
+          "title": "KBO 공통 경기장 반입물품·가방 안내 (SAFE 캠페인 기준)",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-09-11",
+          "review_status": "approved",
+          "distance": 0.7475251603964267
+        },
+        {
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 시설 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_stadium_shop"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.476682832307739
+        },
+        {
+          "chunk_id": "SAJIK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 좌석 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_sajik_seat_guide",
+            "lotte_sajik_ticket_price"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=340",
+            "https://www.giantsclub.com/html/?pcode=339"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.6007718742980679
+        }
+      ]
+    },
+    {
+      "id": "sajik_008",
+      "query": "잠실야구장 주차 알려줘",
+      "stadium_id": "SAJIK",
+      "expected_document_type": null,
+      "case_type": "negative",
+      "note": "SAJIK 필터를 걸면 억지 검색될 수 있다. 실제 Tool 앞단에서는 잠실과 SAJIK 불일치를 처리해야 한다.",
+      "top1_hit": null,
+      "top3_hit": null,
+      "top_distance": 0.688321646118577,
+      "top_result_is_relevant": false,
+      "top_result_metadata_complete": true,
+      "results": [
+        {
+          "chunk_id": "KBO_common_stadium_bag_policy_r0001_chunk_000",
+          "document_id": "KBO_common_stadium_bag_policy_r0001",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": null,
+          "title": "KBO 공통 경기장 반입물품·가방 안내 (SAFE 캠페인 기준)",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-09-11",
+          "review_status": "approved",
+          "distance": 0.688321646118577
+        },
+        {
+          "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_stadium_shop"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.49913271229706546
+        },
+        {
+          "chunk_id": "SAJIK_stadium_ticketing_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_ticketing_guide_20260729",
+          "document_type": "stadium_ticketing_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 티켓 및 예매 안내 초안",
+          "source_ids": [
+            "kbo_ticket_map",
+            "lotte_ticket_purchase_guide",
+            "lotte_sajik_ticket_price",
+            "lotte_ticket_discount"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/kbo/league/map.aspx",
+            "https://www.giantsclub.com/m/?pcode=539",
+            "https://www.giantsclub.com/html/?pcode=339",
+            "https://www.giantsclub.com/html/?pcode=341"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.562840549960681
+        }
+      ]
+    },
+    {
+      "id": "sajik_009",
+      "query": "고척돔은 비 와도 경기해?",
+      "stadium_id": "SAJIK",
+      "expected_document_type": null,
+      "case_type": "negative",
+      "note": "다른 구장/돔 관련 질문이다. 실제 Tool 앞단에서는 stadium_id를 GOCHEOK으로 추출하거나 구장 확인을 요청해야 한다.",
+      "top1_hit": null,
+      "top3_hit": null,
+      "top_distance": 0.6657296904229437,
+      "top_result_is_relevant": false,
+      "top_result_metadata_complete": true,
+      "results": [
+        {
+          "chunk_id": "KBO_common_stadium_bag_policy_r0001_chunk_000",
+          "document_id": "KBO_common_stadium_bag_policy_r0001",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": null,
+          "title": "KBO 공통 경기장 반입물품·가방 안내 (SAFE 캠페인 기준)",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-09-11",
+          "review_status": "approved",
+          "distance": 0.6657296904229437
+        },
+        {
+          "chunk_id": "SAJIK_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 반입 및 안전 정책 초안",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.6684020599293747
+        },
+        {
+          "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_stadium_shop"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.7024144353275655
+        }
+      ]
+    },
+    {
+      "id": "sajik_010",
+      "query": "한화생명 볼파크 좌석 알려줘",
+      "stadium_id": "SAJIK",
+      "expected_document_type": null,
+      "case_type": "negative",
+      "note": "다른 구장 좌석 질문이다. SAJIK RAG 검색으로 답변하면 안 된다.",
+      "top1_hit": null,
+      "top3_hit": null,
+      "top_distance": 0.8059177888876117,
+      "top_result_is_relevant": false,
+      "top_result_metadata_complete": true,
+      "results": [
+        {
+          "chunk_id": "KBO_common_stadium_bag_policy_r0001_chunk_000",
+          "document_id": "KBO_common_stadium_bag_policy_r0001",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": null,
+          "title": "KBO 공통 경기장 반입물품·가방 안내 (SAFE 캠페인 기준)",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-09-11",
+          "review_status": "approved",
+          "distance": 0.8059177888876117
+        },
+        {
+          "chunk_id": "SAJIK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 좌석 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_sajik_seat_guide",
+            "lotte_sajik_ticket_price"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=340",
+            "https://www.giantsclub.com/html/?pcode=339"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.7061268835896441
+        },
+        {
+          "chunk_id": "SAJIK_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 반입 및 안전 정책 초안",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.7815185672697899
+        }
+      ]
+    },
+    {
+      "id": "sajik_011",
+      "query": "사직야구장 몇 호선 타고 가?",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_transport_guide",
+      "case_type": "positive",
+      "note": "지하철 노선 질문은 교통 안내 문서가 상위에 와야 한다.",
+      "top1_hit": false,
+      "top3_hit": false,
+      "top_distance": 0.6900894627492934,
+      "top_result_is_relevant": false,
+      "top_result_metadata_complete": true,
+      "results": [
+        {
+          "chunk_id": "KBO_common_stadium_bag_policy_r0001_chunk_000",
+          "document_id": "KBO_common_stadium_bag_policy_r0001",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": null,
+          "title": "KBO 공통 경기장 반입물품·가방 안내 (SAFE 캠페인 기준)",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-09-11",
+          "review_status": "approved",
+          "distance": 0.6900894627492934
+        },
+        {
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 시설 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_stadium_shop"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.45984616641967724
+        },
+        {
+          "chunk_id": "SAJIK_stadium_seat_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_seat_guide_20260729",
+          "document_type": "stadium_seat_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 좌석 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_sajik_seat_guide",
+            "lotte_sajik_ticket_price"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=340",
+            "https://www.giantsclub.com/html/?pcode=339"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.47445599109542336
+        }
+      ]
+    },
+    {
+      "id": "sajik_012",
+      "query": "사직구장 가까운 지하철역 어디야?",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_transport_guide",
+      "case_type": "positive",
+      "note": "가까운 지하철역 질문은 교통 안내 문서가 상위에 와야 한다.",
+      "top1_hit": false,
+      "top3_hit": true,
+      "top_distance": 0.8689657552761438,
+      "top_result_is_relevant": false,
+      "top_result_metadata_complete": true,
+      "results": [
+        {
+          "chunk_id": "KBO_common_stadium_bag_policy_r0001_chunk_000",
+          "document_id": "KBO_common_stadium_bag_policy_r0001",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": null,
+          "title": "KBO 공통 경기장 반입물품·가방 안내 (SAFE 캠페인 기준)",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-09-11",
+          "review_status": "approved",
+          "distance": 0.8689657552761438
+        },
+        {
+          "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_stadium_shop"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.5581582355762538
+        },
+        {
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 시설 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_stadium_shop"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.5982222299823445
+        }
+      ]
+    },
+    {
+      "id": "sajik_013",
+      "query": "사직구장 버스로 가는 법 알려줘",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_transport_guide",
+      "case_type": "positive",
+      "note": "버스 노선과 대중교통 질문은 교통 안내 문서가 상위에 와야 한다.",
+      "top1_hit": false,
+      "top3_hit": true,
+      "top_distance": 0.7448364528826585,
+      "top_result_is_relevant": false,
+      "top_result_metadata_complete": true,
+      "results": [
+        {
+          "chunk_id": "KBO_common_stadium_bag_policy_r0001_chunk_000",
+          "document_id": "KBO_common_stadium_bag_policy_r0001",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": null,
+          "title": "KBO 공통 경기장 반입물품·가방 안내 (SAFE 캠페인 기준)",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-09-11",
+          "review_status": "approved",
+          "distance": 0.7448364528826585
+        },
+        {
+          "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_stadium_shop"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.4965328643536232
+        },
+        {
+          "chunk_id": "SAJIK_stadium_bag_policy_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_bag_policy_20260729",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 반입 및 안전 정책 초안",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.636420903297102
+        }
+      ]
+    },
+    {
+      "id": "sajik_014",
+      "query": "사직구장 주차 가능해?",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_transport_guide",
+      "case_type": "positive",
+      "note": "주차 가능 여부와 자가용 접근 질문은 교통 안내 문서가 상위에 와야 한다.",
+      "top1_hit": false,
+      "top3_hit": true,
+      "top_distance": 0.7285677492820264,
+      "top_result_is_relevant": false,
+      "top_result_metadata_complete": true,
+      "results": [
+        {
+          "chunk_id": "KBO_common_stadium_bag_policy_r0001_chunk_000",
+          "document_id": "KBO_common_stadium_bag_policy_r0001",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": null,
+          "title": "KBO 공통 경기장 반입물품·가방 안내 (SAFE 캠페인 기준)",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-09-11",
+          "review_status": "approved",
+          "distance": 0.7285677492820264
+        },
+        {
+          "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_stadium_shop"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.5234204054553486
+        },
+        {
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 시설 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_stadium_shop"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.5818665399266905
+        }
+      ]
+    },
+    {
+      "id": "sajik_015",
+      "query": "사직야구장 대중교통 추천해줘",
+      "stadium_id": "SAJIK",
+      "expected_document_type": "stadium_transport_guide",
+      "case_type": "positive",
+      "note": "대중교통 추천 질문은 교통 안내 문서가 상위에 와야 한다.",
+      "top1_hit": false,
+      "top3_hit": true,
+      "top_distance": 0.6615161776938684,
+      "top_result_is_relevant": false,
+      "top_result_metadata_complete": true,
+      "results": [
+        {
+          "chunk_id": "KBO_common_stadium_bag_policy_r0001_chunk_000",
+          "document_id": "KBO_common_stadium_bag_policy_r0001",
+          "document_type": "stadium_bag_policy",
+          "stadium_id": null,
+          "title": "KBO 공통 경기장 반입물품·가방 안내 (SAFE 캠페인 기준)",
+          "source_ids": [
+            "kbo_safe_campaign"
+          ],
+          "source_urls": [
+            "https://www.koreabaseball.com/Kbo/BusinessAndEvent/Safe.aspx"
+          ],
+          "as_of": "2026-09-11",
+          "review_status": "approved",
+          "distance": 0.6615161776938684
+        },
+        {
+          "chunk_id": "SAJIK_stadium_transport_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_transport_guide_20260729",
+          "document_type": "stadium_transport_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 지하철 버스 주차 교통 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_stadium_shop"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.49341320712031156
+        },
+        {
+          "chunk_id": "SAJIK_stadium_facility_guide_20260729_chunk_000",
+          "document_id": "SAJIK_stadium_facility_guide_20260729",
+          "document_type": "stadium_facility_guide",
+          "stadium_id": "SAJIK",
+          "title": "사직야구장 시설 안내 초안",
+          "source_ids": [
+            "lotte_sajik_stadium",
+            "lotte_stadium_shop"
+          ],
+          "source_urls": [
+            "https://www.giantsclub.com/html/?pcode=207",
+            "https://www.giantsclub.com/html/?pcode=367"
+          ],
+          "as_of": "2026-07-29",
+          "review_status": "needs_review",
+          "distance": 0.5004524603857312
+        }
+      ]
+    }
+  ]
+}

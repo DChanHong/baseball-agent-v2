@@ -102,13 +102,15 @@ class StadiumGuideSyncService:
                 is_unchanged = bool(
                     latest and latest["normalized_text_hash"] == parsed.text_hash
                 )
-                if is_unchanged and latest["raw_file_path"]:
+                if latest is not None and is_unchanged and latest["raw_file_path"]:
                     parsed = ParsedSource(
                         collected=parsed.collected,
                         text=parsed.text,
                         raw_hash=parsed.raw_hash,
                         text_hash=parsed.text_hash,
-                        raw_file_path=self._repository_root / latest["raw_file_path"],
+                        raw_file_path=(
+                            self._repository_root / str(latest["raw_file_path"])
+                        ),
                     )
                 else:
                     parsed = save_raw_snapshot(self._raw_root, parsed)

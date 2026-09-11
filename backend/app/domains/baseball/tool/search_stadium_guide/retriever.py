@@ -76,7 +76,7 @@ class PgVectorStadiumGuideRetriever:
                 or chunks.document_type = any(:guide_types)
               )
             order by
-              (chunks.stadium_id = :stadium_id) desc,
+              (chunks.stadium_id = :stadium_id) desc nulls last,
               chunks.embedding <=> cast(:query_embedding as extensions.vector)
             limit :top_k
             """

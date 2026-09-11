@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from datetime import date
 from pathlib import Path
 
 import asyncpg
@@ -21,6 +22,20 @@ def _json_object(value: object) -> dict[str, object]:
         if isinstance(decoded, dict):
             return decoded
     return {}
+
+
+def _date_value(value: object) -> date:
+    if isinstance(value, date):
+        return value
+    if isinstance(value, str):
+        return date.fromisoformat(value)
+    raise ValueError(f"invalid date value: {value!r}")
+
+
+def _string_list(value: object) -> list[str]:
+    if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
+        raise ValueError("expected a list of strings")
+    return value
 
 
 class StadiumGuideSyncRepository:
@@ -169,24 +184,37 @@ class StadiumGuideSyncRepository:
         )
         return self._candidate_from_row(row) if row else None
 
-    async def latest_source_checks(
+    async def source_checks_for_run(
         self,
+        run_id: str,
         source_ids: list[str],
     ) -> list[dict[str, object]]:
         if not source_ids:
             return []
         rows = await self._connection.fetch(
             """
-            select distinct on (source_id)
+            select
               source_id, source_url, result_status, raw_file_path,
               normalized_text_hash, parser_name, collected_at
             from public.stadium_guide_source_checks
-            where source_id = any($1::text[])
-            order by source_id, collected_at desc
+            where run_id = $1 and source_id = any($2::text[])
+            order by source_id
             """,
+            run_id,
             source_ids,
         )
         return [dict(row) for row in rows]
+
+    async def assert_candidate_current(self, candidate: CandidateRecord) -> None:
+        active = await self.active_document(candidate.logical_document_id)
+        if candidate.previous_revision_id is None:
+            if active is not None:
+                raise ValueError("CREATE candidate conflicts with a new active revision")
+            return
+        if active is None or active.document_id != candidate.previous_revision_id:
+            raise ValueError("active revision changed after candidate generation")
+        if active.content_hash != candidate.previous_content_hash:
+            raise ValueError("active content hash changed after candidate generation")
 
     async def review_candidate(
         self,
@@ -338,9 +366,9 @@ class StadiumGuideSyncRepository:
                     payload.get("stadium_id"),
                     payload.get("team_id"),
                     payload["title"],
-                    payload["as_of"],
+                    _date_value(payload["as_of"]),
                     payload["trust_level"],
-                    list(payload.get("sources") or []),
+                    _string_list(payload.get("sources")),
                     source_urls,
                     payload["content_hash"],
                     json.dumps(metadata, ensure_ascii=False),
@@ -370,9 +398,9 @@ class StadiumGuideSyncRepository:
                     embedding_vector,
                     embedding_model,
                     embedding_dimensions,
-                    payload["as_of"],
+                    _date_value(payload["as_of"]),
                     payload["trust_level"],
-                    list(payload.get("sources") or []),
+                    _string_list(payload.get("sources")),
                     source_urls,
                     payload["content_hash"],
                     json.dumps(metadata, ensure_ascii=False),
@@ -427,13 +455,53 @@ class StadiumGuideSyncRepository:
             await self._connection.execute(
                 """
                 update public.stadium_guide_change_candidates
-                set status = $2, review_note = concat_ws(E'\n', review_note, $3)
+                set status = $2,
+                    review_note = concat_ws(E'\n', review_note, $3::text)
                 where candidate_id = $1
                   and status in ('applied_local', 'evaluation_failed')
                 """,
                 candidate_id,
                 status.value,
                 f"evaluation {evaluation_run_id}: {'passed' if passed else 'failed'}",
+            )
+            await self._connection.execute(
+                """
+                update public.stadium_guide_deployments
+                set evaluation_run_id = $3,
+                    metadata = metadata || $4::jsonb
+                where candidate_id = $1 and revision_id = $2 and target = 'local'
+                """,
+                candidate_id,
+                revision_id,
+                evaluation_run_id,
+                json.dumps({"evaluation": summary}, ensure_ascii=False),
+            )
+        candidate = await self.candidate(candidate_id)
+        if not candidate:
+            raise ValueError(f"candidate not found: {candidate_id}")
+        return candidate
+
+    async def record_evaluation_error(
+        self,
+        *,
+        candidate_id: str,
+        revision_id: str,
+        evaluation_run_id: str,
+        error_code: str,
+    ) -> CandidateRecord:
+        summary = {"passed": False, "error_code": error_code}
+        async with self._connection.transaction():
+            await self._connection.execute(
+                """
+                update public.stadium_guide_change_candidates
+                set status = $2,
+                    review_note = concat_ws(E'\n', review_note, $3::text)
+                where candidate_id = $1
+                  and status in ('applied_local', 'evaluation_failed')
+                """,
+                candidate_id,
+                CandidateStatus.EVALUATION_FAILED.value,
+                f"evaluation {evaluation_run_id}: error {error_code}",
             )
             await self._connection.execute(
                 """

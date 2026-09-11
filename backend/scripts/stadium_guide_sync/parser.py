@@ -55,20 +55,51 @@ def _extract_around(text: str, markers: tuple[str, ...], *, radius: int = 700) -
     return "\n".join(unique)
 
 
+def _extract_faq_blocks(body: str, answer_ids: tuple[str, ...]) -> str:
+    blocks: list[str] = []
+    for answer_id in answer_ids:
+        question = re.search(
+            rf"<a[^>]+href=[\"']#{re.escape(answer_id)}[\"'][^>]*>(.*?)</a>",
+            body,
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+        answer = re.search(
+            rf"<div\s+id=[\"']{re.escape(answer_id)}[\"'][^>]*>(.*?)</div>",
+            body,
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+        if question and answer:
+            blocks.append(visible_text(question.group(1) + "\n" + answer.group(1)))
+    return "\n".join(blocks)
+
+
+def _extract_elements_by_id(body: str, element_ids: tuple[str, ...]) -> str:
+    blocks: list[str] = []
+    for element_id in element_ids:
+        match = re.search(
+            rf"<(ul|div)\s+id=[\"']{re.escape(element_id)}[\"'][^>]*>"
+            r"(.*?)</\1>",
+            body,
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+        if match:
+            blocks.append(visible_text(match.group(2)))
+    return "\n".join(blocks)
+
+
 def parse_collected_source(collected: CollectedSource) -> str:
     text = visible_text(collected.body)
     parser_name = collected.source.parser_name
+    required: tuple[str, ...]
     if parser_name == "heroes_gocheok_faq":
-        text = _extract_around(
-            text,
-            (
-                "구장 내 음식물 섭취 가능한가요",
-                "음식물 반입",
-                "캔 반입 가능한가요",
-            ),
-            radius=900,
-        )
+        text = _extract_faq_blocks(collected.body, ("a_13", "a_14"))
         required = ("음식물", "반입")
+    elif parser_name == "kbo_safe_campaign":
+        text = _extract_elements_by_id(
+            collected.body,
+            ("block2", "block4", "block5", "block6", "block9"),
+        )
+        required = ("유리병", "가방", "반입")
     elif parser_name == "heroes_gocheok_ticket":
         text = _extract_around(text, ("SAFE 캠페인", "반입", "주차"), radius=1000)
         required = ("반입",)
@@ -85,4 +116,3 @@ def parse_collected_source(collected: CollectedSource) -> str:
     if any(marker.lower() in text.lower() for marker in blocked_markers):
         raise ParseError("BLOCK_OR_LOGIN_PAGE", "received a block or login page")
     return text
-

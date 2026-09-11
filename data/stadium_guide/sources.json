@@ -110,7 +110,7 @@
         "stadium_bag_policy"
       ],
       "collector_type": "http",
-      "parser_name": "visible_text",
+      "parser_name": "kbo_safe_campaign",
       "refresh_policy": "monthly",
       "trust_level": "official",
       "enabled": true,
