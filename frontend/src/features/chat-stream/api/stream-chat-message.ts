@@ -294,6 +294,9 @@ export async function* streamChatMessage(
 
         if (event) {
           yield event;
+          if (event.type === "done") {
+            return;
+          }
         }
       }
     }

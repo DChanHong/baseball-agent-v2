@@ -29,7 +29,7 @@ def build_assistant_content(
         return _unsupported_text(decision.unsupported_reason)
 
     if not decision.should_call_tool:
-        return "질문은 확인했어요. 현재 MVP에서는 사용할 수 있는 도구 범위 안에서 답변을 준비하고 있습니다."
+        return "질문을 확인했습니다. 현재 MVP에서 사용할 수 있는 도구 범위 안에서 답변을 준비하고 있습니다."
 
     if tool_payload is None:
         return "도구 호출이 필요했지만 결과를 만들지 못했습니다. 잠시 뒤 다시 시도해 주세요."
@@ -73,7 +73,7 @@ def build_selected_game_follow_up_answer(
 
     if intent == "selected_game_time":
         if selected_game.start_time is None:
-            return f"직전 조회한 {matchup} 경기의 시작 시간은 아직 확인되지 않았어요."
+            return f"직전 조회한 {matchup} 경기의 시작 시간은 아직 확인되지 않았습니다."
         return f"직전 조회한 {matchup} 경기는 {_format_time(selected_game.start_time)}에 시작합니다."
 
     if intent == "selected_game_opponent":
@@ -158,23 +158,23 @@ def promote_context_from_tool_payload(
 
 def _clarification_text(reason: str | None) -> str:
     if reason == "team_required_for_schedule_lookup":
-        return "어느 팀 경기를 볼지 알려주시면 일정과 경기 여부를 확인해드릴게요."
+        return "어느 팀 경기를 볼지 알려주시면 일정과 경기 여부를 확인해 드리겠습니다."
     if reason == "stadium_required_for_stadium_guide_search":
-        return "어느 구장 기준인지 알려주시면 반입, 교통, 시설 정보를 찾아드릴게요."
+        return "어느 구장 기준인지 알려주시면 반입, 교통, 시설 정보를 찾아 드리겠습니다."
     if reason == "stadium_required_for_weather_lookup":
-        return "어느 구장 날씨를 볼지 알려주시면 직관 컨디션을 확인해드릴게요."
-    return "조금만 더 구체적으로 알려주시면 확인해드릴게요."
+        return "어느 구장 날씨를 볼지 알려주시면 직관 컨디션을 확인해 드리겠습니다."
+    return "조금만 더 구체적으로 알려주시면 확인해 드리겠습니다."
 
 
 def _unsupported_text(reason: str) -> str:
     messages = {
-        "out_of_scope": "지금은 KBO 직관과 야구 관련 질문만 도와드릴 수 있어요.",
+        "out_of_scope": "지금은 KBO 직관과 야구 관련 질문만 도와드릴 수 있습니다.",
         "weather_or_realtime_cancellation_prediction_required": (
-            "공식 우천 취소 여부는 구단/KBO의 확정 공지가 필요해요. "
+            "공식 우천 취소 여부는 구단/KBO의 확정 공지가 필요합니다. "
             "대신 구장 기준 날씨와 직관 준비 수준은 확인할 수 있습니다."
         ),
         "weather_forecast_range_not_supported": "현재 날씨 도구는 오늘부터 글피까지만 지원합니다.",
-        "ticket_inventory_tool_required": "실시간 잔여석은 아직 조회할 수 없어요. 예매처와 예매 방법 안내는 가능합니다.",
+        "ticket_inventory_tool_required": "실시간 잔여석은 아직 조회할 수 없습니다. 예매처와 예매 방법은 안내해 드릴 수 있습니다.",
         "opponent_team_filter_not_supported_yet": "두 팀 맞대결 일정 필터는 아직 지원하지 않습니다.",
     }
     return messages.get(reason, "현재 MVP에서 아직 지원하지 않는 요청입니다.")
@@ -190,7 +190,7 @@ def _tool_summary(
     if tool_name == "find_kbo_game":
         total = result.get("total")
         if total == 0:
-            return "조회 조건에 맞는 KBO 경기를 찾지 못했어요."
+            return "조회 조건에 맞는 KBO 경기를 찾지 못했습니다."
         games = result.get("games")
         if total == 1 and isinstance(games, list) and len(games) == 1:
             game = games[0]
@@ -204,7 +204,7 @@ def _tool_summary(
     if tool_name == "get_stadium_info":
         stadium = result.get("stadium")
         if not isinstance(stadium, dict):
-            return "구장 정보를 찾지 못했어요."
+            return "구장 정보를 찾지 못했습니다."
         name = stadium.get("name_ko") or stadium.get("short_name") or "해당 구장"
         address = stadium.get("address")
         dome_text = "돔구장입니다" if stadium.get("is_dome") else "돔구장은 아닙니다"
@@ -225,15 +225,15 @@ def _tool_summary(
         items = result.get("items")
         count = len(items) if isinstance(items, list) else 0
         if not answerable:
-            return "관련 안내 문서를 찾지 못했어요. 공식 구단 안내를 함께 확인해 주세요."
-        return f"관련 안내 문서 {count}건을 찾았습니다. 카드에서 출처와 주요 내용을 확인할 수 있어요."
+            return "관련 안내 문서를 찾지 못했습니다. 공식 구단 안내를 함께 확인해 주세요."
+        return f"관련 안내 문서 {count}건을 찾았습니다. 카드에서 출처와 주요 내용을 확인해 주세요."
 
     if tool_name == "search_baseball_knowledge":
         answerable = result.get("answerable")
         items = result.get("items")
         count = len(items) if isinstance(items, list) else 0
         if not answerable:
-            return "관련 야구 지식 문서를 찾지 못했어요."
+            return "관련 야구 지식 문서를 찾지 못했습니다."
         return f"질문 '{fallback_message}'에 참고할 야구 지식 근거 {count}건을 찾았습니다."
 
     return "도구 결과를 확인했습니다."

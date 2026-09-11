@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import logging
 from functools import lru_cache
 from pathlib import Path
@@ -33,14 +34,19 @@ class AnswerGenerationService:
         self,
         chain: Any | None = None,
         model: str | None = None,
+        timeout_seconds: float | None = None,
     ) -> None:
         if chain is not None and model is not None:
             self._model = model
             self._chain = chain
+            self._timeout_seconds = timeout_seconds or 15.0
             return
 
         settings = get_settings()
         self._model = model or settings.openai_model
+        self._timeout_seconds = (
+            timeout_seconds or settings.openai_answer_timeout_seconds
+        )
         self._chain = chain or _build_answer_generation_chain(
             model=self._model,
             api_key=settings.openai_api_key,
@@ -67,7 +73,10 @@ class AnswerGenerationService:
         )
 
         try:
-            response = await self._chain.ainvoke({"request": request.model_dump_json()})
+            async with asyncio.timeout(self._timeout_seconds):
+                response = await self._chain.ainvoke(
+                    {"request": request.model_dump_json()}
+                )
         except Exception:
             logger.exception("answer generation failed model=%s", self._model)
             raise

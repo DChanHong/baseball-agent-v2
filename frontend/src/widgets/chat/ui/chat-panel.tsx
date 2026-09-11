@@ -216,7 +216,8 @@ export function ChatPanel({ activeConversationId, onConversationCreated }: ChatP
         }
         return;
       case "assistant.completed":
-        setResponseStatus("streaming");
+        setResponseStatus("idle");
+        setIsStreaming(false);
         {
           const previousAssistantMessageId = activeAssistantMessageIdRef.current;
           activeAssistantMessageIdRef.current = event.messageId;
@@ -251,6 +252,9 @@ export function ChatPanel({ activeConversationId, onConversationCreated }: ChatP
         return;
       case "done":
         void queryClient.invalidateQueries({ queryKey: conversationListQueryKey });
+        setIsStreaming(false);
+        activeAssistantMessageIdRef.current = null;
+        setActiveAssistantMessageId(null);
         setResponseStatus((current) => (current === "failed" ? current : "idle"));
         return;
       default:

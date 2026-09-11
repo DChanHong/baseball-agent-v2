@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     openai_api_key: str
     openai_model: str = "gpt-5-mini"
     openai_timeout_seconds: float = 30.0
+    openai_answer_timeout_seconds: float = 15.0
 
     # Hosted Supabase Auth
     supabase_url: str = ""
