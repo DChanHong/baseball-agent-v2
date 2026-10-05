@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import AsyncIterator
+from collections.abc import AsyncGenerator, Awaitable, Callable
+from contextlib import aclosing
+from time import perf_counter
 from typing import Any, Literal
 from uuid import uuid4
 
@@ -22,6 +24,7 @@ from app.agent.state import (
     BaseballAgentState,
 )
 from app.agent.tool_executor import AgentToolExecutor
+from app.core.agent_trace import emit_trace, trace_scope, trace_stage
 
 logger = logging.getLogger(__name__)
 
@@ -62,8 +65,48 @@ class BaseballAgentGraph:
     async def astream(
         self,
         graph_input: BaseballAgentInput,
-    ) -> AsyncIterator[AgentGraphEvent]:
+    ) -> AsyncGenerator[AgentGraphEvent, None]:
+        trace_id = uuid4().hex
+        started = perf_counter()
+        status = "interrupted"
+        emit_trace(trace_id, "turn.started")
+        try:
+            async with aclosing(self._astream(graph_input, trace_id)) as stream:
+                async for event in stream:
+                    if event.output is not None:
+                        status = "completed"
+                        emit_trace(
+                            trace_id,
+                            "turn.completed",
+                            duration_ms=round((perf_counter() - started) * 1000, 3),
+                            answer_source=event.output.answer_source,
+                            fallback_reason=event.output.fallback_reason,
+                        )
+                    yield event
+        except Exception as exc:
+            status = "failed"
+            emit_trace(
+                trace_id,
+                "turn.failed",
+                duration_ms=round((perf_counter() - started) * 1000, 3),
+                error_type=type(exc).__name__,
+            )
+            raise
+        finally:
+            if status == "interrupted":
+                emit_trace(
+                    trace_id,
+                    "turn.interrupted",
+                    duration_ms=round((perf_counter() - started) * 1000, 3),
+                )
+
+    async def _astream(
+        self,
+        graph_input: BaseballAgentInput,
+        trace_id: str,
+    ) -> AsyncGenerator[AgentGraphEvent, None]:
         initial_state: BaseballAgentState = {
+            "trace_id": trace_id,
             "conversation_id": graph_input.conversation_id,
             "user_profile_id": graph_input.user_profile_id,
             "user_message": graph_input.user_message,
@@ -85,7 +128,10 @@ class BaseballAgentGraph:
             elif "tool_execute" in update:
                 state_update = update["tool_execute"]
                 tool_payload = state_update.get("tool_payload")
-                if isinstance(tool_payload, dict) and tool_payload.get("status") == "failed":
+                if (
+                    isinstance(tool_payload, dict)
+                    and tool_payload.get("status") == "failed"
+                ):
                     yield AgentGraphEvent(
                         kind="tool.failed",
                         tool_call_id=tool_payload.get("tool_call_id"),
@@ -112,16 +158,62 @@ class BaseballAgentGraph:
                         context=state_update["context"],
                         answer=state_update["answer"],
                         answer_generation=state_update.get("answer_generation"),
+                        trace_id=trace_id,
+                        answer_source=state_update["answer_source"],
+                        fallback_reason=state_update.get("fallback_reason"),
                     ),
                 )
 
+    def _traced_node(
+        self,
+        stage: str,
+        node: Callable[[BaseballAgentState], Awaitable[dict[str, Any]]],
+    ) -> Callable[[BaseballAgentState], Awaitable[dict[str, Any]]]:
+        async def run(state: BaseballAgentState) -> dict[str, Any]:
+            decision = state.get("routing_decision")
+            fields = {"tool_name": decision.tool_name} if decision else {}
+            with (
+                trace_scope(state["trace_id"]),
+                trace_stage(stage, **fields) as details,
+            ):
+                update = await node(state)
+                if stage == "route":
+                    routed = update["routing_decision"]
+                    details.update(
+                        tool_name=routed.tool_name,
+                        should_call_tool=routed.should_call_tool,
+                        needs_clarification=routed.needs_clarification,
+                    )
+                elif stage == "tool":
+                    payload = update["tool_payload"]
+                    if payload["status"] == "failed":
+                        details.update(
+                            status="failed", error_type=update["tool_error_type"]
+                        )
+                elif stage == "answer":
+                    details.update(
+                        answer_source=update["answer_source"],
+                        fallback_reason=update.get("fallback_reason"),
+                    )
+                    draft = update.get("answer_generation")
+                    if draft is not None:
+                        details.update(
+                            answerability=draft.answerability,
+                            used_evidence_refs=draft.used_evidence_refs,
+                        )
+                return update
+
+        return run
+
     def _compile_graph(self):
         graph = StateGraph(BaseballAgentState)
-        graph.add_node("route", self._route)
+        graph.add_node("route", self._traced_node("route", self._route))
         graph.add_node("prepare_tool", self._prepare_tool)
-        graph.add_node("tool_execute", self._tool_execute)
+        graph.add_node("tool_execute", self._traced_node("tool", self._tool_execute))
         graph.add_node("state_update", self._state_update)
-        graph.add_node("answer_generate", self._answer_generate)
+        graph.add_node(
+            "answer_generate", self._traced_node("answer", self._answer_generate)
+        )
 
         graph.add_edge(START, "route")
         graph.add_conditional_edges(
@@ -184,6 +276,7 @@ class BaseballAgentGraph:
                     "error": {"code": "tool_execution_failed", "message": str(exc)},
                 },
                 "tool_limitations": [],
+                "tool_error_type": type(exc).__name__,
             }
 
         result_payload = _model_payload(result)
@@ -211,15 +304,19 @@ class BaseballAgentGraph:
         context = state["context"]
         decision = state["routing_decision"]
         answer_generation = None
+        answer_source = "template"
+        fallback_reason = None
         if (
             state.get("answer_mode") == "contextual_direct"
             and decision.direct_answer_intent is not None
         ):
+            answer_source = "contextual_direct"
             answer = build_selected_game_follow_up_answer(
                 intent=decision.direct_answer_intent,
                 context=context,
             )
             if answer is None:
+                answer_source = "template"
                 answer = build_assistant_content(
                     message=state["user_message"],
                     decision=decision,
@@ -234,6 +331,12 @@ class BaseballAgentGraph:
 
             tool_payload = state.get("tool_payload")
             if (
+                isinstance(tool_payload, dict)
+                and tool_payload.get("status") == "failed"
+            ):
+                answer_source = "fallback"
+                fallback_reason = "tool_execution_failed"
+            if (
                 self._answer_generation_service is not None
                 and isinstance(tool_payload, dict)
                 and tool_payload.get("status") == "completed"
@@ -245,7 +348,10 @@ class BaseballAgentGraph:
                         tool_limitations=state.get("tool_limitations", []),
                     )
                     answer = answer_generation.answer
-                except Exception:
+                    answer_source = "llm"
+                except Exception as exc:
+                    answer_source = "fallback"
+                    fallback_reason = type(exc).__name__
                     logger.exception(
                         "grounded answer generation failed; using deterministic fallback"
                     )
@@ -257,6 +363,8 @@ class BaseballAgentGraph:
             "context": context,
             "answer": answer,
             "answer_generation": answer_generation,
+            "answer_source": answer_source,
+            "fallback_reason": fallback_reason,
         }
 
 

@@ -4,9 +4,6 @@ from datetime import UTC, date, datetime, time
 from uuid import UUID
 
 import pytest
-from fastapi import FastAPI
-from fastapi.testclient import TestClient
-
 from app.agent.answer_schemas import GroundedAnswerDraft
 from app.agent.routing_schemas import (
     DirectAnswerIntent,
@@ -24,6 +21,8 @@ from app.domains.chat.controller.router import router as chat_router
 from app.domains.chat.controller.schemas import ChatStreamRequest
 from app.domains.chat.service.services import ChatStreamService
 from app.domains.conversation.domain.entities import Conversation, Message
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
 
 PROFILE_ID = UUID("22222222-2222-4222-8222-222222222222")
 AUTH_USER_ID = UUID("11111111-1111-4111-8111-111111111111")
@@ -238,6 +237,11 @@ async def test_chat_stream_stores_new_conversation_and_messages_by_profile_id() 
     }
     assert routing_service.favorite_team_id == "LOTTE"
     assert session.rollbacks == 0
+    metadata = message_repository.saved[-1].metadata
+    assert metadata is not None
+    assert len(metadata["trace_id"]) == 32
+    assert metadata["answer_source"] == "template"
+    assert metadata["fallback_reason"] is None
 
 
 @pytest.mark.asyncio

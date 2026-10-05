@@ -2,6 +2,7 @@ import logging
 
 from openai import AsyncOpenAI
 
+from app.core.agent_trace import retrieval_details, trace_stage
 from app.domains.baseball.tool.rag_config import (
     STADIUM_GUIDE_RAG_CONFIG,
     RagRetrievalConfig,
@@ -15,6 +16,7 @@ from app.domains.baseball.tool.search_stadium_guide.schemas import (
 )
 
 logger = logging.getLogger(__name__)
+
 
 class SearchStadiumGuideToolHandler:
     """LLM의 search_stadium_guide tool 호출을 처리합니다."""
@@ -45,15 +47,22 @@ class SearchStadiumGuideToolHandler:
         )
 
         try:
-            query_embedding = await self._embed_query(tool_input.query)
-            items = await self._retriever.search(
-                query_embedding=query_embedding,
-                stadium_id=tool_input.stadium_id,
-                document_types=self._retrieval_config.document_types,
-                guide_types=tool_input.guide_types,
+            with trace_stage("embedding", model=self._retrieval_config.embedding_model):
+                query_embedding = await self._embed_query(tool_input.query)
+            with trace_stage(
+                "retrieval",
                 top_k=self._retrieval_config.effective_top_k(tool_input.top_k),
                 relevance_threshold=self._retrieval_config.relevance_threshold,
-            )
+            ) as details:
+                items = await self._retriever.search(
+                    query_embedding=query_embedding,
+                    stadium_id=tool_input.stadium_id,
+                    document_types=self._retrieval_config.document_types,
+                    guide_types=tool_input.guide_types,
+                    top_k=self._retrieval_config.effective_top_k(tool_input.top_k),
+                    relevance_threshold=self._retrieval_config.relevance_threshold,
+                )
+                details.update(retrieval_details(items))
         except Exception:
             logger.exception("search_stadium_guide tool failed")
             raise

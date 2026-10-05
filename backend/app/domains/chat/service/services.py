@@ -260,6 +260,9 @@ class ChatStreamService:
             status=MessageStatus.COMPLETED,
             latency_ms=latency_ms,
             metadata={
+                "trace_id": graph_output.trace_id,
+                "answer_source": graph_output.answer_source,
+                "fallback_reason": graph_output.fallback_reason,
                 "routing_decision": graph_output.routing_decision.model_dump(
                     mode="json"
                 ),

@@ -16,6 +16,7 @@ from app.agent.answer_schemas import (
     GroundedAnswerDraft,
     GroundedAnswerRequest,
 )
+from app.core.agent_trace import trace_stage
 from app.core.config import get_settings
 
 logger = logging.getLogger(__name__)
@@ -73,10 +74,11 @@ class AnswerGenerationService:
         )
 
         try:
-            async with asyncio.timeout(self._timeout_seconds):
-                response = await self._chain.ainvoke(
-                    {"request": request.model_dump_json()}
-                )
+            with trace_stage("answer_llm", model=self._model):
+                async with asyncio.timeout(self._timeout_seconds):
+                    response = await self._chain.ainvoke(
+                        {"request": request.model_dump_json()}
+                    )
         except Exception:
             logger.exception("answer generation failed model=%s", self._model)
             raise

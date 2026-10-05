@@ -100,3 +100,17 @@ except Exception:
 요청 단위 추적이 필요해지면 middleware에서 `request_id`를 생성하고, conversation/message id와 함께 로그 context로 전달한다.
 
 OpenTelemetry, Sentry, Datadog 같은 외부 관측성 도구는 실제 배포 환경과 장애 대응 요구가 정해진 뒤 도입한다.
+
+## 8. Agent trace 첫 구현 (2026-10-05)
+
+`backend/app/core/agent_trace.py`는 표준 logger에 `agent_trace <JSON>`을 남긴다.
+Graph 실행 단위 `trace_id`로 routing, Tool, embedding, retrieval, answer 단계를
+연결하고 단계별 시간, 검색 chunk ID·distance, 답변 경로와 fallback 사유를 기록한다.
+
+새 trace에는 사용자·대화 식별자, 질문·답변 전문, query, prompt, Tool payload,
+검색 본문, 인증값과 예외 메시지를 넣지 않는다. 예외 타입만 기록한다.
+이 범위는 기존 HTTP body logging과 exception logger 전체에 대한 변경이 아니다.
+
+Graph 외부의 handler 호출에는 trace를 자동 생성하지 않는다. HTTP 요청 전체,
+DB 저장·SSE 전송 완료와 graph 완료를 구분한다. 상세 이벤트 계약과 검증은
+`docs/spec/2026-10-05-agent-observability-spec.md`를 따른다.

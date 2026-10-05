@@ -86,11 +86,15 @@ class BaseballAgentOutput(BaseModel):
     context: AgentConversationContext
     answer: str
     answer_generation: GroundedAnswerDraft | None = None
+    trace_id: str | None = None
+    answer_source: str = "template"
+    fallback_reason: str | None = None
 
 
 class BaseballAgentState(TypedDict, total=False):
     """LangGraph state channels for one chat turn."""
 
+    trace_id: str
     conversation_id: UUID
     user_profile_id: UUID
     user_message: str
@@ -106,3 +110,6 @@ class BaseballAgentState(TypedDict, total=False):
     answer: str
     answer_generation: GroundedAnswerDraft | None
     answer_mode: Literal["contextual_direct", "routed"]
+    answer_source: str
+    fallback_reason: str | None
+    tool_error_type: str

@@ -3,7 +3,7 @@
 > 라벨: `MVP2`  
 > 상태: 계획 유지
 > 작성일: 2026-08-03
-> 최근 업데이트: 2026-09-08
+> 최근 업데이트: 2026-10-05
 > 목적: MVP 채팅/Tool 기본 틀 이후 운영 데이터 최신성, 실사용 QA, 관측성, 평가, RAG, 보안, Agent orchestration을 단계적으로 개선하기 위한 계획
 
 ## 1. 배경
@@ -534,7 +534,7 @@ LangSmith trace 도입 가능성 검토
 전면 전환이 아니라 비교 도입 기준 작성
 ```
 
-### Step 3. Agent trace / Observability
+### Step 3. Agent trace / Observability — 최소 graph trace 구현 완료
 
 `POST /api/v1/chat` 실행 중 아래 이벤트와 지표를 하나의 trace로 묶어 남긴다.
 
@@ -552,6 +552,20 @@ stream_failed
 ```
 
 운영 DB table을 바로 만들기보다, 우선 구조화 logging 또는 local run 파일로 시작한다.
+
+2026-10-05 첫 회차 구현:
+
+- graph 실행마다 생성한 `trace_id`로 route, tool, embedding, retrieval, answer,
+  answer_llm을 연결한다.
+- 단계별 시간, chunk ID·distance, 답변 경로와 fallback 사유를 JSON 로그로 남긴다.
+- 기존 assistant metadata에 trace ID와 답변 경로를 추가했다.
+- 새 trace에는 사용자 질문·답변 전문, 인증값, 예외 메시지를 기록하지 않는다.
+- backend 전체 78개 테스트와 변경 파일 Ruff가 통과했다.
+- HTTP request ID 연결, DB 저장·SSE 실패, token usage, 실제 서비스 QA는 남아 있다.
+
+상세 계약: `docs/spec/2026-10-05-agent-observability-spec.md`.
+작업 기록: `blog/work-logs/2026-10-05-agent-observability-v1.md`.
+블로그 초안: `blog/blog-7-agent-observability-draft.md`.
 
 ### Step 4. 평가셋과 run 저장
 
@@ -713,14 +727,14 @@ Prompt Injection, Tool Abuse, Data Leakage, Source Trust 관련 security case가
 
 ## 7. 다음 작업
 
-가장 먼저 할 일:
+2026-10-05 기준 첫 QA와 최소 graph trace 구축은 완료했다.
+다음 회차는 기존 질문의 재실행과 Step 4 평가 run 연결에 집중한다.
 
-```text
-1. 기존 대표 질문과 follow-up 질문으로 1차 실사용 QA를 실행한다.
-2. 결과를 passed / ambiguous / failed로 분류한다.
-3. 실패와 애매 사례를 data/chat/evaluation/candidates에 기록한다.
-4. 반복성과 영향도가 높은 사례를 evaluation case로 승격한다.
-5. 작업 로그와 milestone run을 남기고 3.3 구조 검토로 전달할 요구사항을 정리한다.
-```
+1. DB·실제 API 사용 범위를 승인받은 뒤 기존 9개 smoke 질문을 재실행한다.
+2. trace ID로 단계별 latency와 fallback 여부를 확인하고 실패 유형을 분류한다.
+3. 결과를 개인정보 없는 evaluation run과 candidate에 연결한다.
+4. 나머지 21개 case의 실행을 확장한다.
+5. Tool별 baseline을 정리한 뒤 실패 결과에 따라 검색 개선 또는 multi-step을 선택한다.
 
-상세 실행 계획은 `docs/work/2026-09-08-mvp2-3-2-manual-qa-evaluation-dataset-plan.md`를 따른다.
+Trace의 HTTP·DB 저장·SSE 전송 확장은 Step 3 잔여 항목으로 유지한다.
+QA 데이터 기준은 `docs/work/2026-09-08-mvp2-3-2-manual-qa-evaluation-dataset-plan.md`를 따른다.
