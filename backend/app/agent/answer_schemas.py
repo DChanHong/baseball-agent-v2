@@ -24,6 +24,9 @@ class GroundedAnswerRequest(BaseModel):
     tool_name: str = Field(min_length=1)
     evidence: list[AnswerEvidence] = Field(min_length=1, max_length=3)
     limitations: list[str]
+    allowed_limitations: list[str] = Field(
+        description="Complete server-computed list of allowed limitation codes."
+    )
 
 
 class GroundedAnswerDraft(BaseModel):
@@ -36,7 +39,12 @@ class GroundedAnswerDraft(BaseModel):
     ]
     answer: str = Field(min_length=1, max_length=2400)
     used_evidence_refs: list[str]
-    acknowledged_limitations: list[str]
+    acknowledged_limitations: list[str] = Field(
+        description=(
+            "Select exact codes only from input allowed_limitations. "
+            "Do not invent or paraphrase codes. Use [] when none apply."
+        )
+    )
 
     @field_validator("used_evidence_refs")
     @classmethod

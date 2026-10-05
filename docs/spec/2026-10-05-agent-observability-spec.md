@@ -97,3 +97,15 @@ cd backend
 - 다단계 실행 도입 시 step ID와 종료 이유 확장
 
 따라서 MVP2 Step 3 전체 완료 대신 최소 graph trace 구현 완료로 기록한다.
+
+## 9. 답변 계약 검증 trace 보강
+
+- [확인됨] `answer_validation.started/completed/failed`를 추가했다.
+  단계 시간, evidence_count, allowed_limitation_count를 기록한다.
+- [확인됨] 검증 실패 error_code와 최종 fallback_reason은
+  answer_schema_invalid / unknown_evidence_refs / unknown_limitation_codes로 구분한다.
+- [확인됨] chain 내부 Pydantic 오류는 별도 검증 단계 진입 전에 실패할 수 있으며
+  최종 fallback_reason은 answer_schema_invalid다.
+- [확인됨] 답변 모델 입력의 allowed_limitations와 서버 검증 목록을 맞췄다.
+  상세 범위는 `docs/work/2026-10-05-answer-limitation-contract-plan.md`를 따른다.
+- [확인 필요] 실제 모델의 검증 실패율·자연어 답변 품질 개선 여부.

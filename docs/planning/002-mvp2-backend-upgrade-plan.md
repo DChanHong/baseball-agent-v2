@@ -660,6 +660,15 @@ done
 
 단, `assistant.delta`는 단순 Tool 요약이 아니라 Tool result와 retrieved source를 바탕으로 생성한 최종 답변 chunk가 되도록 개선한다.
 
+2026-10-05 답변 계약 보강:
+
+- 모델 입력에 서버가 계산한 `allowed_limitations` 전체 목록을 전달한다.
+- 자연어 설명과 metadata 코드 선택을 prompt와 출력 field description에서 구분한다.
+- schema·evidence ref·limitation 코드 오류를 trace와 fallback 사유로 구분한다.
+- 기존 엄격한 검증과 fallback은 유지하며 재시도는 추가하지 않았다.
+- 합성 회귀 검증 완료 (backend 92 passed). 실제 모델 개선 효과는 미검증이다.
+- 후속 계획: `docs/work/2026-10-05-answer-limitation-contract-plan.md`.
+
 ### Step 12. 제한된 Multi-step Agent
 
 관측과 평가 기반이 생긴 뒤 시작한다.

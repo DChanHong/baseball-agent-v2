@@ -10,7 +10,10 @@ from uuid import uuid4
 from langgraph.graph import END, START, StateGraph
 from pydantic import BaseModel
 
-from app.agent.answer_generation_service import AnswerGenerationService
+from app.agent.answer_generation_service import (
+    AnswerContractError,
+    AnswerGenerationService,
+)
 from app.agent.answering import (
     build_assistant_content,
     build_selected_game_follow_up_answer,
@@ -351,7 +354,11 @@ class BaseballAgentGraph:
                     answer_source = "llm"
                 except Exception as exc:
                     answer_source = "fallback"
-                    fallback_reason = type(exc).__name__
+                    fallback_reason = (
+                        exc.code
+                        if isinstance(exc, AnswerContractError)
+                        else type(exc).__name__
+                    )
                     logger.exception(
                         "grounded answer generation failed; using deterministic fallback"
                     )

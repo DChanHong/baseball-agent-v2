@@ -10,6 +10,7 @@ from uuid import uuid4
 
 import pytest
 from app.agent.answer_generation_service import AnswerGenerationService
+from app.agent.answer_schemas import GroundedAnswerDraft
 from app.agent.graph import BaseballAgentGraph
 from app.agent.routing_schemas import ToolRoutingDecision
 from app.agent.state import AgentConversationContext, BaseballAgentInput
@@ -104,11 +105,19 @@ class AnswerChain:
         if self.mode == "timeout":
             await asyncio.sleep(60)
         refs = [] if self.mode == "empty" else ["E1"]
+        if self.mode == "bad_ref":
+            refs = ["E99"]
+        if self.mode == "chain_schema":
+            return GroundedAnswerDraft.model_validate({"answer": SECRET})
+        if self.mode == "bad_schema":
+            return {"answer": SECRET}
         return {
             "answerability": "insufficient_source" if not refs else "fully_answerable",
             "answer": SECRET,
             "used_evidence_refs": refs,
-            "acknowledged_limitations": [],
+            "acknowledged_limitations": [SECRET]
+            if self.mode == "bad_limitation"
+            else [],
         }
 
 
@@ -158,6 +167,10 @@ def records(caplog: Any) -> list[dict[str, Any]]:
         ("timeout", "fallback", "TimeoutError"),
         ("tool_failure", "fallback", "tool_execution_failed"),
         ("direct", "template", None),
+        ("bad_limitation", "fallback", "unknown_limitation_codes"),
+        ("bad_ref", "fallback", "unknown_evidence_refs"),
+        ("bad_schema", "fallback", "answer_schema_invalid"),
+        ("chain_schema", "fallback", "answer_schema_invalid"),
     ],
 )
 async def test_turn_trace_connects_stages_and_distinguishes_fallback(
@@ -185,6 +198,13 @@ async def test_turn_trace_connects_stages_and_distinguishes_fallback(
             next(r for r in logs if r["event"] == "answer_llm.failed")["error_type"]
             == "TimeoutError"
         )
+    if mode == "chain_schema":
+        assert "answer_llm.failed" in names
+        assert "answer_validation.started" not in names
+    if mode.startswith("bad_"):
+        validation = next(r for r in logs if r["event"] == "answer_validation.failed")
+        assert validation["error_code"] == reason
+        assert output.answer_generation is None
     if mode == "direct":
         assert "tool.started" not in names
     elif mode == "tool_failure":

@@ -4,12 +4,12 @@ import asyncio
 import logging
 from functools import lru_cache
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from langchain_core.messages import SystemMessage
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
-from pydantic import SecretStr
+from pydantic import SecretStr, ValidationError
 
 from app.agent.answer_schemas import (
     AnswerEvidence,
@@ -26,6 +26,19 @@ ANSWER_GENERATION_POLICY_PATH = (
 )
 _MAX_RAG_EVIDENCE_ITEMS = 3
 _MAX_EVIDENCE_CONTENT_CHARS = 6000
+
+
+AnswerValidationCode = Literal[
+    "answer_schema_invalid", "unknown_evidence_refs", "unknown_limitation_codes"
+]
+
+
+class AnswerContractError(ValueError):
+    """Stable validation reason without copying model-generated values into logs."""
+
+    def __init__(self, code: AnswerValidationCode, message: str) -> None:
+        super().__init__(message)
+        self.code = code
 
 
 class AnswerGenerationService:
@@ -79,29 +92,24 @@ class AnswerGenerationService:
                     response = await self._chain.ainvoke(
                         {"request": request.model_dump_json()}
                     )
+        except ValidationError:
+            raise AnswerContractError(
+                "answer_schema_invalid", "answer schema invalid"
+            ) from None
         except Exception:
             logger.exception("answer generation failed model=%s", self._model)
             raise
 
-        draft = (
-            response
-            if isinstance(response, GroundedAnswerDraft)
-            else GroundedAnswerDraft.model_validate(response)
-        )
-        allowed_refs = {item.ref for item in request.evidence}
-        unknown_refs = set(draft.used_evidence_refs) - allowed_refs
-        if unknown_refs:
-            raise ValueError(
-                f"answer referenced unknown evidence: {sorted(unknown_refs)}"
-            )
-
-        allowed_limitations = _allowed_limitations(request)
-        unknown_limitations = set(draft.acknowledged_limitations) - allowed_limitations
-        if unknown_limitations:
-            raise ValueError(
-                "answer acknowledged unknown limitations: "
-                f"{sorted(unknown_limitations)}"
-            )
+        with trace_stage(
+            "answer_validation",
+            evidence_count=len(request.evidence),
+            allowed_limitation_count=len(request.allowed_limitations),
+        ) as details:
+            try:
+                draft = _validate_answer_response(response, request)
+            except AnswerContractError as exc:
+                details["error_code"] = exc.code
+                raise
 
         logger.info(
             "answer generation completed model=%s answerability=%s evidence_refs=%s",
@@ -110,6 +118,32 @@ class AnswerGenerationService:
             draft.used_evidence_refs,
         )
         return draft
+
+
+def _validate_answer_response(
+    response: Any,
+    request: GroundedAnswerRequest,
+) -> GroundedAnswerDraft:
+    try:
+        draft = (
+            response
+            if isinstance(response, GroundedAnswerDraft)
+            else GroundedAnswerDraft.model_validate(response)
+        )
+    except ValidationError:
+        raise AnswerContractError(
+            "answer_schema_invalid", "answer schema invalid"
+        ) from None
+    allowed_refs = {item.ref for item in request.evidence}
+    if set(draft.used_evidence_refs) - allowed_refs:
+        raise AnswerContractError(
+            "unknown_evidence_refs", "answer referenced unknown evidence"
+        )
+    if set(draft.acknowledged_limitations) - set(request.allowed_limitations):
+        raise AnswerContractError(
+            "unknown_limitation_codes", "answer acknowledged unknown limitations"
+        )
+    return draft
 
 
 def build_grounded_answer_request(
@@ -125,12 +159,15 @@ def build_grounded_answer_request(
     if not isinstance(tool_name, str) or not isinstance(result, dict):
         raise TypeError("answer generation requires a valid tool result")
 
-    return GroundedAnswerRequest(
+    request = GroundedAnswerRequest(
         user_message=message,
         tool_name=tool_name,
         evidence=_build_evidence(result),
         limitations=list(dict.fromkeys(tool_limitations)),
+        allowed_limitations=[],
     )
+    request.allowed_limitations = sorted(_allowed_limitations(request))
+    return request
 
 
 def _build_evidence(result: dict[str, Any]) -> list[AnswerEvidence]:
