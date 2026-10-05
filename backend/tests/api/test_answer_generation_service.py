@@ -4,6 +4,7 @@ import asyncio
 import json
 
 import pytest
+
 from app.agent.answer_generation_service import (
     AnswerContractError,
     AnswerGenerationService,
@@ -239,7 +240,10 @@ async def test_allowed_codes_match_complete_list_sent_to_model(
         "source_policy",
         "tool_policy",
     ]
-    assert draft.acknowledged_limitations == codes
+    # The server records the review notice it adds independently of model selection.
+    assert draft.acknowledged_limitations == list(
+        dict.fromkeys([*codes, "needs_review"])
+    )
     assert len(chain.inputs) == 1
 
 
@@ -291,3 +295,418 @@ def test_discarded_evidence_cannot_expand_allowed_codes() -> None:
         },
     )
     assert request.allowed_limitations == []
+
+
+@pytest.mark.parametrize(
+    "answer_model,override,expected",
+    [
+        (None, None, "routing-model"),
+        ("answer-model", None, "answer-model"),
+        ("", None, "routing-model"),
+        ("answer-model", "explicit-model", "explicit-model"),
+    ],
+)
+def test_answer_model_setting_is_independent_and_backward_compatible(
+    monkeypatch,
+    answer_model,
+    override,
+    expected,
+) -> None:
+    from types import SimpleNamespace
+
+    import app.agent.answer_generation_service as module
+
+    settings = SimpleNamespace(
+        openai_model="routing-model",
+        openai_answer_model=answer_model,
+        openai_answer_reasoning_effort=None,
+        openai_answer_timeout_seconds=15.0,
+        openai_timeout_seconds=30.0,
+        openai_api_key="synthetic-key",
+    )
+    models = []
+    monkeypatch.setattr(module, "get_settings", lambda: settings)
+    monkeypatch.setattr(
+        module,
+        "_build_answer_generation_chain",
+        lambda **kwargs: models.append(kwargs["model"]) or object(),
+    )
+    module.AnswerGenerationService(model=override)
+    assert models == [expected]
+    assert settings.openai_model == "routing-model"
+
+
+def test_metadata_compaction_preserves_facts_and_source_contract() -> None:
+    metadata = {
+        "language": "ko",
+        "audience": "beginner",
+        "topic_id": "balk",
+        "knowledge_type": "common_play",
+        "search_keywords": ["보크"],
+        "example_questions": ["보크가 뭐야?"],
+        "topic_summary": "투수의 반칙행위",
+        "limitations": ["source_partial"],
+        "source_pages": [{"pages": [57]}],
+        "is_latest": True,
+        "season_years": [2026],
+        "ticket_urls": ["https://example.com/ticket"],
+        "nearest_subway_stations": ["사직역"],
+        "future_domain_fact": "preserve",
+    }
+    item = {
+        "chunk_id": "balk_1",
+        "content": "보크 선언 시 주자에게 진루권 부여",
+        "metadata": metadata,
+        "source_urls": ["https://example.com/rules"],
+        "as_of": "2026-07-31",
+        "review_status": "needs_review",
+    }
+    request = build_grounded_answer_request(
+        message="보크가 뭐야?",
+        tool_payload={
+            "name": "search_baseball_knowledge",
+            "status": "completed",
+            "result": {"items": [item]},
+        },
+        tool_limitations=[],
+    )
+    payload = request.evidence[0].payload
+    assert payload["content"] == item["content"]
+    assert payload["source_urls"] == item["source_urls"]
+    assert payload["as_of"] == item["as_of"]
+    assert payload["metadata"] == {
+        key: value
+        for key, value in metadata.items()
+        if key
+        not in {
+            "language",
+            "audience",
+            "topic_id",
+            "knowledge_type",
+            "search_keywords",
+            "example_questions",
+        }
+    }
+    assert request.allowed_limitations == ["needs_review", "source_partial"]
+    assert item["metadata"] == metadata
+
+
+def test_metadata_compaction_preserves_bounded_body_and_all_evidence_refs() -> None:
+    request = build_grounded_answer_request(
+        message="규칙 알려줘",
+        tool_payload={
+            "name": "search_baseball_knowledge",
+            "status": "completed",
+            "result": {
+                "items": [
+                    {"content": "가" * 6001, "metadata": {"limitations": ["partial"]}}
+                    for _ in range(3)
+                ]
+            },
+        },
+        tool_limitations=[],
+    )
+    assert [e.ref for e in request.evidence] == ["E1", "E2", "E3"]
+    assert all(e.payload["content"] == "가" * 6000 for e in request.evidence)
+    assert all(e.payload["content_truncated"] for e in request.evidence)
+    assert request.allowed_limitations == ["content_truncated", "partial"]
+
+
+@pytest.mark.asyncio
+async def test_raw_structured_response_records_only_token_counters(caplog) -> None:
+    import logging
+    from types import SimpleNamespace
+
+    from app.core.agent_trace import trace_scope
+
+    chain = FakeAnswerChain(
+        {
+            "parsed": {
+                "answerability": "insufficient_source",
+                "answer": "확인할 수 없습니다.",
+                "used_evidence_refs": [],
+                "acknowledged_limitations": [],
+            },
+            "raw": SimpleNamespace(
+                content="synthetic-private-answer",
+                usage_metadata={
+                    "input_tokens": 50,
+                    "output_tokens": 30,
+                    "total_tokens": 80,
+                    "output_token_details": {
+                        "reasoning": 20,
+                        "private": "synthetic-private-answer",
+                    },
+                    "input_token_details": {"cache_read": 10},
+                    "secret": "synthetic-private-answer",
+                },
+            ),
+            "parsing_error": None,
+        }
+    )
+    with caplog.at_level(logging.INFO), trace_scope("usage-test"):
+        draft = await AnswerGenerationService(
+            chain=chain, model="test", reasoning_effort="low"
+        ).execute(
+            message="확인해줘",
+            tool_payload={
+                "name": "search_stadium_guide",
+                "status": "completed",
+                "result": {"items": [], "answerable": False},
+            },
+            tool_limitations=[],
+        )
+    assert draft.answerability == "insufficient_source"
+    events = [
+        json.loads(record.message.split("agent_trace ", 1)[1])
+        for record in caplog.records
+        if "agent_trace " in record.message
+    ]
+    completed = next(e for e in events if e["event"] == "answer_llm.completed")
+    assert completed["input_tokens"] == 50
+    assert completed["reasoning_tokens"] == 20
+    assert completed["cached_input_tokens"] == 10
+    assert completed["reasoning_effort"] == "low"
+    assert "synthetic-private-answer" not in json.dumps(events)
+
+
+@pytest.mark.asyncio
+async def test_raw_structured_parse_failure_keeps_validation_contract() -> None:
+    chain = FakeAnswerChain(
+        {
+            "raw": object(),
+            "parsed": None,
+            "parsing_error": ValueError("synthetic-private-output"),
+        }
+    )
+    with pytest.raises(AnswerContractError) as exc:
+        await AnswerGenerationService(chain=chain, model="test").execute(
+            message="확인해줘",
+            tool_payload={
+                "name": "search_stadium_guide",
+                "status": "completed",
+                "result": {"items": []},
+            },
+            tool_limitations=[],
+        )
+    assert exc.value.code == "answer_schema_invalid"
+    assert "synthetic-private-output" not in str(exc.value)
+
+
+def test_usage_details_ignore_missing_or_untrusted_counter_values() -> None:
+    from types import SimpleNamespace
+
+    from app.agent.answer_generation_service import _answer_usage_details
+
+    assert _answer_usage_details({}) == {}
+    assert _answer_usage_details({"raw": object()}) == {}
+    assert _answer_usage_details(
+        {
+            "raw": SimpleNamespace(
+                usage_metadata={
+                    "input_tokens": True,
+                    "output_tokens": -1,
+                    "total_tokens": "secret",
+                    "output_token_details": {"reasoning": 9},
+                }
+            )
+        }
+    ) == {"reasoning_tokens": 9}
+
+
+@pytest.mark.parametrize(
+    "used_refs,review_status,expected_notice",
+    [
+        (["E1"], "needs_review", True),
+        ([], "needs_review", False),
+        (["E1"], "approved", False),
+    ],
+)
+def test_source_notice_uses_only_referenced_review_required_evidence(
+    used_refs, review_status, expected_notice
+) -> None:
+    from app.agent.answer_generation_service import _finalize_source_notice
+
+    request = build_grounded_answer_request(
+        message="병살이 뭐야?",
+        tool_payload={
+            "name": "search_baseball_knowledge",
+            "status": "completed",
+            "result": {
+                "items": [
+                    {
+                        "content": "연속 플레이의 두 아웃",
+                        "as_of": "2026-07-31",
+                        "review_status": review_status,
+                    }
+                ]
+            },
+        },
+        tool_limitations=[],
+    )
+    draft = GroundedAnswerDraft(
+        answerability="insufficient_source",
+        answer="확인된 내용을 안내합니다.",
+        used_evidence_refs=used_refs,
+        acknowledged_limitations=[],
+    )
+    result, added = _finalize_source_notice(draft, request)
+    assert added is expected_notice
+    if expected_notice:
+        assert "2026-07-31" in result.answer
+        assert "추가 검수" in result.answer
+        assert "공식 출처" in result.answer
+        assert result.acknowledged_limitations == ["needs_review"]
+        assert draft.acknowledged_limitations == []
+    else:
+        assert result == draft
+
+
+def test_source_notice_revalidates_answer_length_and_rejects_untrusted_date() -> None:
+    from app.agent.answer_generation_service import _finalize_source_notice
+
+    request = build_grounded_answer_request(
+        message="확인해줘",
+        tool_payload={
+            "name": "search_stadium_guide",
+            "status": "completed",
+            "result": {
+                "items": [
+                    {
+                        "content": "안내",
+                        "as_of": "synthetic-secret-date",
+                        "review_status": "needs_review",
+                    }
+                ]
+            },
+        },
+        tool_limitations=[],
+    )
+    draft = GroundedAnswerDraft(
+        answerability="fully_answerable",
+        answer="안내합니다.",
+        used_evidence_refs=["E1"],
+        acknowledged_limitations=[],
+    )
+    result, _ = _finalize_source_notice(draft, request)
+    assert "synthetic-secret-date" not in result.answer
+    assert "추가 검수" in result.answer
+    draft.answer = "가" * 2400
+    with pytest.raises(AnswerContractError) as exc:
+        _finalize_source_notice(draft, request)
+    assert exc.value.code == "answer_schema_invalid"
+
+
+@pytest.mark.parametrize(
+    "model,override,expected",
+    [
+        ("gpt-5-mini", None, "low"),
+        ("gpt-5-mini", "medium", "medium"),
+        ("gpt-4.1-mini", None, None),
+    ],
+)
+def test_reasoning_setting_is_answer_only_and_model_compatible(
+    monkeypatch, model, override, expected
+) -> None:
+    from types import SimpleNamespace
+
+    import app.agent.answer_generation_service as module
+
+    settings = SimpleNamespace(
+        openai_model="gpt-5-mini",
+        openai_answer_model=None,
+        openai_answer_reasoning_effort="low",
+        openai_answer_timeout_seconds=15,
+        openai_timeout_seconds=30,
+        openai_api_key="synthetic-key",
+    )
+    captured = []
+    monkeypatch.setattr(module, "get_settings", lambda: settings)
+    monkeypatch.setattr(
+        module,
+        "_build_answer_generation_chain",
+        lambda **kwargs: captured.append(kwargs) or object(),
+    )
+    module.AnswerGenerationService(model=model, reasoning_effort=override)
+    assert captured[0]["reasoning_effort"] == expected
+    assert settings.openai_model == "gpt-5-mini"
+
+
+def test_answer_chain_requests_raw_usage_and_keeps_strict_schema(monkeypatch) -> None:
+    from langchain_core.runnables import RunnableLambda
+
+    import app.agent.answer_generation_service as module
+
+    captured = {}
+
+    class ChatModel:
+        def __init__(self, **kwargs):
+            captured.update(kwargs)
+
+        def with_structured_output(self, schema, **kwargs):
+            captured.update(kwargs)
+            captured["schema"] = schema
+            return RunnableLambda(lambda _: {})
+
+    monkeypatch.setattr(module, "ChatOpenAI", ChatModel)
+    module._build_answer_generation_chain(
+        model="gpt-5-mini", api_key="synthetic-key", timeout=30, reasoning_effort="low"
+    )
+    assert captured["reasoning_effort"] == "low"
+    assert captured["include_raw"] is True
+    assert captured["strict"] is True
+    assert captured["schema"] is GroundedAnswerDraft
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "tool,expected",
+    [
+        ("search_baseball_knowledge", "medium"),
+        ("find_kbo_game", "medium"),
+        ("search_ticketing_guide", "low"),
+        ("search_stadium_guide", "low"),
+    ],
+)
+async def test_default_policy_keeps_reasoning_for_rules_and_other_tools(
+    monkeypatch, tool, expected
+) -> None:
+    from types import SimpleNamespace
+
+    import app.agent.answer_generation_service as module
+
+    settings = SimpleNamespace(
+        openai_model="gpt-5-mini",
+        openai_answer_model=None,
+        openai_answer_reasoning_effort="low",
+        openai_answer_timeout_seconds=15,
+        openai_timeout_seconds=30,
+        openai_api_key="synthetic-key",
+    )
+    calls = []
+
+    class Chain:
+        def __init__(self, effort):
+            self.effort = effort
+
+        async def ainvoke(self, _):
+            calls.append(self.effort)
+            return {
+                "answerability": "insufficient_source",
+                "answer": "자료가 부족합니다.",
+                "used_evidence_refs": [],
+                "acknowledged_limitations": [],
+            }
+
+    monkeypatch.setattr(module, "get_settings", lambda: settings)
+    monkeypatch.setattr(
+        module,
+        "_build_answer_generation_chain",
+        lambda **kwargs: Chain(kwargs["reasoning_effort"]),
+    )
+    await module.AnswerGenerationService().execute(
+        message="확인해줘",
+        tool_payload={"name": tool, "status": "completed", "result": {"items": []}},
+        tool_limitations=[],
+    )
+    assert calls == [expected]

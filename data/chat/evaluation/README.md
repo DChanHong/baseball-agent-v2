@@ -18,6 +18,7 @@ Manual QA Run
 candidates/  실패·애매 사례의 검토 대기열
 cases/       기대 동작이 확정된 재사용 평가셋
 runs/manual/ 브라우저 기반 수동 QA 실행 결과
+runs/answer-model/ 고정 공개 근거를 사용하는 답변 모델 비교 milestone
 schemas/     각 데이터 파일의 JSON Schema
 ```
 
@@ -70,6 +71,13 @@ API key와 환경변수 값
 ```
 
 초기 QA는 합성 질문만 사용한다. 실제 사용에서 발견한 문제를 옮길 때는 의미를 유지한 `sanitized_input`으로 재작성한다. Assistant 응답 전문은 기본적으로 저장하지 않고 `observed_behavior`로 요약한다.
+
+답변 모델 비교의 `cases/answer_model_comparison_cases.json`은 공개 RAG 결과를
+고정한 별도 fixture다. 기존 chat case schema 및 chat validator 대상과 구분한다.
+`backend/scripts/compare_answer_models.py`가 입력을 기존 답변 request 계약으로
+구성하고, 생성 답변은 실제 서비스의 schema·ref·limitation 검증을 거친다.
+`runs/answer-model/`에는 시간·계약 검증 결과·검토 주체가 명시된 품질 점검 요약을 보관한다.
+검토용 합성 답변 전문은 `/private/tmp`에만 만들고 Git에 넣지 않는다.
 
 ## 검증
 

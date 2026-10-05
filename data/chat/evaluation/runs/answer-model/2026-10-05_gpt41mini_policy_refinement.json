@@ -1,0 +1,435 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-10-05T07:20:35.642468+00:00",
+  "scope": "answer_only_fixed_evidence",
+  "dataset": "data/chat/evaluation/cases/answer_model_comparison_cases.json",
+  "dataset_sha256": "022faa2323455f48752cbb3b053fe72df28653c451687215bc67430c740432f0",
+  "prompt_sha256": "f24a3530a19bd9d3484dfe312a51c07c23dfce152c7c8b08f75936405c0d074b",
+  "timeout_seconds": 15.0,
+  "repeats": 3,
+  "summary": {
+    "gpt-4.1-mini": {
+      "count": 15,
+      "validated": 15,
+      "median_ms": 1353.675,
+      "min_ms": 929.692,
+      "max_ms": 1871.326,
+      "timeouts": 0,
+      "manual_quality_review": "completed"
+    }
+  },
+  "results": [
+    {
+      "case_id": "double_play",
+      "model": "gpt-4.1-mini",
+      "repetition": 1,
+      "input_sha256": "77a9d733fd27cdb707739ac4a5511744bd31ab5bfbf06b9251a2791266beaec3",
+      "input_chars": 2156,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "needs_review"
+      ],
+      "answer_chars": 81,
+      "duration_ms": 1306.748
+    },
+    {
+      "case_id": "balk",
+      "model": "gpt-4.1-mini",
+      "repetition": 1,
+      "input_sha256": "aee1f1a940323c9a065ed67a02280f44d662151c3bb42b90fd1f2ce2ecfb28a3",
+      "input_chars": 16581,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "PDF 원문 page slice 기반 초기 chunk이며, 초보자용 curated 설명문은 후속 단계에서 보강한다.",
+        "content_truncated",
+        "needs_review"
+      ],
+      "answer_chars": 208,
+      "duration_ms": 1709.412
+    },
+    {
+      "case_id": "sajik_ticket",
+      "model": "gpt-4.1-mini",
+      "repetition": 1,
+      "input_sha256": "76b6302087d8a462c8efdbd2ff74fe4d1a7e57e487f8bfd9c79fbf73a8e997a8",
+      "input_chars": 1550,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "needs_review",
+        "official_ticketing_source_should_be_checked"
+      ],
+      "answer_chars": 274,
+      "duration_ms": 1626.225
+    },
+    {
+      "case_id": "sajik_parking",
+      "model": "gpt-4.1-mini",
+      "repetition": 1,
+      "input_sha256": "eec9b826e71699bf0e0d9b5ba2596481e932d57b5f22ff4f6ad9bf97b2851eb6",
+      "input_chars": 1674,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "needs_review",
+        "공식 페이지의 주차장 수용 규모와 실시간 주차 가능 대수는 확인되지 않았다."
+      ],
+      "answer_chars": 252,
+      "duration_ms": 1609.236
+    },
+    {
+      "case_id": "no_source",
+      "model": "gpt-4.1-mini",
+      "repetition": 1,
+      "input_sha256": "26e73f01cc197e950ebfc68da1a6ce250293bb29145890e4825c0526301f55f5",
+      "input_chars": 278,
+      "status": "validated",
+      "answerability": "insufficient_source",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "no_relevant_stadium_guide_found"
+      ],
+      "answer_chars": 50,
+      "duration_ms": 1053.178
+    },
+    {
+      "case_id": "double_play",
+      "model": "gpt-4.1-mini",
+      "repetition": 2,
+      "input_sha256": "77a9d733fd27cdb707739ac4a5511744bd31ab5bfbf06b9251a2791266beaec3",
+      "input_chars": 2156,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "PDF 원문 page slice 기반 초기 chunk이며, 초보자용 curated 설명문은 후속 단계에서 보강한다.",
+        "needs_review"
+      ],
+      "answer_chars": 76,
+      "duration_ms": 1148.985
+    },
+    {
+      "case_id": "balk",
+      "model": "gpt-4.1-mini",
+      "repetition": 2,
+      "input_sha256": "aee1f1a940323c9a065ed67a02280f44d662151c3bb42b90fd1f2ce2ecfb28a3",
+      "input_chars": 16581,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "PDF 원문 page slice 기반 초기 chunk이며, 초보자용 curated 설명문은 후속 단계에서 보강한다.",
+        "content_truncated",
+        "needs_review"
+      ],
+      "answer_chars": 190,
+      "duration_ms": 1654.758
+    },
+    {
+      "case_id": "sajik_ticket",
+      "model": "gpt-4.1-mini",
+      "repetition": 2,
+      "input_sha256": "76b6302087d8a462c8efdbd2ff74fe4d1a7e57e487f8bfd9c79fbf73a8e997a8",
+      "input_chars": 1550,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "needs_review",
+        "official_ticketing_source_should_be_checked"
+      ],
+      "answer_chars": 255,
+      "duration_ms": 1438.194
+    },
+    {
+      "case_id": "sajik_parking",
+      "model": "gpt-4.1-mini",
+      "repetition": 2,
+      "input_sha256": "eec9b826e71699bf0e0d9b5ba2596481e932d57b5f22ff4f6ad9bf97b2851eb6",
+      "input_chars": 1674,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "needs_review",
+        "공식 페이지의 주차장 수용 규모와 실시간 주차 가능 대수는 확인되지 않았다."
+      ],
+      "answer_chars": 192,
+      "duration_ms": 1535.318
+    },
+    {
+      "case_id": "no_source",
+      "model": "gpt-4.1-mini",
+      "repetition": 2,
+      "input_sha256": "26e73f01cc197e950ebfc68da1a6ce250293bb29145890e4825c0526301f55f5",
+      "input_chars": 278,
+      "status": "validated",
+      "answerability": "insufficient_source",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "no_relevant_stadium_guide_found"
+      ],
+      "answer_chars": 56,
+      "duration_ms": 929.692
+    },
+    {
+      "case_id": "double_play",
+      "model": "gpt-4.1-mini",
+      "repetition": 3,
+      "input_sha256": "77a9d733fd27cdb707739ac4a5511744bd31ab5bfbf06b9251a2791266beaec3",
+      "input_chars": 2156,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "needs_review"
+      ],
+      "answer_chars": 94,
+      "duration_ms": 1144.185
+    },
+    {
+      "case_id": "balk",
+      "model": "gpt-4.1-mini",
+      "repetition": 3,
+      "input_sha256": "aee1f1a940323c9a065ed67a02280f44d662151c3bb42b90fd1f2ce2ecfb28a3",
+      "input_chars": 16581,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "PDF 원문 page slice 기반 초기 chunk이며, 초보자용 curated 설명문은 후속 단계에서 보강한다.",
+        "needs_review"
+      ],
+      "answer_chars": 174,
+      "duration_ms": 1871.326
+    },
+    {
+      "case_id": "sajik_ticket",
+      "model": "gpt-4.1-mini",
+      "repetition": 3,
+      "input_sha256": "76b6302087d8a462c8efdbd2ff74fe4d1a7e57e487f8bfd9c79fbf73a8e997a8",
+      "input_chars": 1550,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "needs_review",
+        "official_ticketing_source_should_be_checked"
+      ],
+      "answer_chars": 219,
+      "duration_ms": 1353.675
+    },
+    {
+      "case_id": "sajik_parking",
+      "model": "gpt-4.1-mini",
+      "repetition": 3,
+      "input_sha256": "eec9b826e71699bf0e0d9b5ba2596481e932d57b5f22ff4f6ad9bf97b2851eb6",
+      "input_chars": 1674,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "needs_review",
+        "공식 페이지의 주차장 수용 규모와 실시간 주차 가능 대수는 확인되지 않았다."
+      ],
+      "answer_chars": 136,
+      "duration_ms": 1255.872
+    },
+    {
+      "case_id": "no_source",
+      "model": "gpt-4.1-mini",
+      "repetition": 3,
+      "input_sha256": "26e73f01cc197e950ebfc68da1a6ce250293bb29145890e4825c0526301f55f5",
+      "input_chars": 278,
+      "status": "validated",
+      "answerability": "insufficient_source",
+      "used_evidence_refs": [],
+      "acknowledged_limitations": [
+        "no_relevant_stadium_guide_found"
+      ],
+      "answer_chars": 74,
+      "duration_ms": 1041.914
+    }
+  ],
+  "manual_review": {
+    "method": "Assistant qualitative inspection of generated synthetic answers against supplied evidence and answer policy; no independent human signoff and no full answer stored. Labels are not automated factual guarantees.",
+    "results": [
+      {
+        "case_id": "double_play",
+        "model": "gpt-4.1-mini",
+        "repetition": 1,
+        "outcome": "needs_improvement",
+        "labels": [
+          "needs_review_notice_incomplete",
+          "definition_overgeneralized"
+        ]
+      },
+      {
+        "case_id": "balk",
+        "model": "gpt-4.1-mini",
+        "repetition": 1,
+        "outcome": "needs_improvement",
+        "labels": [
+          "needs_review_notice_incomplete",
+          "rule_example_overgeneralized"
+        ]
+      },
+      {
+        "case_id": "sajik_ticket",
+        "model": "gpt-4.1-mini",
+        "repetition": 1,
+        "outcome": "needs_improvement",
+        "labels": [
+          "needs_review_notice_incomplete"
+        ]
+      },
+      {
+        "case_id": "sajik_parking",
+        "model": "gpt-4.1-mini",
+        "repetition": 1,
+        "outcome": "needs_improvement",
+        "labels": [
+          "needs_review_notice_incomplete",
+          "answerability_overstated"
+        ]
+      },
+      {
+        "case_id": "no_source",
+        "model": "gpt-4.1-mini",
+        "repetition": 1,
+        "outcome": "passed",
+        "labels": []
+      },
+      {
+        "case_id": "double_play",
+        "model": "gpt-4.1-mini",
+        "repetition": 2,
+        "outcome": "needs_improvement",
+        "labels": [
+          "needs_review_notice_incomplete",
+          "definition_overgeneralized"
+        ]
+      },
+      {
+        "case_id": "balk",
+        "model": "gpt-4.1-mini",
+        "repetition": 2,
+        "outcome": "needs_improvement",
+        "labels": [
+          "needs_review_notice_incomplete",
+          "rule_example_overgeneralized"
+        ]
+      },
+      {
+        "case_id": "sajik_ticket",
+        "model": "gpt-4.1-mini",
+        "repetition": 2,
+        "outcome": "needs_improvement",
+        "labels": [
+          "needs_review_notice_incomplete"
+        ]
+      },
+      {
+        "case_id": "sajik_parking",
+        "model": "gpt-4.1-mini",
+        "repetition": 2,
+        "outcome": "needs_improvement",
+        "labels": [
+          "needs_review_notice_incomplete",
+          "answerability_overstated"
+        ]
+      },
+      {
+        "case_id": "no_source",
+        "model": "gpt-4.1-mini",
+        "repetition": 2,
+        "outcome": "passed",
+        "labels": []
+      },
+      {
+        "case_id": "double_play",
+        "model": "gpt-4.1-mini",
+        "repetition": 3,
+        "outcome": "needs_improvement",
+        "labels": [
+          "needs_review_notice_incomplete",
+          "definition_overgeneralized"
+        ]
+      },
+      {
+        "case_id": "balk",
+        "model": "gpt-4.1-mini",
+        "repetition": 3,
+        "outcome": "needs_improvement",
+        "labels": [
+          "needs_review_notice_incomplete",
+          "rule_example_overgeneralized"
+        ]
+      },
+      {
+        "case_id": "sajik_ticket",
+        "model": "gpt-4.1-mini",
+        "repetition": 3,
+        "outcome": "needs_improvement",
+        "labels": [
+          "needs_review_notice_incomplete"
+        ]
+      },
+      {
+        "case_id": "sajik_parking",
+        "model": "gpt-4.1-mini",
+        "repetition": 3,
+        "outcome": "needs_improvement",
+        "labels": [
+          "needs_review_notice_incomplete",
+          "answerability_overstated"
+        ]
+      },
+      {
+        "case_id": "no_source",
+        "model": "gpt-4.1-mini",
+        "repetition": 3,
+        "outcome": "passed",
+        "labels": []
+      }
+    ]
+  },
+  "decision": {
+    "answer_model_switch": "rejected",
+    "reason": "Candidate is faster but definitions/examples and needs_review notices remain unreliable; retain current configured model."
+  }
+}

@@ -1,0 +1,1100 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-10-05T08:05:48.756960+00:00",
+  "scope": "answer_only_fixed_evidence",
+  "dataset": "data/chat/evaluation/cases/answer_model_comparison_cases.json",
+  "dataset_sha256": "022faa2323455f48752cbb3b053fe72df28653c451687215bc67430c740432f0",
+  "prompt_sha256": "6a20a9fe51b42298c91f6d77b5da96dee1352654c6c204a44502c3ed2814d9a1",
+  "timeout_seconds": 15.0,
+  "repeats": 3,
+  "summary": {
+    "gpt-5-mini:medium": {
+      "count": 15,
+      "validated": 13,
+      "median_ms": 11341.461,
+      "min_ms": 6851.201,
+      "max_ms": 15006.714,
+      "timeouts": 2,
+      "manual_quality_review": "candidate_reviewed_rules_rejected",
+      "median_reasoning_tokens": 960
+    },
+    "gpt-5-mini:low": {
+      "count": 15,
+      "validated": 15,
+      "median_ms": 4209.793,
+      "min_ms": 2704.236,
+      "max_ms": 6080.391,
+      "timeouts": 0,
+      "manual_quality_review": "candidate_reviewed_rules_rejected",
+      "median_reasoning_tokens": 256
+    }
+  },
+  "results": [
+    {
+      "case_id": "double_play",
+      "model": "gpt-5-mini:medium",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "medium",
+      "repetition": 1,
+      "input_sha256": "2c3df55d03e195cb10973ee4cea950b0fc392525e3554d1e383c82ed6bce90df",
+      "input_chars": 1953,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "PDF 원문 page slice 기반 초기 chunk이며, 초보자용 curated 설명문은 후속 단계에서 보강한다.",
+        "needs_review"
+      ],
+      "answer_chars": 172,
+      "duration_ms": 11341.461,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 1907,
+        "output_tokens": 1282,
+        "total_tokens": 3189,
+        "reasoning_tokens": 1152,
+        "cached_input_tokens": 0
+      }
+    },
+    {
+      "case_id": "double_play",
+      "model": "gpt-5-mini:low",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "low",
+      "repetition": 1,
+      "input_sha256": "2c3df55d03e195cb10973ee4cea950b0fc392525e3554d1e383c82ed6bce90df",
+      "input_chars": 1953,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "PDF 원문 page slice 기반 초기 chunk이며, 초보자용 curated 설명문은 후속 단계에서 보강한다.",
+        "needs_review"
+      ],
+      "answer_chars": 180,
+      "duration_ms": 3223.759,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 1907,
+        "output_tokens": 334,
+        "total_tokens": 2241,
+        "reasoning_tokens": 192,
+        "cached_input_tokens": 0
+      }
+    },
+    {
+      "case_id": "balk",
+      "model": "gpt-5-mini:medium",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "medium",
+      "repetition": 1,
+      "input_sha256": "85aeae8117cd7422785cc0619cd88280317eef542cc2575f0c81520a3adf8be3",
+      "input_chars": 15932,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "PDF 원문 page slice 기반 초기 chunk이며, 초보자용 curated 설명문은 후속 단계에서 보강한다.",
+        "content_truncated",
+        "needs_review"
+      ],
+      "answer_chars": 273,
+      "duration_ms": 7722.406,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 10304,
+        "output_tokens": 969,
+        "total_tokens": 11273,
+        "reasoning_tokens": 768,
+        "cached_input_tokens": 0
+      }
+    },
+    {
+      "case_id": "balk",
+      "model": "gpt-5-mini:low",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "low",
+      "repetition": 1,
+      "input_sha256": "85aeae8117cd7422785cc0619cd88280317eef542cc2575f0c81520a3adf8be3",
+      "input_chars": 15932,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "PDF 원문 page slice 기반 초기 chunk이며, 초보자용 curated 설명문은 후속 단계에서 보강한다.",
+        "content_truncated",
+        "needs_review"
+      ],
+      "answer_chars": 235,
+      "duration_ms": 4209.793,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 10304,
+        "output_tokens": 441,
+        "total_tokens": 10745,
+        "reasoning_tokens": 256,
+        "cached_input_tokens": 0
+      }
+    },
+    {
+      "case_id": "sajik_ticket",
+      "model": "gpt-5-mini:medium",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "medium",
+      "repetition": 1,
+      "input_sha256": "ec6dee800d788055f85b3631708b199a024989a1293b10cd44c016ef0328fa17",
+      "input_chars": 1534,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "needs_review",
+        "official_ticketing_source_should_be_checked",
+        "ticket_inventory_not_supported",
+        "ticketing_policy_may_be_outdated"
+      ],
+      "answer_chars": 288,
+      "duration_ms": 8694.82,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 1549,
+        "output_tokens": 1152,
+        "total_tokens": 2701,
+        "reasoning_tokens": 960,
+        "cached_input_tokens": 0
+      }
+    },
+    {
+      "case_id": "sajik_ticket",
+      "model": "gpt-5-mini:low",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "low",
+      "repetition": 1,
+      "input_sha256": "ec6dee800d788055f85b3631708b199a024989a1293b10cd44c016ef0328fa17",
+      "input_chars": 1534,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "needs_review",
+        "official_ticketing_source_should_be_checked",
+        "ticket_inventory_not_supported",
+        "ticketing_policy_may_be_outdated",
+        "당일 잔여석은 RAG가 아니라 실시간 예매처 확인 대상이다.",
+        "예매 오픈 시간과 취소/환불 조건은 원문 추가 파싱 후 구조화가 필요하다."
+      ],
+      "answer_chars": 253,
+      "duration_ms": 4490.576,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 1549,
+        "output_tokens": 537,
+        "total_tokens": 2086,
+        "reasoning_tokens": 320,
+        "cached_input_tokens": 0
+      }
+    },
+    {
+      "case_id": "sajik_parking",
+      "model": "gpt-5-mini:medium",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "medium",
+      "repetition": 1,
+      "input_sha256": "08831dce8c85b7ff9d7cda9a16b4c5061b3ad1e406c0d467d51ec0164ed09e7d",
+      "input_chars": 1432,
+      "status": "failed",
+      "failure_reason": "TimeoutError",
+      "duration_ms": 15006.714,
+      "token_usage": {}
+    },
+    {
+      "case_id": "sajik_parking",
+      "model": "gpt-5-mini:low",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "low",
+      "repetition": 1,
+      "input_sha256": "08831dce8c85b7ff9d7cda9a16b4c5061b3ad1e406c0d467d51ec0164ed09e7d",
+      "input_chars": 1432,
+      "status": "validated",
+      "answerability": "partially_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "needs_review",
+        "공식 페이지의 주차장 수용 규모와 실시간 주차 가능 대수는 확인되지 않았다."
+      ],
+      "answer_chars": 291,
+      "duration_ms": 5264.764,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 1659,
+        "output_tokens": 475,
+        "total_tokens": 2134,
+        "reasoning_tokens": 256,
+        "cached_input_tokens": 0
+      }
+    },
+    {
+      "case_id": "no_source",
+      "model": "gpt-5-mini:medium",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "medium",
+      "repetition": 1,
+      "input_sha256": "26e73f01cc197e950ebfc68da1a6ce250293bb29145890e4825c0526301f55f5",
+      "input_chars": 278,
+      "status": "validated",
+      "answerability": "insufficient_source",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "no_relevant_stadium_guide_found"
+      ],
+      "answer_chars": 153,
+      "duration_ms": 6851.201,
+      "source_notice_added": false,
+      "token_usage": {
+        "input_tokens": 1082,
+        "output_tokens": 770,
+        "total_tokens": 1852,
+        "reasoning_tokens": 640,
+        "cached_input_tokens": 0
+      }
+    },
+    {
+      "case_id": "no_source",
+      "model": "gpt-5-mini:low",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "low",
+      "repetition": 1,
+      "input_sha256": "26e73f01cc197e950ebfc68da1a6ce250293bb29145890e4825c0526301f55f5",
+      "input_chars": 278,
+      "status": "validated",
+      "answerability": "insufficient_source",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "no_relevant_stadium_guide_found"
+      ],
+      "answer_chars": 115,
+      "duration_ms": 2704.236,
+      "source_notice_added": false,
+      "token_usage": {
+        "input_tokens": 1082,
+        "output_tokens": 239,
+        "total_tokens": 1321,
+        "reasoning_tokens": 128,
+        "cached_input_tokens": 0
+      }
+    },
+    {
+      "case_id": "double_play",
+      "model": "gpt-5-mini:low",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "low",
+      "repetition": 2,
+      "input_sha256": "2c3df55d03e195cb10973ee4cea950b0fc392525e3554d1e383c82ed6bce90df",
+      "input_chars": 1953,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "PDF 원문 page slice 기반 초기 chunk이며, 초보자용 curated 설명문은 후속 단계에서 보강한다.",
+        "needs_review"
+      ],
+      "answer_chars": 99,
+      "duration_ms": 3513.947,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 1907,
+        "output_tokens": 371,
+        "total_tokens": 2278,
+        "reasoning_tokens": 256,
+        "cached_input_tokens": 1792
+      }
+    },
+    {
+      "case_id": "double_play",
+      "model": "gpt-5-mini:medium",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "medium",
+      "repetition": 2,
+      "input_sha256": "2c3df55d03e195cb10973ee4cea950b0fc392525e3554d1e383c82ed6bce90df",
+      "input_chars": 1953,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "PDF 원문 page slice 기반 초기 chunk이며, 초보자용 curated 설명문은 후속 단계에서 보강한다.",
+        "needs_review"
+      ],
+      "answer_chars": 214,
+      "duration_ms": 8935.984,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 1907,
+        "output_tokens": 1180,
+        "total_tokens": 3087,
+        "reasoning_tokens": 1024,
+        "cached_input_tokens": 1792
+      }
+    },
+    {
+      "case_id": "balk",
+      "model": "gpt-5-mini:low",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "low",
+      "repetition": 2,
+      "input_sha256": "85aeae8117cd7422785cc0619cd88280317eef542cc2575f0c81520a3adf8be3",
+      "input_chars": 15932,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "PDF 원문 page slice 기반 초기 chunk이며, 초보자용 curated 설명문은 후속 단계에서 보강한다.",
+        "content_truncated",
+        "needs_review"
+      ],
+      "answer_chars": 251,
+      "duration_ms": 3966.208,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 10304,
+        "output_tokens": 452,
+        "total_tokens": 10756,
+        "reasoning_tokens": 256,
+        "cached_input_tokens": 10240
+      }
+    },
+    {
+      "case_id": "balk",
+      "model": "gpt-5-mini:medium",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "medium",
+      "repetition": 2,
+      "input_sha256": "85aeae8117cd7422785cc0619cd88280317eef542cc2575f0c81520a3adf8be3",
+      "input_chars": 15932,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "PDF 원문 page slice 기반 초기 chunk이며, 초보자용 curated 설명문은 후속 단계에서 보강한다.",
+        "content_truncated",
+        "needs_review"
+      ],
+      "answer_chars": 401,
+      "duration_ms": 12412.569,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 10304,
+        "output_tokens": 1754,
+        "total_tokens": 12058,
+        "reasoning_tokens": 1472,
+        "cached_input_tokens": 10240
+      }
+    },
+    {
+      "case_id": "sajik_ticket",
+      "model": "gpt-5-mini:low",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "low",
+      "repetition": 2,
+      "input_sha256": "ec6dee800d788055f85b3631708b199a024989a1293b10cd44c016ef0328fa17",
+      "input_chars": 1534,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "needs_review",
+        "official_ticketing_source_should_be_checked",
+        "ticket_inventory_not_supported",
+        "ticketing_policy_may_be_outdated"
+      ],
+      "answer_chars": 239,
+      "duration_ms": 4526.7,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 1549,
+        "output_tokens": 487,
+        "total_tokens": 2036,
+        "reasoning_tokens": 320,
+        "cached_input_tokens": 1408
+      }
+    },
+    {
+      "case_id": "sajik_ticket",
+      "model": "gpt-5-mini:medium",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "medium",
+      "repetition": 2,
+      "input_sha256": "ec6dee800d788055f85b3631708b199a024989a1293b10cd44c016ef0328fa17",
+      "input_chars": 1534,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "needs_review",
+        "official_ticketing_source_should_be_checked",
+        "ticket_inventory_not_supported",
+        "ticketing_policy_may_be_outdated",
+        "당일 잔여석은 RAG가 아니라 실시간 예매처 확인 대상이다.",
+        "예매 오픈 시간과 취소/환불 조건은 원문 추가 파싱 후 구조화가 필요하다."
+      ],
+      "answer_chars": 283,
+      "duration_ms": 12251.254,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 1549,
+        "output_tokens": 1222,
+        "total_tokens": 2771,
+        "reasoning_tokens": 960,
+        "cached_input_tokens": 1408
+      }
+    },
+    {
+      "case_id": "sajik_parking",
+      "model": "gpt-5-mini:low",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "low",
+      "repetition": 2,
+      "input_sha256": "08831dce8c85b7ff9d7cda9a16b4c5061b3ad1e406c0d467d51ec0164ed09e7d",
+      "input_chars": 1432,
+      "status": "validated",
+      "answerability": "partially_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "needs_review",
+        "공식 페이지의 주차장 수용 규모와 실시간 주차 가능 대수는 확인되지 않았다."
+      ],
+      "answer_chars": 317,
+      "duration_ms": 6080.391,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 1659,
+        "output_tokens": 557,
+        "total_tokens": 2216,
+        "reasoning_tokens": 320,
+        "cached_input_tokens": 1536
+      }
+    },
+    {
+      "case_id": "sajik_parking",
+      "model": "gpt-5-mini:medium",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "medium",
+      "repetition": 2,
+      "input_sha256": "08831dce8c85b7ff9d7cda9a16b4c5061b3ad1e406c0d467d51ec0164ed09e7d",
+      "input_chars": 1432,
+      "status": "failed",
+      "failure_reason": "TimeoutError",
+      "duration_ms": 15003.904,
+      "token_usage": {}
+    },
+    {
+      "case_id": "no_source",
+      "model": "gpt-5-mini:low",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "low",
+      "repetition": 2,
+      "input_sha256": "26e73f01cc197e950ebfc68da1a6ce250293bb29145890e4825c0526301f55f5",
+      "input_chars": 278,
+      "status": "validated",
+      "answerability": "insufficient_source",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "no_relevant_stadium_guide_found"
+      ],
+      "answer_chars": 102,
+      "duration_ms": 3090.324,
+      "source_notice_added": false,
+      "token_usage": {
+        "input_tokens": 1082,
+        "output_tokens": 234,
+        "total_tokens": 1316,
+        "reasoning_tokens": 128,
+        "cached_input_tokens": 1024
+      }
+    },
+    {
+      "case_id": "no_source",
+      "model": "gpt-5-mini:medium",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "medium",
+      "repetition": 2,
+      "input_sha256": "26e73f01cc197e950ebfc68da1a6ce250293bb29145890e4825c0526301f55f5",
+      "input_chars": 278,
+      "status": "validated",
+      "answerability": "insufficient_source",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "no_relevant_stadium_guide_found"
+      ],
+      "answer_chars": 127,
+      "duration_ms": 7992.051,
+      "source_notice_added": false,
+      "token_usage": {
+        "input_tokens": 1082,
+        "output_tokens": 888,
+        "total_tokens": 1970,
+        "reasoning_tokens": 768,
+        "cached_input_tokens": 1024
+      }
+    },
+    {
+      "case_id": "double_play",
+      "model": "gpt-5-mini:medium",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "medium",
+      "repetition": 3,
+      "input_sha256": "2c3df55d03e195cb10973ee4cea950b0fc392525e3554d1e383c82ed6bce90df",
+      "input_chars": 1953,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "PDF 원문 page slice 기반 초기 chunk이며, 초보자용 curated 설명문은 후속 단계에서 보강한다.",
+        "needs_review"
+      ],
+      "answer_chars": 187,
+      "duration_ms": 9346.329,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 1907,
+        "output_tokens": 1033,
+        "total_tokens": 2940,
+        "reasoning_tokens": 896,
+        "cached_input_tokens": 1792
+      }
+    },
+    {
+      "case_id": "double_play",
+      "model": "gpt-5-mini:low",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "low",
+      "repetition": 3,
+      "input_sha256": "2c3df55d03e195cb10973ee4cea950b0fc392525e3554d1e383c82ed6bce90df",
+      "input_chars": 1953,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "PDF 원문 page slice 기반 초기 chunk이며, 초보자용 curated 설명문은 후속 단계에서 보강한다.",
+        "needs_review"
+      ],
+      "answer_chars": 133,
+      "duration_ms": 4553.757,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 1907,
+        "output_tokens": 440,
+        "total_tokens": 2347,
+        "reasoning_tokens": 320,
+        "cached_input_tokens": 1792
+      }
+    },
+    {
+      "case_id": "balk",
+      "model": "gpt-5-mini:medium",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "medium",
+      "repetition": 3,
+      "input_sha256": "85aeae8117cd7422785cc0619cd88280317eef542cc2575f0c81520a3adf8be3",
+      "input_chars": 15932,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "PDF 원문 page slice 기반 초기 chunk이며, 초보자용 curated 설명문은 후속 단계에서 보강한다.",
+        "content_truncated",
+        "needs_review"
+      ],
+      "answer_chars": 390,
+      "duration_ms": 14585.812,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 10304,
+        "output_tokens": 1740,
+        "total_tokens": 12044,
+        "reasoning_tokens": 1472,
+        "cached_input_tokens": 10240
+      }
+    },
+    {
+      "case_id": "balk",
+      "model": "gpt-5-mini:low",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "low",
+      "repetition": 3,
+      "input_sha256": "85aeae8117cd7422785cc0619cd88280317eef542cc2575f0c81520a3adf8be3",
+      "input_chars": 15932,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "PDF 원문 page slice 기반 초기 chunk이며, 초보자용 curated 설명문은 후속 단계에서 보강한다.",
+        "content_truncated",
+        "needs_review"
+      ],
+      "answer_chars": 342,
+      "duration_ms": 4799.281,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 10304,
+        "output_tokens": 552,
+        "total_tokens": 10856,
+        "reasoning_tokens": 320,
+        "cached_input_tokens": 10240
+      }
+    },
+    {
+      "case_id": "sajik_ticket",
+      "model": "gpt-5-mini:medium",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "medium",
+      "repetition": 3,
+      "input_sha256": "ec6dee800d788055f85b3631708b199a024989a1293b10cd44c016ef0328fa17",
+      "input_chars": 1534,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "needs_review",
+        "official_ticketing_source_should_be_checked",
+        "ticket_inventory_not_supported",
+        "ticketing_policy_may_be_outdated",
+        "당일 잔여석은 RAG가 아니라 실시간 예매처 확인 대상이다.",
+        "예매 오픈 시간과 취소/환불 조건은 원문 추가 파싱 후 구조화가 필요하다."
+      ],
+      "answer_chars": 262,
+      "duration_ms": 14270.629,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 1549,
+        "output_tokens": 1468,
+        "total_tokens": 3017,
+        "reasoning_tokens": 1216,
+        "cached_input_tokens": 0
+      }
+    },
+    {
+      "case_id": "sajik_ticket",
+      "model": "gpt-5-mini:low",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "low",
+      "repetition": 3,
+      "input_sha256": "ec6dee800d788055f85b3631708b199a024989a1293b10cd44c016ef0328fa17",
+      "input_chars": 1534,
+      "status": "validated",
+      "answerability": "fully_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "needs_review",
+        "official_ticketing_source_should_be_checked",
+        "ticket_inventory_not_supported",
+        "ticketing_policy_may_be_outdated"
+      ],
+      "answer_chars": 292,
+      "duration_ms": 3672.726,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 1549,
+        "output_tokens": 380,
+        "total_tokens": 1929,
+        "reasoning_tokens": 192,
+        "cached_input_tokens": 1408
+      }
+    },
+    {
+      "case_id": "sajik_parking",
+      "model": "gpt-5-mini:medium",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "medium",
+      "repetition": 3,
+      "input_sha256": "08831dce8c85b7ff9d7cda9a16b4c5061b3ad1e406c0d467d51ec0164ed09e7d",
+      "input_chars": 1432,
+      "status": "validated",
+      "answerability": "partially_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "needs_review",
+        "공식 페이지의 주차장 수용 규모와 실시간 주차 가능 대수는 확인되지 않았다."
+      ],
+      "answer_chars": 387,
+      "duration_ms": 13148.614,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 1659,
+        "output_tokens": 1555,
+        "total_tokens": 3214,
+        "reasoning_tokens": 1280,
+        "cached_input_tokens": 1536
+      }
+    },
+    {
+      "case_id": "sajik_parking",
+      "model": "gpt-5-mini:low",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "low",
+      "repetition": 3,
+      "input_sha256": "08831dce8c85b7ff9d7cda9a16b4c5061b3ad1e406c0d467d51ec0164ed09e7d",
+      "input_chars": 1432,
+      "status": "validated",
+      "answerability": "partially_answerable",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "needs_review",
+        "공식 페이지의 주차장 수용 규모와 실시간 주차 가능 대수는 확인되지 않았다."
+      ],
+      "answer_chars": 406,
+      "duration_ms": 5816.827,
+      "source_notice_added": true,
+      "token_usage": {
+        "input_tokens": 1659,
+        "output_tokens": 541,
+        "total_tokens": 2200,
+        "reasoning_tokens": 256,
+        "cached_input_tokens": 1536
+      }
+    },
+    {
+      "case_id": "no_source",
+      "model": "gpt-5-mini:medium",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "medium",
+      "repetition": 3,
+      "input_sha256": "26e73f01cc197e950ebfc68da1a6ce250293bb29145890e4825c0526301f55f5",
+      "input_chars": 278,
+      "status": "validated",
+      "answerability": "insufficient_source",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "no_relevant_stadium_guide_found"
+      ],
+      "answer_chars": 124,
+      "duration_ms": 8421.738,
+      "source_notice_added": false,
+      "token_usage": {
+        "input_tokens": 1082,
+        "output_tokens": 887,
+        "total_tokens": 1969,
+        "reasoning_tokens": 768,
+        "cached_input_tokens": 1024
+      }
+    },
+    {
+      "case_id": "no_source",
+      "model": "gpt-5-mini:low",
+      "actual_model": "gpt-5-mini",
+      "reasoning_effort": "low",
+      "repetition": 3,
+      "input_sha256": "26e73f01cc197e950ebfc68da1a6ce250293bb29145890e4825c0526301f55f5",
+      "input_chars": 278,
+      "status": "validated",
+      "answerability": "insufficient_source",
+      "used_evidence_refs": [
+        "E1"
+      ],
+      "acknowledged_limitations": [
+        "no_relevant_stadium_guide_found"
+      ],
+      "answer_chars": 94,
+      "duration_ms": 2834.755,
+      "source_notice_added": false,
+      "token_usage": {
+        "input_tokens": 1082,
+        "output_tokens": 231,
+        "total_tokens": 1313,
+        "reasoning_tokens": 128,
+        "cached_input_tokens": 1024
+      }
+    }
+  ],
+  "manual_review": {
+    "method": "Assistant qualitative inspection against frozen evidence. Guide checks: official ticket channels without invented realtime stock/prices; parking availability uncertainty without invented capacity; refusal for empty source; review/date notice. Not independent human signoff or exhaustive factual guarantee.",
+    "results": [
+      {
+        "case_id": "double_play",
+        "repetition": 1,
+        "reasoning_effort": "medium",
+        "outcome": "baseline_contract_checked_content_not_scored",
+        "labels": []
+      },
+      {
+        "case_id": "double_play",
+        "repetition": 1,
+        "reasoning_effort": "low",
+        "outcome": "core_checks_passed",
+        "labels": [
+          "awkward_out_count_wording"
+        ]
+      },
+      {
+        "case_id": "balk",
+        "repetition": 1,
+        "reasoning_effort": "medium",
+        "outcome": "baseline_contract_checked_content_not_scored",
+        "labels": []
+      },
+      {
+        "case_id": "balk",
+        "repetition": 1,
+        "reasoning_effort": "low",
+        "outcome": "rejected_for_rules",
+        "labels": [
+          "rule_conditions_may_be_overgeneralized"
+        ]
+      },
+      {
+        "case_id": "sajik_ticket",
+        "repetition": 1,
+        "reasoning_effort": "medium",
+        "outcome": "baseline_contract_checked_content_not_scored",
+        "labels": []
+      },
+      {
+        "case_id": "sajik_ticket",
+        "repetition": 1,
+        "reasoning_effort": "low",
+        "outcome": "core_checks_passed",
+        "labels": []
+      },
+      {
+        "case_id": "sajik_parking",
+        "repetition": 1,
+        "reasoning_effort": "medium",
+        "outcome": "not_reviewed_timeout",
+        "labels": [
+          "timeout"
+        ]
+      },
+      {
+        "case_id": "sajik_parking",
+        "repetition": 1,
+        "reasoning_effort": "low",
+        "outcome": "core_checks_passed",
+        "labels": []
+      },
+      {
+        "case_id": "no_source",
+        "repetition": 1,
+        "reasoning_effort": "medium",
+        "outcome": "baseline_contract_checked_content_not_scored",
+        "labels": []
+      },
+      {
+        "case_id": "no_source",
+        "repetition": 1,
+        "reasoning_effort": "low",
+        "outcome": "core_checks_passed",
+        "labels": []
+      },
+      {
+        "case_id": "double_play",
+        "repetition": 2,
+        "reasoning_effort": "low",
+        "outcome": "core_checks_passed",
+        "labels": []
+      },
+      {
+        "case_id": "double_play",
+        "repetition": 2,
+        "reasoning_effort": "medium",
+        "outcome": "baseline_contract_checked_content_not_scored",
+        "labels": []
+      },
+      {
+        "case_id": "balk",
+        "repetition": 2,
+        "reasoning_effort": "low",
+        "outcome": "rejected_for_rules",
+        "labels": [
+          "rule_conditions_may_be_overgeneralized",
+          "windup_and_set_stop_conditions_conflated"
+        ]
+      },
+      {
+        "case_id": "balk",
+        "repetition": 2,
+        "reasoning_effort": "medium",
+        "outcome": "baseline_contract_checked_content_not_scored",
+        "labels": []
+      },
+      {
+        "case_id": "sajik_ticket",
+        "repetition": 2,
+        "reasoning_effort": "low",
+        "outcome": "core_checks_passed",
+        "labels": []
+      },
+      {
+        "case_id": "sajik_ticket",
+        "repetition": 2,
+        "reasoning_effort": "medium",
+        "outcome": "baseline_contract_checked_content_not_scored",
+        "labels": []
+      },
+      {
+        "case_id": "sajik_parking",
+        "repetition": 2,
+        "reasoning_effort": "low",
+        "outcome": "core_checks_passed",
+        "labels": []
+      },
+      {
+        "case_id": "sajik_parking",
+        "repetition": 2,
+        "reasoning_effort": "medium",
+        "outcome": "not_reviewed_timeout",
+        "labels": [
+          "timeout"
+        ]
+      },
+      {
+        "case_id": "no_source",
+        "repetition": 2,
+        "reasoning_effort": "low",
+        "outcome": "core_checks_passed",
+        "labels": []
+      },
+      {
+        "case_id": "no_source",
+        "repetition": 2,
+        "reasoning_effort": "medium",
+        "outcome": "baseline_contract_checked_content_not_scored",
+        "labels": []
+      },
+      {
+        "case_id": "double_play",
+        "repetition": 3,
+        "reasoning_effort": "medium",
+        "outcome": "baseline_contract_checked_content_not_scored",
+        "labels": []
+      },
+      {
+        "case_id": "double_play",
+        "repetition": 3,
+        "reasoning_effort": "low",
+        "outcome": "core_checks_passed",
+        "labels": []
+      },
+      {
+        "case_id": "balk",
+        "repetition": 3,
+        "reasoning_effort": "medium",
+        "outcome": "baseline_contract_checked_content_not_scored",
+        "labels": []
+      },
+      {
+        "case_id": "balk",
+        "repetition": 3,
+        "reasoning_effort": "low",
+        "outcome": "rejected_for_rules",
+        "labels": [
+          "rule_conditions_may_be_overgeneralized"
+        ]
+      },
+      {
+        "case_id": "sajik_ticket",
+        "repetition": 3,
+        "reasoning_effort": "medium",
+        "outcome": "baseline_contract_checked_content_not_scored",
+        "labels": []
+      },
+      {
+        "case_id": "sajik_ticket",
+        "repetition": 3,
+        "reasoning_effort": "low",
+        "outcome": "core_checks_passed",
+        "labels": []
+      },
+      {
+        "case_id": "sajik_parking",
+        "repetition": 3,
+        "reasoning_effort": "medium",
+        "outcome": "baseline_contract_checked_content_not_scored",
+        "labels": []
+      },
+      {
+        "case_id": "sajik_parking",
+        "repetition": 3,
+        "reasoning_effort": "low",
+        "outcome": "core_checks_passed",
+        "labels": []
+      },
+      {
+        "case_id": "no_source",
+        "repetition": 3,
+        "reasoning_effort": "medium",
+        "outcome": "baseline_contract_checked_content_not_scored",
+        "labels": []
+      },
+      {
+        "case_id": "no_source",
+        "repetition": 3,
+        "reasoning_effort": "low",
+        "outcome": "core_checks_passed",
+        "labels": []
+      }
+    ]
+  },
+  "decision": {
+    "model": "unchanged_gpt-5-mini",
+    "fast_scope": [
+      "search_ticketing_guide",
+      "search_stadium_guide"
+    ],
+    "knowledge_and_other_tools": "retain_medium",
+    "blanket_low": "rejected_rule_condition_error",
+    "source_notice": "server_added_after_contract_validation"
+  }
+}

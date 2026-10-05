@@ -737,6 +737,13 @@ Prompt Injection, Tool Abuse, Data Leakage, Source Trust 관련 security case가
 ## 7. 다음 작업
 
 2026-10-05 기준 첫 QA와 최소 graph trace 구축은 완료했다.
+limitation 입력 계약 개선 이후 답변 전용 모델 설정과 고정 근거 비교 도구도 구현했다.
+실제 모델 비교에서 후보는 빨랐으나 자연어 정확성·검수 안내가 불안정해 기본 모델 교체는 보류했다.
+결과와 다음 품질 개선 범위는 `docs/work/2026-10-05-answer-model-comparison.md`에 기록했다.
+기존 모델을 유지한 답변 metadata 축소도 반영·비교했다. 입력은 줄었지만 지연 중앙값 개선은 확인하지 못했다.
+해당 결과는 `docs/work/2026-10-05-answer-evidence-compaction.md`에 기록했다.
+후속 추론 토큰 비교에서 구장·예매 안내의 답변 단계 중앙값을 12.251초 → 4.491초로 줄였다. 모델은 유지하고 해당 Tool만 low를 사용하며 야구 규칙은 medium을 유지한다.
+실제 적용 정책 검증 및 남은 지연은 `docs/work/2026-10-05-answer-latency-reasoning-policy.md`에 기록했다.
 다음 회차는 기존 질문의 재실행과 Step 4 평가 run 연결에 집중한다.
 
 1. DB·실제 API 사용 범위를 승인받은 뒤 기존 9개 smoke 질문을 재실행한다.

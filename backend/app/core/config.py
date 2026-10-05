@@ -1,4 +1,5 @@
 from functools import lru_cache
+from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -24,6 +25,10 @@ class Settings(BaseSettings):
     # OpenAI
     openai_api_key: str
     openai_model: str = "gpt-5-mini"
+    openai_answer_model: str | None = None
+    openai_answer_reasoning_effort: (
+        Literal["minimal", "low", "medium", "high"] | None
+    ) = "low"
     openai_timeout_seconds: float = 30.0
     openai_answer_timeout_seconds: float = 15.0
 
