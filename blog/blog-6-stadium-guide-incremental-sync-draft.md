@@ -1,254 +1,129 @@
 # [AI Agent] RAG 데이터를 운영하기: 전체 재임베딩에서 증분 갱신으로
 
-> 상태: Phase 5 운영 반영과 검증 완료
-> 기준 spec: `docs/spec/2026-09-10-stadium-guide-incremental-sync-spec.md`
-> 구현 범위: 공식 출처 수집, 변경 분류, 검수, 증분 임베딩, 로컬 평가, 운영 승격과 롤백
+“고척돔 음식물 반입 가능해?”
 
-## 개요
+KBO Mate의 실사용 QA에서 던진 질문입니다. 검색 도구는 정상적으로 실행됐지만, 가져온 문서는 캔·병·PET와 주류 제한을 설명하고 있었습니다. 검색 결과가 있다는 사실만으로는 사용자가 궁금해한 외부 음식물 반입 여부에 답할 수 없었습니다.
 
-KBO Mate의 구장 안내는 공식 출처를 정리한 문서를 임베딩하고 Supabase
-pgvector에서 검색하는 RAG 데이터다. 첫 구현은 전체 입력을 임베딩한 뒤
-`document_id`와 `chunk_id`를 기준으로 upsert했다. 데이터가 작을 때
-임베딩 흐름을 검증하기에는 충분했지만, 실제 운영에서는 다음 질문에 답하기
-어려웠다.
+처음에는 부족한 문서 하나를 추가하면 될 것처럼 보였습니다. 하지만 공식 안내가 바뀔 때마다 문서를 수동으로 수정하고 전체 데이터를 다시 임베딩한다면, 같은 작업을 계속 반복해야 합니다. 잘못 수정한 문서가 검색되기 시작했을 때 어떻게 되돌릴지도 정해져 있지 않았습니다.
 
-```text
-처음 추가된 문서인가, 기존 문서의 변경인가?
-본문은 같고 임베딩 설정만 달라졌는가?
-출처에서 정보가 사라진 것인가, 수집에 실패한 것인가?
-새 문서에 문제가 생기면 기존 정상 문서로 돌아갈 수 있는가?
-```
+이번 글에서는 이 문제를 계기로 구장 안내 RAG에 증분 갱신 파이프라인을 도입한 과정을 정리합니다. 공식 출처에서 변경 후보를 만들고, 사람이 검수한 문서만 임베딩한 뒤, 검색 평가를 거쳐 운영에 반영하기까지의 이야기입니다.
 
-upsert는 같은 key의 row를 저장하는 방법이다. 무엇을 만들고, 고치고,
-비활성화할지 판단하는 운영 정책까지 대신하지는 않는다. 이번 작업에서는
-구장 안내 RAG를 신규·변경·삭제 후보로 분류하고, 사람이 승인한 문서만
-증분 임베딩하는 반자동 파이프라인으로 바꿨다.
+## 1. 문서를 저장하는 것과 운영하는 것은 달랐습니다
 
-## 1. 실사용 QA에서 시작된 문제
+KBO Mate는 공식 출처를 정리한 문서를 임베딩하고 Supabase의 pgvector로 검색합니다. 초기 구현에서는 전체 입력을 임베딩한 뒤 `document_id`와 `chunk_id`를 기준으로 upsert했습니다. 같은 키의 데이터가 있으면 갱신하고, 없으면 추가하는 방식입니다.
 
-출발점은 다음 질문이었다.
+이 방식으로 검색 흐름은 만들 수 있었지만, 운영에 필요한 판단까지 해결되지는 않았습니다. 기존 문서의 내용이 바뀐 것인지, 수집에 실패해 빈 결과가 나온 것인지, 새 버전에 문제가 생기면 이전 버전으로 돌아갈 수 있는지를 별도로 관리해야 했습니다.
 
-```text
-고척돔 음식물 반입 가능해?
-```
+실제 데이터 상태를 확인하면서 또 하나의 차이도 발견했습니다.
 
-기존 고척 반입 문서는 캔, 병, PET와 주류 제한을 설명했지만 외부 음식물
-반입 가능 여부를 직접 뒷받침하지 못했다. 부족한 문서 하나를 수동으로
-수정하고 전체 데이터를 다시 임베딩할 수도 있었지만, 같은 방식은 정보가
-바뀔 때마다 반복 비용과 운영 위험을 만든다.
-
-그래서 문제를 다음과 같이 다시 정의했다.
-
-```text
-부족한 문서 하나를 어떻게 추가할까?
-↓
-공식 정보가 계속 바뀌는 상황에서 RAG 데이터를 어떻게 안전하게 갱신할까?
-```
-
-## 2. 파일이 있다고 검색되는 것은 아니었다
-
-작업 전 저장소에는 9개 구장의 구장 안내가 있었다.
-
-```text
-normalized 문서: 45개
-embedded input: 45개 chunk
-공식 출처 registry: 55개
-```
-
-하지만 로컬 DB의 `rag_documents`와 `rag_chunks`에는 사직구장 문서가
-각각 5개만 있었다.
-
-```text
-저장소의 embedding 입력: 45개
-로컬 DB의 실제 검색 chunk: 5개
-```
-
-이 차이를 확인한 뒤부터 데이터 상태를 세 단계로 나눠 보게 됐다.
-
-1. normalized 문서가 저장소에 존재하는가?
-2. embedding 입력이 생성됐는가?
-3. DB에서 활성 검색 데이터로 제공되는가?
-
-RAG 품질을 확인하려면 파일 개수보다 실제 vector index와 활성 revision을
-봐야 한다.
-
-## 3. 변경을 저장하기 전에 분류한다
-
-증분 갱신의 핵심은 DB 쓰기보다 앞에 있는 분류 단계다.
-
-| 분류 | 조건 | 처리 |
-|---|---|---|
-| `CREATE` | 활성 논리 문서가 없음 | 신규 revision 후보 생성 |
-| `UPDATE` | 활성 문서와 content hash가 다름 | 변경 revision 후보 생성 |
-| `UNCHANGED` | 본문과 임베딩 설정이 같음 | 임베딩과 DB 쓰기 생략 |
-| `DELETE_CANDIDATE` | 정상 수집에서 기존 정보 소실이 반복됨 | 검수 후 비활성화 후보 생성 |
-| `MANUAL_REQUIRED` | 수집·추출·정규화를 신뢰하기 어려움 | 사람이 직접 확인 |
-| `RE_EMBED` | 본문은 같지만 임베딩 계약이 바뀜 | 해당 문서 재임베딩 |
-
-이번 작업에서는 기존 `text-embedding-3-small`, 1536차원을 유지했기
-때문에 `RE_EMBED`는 실행하지 않았다.
-
-## 4. 완전 자동화 대신 터미널 기반 반자동을 택했다
-
-파이프라인은 등록된 공식 출처만 수집한다. LLM에 웹 검색을 맡기거나,
-LLM이 만든 문서를 곧바로 서비스에 넣지 않는다.
-
-```text
-공식 출처 수집
-→ raw snapshot과 hash 저장
-→ 출처별 parser로 본문 추출
-→ LLM normalized 후보 생성
-→ CREATE·UPDATE·UNCHANGED 등으로 분류
-→ 사람이 문서 단위로 검수
-→ 승인
-→ 로컬 임베딩과 검색 평가
-→ 운영 승격
-```
-
-cron, 관리자 화면, 신규 URL 자동 발견은 범위에서 제외했다. 운영자가
-터미널에서 직접 실행하지만 실행 이력, 멱등성, 평가 차단과 롤백에 필요한
-정보는 남긴다. 자동화의 범위를 넓히기 전에 데이터 경계와 승인 기준을 먼저
-안정시키려는 선택이었다.
-
-## 5. revision으로 기존 데이터를 보호한다
-
-새 후보를 검수하는 동안에는 현재 서비스 중인 문서를 유지한다.
-
-```text
-현재 활성 revision 유지
-→ 새 revision 후보 생성
-→ 검수와 승인
-→ 로컬 적용과 평가
-→ 새 revision 활성화
-→ 이전 revision 비활성화
-```
-
-날짜가 포함된 문서 ID만 사용하던 구조도 논리 문서와 revision으로 나눴다.
-
-```text
-logical_document_id: GOCHEOK_stadium_food_guide
-revision_id: GOCHEOK_stadium_food_guide_r0001
-chunk_id: GOCHEOK_stadium_food_guide_r0001_chunk_000
-```
-
-하나의 논리 문서에는 활성 revision이 하나만 존재한다. 이전 revision과
-embedding은 롤백을 위해 보존하고 일반 검색에서는 제외한다. 활성 revision
-교체는 문서와 chunk 생성, 이전 revision 비활성화를 하나의 transaction으로
-처리한다.
-
-## 6. 삭제는 두 번 확인하고 승인한다
-
-공식 페이지에서 문장이 보이지 않는다는 이유만으로 데이터를 삭제하지
-않는다.
-
-```text
-HTTP 오류
-빈 페이지
-로그인 화면
-접근 차단
-JavaScript 렌더링 실패
-페이지 개편으로 인한 selector 실패
-```
-
-이런 상태는 정보 삭제가 아니라 수집 실패다. 정상 수집 결과에서 같은
-정보의 소실이 두 번 연속 확인될 때만 `DELETE_CANDIDATE`를 만든다.
-이 후보도 사람이 승인해야 현재 revision을 비활성화한다. raw snapshot과
-revision 이력은 물리 삭제하지 않는다.
-
-## 7. 공통 정책과 구장별 정책을 함께 검색한다
-
-KBO SAFE 캠페인처럼 전체 구장에 적용되는 내용을 구장마다 복사하면 정책이
-바뀔 때 중복 수정이 생긴다. 공통 정책은 `stadium_id=null`인 하나의
-문서로 관리한다.
-
-```text
-KBO_common_stadium_bag_policy
-→ KBO 전체 구장의 공통 반입·안전 기준
-
-GOCHEOK_stadium_bag_policy
-→ 고척스카이돔의 추가 제한과 예외
-```
-
-검색기는 해당 구장의 문서와 공통 문서를 함께 조회하되, 구장별 정책을
-먼저 반환한다. 서로 충돌하는 내용은 자동 병합하지 않고 검수 대상으로
-남긴다.
-
-## 8. 질문의 의미에 맞게 문서 유형을 확장했다
-
-기존 반입 문서 하나에 음식물, 음료 용기와 주류 제한을 모두 넣으면 질문의
-의도와 검색 결과가 어긋날 수 있다. 기존 5개 유형에 다음 3개를 추가했다.
-
-| 유형 | 담당 범위 |
+| 확인 대상 | 작업 시작 시점의 상태 |
 |---|---|
-| `stadium_food_guide` | 외부 음식 반입, 취식, 구장 내 식음 매장 |
-| `stadium_entry_guide` | 게이트, 입장 시간, 티켓 확인, 재입장, 입장 동선 |
-| `stadium_accessibility_guide` | 휠체어석, 장애인 주차, 엘리베이터, 접근 가능한 출입구 |
+| 저장소의 정규화 문서 | 9개 구장, 45개 문서 |
+| 임베딩 입력 파일 | 45개 chunk |
+| 공식 출처 registry | 55개 출처 |
+| 로컬 DB의 검색 데이터 | 사직 문서 5개, chunk 5개 |
 
-캔·병·PET·주류 제한은 `stadium_bag_policy`에 유지했다. 모든 구장에
-8개 유형을 강제로 만들지 않고 공식 근거가 있는 문서만 생성한다.
+저장소에 파일이 있다고 해서 검색에도 사용되는 것은 아니었습니다. 이후에는 정규화 문서, 임베딩 입력, DB의 활성 검색 데이터를 각각 확인했습니다. RAG의 현재 상태는 파일 개수만으로 판단할 수 없었습니다.
 
-## 9. Phase 1: revision 기반과 관리 테이블
+## 2. 저장하기 전에 변경의 종류부터 구분했습니다
 
-첫 단계에서는 수집기보다 안전한 교체 기반을 먼저 만들었다.
+증분 갱신에서는 무엇을 다시 임베딩할지 결정하는 단계가 필요합니다. 이를 위해 새로 수집한 내용과 현재 활성 문서를 비교하고, 다음과 같이 분류했습니다.
 
-```text
-rag_documents에 logical_document_id와 revision_number 추가
-활성 여부와 활성화·비활성화 시점 추가
-기존 문서를 위한 legacy_unreviewed 상태 추가
-논리 문서별 활성 revision 하나만 허용
-수집 실행, 출처 확인, 변경 후보, 배포 이력 테이블 추가
-활성·승인 revision만 검색하도록 retriever 변경
-stadium_id가 null인 공통 문서 검색 지원
-신규 문서 유형의 routing schema와 Tool 설명 추가
-```
+| 분류 | 의미 | 처리 |
+|---|---|---|
+| `CREATE` | 활성 논리 문서가 없습니다. | 신규 revision 후보를 만듭니다. |
+| `UPDATE` | 기존 문서와 content hash가 다릅니다. | 변경 revision 후보를 만듭니다. |
+| `UNCHANGED` | 본문과 임베딩 설정이 같습니다. | 임베딩과 문서 갱신을 생략합니다. |
+| `DELETE_CANDIDATE` | 정상 수집에서 기존 정보의 소실이 반복됩니다. | 검수할 비활성화 후보를 만듭니다. |
+| `MANUAL_REQUIRED` | 수집·추출·정규화 결과를 신뢰하기 어렵습니다. | 사람이 직접 확인합니다. |
+| `RE_EMBED` | 본문은 같지만 임베딩 설정이 바뀌었습니다. | 해당 문서를 다시 임베딩합니다. |
 
-기존 사직 문서 5개는 서비스를 중단하지 않도록 legacy 활성 revision으로
-전환했다.
+content hash는 본문의 변경 여부를 비교하기 위한 값입니다. 내용이 그대로라면 임베딩을 다시 요청하지 않고, 변경된 문서만 다음 단계로 넘깁니다. 이번 작업에서는 기존 `text-embedding-3-small` 모델과 1536차원을 유지했으므로 `RE_EMBED`는 실행하지 않았습니다.
 
-```text
-로컬 migration: 완료
-관리 테이블: 4개
-legacy 활성 revision: 5개
-중복 활성 revision: 0개
-공통 문서 검색 transaction: 통과
-후보 쓰기와 rollback: 통과
-Supabase schema lint: 오류 없음
-백엔드 API 테스트: 59개 통과
-```
-
-관련 커밋은 `9a02068 feat: add stadium guide revision foundation`이다.
-
-## 10. Phase 2: 공식 출처 수집과 후보 생성
-
-두 번째 단계에서는 source registry를 기준으로 수집하고 후보를 만드는
-흐름을 구현했다.
+전체 흐름은 다음과 같습니다.
 
 ```text
-sources.json 검증
-→ 일반 HTTP 수집
-→ 출처별 parser
-→ 필요할 때만 브라우저 adapter
-→ raw snapshot 저장
-→ content hash 비교
-→ LLM normalized 후보 생성
-→ 변경 분류와 로컬 후보 저장
+등록된 공식 출처 수집
+→ 원문 snapshot과 hash 저장
+→ 출처별 parser로 본문 추출
+→ LLM으로 정규화 후보 생성
+→ 변경 종류 분류
+→ 사람이 문서 단위로 검수·승인
+→ 로컬 임베딩과 검색 평가
+→ 운영 반영
 ```
 
-첫 대상인 키움 공식 FAQ는 일반 HTTP만으로 본문을 얻을 수 있었다. 같은
-본문으로 다시 실행하면 기존 pending candidate와 raw snapshot을 재사용해
-중복 후보를 만들지 않았다.
+현재는 운영자가 터미널에서 실행하는 반자동 방식입니다. 정기 실행, 관리자 화면, 신규 URL 자동 발견까지 확장하기보다, 먼저 어떤 근거로 문서를 만들고 어떤 조건에서 반영할지 명확하게 정했습니다.
 
-처음 생성된 음식물 후보에는 주소, 전화번호, 주류와 재입장 정보가 한
-문서에 섞였다. 원인은 FAQ 답변 뒤의 이웃 FAQ와 footer까지 parser가
-가져온 것이었다. 이를 계기로 범용 parser에 의존하지 않고, 고척 FAQ의
-음식물·캔 답변 블록과 KBO SAFE 페이지의 정책·예외 블록만 추출하도록
-범위를 좁혔다.
+## 3. 문서의 정체성과 버전을 분리했습니다
 
-관련 커밋은 `1843eb5 feat: add stadium guide candidate pipeline`이다.
+새로운 내용을 검수하는 동안에도 기존 검색은 계속 동작해야 합니다. 이를 위해 같은 주제를 나타내는 논리 문서 ID와 개별 버전을 나타내는 revision ID를 나눴습니다. chunk는 실제 임베딩과 검색에 사용하는 문서 조각입니다.
 
-## 11. Phase 3: 후보 검수와 로컬 적용
+```text
+논리 문서: GOCHEOK_stadium_food_guide
+  └─ revision: GOCHEOK_stadium_food_guide_r0001
+       └─ chunk: GOCHEOK_stadium_food_guide_r0001_chunk_000
+```
 
-후보 관리는 다음 명령으로 분리했다.
+예를 들어 같은 음식물 안내를 수정하면 논리 문서 ID는 유지하고 새 revision을 만듭니다. 아래는 두 번째 버전으로 교체한 상황을 설명하기 위한 예시이며, 실제 운영 조회 결과는 아닙니다.
+
+```json
+[
+  {
+    "logical_document_id": "GOCHEOK_stadium_food_guide",
+    "document_id": "GOCHEOK_stadium_food_guide_r0001",
+    "revision_number": 1,
+    "is_active": false
+  },
+  {
+    "logical_document_id": "GOCHEOK_stadium_food_guide",
+    "document_id": "GOCHEOK_stadium_food_guide_r0002",
+    "revision_number": 2,
+    "is_active": true
+  }
+]
+```
+
+하나의 논리 문서에는 활성 revision이 하나만 존재하도록 제한했습니다. 이전 revision과 임베딩은 롤백을 위해 보존하고 일반 검색에서는 제외합니다. 새 문서와 chunk를 만들고 이전 revision을 비활성화하는 작업은 하나의 DB transaction으로 처리합니다.
+
+기존 데이터도 바로 제거하지 않았습니다. 사직 문서 5개는 `legacy_unreviewed` 상태의 활성 revision으로 전환해 검색을 유지했습니다. 새 승인 절차를 거친 문서와 기존 문서를 구분하면서 점진적으로 교체할 수 있도록 했습니다.
+
+## 4. LLM의 출력은 먼저 검수 후보로 저장했습니다
+
+LLM이 만든 문서가 곧바로 검색에 사용되면, 잘못 추출한 정보도 그대로 서비스에 들어갈 수 있습니다. 그래서 생성 결과를 candidate, 즉 검수 후보로 저장했습니다.
+
+아래는 실제 `CandidateRecord`의 주요 필드만 추린 설명용 예시입니다. ID와 hash는 예시 값이며, 본문도 특정 구장의 실제 정책을 나타내지 않습니다.
+
+```json
+{
+  "candidate_id": "SGC_EXAMPLE_001",
+  "run_id": "RUN_EXAMPLE_001",
+  "logical_document_id": "GOCHEOK_stadium_food_guide",
+  "operation": "UPDATE",
+  "previous_revision_id": "GOCHEOK_stadium_food_guide_r0001",
+  "candidate_revision_id": "GOCHEOK_stadium_food_guide_r0002",
+  "previous_content_hash": "example_hash_before",
+  "candidate_content_hash": "example_hash_after",
+  "status": "pending",
+  "source_ids": ["example_official_faq"],
+  "candidate_payload": {
+    "title": "고척스카이돔 음식물 안내",
+    "content": "공식 FAQ에서 확인한 음식물 안내 본문을 저장합니다.",
+    "as_of": "2026-09-11",
+    "metadata": {
+      "limitations": [
+        "원문에서 확인되지 않은 조건은 추가 확인이 필요합니다."
+      ]
+    }
+  }
+}
+```
+
+이 구조에서는 바꾸려는 문서, 비교한 이전 버전, 새 본문의 hash, 출처와 검수 상태를 함께 확인할 수 있습니다. `as_of`는 정보의 기준일이며, `limitations`에는 원문만으로 확정할 수 없는 내용을 남깁니다.
+
+검수할 때는 최신 웹페이지를 다시 가져와 대신 보여주지 않습니다. 후보를 생성했던 시점의 source check와 원문 snapshot을 사용합니다. 검수한 근거와 실제 반영한 근거가 달라지는 일을 막기 위해서입니다.
+
+후보 확인과 승인은 다음처럼 별도 명령으로 나눴습니다. 아래 명령은 `backend` 디렉터리를 기준으로 실행합니다.
 
 ```bash
 python scripts/sync_stadium_guides.py candidates list --status pending
@@ -258,119 +133,57 @@ python scripts/sync_stadium_guides.py candidates reject <candidate_id> --reason 
 python scripts/sync_stadium_guides.py apply-local <candidate_id>
 ```
 
-`show`는 후보 생성 당시 source check와 raw snapshot을 기준으로 기존
-내용, 후보 내용, 문장 단위 diff, 출처, 기준일과 limitation을 보여준다.
-최신 수집 결과를 대신 사용하면 검수한 근거와 적용 근거가 달라질 수 있기
-때문이다.
+승인은 상태만 변경하며 임베딩을 실행하지 않습니다. 실제 적용 시에는 임베딩 직전과 DB transaction 안에서 활성 revision과 hash를 다시 확인합니다. 검수하는 동안 다른 버전이 먼저 반영됐다면 오래된 후보를 그대로 적용하지 않습니다.
 
-승인은 상태만 바꾸며 임베딩하지 않는다. `apply-local`은 embedding
-직전과 DB transaction 안에서 활성 revision과 hash를 다시 확인한다.
-후보가 생성된 뒤 다른 revision이 활성화됐다면 오래된 후보를 적용하지
-않는다.
+## 5. 첫 후보를 반려하면서 문서의 경계를 다시 잡았습니다
 
-관련 커밋은 다음 두 개다.
+첫 수집 대상인 키움 공식 FAQ는 일반 HTTP 요청으로 본문을 얻을 수 있었습니다. 하지만 처음 생성된 음식물 후보에는 주소, 전화번호, 주류와 재입장 정보가 함께 들어갔습니다. parser가 해당 답변뿐 아니라 이웃 FAQ와 footer까지 가져온 것이 원인이었습니다.
 
-```text
-1c6d6a4 feat: add stadium guide review and local apply pipeline
-a5a5c22 feat: complete stadium guide phase 3 rollout
-```
+결국 초기 후보 4개를 반려하고 추출 범위와 문서 유형을 다시 정리했습니다.
 
-## 12. 첫 적용 결과: 고척 안내와 KBO 공통 정책
-
-초기 결과가 잘못 섞인 후보 4개는 반려하고 parser와 LLM 문서 경계를
-보강한 뒤 다시 생성했다.
-
-| 반려 후보 | 이유 |
+| 반려한 후보 | 발견한 문제 |
 |---|---|
-| 고척 food 1차 | 주류·용기·재입장·주소·전화번호 혼재 |
-| 고척 entry 1차 | 주류·용기·선예매·연간회원 혼재 |
-| 고척 bag 1차 | 캔 총용량을 주류 총용량으로 축소 해석 |
-| KBO 공통 bag 1차 | 가방 크기·개수 누락, 매점 판매 규칙 혼재 |
+| 고척 음식물 안내 | 주류·용기·재입장·주소·전화번호가 섞였습니다. |
+| 고척 입장 안내 | 주류·용기·선예매·연간회원 정보가 섞였습니다. |
+| 고척 반입 정책 | 캔 총용량을 주류 총용량으로 좁혀 해석했습니다. |
+| KBO 공통 반입 정책 | 가방 크기·개수 기준이 빠지고 매점 판매 규칙이 섞였습니다. |
 
-공식 근거와 limitation을 다시 검수해 다음 4개 후보를 승인했다.
+이후에는 출처별 FAQ 답변과 정책·예외 블록을 지정해 추출했습니다. 문서 유형도 질문의 의미에 맞춰 나눴습니다. 음식물 안내는 `stadium_food_guide`, 입장과 재입장은 `stadium_entry_guide`, 캔·병·PET·주류 제한은 `stadium_bag_policy`에서 다루도록 했습니다. 접근성 정보를 위한 `stadium_accessibility_guide`도 추가했습니다.
 
-| 문서 | candidate ID | revision ID |
-|---|---|---|
-| KBO 공통 반입 정책 | `SGC_20260911T005413_5cb4de4620` | `KBO_common_stadium_bag_policy_r0001` |
-| 고척 음식물 안내 | `SGC_20260911T004205_c6db1d8010` | `GOCHEOK_stadium_food_guide_r0001` |
-| 고척 반입 정책 | `SGC_20260911T004728_256571a4e6` | `GOCHEOK_stadium_bag_policy_r0001` |
-| 고척 입장 안내 | `SGC_20260911T004343_0399aa1274` | `GOCHEOK_stadium_entry_guide_r0001` |
+모든 구장에 모든 유형을 채우지는 않았습니다. 공식 근거가 있는 문서만 만들고, 원문에서 명확하지 않은 용량 기준이나 ‘올 시즌부터’ 같은 표현은 임의로 확정하지 않고 한계와 기준일을 남겼습니다.
 
-문서별 경계는 다음과 같이 잡았다.
+삭제에도 같은 원칙을 적용했습니다. HTTP 오류나 빈 페이지, 로그인 화면, 접근 차단, parser 실패는 정보가 사라졌다는 증거가 아닙니다. 정상 수집에서 같은 정보의 소실이 두 번 연속 확인돼야 `DELETE_CANDIDATE`를 만들고, 사람이 승인한 뒤 현재 revision을 비활성화하도록 했습니다.
 
-```text
-food: 구장 내 취식, 최초 입장 음식물, 재입장 시 외부 음식 제한
-bag: 캔·병·PET·주류·피처·생수 제한
-entry: 최초 입장과 재입장에 필요한 최소 교차 정보
-common bag: 가방 크기·개수, 용기, 위험 물품, 구장별 예외
+## 6. 공통 정책을 추가하자 기존 검색이 흔들렸습니다
+
+KBO 공통 정책을 구장마다 복사하면 정책이 바뀔 때 같은 내용을 여러 번 수정해야 합니다. 그래서 공통 정책은 `stadium_id=null`인 문서 하나로 관리하고, 구장별 문서와 함께 검색하도록 했습니다.
+
+아래는 검색 대상의 관계를 보여주는 설명용 예시입니다.
+
+```json
+[
+  {
+    "logical_document_id": "KBO_common_stadium_bag_policy",
+    "stadium_id": null,
+    "document_type": "stadium_bag_policy"
+  },
+  {
+    "logical_document_id": "GOCHEOK_stadium_bag_policy",
+    "stadium_id": "GOCHEOK",
+    "document_type": "stadium_bag_policy"
+  }
+]
 ```
 
-원문이 명확히 구분하지 않은 `총량 1L`의 적용 대상과 `올 시즌부터`
-같은 상대적 시점은 임의로 해석하지 않고 limitation과 기준일로 남겼다.
+의도한 동작은 해당 구장의 문서를 먼저 반환하고 공통 정책을 함께 제공하는 것이었습니다. 서로 충돌하는 내용은 자동으로 합치지 않고 검수 대상으로 남겼습니다.
 
-## 13. 실제로 변경된 문서만 임베딩했는가
-
-승인한 후보를 KBO 공통 bag, 고척 food, bag, entry 순으로 적용했다.
-
-```text
-적용 전 rag_documents: 5
-적용 전 rag_chunks: 5
-CREATE: 4
-UPDATE: 0
-DELETE_CANDIDATE 적용: 0
-문서 embedding 요청: 4회
-문서 embedding 입력: 4개
-적용 후 rag_documents: 9
-적용 후 rag_chunks: 9
-```
-
-평가는 성공 4회와 수정 후 재평가 2회를 수행했다. 평가기는 한 실행의
-질문을 한 번에 embedding하므로 평가 query embedding은 6회 요청,
-총 104개 질문 입력이었다. 문서 임베딩 4회를 포함하면 이번 로컬 적용에서
-embedding endpoint 요청은 총 10회였다.
-
-같은 네 candidate를 다시 `apply-local`했을 때 모두
-`already_applied=true`를 반환했다.
-
-```text
-추가 revision: 0
-추가 문서 embedding: 0
-중복 chunk: 0
-논리 문서별 활성 revision: 정확히 1개
-```
-
-## 14. 로컬 검색 평가는 기존 기준과 함께 본다
-
-새 고척 문서가 자신의 질문에서 상위에 나오는지 확인하면서 기존 사직
-15개 case도 함께 실행했다. 사직 baseline에 이미 존재하던 Top1 실패
-`sajik_011`과 negative threshold 초과 `sajik_008`이 늘어나지 않는 것을
-통과 기준으로 삼았다.
-
-| 적용 문서 | 대상 평가 | 사직 회귀 | 결과 |
-|---|---|---|---|
-| KBO 공통 bag | Top1 3/3, Top3 3/3 | Top1 11/12, Top3 12/12 | 통과 |
-| 고척 food | Top1 3/3, Top3 3/3 | Top1 11/12, Top3 12/12 | 통과 |
-| 고척 bag | Top1 3/3, Top3 3/3 | Top1 11/12, Top3 12/12 | 통과 |
-| 고척 entry | Top1 1/1, Top3 1/1 | Top1 11/12, Top3 12/12 | 통과 |
-
-평가 결과에는 검색 순위뿐 아니라 target 문서의 `source_ids`,
-`source_urls`, `as_of`가 비어 있지 않은지도 포함했다. 관련 결과는
-`data/stadium_guide/evaluation/runs/candidate/`에 보존했다.
-
-## 15. 평가 실패가 찾아낸 두 가지 문제
-
-### 공통 문서가 구장별 문서보다 먼저 나온 문제
-
-첫 KBO 공통 정책 평가에서는 고척 target은 통과했지만 사직 회귀가 크게
-떨어졌다. SQL은 다음처럼 구장 일치 여부를 내림차순 정렬하고 있었다.
+그런데 첫 공통 정책 평가에서 기존 사직 검색 성능이 떨어졌습니다. 당시 정렬 조건은 다음과 같았습니다.
 
 ```sql
 order by (chunks.stadium_id = :stadium_id) desc, distance
 ```
 
-공통 문서의 비교 결과는 `false`가 아니라 `NULL`이다. PostgreSQL의
-`DESC` 정렬에서는 별도 지정이 없으면 NULL이 먼저 와서 공통 문서가
-구장별 문서를 밀어냈다.
+공통 문서는 `stadium_id`가 NULL이므로 비교 결과도 NULL이었습니다. 이 정렬에서는 NULL 값이 먼저 배치돼 공통 문서가 구장별 문서보다 앞에 나왔습니다. 다음과 같이 `NULLS LAST`를 명시한 뒤 재평가해 문제를 해결했습니다.
 
 ```sql
 order by
@@ -378,169 +191,89 @@ order by
   distance
 ```
 
-`NULLS LAST`를 추가한 뒤 같은 candidate를 재실행했다. 이미 생성한
-revision과 embedding은 재사용했고 평가만 다시 실행해 통과했다.
+새 문서의 검색 결과만 봤다면 놓쳤을 문제였습니다. 이후에도 신규 데이터 평가와 기존 질문의 회귀 평가를 함께 실행했습니다.
 
-### 입장 평가 질문에 음식물 의도가 섞인 문제
+## 7. 평가 질문도 검토 대상이었습니다
 
-첫 entry 평가는 입장 문서가 2위, food 문서가 1위였다.
+입장 안내의 첫 평가에서는 entry 문서가 2위, food 문서가 1위로 나왔습니다. 질문은 다음과 같았습니다.
 
-```text
-고척돔 재입장할 때 외부 음식을 다시 가져갈 수 있어?
-```
+> 고척돔 재입장할 때 외부 음식을 다시 가져갈 수 있어?
 
-질문은 재입장과 음식물이라는 두 의도를 함께 갖고 있었다. entry 문서만
-1위여야 한다는 기대와 질문 자체가 맞지 않았다. food 정책 검증은 별도
-case에 이미 있으므로 entry case를 재입장 가능 여부와 절차에 집중하도록
-바꿨다.
+이 질문에는 재입장과 음식물이라는 두 의도가 함께 들어 있습니다. 입장 문서만 반드시 1위여야 한다는 기대가 질문과 맞지 않았습니다. 음식물 정책은 별도 case에서 확인하고 있었으므로, 입장 평가 질문은 다음처럼 절차에 집중하도록 바꿨습니다.
 
-```text
-고척돔에서 경기 중 나갔다가 다시 입장할 수 있어? 재입장 절차가 궁금해.
-```
+> 고척돔에서 경기 중 나갔다가 다시 입장할 수 있어? 재입장 절차가 궁금해.
 
-재평가에서는 entry 문서가 Top1에 나왔고 사직 회귀 결과도 유지됐다.
+재평가에서는 entry 문서가 1위로 나왔고 기존 사직 검색 결과도 유지됐습니다. 이 경험을 통해 평가 실패가 발생하면 문서나 검색기뿐 아니라 질문과 기대 결과의 관계도 함께 확인해야 한다는 점을 배웠습니다.
 
-## 16. 로컬 완료 상태
+최종 로컬 평가 결과는 다음과 같습니다. Top1은 기대 문서가 첫 번째에 검색됐는지, Top3는 상위 세 결과 안에 포함됐는지를 의미합니다.
 
-Phase 3 종료 시 로컬 DB 상태는 다음과 같다.
+| 적용 문서 | 대상 질문 Top1 / Top3 | 기존 사직 질문 Top1 / Top3 |
+|---|---|---|
+| KBO 공통 반입 정책 | 3/3 · 3/3 | 11/12 · 12/12 |
+| 고척 음식물 안내 | 3/3 · 3/3 | 11/12 · 12/12 |
+| 고척 반입 정책 | 3/3 · 3/3 | 11/12 · 12/12 |
+| 고척 입장 안내 | 1/1 · 1/1 | 11/12 · 12/12 |
 
-```text
-rag_documents=9
-rag_chunks=9
-ready_for_production=4
-rejected=4
-completed_local_deployments=4
-중복 활성 revision=0
-중복 document_id·chunk_index=0
-```
+사직 평가는 전체 15개 case를 실행했으며, 표의 순위 지표는 그중 12개 질문에 대한 결과입니다. 기존 baseline에 있던 Top1 실패 `sajik_011`과 negative threshold 초과 `sajik_008`은 남아 있었습니다. 이번 통과 기준은 모든 문제의 해결이 아니라, 신규 데이터 때문에 기존 실패가 늘어나지 않는 것이었습니다.
 
-로컬 적용 transaction을 rollback하는 통합 검증에서도 승인, revision과
-chunk 생성, 평가 상태 전이와 재실행 멱등성을 확인했다.
+검색 순위와 함께 출처 ID, 출처 URL, 기준일이 비어 있지 않은지도 확인했습니다.
 
-```text
-phase3_transaction=passed
-idempotent_reapply=passed
-verify_candidates=0
-verify_documents=0
-```
+## 8. 변경된 문서만 임베딩하는지 확인했습니다
 
-변경 범위 lint와 type check가 통과했고 백엔드 API 테스트는 69개가
-통과했다.
+검수를 통과한 문서는 KBO 공통 반입 정책과 고척의 음식물·반입·입장 안내, 총 4개였습니다. 이번 로컬 적용에서는 모두 신규 생성으로 처리됐습니다.
 
-## 17. 운영 반영에서 발견한 schema 불일치
+| 항목 | 실제 로컬 적용 결과 |
+|---|---|
+| 문서 수 | 5개 → 9개 |
+| chunk 수 | 5개 → 9개 |
+| 변경 분류 | CREATE 4개, UPDATE 0개 |
+| 삭제 후보 적용 | 0개 |
+| 문서 임베딩 | 요청 4회, 입력 4개 |
+| 평가 질문 임베딩 | 요청 6회, 입력 104개 |
 
-로컬 작업 후 백엔드가 운영 DB를 바라보는 상태에서 키움 예매 안내를
-검색했더니 Tool 실패와 전체 채팅 스트림 실패가 이어졌다. 운영 DB에는
-고척 예매 문서가 있었지만 새 retriever가 요구하는
-`is_active`, `logical_document_id`, `legacy_unreviewed` 컬럼이 없었다.
+문서 임베딩과 평가 질문 임베딩은 구분해서 집계했습니다. 평가 실행은 실패 후 수정한 두 번을 포함해 총 6회였으며, 평가기는 실행별 질문을 묶어서 임베딩했습니다. 문서와 평가를 합친 embedding endpoint 요청은 총 10회였습니다.
+
+같은 후보 4개에 `apply-local`을 다시 실행했을 때는 모두 `already_applied=true`를 반환했습니다. 추가 revision, 추가 문서 임베딩, 중복 chunk는 발생하지 않았습니다. 같은 작업을 반복해도 결과가 불필요하게 늘어나지 않는 멱등성을 확인한 것입니다.
+
+로컬 단계에서는 transaction 롤백과 재실행도 검증했으며, 당시 변경 범위의 lint·type check와 백엔드 API 테스트 69개가 통과했습니다.
+
+## 9. 운영 반영에서는 코드와 DB의 순서가 중요했습니다
+
+로컬에서 검증한 뒤에도 문제가 하나 더 있었습니다. 새 백엔드 코드가 운영 DB를 조회했지만, 운영 DB에는 검색기가 요구하는 revision 관련 컬럼이 아직 없었습니다.
 
 ```text
-새 backend 코드
-→ revision 컬럼을 사용하는 검색 SQL 실행
-→ 아직 migration되지 않은 운영 DB에서 실패
-→ 실패한 DB transaction이 남음
+새 검색 SQL 실행
+→ 운영 DB의 revision schema 미적용으로 조회 실패
+→ 실패한 transaction이 남음
 → assistant 메시지 저장도 실패
-→ 화면에 Tool 오류와 stream 오류가 연속 표시
+→ Tool 오류와 채팅 스트림 오류가 연속 발생
 ```
 
-이 문제는 새 데이터의 품질 문제가 아니라 코드와 DB 배포 순서 문제였다.
-다음 순서로 복구하고 운영 반영을 진행했다.
+운영 DB 백업과 migration 상태를 확인하고, revision migration과 기존 문서 backfill을 적용한 뒤 검색 호환성을 확인했습니다. 이후 로컬 평가를 통과한 4개 revision을 운영에 반영했습니다.
 
-1. 운영 DB 백업과 migration 상태 확인
-2. revision migration 적용
-3. legacy 문서 backfill과 검색 호환성 확인
-4. 평가를 통과한 4개 revision 승격
-5. 예매·음식물·반입·입장 질문 검색 검증
-6. 같은 승격 명령을 다시 실행해 멱등성 확인
+조회 실패가 다른 저장 작업으로 이어지지 않도록 도구의 DB 조회가 실패하면 즉시 transaction을 rollback하고 fallback 답변을 저장하도록 보강했습니다. Supabase transaction pooler에서 prepared statement 이름이 충돌하는 문제도 연결 설정을 수정해 대응했습니다.
 
-도구의 DB 조회가 실패하면 즉시 transaction을 rollback한 뒤 fallback
-답변을 저장하도록 보강했다. Supabase transaction pooler에서 prepared
-statement 이름이 충돌하지 않도록 asyncpg의 prepared statement cache를
-끄고 매 statement에 고유 이름을 사용하도록 연결 설정도 수정했다.
+운영 migration 자체는 기존 문서 68개와 chunk 72개를 유지했습니다. 이후 새 revision 4개를 반영한 결과는 다음과 같습니다.
 
-운영 migration 전후 문서와 chunk 수는 68/72로 유지됐다. 이후 로컬에서
-평가를 통과한 4개 revision을 승격한 결과는 다음과 같다.
+| 항목 | 운영 반영 결과 |
+|---|---|
+| 문서 수 | 68개 → 72개 |
+| chunk 수 | 72개 → 76개 |
+| 로컬·운영 content hash 일치 | 4/4 |
+| 로컬·운영 embedding 일치 | 4/4 |
+| 중복 활성 revision | 0개 |
+| 동일 후보 재반영 | 4/4 `already_promoted=true` |
 
-```text
-운영 rag_documents: 68 → 72
-운영 rag_chunks: 72 → 76
-운영 completed promotion: 4
-로컬·운영 content hash 일치: 4/4
-로컬·운영 embedding 일치: 4/4
-중복 활성 revision: 0
-로컬 candidate 상태: promoted 4
-```
+고척의 기존 legacy 반입 문서는 새 후보와 revision 번호가 충돌했습니다. 기존 문서를 삭제하는 대신 legacy 전용 번호로 옮겨 비활성 상태로 보존하고, 검증한 신규 revision을 활성화했습니다.
 
-고척에는 기존 legacy bag 문서가 있어 candidate의 revision 번호 1과
-충돌했다. 기존 문서를 삭제하는 대신 legacy 전용 번호로 옮겨 비활성
-보존하고, 검증한 `GOCHEOK_stadium_bag_policy_r0001`을 활성화했다.
+롤백도 운영 transaction 안에서 시험했습니다. 이전 legacy revision이 활성화되는 것을 확인한 뒤 검증 transaction을 취소했습니다. 따라서 검증이 끝난 뒤에는 신규 revision이 활성 상태로 유지됐고 테스트용 배포 이력도 남지 않았습니다. 실제 서비스를 이전 문서로 되돌려 둔 것은 아닙니다.
 
-## 18. 설계에서 실제 구현으로 바뀐 부분
+## 10. 이제 문서 한 건의 변경을 추적할 수 있습니다
 
-| 항목 | 초기 생각 | 최종 구현 | 이유 |
-|---|---|---|---|
-| 후보 diff | 본문 전체 또는 줄 단위 | 문장 단위 diff | 정책 문장의 추가·삭제를 검수하기 쉬움 |
-| 후보 근거 | 최신 source check 조회 | 후보 생성 당시 run snapshot 고정 | 검수 근거와 적용 근거의 불일치 방지 |
-| stale 검사 | transaction 안에서 한 번 | embedding 전과 transaction 안에서 두 번 | 불필요한 API 호출과 경합 방지 |
-| parser | 범용 본문 추출 중심 | 출처별 FAQ·정책 블록 지정 | 메뉴, footer와 이웃 FAQ 혼입 방지 |
-| 공통 정책 정렬 | boolean DESC | DESC NULLS LAST | `stadium_id=null` 문서의 우선순위 보장 |
-| 평가 오류 | 실행 예외로 종료 | `evaluation_failed` 상태와 결과 보존 | 실패 후보의 운영 승격 차단 |
-| 운영 실행 | 로컬 완료 직후 반영 | 문서 정비와 별도 승인 후 반영 | migration과 데이터 승격을 분리해 검증 |
+이번 작업에서 가장 도움이 된 구조는 LLM의 문서 생성과 서비스 반영 사이에 검수 후보를 둔 것입니다. parser나 prompt가 잘못된 결과를 만들더라도 후보를 반려하고 기존 검색 데이터를 유지할 수 있었습니다.
 
-## 19. 이번 작업에서 확인한 것
+revision은 되돌아갈 지점을 만들어 줬고, hash 비교는 바뀌지 않은 문서의 재임베딩을 줄여 줬습니다. 신규 질문과 기존 질문을 함께 평가하면서 공통 정책의 정렬 문제도 발견했습니다. 운영 반영 과정에서는 문서 품질뿐 아니라 DB migration과 애플리케이션 배포 순서까지 확인해야 했습니다.
 
-가장 효과가 컸던 결정은 LLM 후보 생성과 서비스 반영 사이에 검수 가능한
-candidate를 둔 것이다. parser나 prompt가 완벽하지 않아도 잘못된 문서를
-반려하고 기존 검색 데이터를 유지할 수 있었다.
+다만 이번 실제 데이터 적용은 신규 문서 4개를 중심으로 검증했습니다. 모든 변경 유형과 모든 구장의 운영 사례를 확인한 것은 아닙니다. 앞으로는 고척 외 구장의 공식 출처 parser를 확대하고, 기존 legacy 문서를 검수한 revision으로 점진적으로 교체할 계획입니다. 문서가 길어질 때는 여러 chunk로 나누는 전략도 다시 검토하려고 합니다.
 
-또한 평가 데이터도 항상 옳다고 가정할 수 없었다. 실제 사용자 질문에는
-여러 의도가 섞일 수 있고, 특정 document type만 Top1이어야 한다는 기대가
-질문과 충돌할 수 있다. 평가 실패를 모델이나 데이터 탓으로만 보지 않고
-검색 SQL, 메타데이터와 평가 질문을 함께 살펴봐야 했다.
-
-이번 구현에서 확인한 원칙은 다음과 같다.
-
-```text
-upsert는 저장 방식이고 변경 분류는 운영 정책이다.
-승인과 적용을 분리해야 검수한 대상을 정확히 배포할 수 있다.
-기존 revision을 남겨야 실패 중에도 서비스와 롤백 경로를 유지할 수 있다.
-파일, embedding 입력, 활성 vector index를 각각 확인해야 한다.
-신규 데이터 평가는 기존 검색 품질의 회귀와 함께 봐야 한다.
-DB migration과 애플리케이션 배포 순서도 RAG 품질의 일부다.
-```
-
-## 20. 운영 검증 결과와 다음 작업
-
-운영 반영 후 같은 네 candidate를 다시 승격했을 때 모두
-`already_promoted=true`를 반환했고 문서와 chunk 수는 늘지 않았다.
-
-```text
-키움 예매 질문: 기존 GOCHEOK ticketing 문서 검색 성공, distance 0.4888
-고척 음식물 질문: 신규 food revision 검색 성공, distance 0.5973
-승격 재실행: 4/4 멱등
-```
-
-고척 bag을 이전 legacy revision으로 되돌리는 롤백도 운영 transaction
-안에서 실행했다. transaction 안에서는 legacy 문서가 활성화됐고,
-검증 transaction을 rollback한 뒤 신규 revision이 다시 활성 상태로
-유지됐으며 테스트용 deployment row도 남지 않았다.
-
-이제 남은 작업은 고척 외 구장으로 같은 흐름을 확대하는 것이다.
-
-1. 구장별 문서 유형 coverage 점검
-2. 공식 출처 parser 확대
-3. legacy 문서를 승인 revision으로 점진적으로 교체
-4. 필요할 때 실제 롤백 명령과 deployment 이력 점검
-5. 문서가 길어질 때 multi-chunk 전략 재검토
-
-## 21. 문서 점검
-
-- [x] 실제 CREATE·반려·승인 결과를 기록했다.
-- [x] 문서 embedding과 평가 embedding 사용량을 구분해 기록했다.
-- [x] 로컬 평가 결과와 실패·수정 과정을 기록했다.
-- [x] 멱등성과 rollback transaction 검증 결과를 기록했다.
-- [x] 구현 과정에서 달라진 설계를 반영했다.
-- [x] 운영 migration, 승격과 Tool 검증 결과를 기록했다.
-- [x] 운영 승격 재실행과 rollback rehearsal 결과를 기록했다.
-- [x] 미완성 placeholder와 HTML 주석을 제거했다.
-- [x] 비밀값과 로컬 인증 정보를 포함하지 않았다.
+처음에는 음식물 질문에 답할 문서 하나가 부족해서 시작한 작업이었습니다. 이제는 어떤 출처에서 후보를 만들었고, 무엇을 승인했으며, 어떤 평가를 거쳐 검색에 반영했는지 문서 단위로 추적할 수 있게 됐습니다. 다음 정보 변경이 발생했을 때도 같은 절차로 검수하고 반영할 수 있는 기반을 마련했습니다.
