@@ -1,7 +1,7 @@
 # 다음 작업: RAGAS 기반 평가 지표와 기준선 만들기
 
 > 작성일: 2026-10-05
-> 상태: 다음 작업 메모 / 평가 지표 정의부터 시작
+> 상태: 평가 지표·입력 계약 정의 완료 / reference 보강부터 진행
 > 선행 구현 커밋: `2b6c5ac perf: reduce guide answer latency with scoped reasoning policy`
 > 이 문서를 다음 회차의 시작점으로 사용하고, 완료한 항목과 결과 링크를 계속 갱신한다.
 
@@ -13,12 +13,15 @@
 - [확인됨] 구장 안내 합성 질문 9회 비교에서 답변 단계 중앙값은 12.251초 → 4.491초였다. 전체 화면 응답 시간의 개선율은 아니다.
 - [확인됨] 검수 대상 근거를 사용하면 서버가 기준일·검수·공식 출처 재확인 안내를 붙인다.
 - [확인됨] 기존 chat 평가 case와 수동 QA 기록, 고정 근거를 사용하는 답변 비교 run이 있다.
-- [확인됨] backend 의존성에는 현재 RAGAS가 등록돼 있지 않다. RAGAS 평가 실행과 검색·답변 품질 기준선 구축은 다음 작업이다.
+- [확인됨] 평가 전용 의존성에 `ragas==0.4.3`과 호환용 `langchain-community==0.4.1`을 고정했다. 지표 factory·입력 adapter·offline 검증과 전용 테스트를 추가했다. 실제 평가 실행과 품질 기준선 구축은 아직 미완료다.
 
-관측과 답변 지연 개선의 첫 회차는 마무리했다. **이제 평가 지표를 정의하고, 실제 검색 결과와 답변을 함께 평가하는 기준선을 만들 차례다.**
+관측과 답변 지연 개선의 첫 회차는 마무리했다. **평가 지표·입력 계약을 정의했으며, 다음은 공식 근거를 확인해 reference를 보강하는 작업이다.** 실제 baseline 점수는 아직 측정하지 않았다.
 
 관련 기록:
 
+- [RAGAS 평가 지표·입력 계약](../../spec/2026-10-05-ragas-evaluation-contract-spec.md)
+- [RAGAS 라이브러리 도입·offline 검증](../../work/2026-10-05-ragas-library-bootstrap.md)
+- [합성 입력 실제 지표 smoke: 2개 사례·8개 점수](../../work/2026-10-05-ragas-synthetic-metric-demo.md). 실제 judge API 실행 완료, 서비스 baseline은 미측정.
 - [MVP2 전체 계획](../../planning/002-mvp2-backend-upgrade-plan.md)
 - [속도 개선과 적용 정책](../../work/2026-10-05-answer-latency-reasoning-policy.md)
 - [기존 QA 데이터 계획](../../work/2026-09-08-mvp2-3-2-manual-qa-evaluation-dataset-plan.md)
@@ -46,7 +49,10 @@ RAG 평가 부분은 RAGAS의 지표와 입력 형식을 기준으로 설계한�
 Faithfulness는 근거와의 일치도이지 원문 자체의 정확성·최신성 보장이 아니다.
 Relevancy도 사실 정확성을 평가하는 지표가 아니므로, 정답 기준과 필수·금지 주장을 따로 둔다.
 Context Recall은 reference가 필요하고 Context Precision은 reference 유무에 따라 구현을 선택한다.
-패키지 버전을 고정한 뒤 실제 metric 이름·API·필수 입력을 확정한다.
+2026-10-05 공식 stable 문서의 `metrics.collections` API를 기준으로
+`Faithfulness`, `AnswerRelevancy`, reference 기반 `ContextPrecision`, `ContextRecall`을 설계에 선택했다.
+필수 입력·근거 분리·적용 제외·별도 서비스 검사는 위 평가 계약에 정의했다.
+패키지 버전을 고정한 뒤 설치 버전의 import·인자·결과 형태를 검증한다.
 
 RAGAS 지표와 별도로 서비스 평가도 유지한다:
 
@@ -110,10 +116,10 @@ metric별 점수·평가 오류·적용 제외 사유
 검색 개선 단계는 baseline의 실패 유형을 보고 필요한 항목만 선택한다.
 
 - [x] 최소 관측 로그, limitation 계약 수정, 답변 생성 지연 실험과 도구별 설정 적용 완료 (`2b6c5ac`).
-- [ ] **다음 시작: RAGAS 평가 지표·필수 입력·적용 대상·서비스 별도 검사 항목을 문서로 확정한다.**
-- [ ] 기존 평가 데이터에서 RAG 사례를 선정하고 검수된 reference·필수 사실·기대 근거를 보강한다.
-- [ ] RAGAS 버전을 고정하고 평가용 의존성·judge/embedding 설정·실행 및 비용 범위를 정한다.
-- [ ] 기존 실행 결과를 평가 입력으로 변환하고 metric별 결과·오류·적용 제외를 저장하는 최소 평가 runner를 만든다.
+- [x] RAGAS 평가 지표·필수 입력·적용 대상·서비스 별도 검사 항목을 [문서로 확정했다](../../spec/2026-10-05-ragas-evaluation-contract-spec.md). 코드·공식 문서 대조 완료, 실행 측정은 미완료.
+- [ ] **다음 시작: 기존 평가 데이터에서 RAG 사례를 선정하고 검수된 reference·필수 사실·기대 근거를 보강한다.** Smoke의 예매·음식물 반입·보크 3개를 후보로 선정했으며 reference 검수는 아직 하지 않았다.
+- [ ] RAGAS 버전을 고정하고 평가용 의존성·judge/embedding 설정·실행 및 비용 범위를 정한다. **의존성 설치·버전 고정·실제 API import 검증은 완료**했으며 judge 설정·실행 비용 범위는 남아 있다.
+- [ ] 기존 실행 결과를 평가 입력으로 변환하고 metric별 결과·오류·적용 제외를 저장하는 최소 평가 runner를 만든다. **입력 adapter·지표 factory·scoring 함수·offline 검증 CLI는 완료**했으며 실제 입력 수집·run manifest·점수 저장 연결은 남아 있다.
 - [ ] 기존 9개 smoke 질문을 실제 routing·검색·답변·SSE 경로로 재실행한다. RAG 사례에는 RAGAS 평가를 연결한다.
 - [ ] 자동 점수와 수동 검토를 대조하고 실패를 routing / retrieval / grounding / policy / runtime으로 분류한다.
 - [ ] 야구 규칙 조건 혼동, 검수 안내 누락, 근거 없음 응답을 회귀 사례로 확정한다.

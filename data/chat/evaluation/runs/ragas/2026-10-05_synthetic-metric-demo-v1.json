@@ -1,0 +1,467 @@
+{
+  "schema_version": 1,
+  "run_id": "2026-10-05_ragas_synthetic_metric_demo_v1",
+  "executed_at": "2026-10-05T22:56:56.564840+09:00",
+  "scope": "controlled_synthetic_metric_demo_only",
+  "service_baseline": false,
+  "reference_scope": "fictional_fixture_verified_against_authored_context_only",
+  "ragas_version": "0.4.3",
+  "judge_model": "gpt-4o-mini-2024-07-18",
+  "embedding_model": "text-embedding-3-small",
+  "strictness": 3,
+  "temperature": 0,
+  "max_output_tokens_per_judge_call": 1024,
+  "sdk_retries": 0,
+  "instructor_max_attempts": 1,
+  "runner_retries": 0,
+  "max_requests": 24,
+  "cost_limit_usd": 0.05,
+  "dataset_sha256": "d8f164c941b07d59227ba319f14d1cac92b8f03407331c575e594f1f58f78d52",
+  "adapter_sha256": "05ad2fddf9cb927eae95d48b247ffc6a16498286d679231b7b4f4fd69601cde1",
+  "duration_seconds": 35.551,
+  "api_request_attempts": 20,
+  "api_usage": [
+    {
+      "kind": "judge",
+      "status_code": 200,
+      "model": "gpt-4o-mini-2024-07-18",
+      "usage": {
+        "prompt_tokens": 545,
+        "completion_tokens": 40,
+        "total_tokens": 585,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00010575
+    },
+    {
+      "kind": "judge",
+      "status_code": 200,
+      "model": "gpt-4o-mini-2024-07-18",
+      "usage": {
+        "prompt_tokens": 1141,
+        "completion_tokens": 118,
+        "total_tokens": 1259,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00024195
+    },
+    {
+      "kind": "judge",
+      "status_code": 200,
+      "model": "gpt-4o-mini-2024-07-18",
+      "usage": {
+        "prompt_tokens": 652,
+        "completion_tokens": 33,
+        "total_tokens": 685,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.0001176
+    },
+    {
+      "kind": "judge",
+      "status_code": 200,
+      "model": "gpt-4o-mini-2024-07-18",
+      "usage": {
+        "prompt_tokens": 652,
+        "completion_tokens": 33,
+        "total_tokens": 685,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.0001176
+    },
+    {
+      "kind": "judge",
+      "status_code": 200,
+      "model": "gpt-4o-mini-2024-07-18",
+      "usage": {
+        "prompt_tokens": 652,
+        "completion_tokens": 33,
+        "total_tokens": 685,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.0001176
+    },
+    {
+      "kind": "embedding",
+      "status_code": 200,
+      "model": "text-embedding-3-small",
+      "usage": {
+        "prompt_tokens": 34,
+        "total_tokens": 34
+      },
+      "estimated_cost_usd": 6.800000000000001e-07
+    },
+    {
+      "kind": "embedding",
+      "status_code": 200,
+      "model": "text-embedding-3-small",
+      "usage": {
+        "prompt_tokens": 48,
+        "total_tokens": 48
+      },
+      "estimated_cost_usd": 9.6e-07
+    },
+    {
+      "kind": "judge",
+      "status_code": 200,
+      "model": "gpt-4o-mini-2024-07-18",
+      "usage": {
+        "prompt_tokens": 1148,
+        "completion_tokens": 40,
+        "total_tokens": 1188,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.0001962
+    },
+    {
+      "kind": "judge",
+      "status_code": 200,
+      "model": "gpt-4o-mini-2024-07-18",
+      "usage": {
+        "prompt_tokens": 1142,
+        "completion_tokens": 60,
+        "total_tokens": 1202,
+        "prompt_tokens_details": {
+          "cached_tokens": 1024,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.0001305
+    },
+    {
+      "kind": "judge",
+      "status_code": 200,
+      "model": "gpt-4o-mini-2024-07-18",
+      "usage": {
+        "prompt_tokens": 1706,
+        "completion_tokens": 77,
+        "total_tokens": 1783,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00030209999999999997
+    },
+    {
+      "kind": "judge",
+      "status_code": 200,
+      "model": "gpt-4o-mini-2024-07-18",
+      "usage": {
+        "prompt_tokens": 542,
+        "completion_tokens": 37,
+        "total_tokens": 579,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.0001035
+    },
+    {
+      "kind": "judge",
+      "status_code": 200,
+      "model": "gpt-4o-mini-2024-07-18",
+      "usage": {
+        "prompt_tokens": 1128,
+        "completion_tokens": 115,
+        "total_tokens": 1243,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.0002382
+    },
+    {
+      "kind": "judge",
+      "status_code": 200,
+      "model": "gpt-4o-mini-2024-07-18",
+      "usage": {
+        "prompt_tokens": 649,
+        "completion_tokens": 33,
+        "total_tokens": 682,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00011714999999999999
+    },
+    {
+      "kind": "judge",
+      "status_code": 200,
+      "model": "gpt-4o-mini-2024-07-18",
+      "usage": {
+        "prompt_tokens": 649,
+        "completion_tokens": 33,
+        "total_tokens": 682,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00011714999999999999
+    },
+    {
+      "kind": "judge",
+      "status_code": 200,
+      "model": "gpt-4o-mini-2024-07-18",
+      "usage": {
+        "prompt_tokens": 649,
+        "completion_tokens": 33,
+        "total_tokens": 682,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00011714999999999999
+    },
+    {
+      "kind": "embedding",
+      "status_code": 200,
+      "model": "text-embedding-3-small",
+      "usage": {
+        "prompt_tokens": 34,
+        "total_tokens": 34
+      },
+      "estimated_cost_usd": 6.800000000000001e-07
+    },
+    {
+      "kind": "embedding",
+      "status_code": 200,
+      "model": "text-embedding-3-small",
+      "usage": {
+        "prompt_tokens": 48,
+        "total_tokens": 48
+      },
+      "estimated_cost_usd": 9.6e-07
+    },
+    {
+      "kind": "judge",
+      "status_code": 200,
+      "model": "gpt-4o-mini-2024-07-18",
+      "usage": {
+        "prompt_tokens": 1142,
+        "completion_tokens": 60,
+        "total_tokens": 1202,
+        "prompt_tokens_details": {
+          "cached_tokens": 1024,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.0001305
+    },
+    {
+      "kind": "judge",
+      "status_code": 200,
+      "model": "gpt-4o-mini-2024-07-18",
+      "usage": {
+        "prompt_tokens": 1138,
+        "completion_tokens": 69,
+        "total_tokens": 1207,
+        "prompt_tokens_details": {
+          "cached_tokens": 1024,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00013529999999999998
+    },
+    {
+      "kind": "judge",
+      "status_code": 200,
+      "model": "gpt-4o-mini-2024-07-18",
+      "usage": {
+        "prompt_tokens": 1696,
+        "completion_tokens": 199,
+        "total_tokens": 1895,
+        "prompt_tokens_details": {
+          "cached_tokens": 1536,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00025859999999999994
+    }
+  ],
+  "estimated_cost_usd": 0.00255013,
+  "price_checked_at": "2026-10-05",
+  "price_sources": [
+    "https://developers.openai.com/api/docs/models/gpt-4o-mini",
+    "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+  ],
+  "results": [
+    {
+      "case_id": "metric_demo_grounded",
+      "metrics": {
+        "faithfulness": {
+          "status": "scored",
+          "value": 1.0,
+          "reason_code": null,
+          "duration_ms": 5153.365
+        },
+        "answer_relevancy": {
+          "status": "scored",
+          "value": 0.3583709210175184,
+          "reason_code": null,
+          "duration_ms": 9158.022
+        },
+        "context_precision": {
+          "status": "scored",
+          "value": 0.9999999999,
+          "reason_code": null,
+          "duration_ms": 3507.41
+        },
+        "context_recall": {
+          "status": "scored",
+          "value": 1.0,
+          "reason_code": null,
+          "duration_ms": 2280.129
+        }
+      }
+    },
+    {
+      "case_id": "metric_demo_unsupported_noisy",
+      "metrics": {
+        "faithfulness": {
+          "status": "scored",
+          "value": 0.0,
+          "reason_code": null,
+          "duration_ms": 2825.867
+        },
+        "answer_relevancy": {
+          "status": "scored",
+          "value": 0.3583709210175184,
+          "reason_code": null,
+          "duration_ms": 6108.755
+        },
+        "context_precision": {
+          "status": "scored",
+          "value": 0.0,
+          "reason_code": null,
+          "duration_ms": 2740.871
+        },
+        "context_recall": {
+          "status": "scored",
+          "value": 0.3333333333333333,
+          "reason_code": null,
+          "duration_ms": 3503.494
+        }
+      }
+    }
+  ]
+}

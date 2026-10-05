@@ -19,6 +19,7 @@ candidates/  실패·애매 사례의 검토 대기열
 cases/       기대 동작이 확정된 재사용 평가셋
 runs/manual/ 브라우저 기반 수동 QA 실행 결과
 runs/answer-model/ 고정 공개 근거를 사용하는 답변 모델 비교 milestone
+runs/ragas/ RAGAS 지표 실행 요약 (합성 지표 smoke와 서비스 baseline은 scope로 구분)
 schemas/     각 데이터 파일의 JSON Schema
 ```
 
@@ -78,6 +79,13 @@ API key와 환경변수 값
 구성하고, 생성 답변은 실제 서비스의 schema·ref·limitation 검증을 거친다.
 `runs/answer-model/`에는 시간·계약 검증 결과·검토 주체가 명시된 품질 점검 요약을 보관한다.
 검토용 합성 답변 전문은 `/private/tmp`에만 만들고 Git에 넣지 않는다.
+
+`runs/ragas/2026-10-05_synthetic-metric-demo-v1.json`은 가상 구장 입력의
+실제 judge·embedding API smoke 결과다. `service_baseline=false`이며
+실서비스 검색/답변·공식 정책 정답셋 평가 결과로 해석하지 않는다.
+기존 manual run schema/validator 대상과 구분한다.
+설정·hash·점수·오류·시간·token usage만 저장하고 입력/답변 전문은 임시 파일에 둔다.
+실행과 해석은 `docs/work/2026-10-05-ragas-synthetic-metric-demo.md`를 따른다.
 
 ## 검증
 

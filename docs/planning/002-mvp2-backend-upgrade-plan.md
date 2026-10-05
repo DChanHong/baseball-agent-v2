@@ -190,6 +190,13 @@ LangSmith, OpenTelemetry, 자체 DB/JSON trace는 비교 후보로 둔다. 처�
 
 검색 품질 개선 전에 기준 질문과 로그 구조를 먼저 만든다.
 
+2026-10-05: [RAGAS 평가 지표·입력 계약](../spec/2026-10-05-ragas-evaluation-contract-spec.md)을 정의했다.
+Faithfulness·Answer Relevancy·reference 기반 Context Precision/Recall을 세 RAG Tool에 적용하도록 설계하고,
+원래 검색 순위와 생성기에 전달된 bounded evidence를 분리했다.
+후속 [라이브러리 도입](../work/2026-10-05-ragas-library-bootstrap.md)에서 평가 그룹에 RAGAS 0.4.3을 고정하고
+지표 factory·입력 adapter·offline 검증을 추가했다.
+reference 검수·judge 설정·실제 입력 수집/runner 저장 연결·baseline 측정은 미완료다.
+
 필요한 평가셋:
 
 ```text
@@ -744,13 +751,16 @@ limitation 입력 계약 개선 이후 답변 전용 모델 설정과 고정 근
 해당 결과는 `docs/work/2026-10-05-answer-evidence-compaction.md`에 기록했다.
 후속 추론 토큰 비교에서 구장·예매 안내의 답변 단계 중앙값을 12.251초 → 4.491초로 줄였다. 모델은 유지하고 해당 Tool만 low를 사용하며 야구 규칙은 medium을 유지한다.
 실제 적용 정책 검증 및 남은 지연은 `docs/work/2026-10-05-answer-latency-reasoning-policy.md`에 기록했다.
-다음 회차는 기존 질문의 재실행과 Step 4 평가 run 연결에 집중한다.
+RAGAS 평가 지표·입력·적용 제외·서비스 별도 검사 계약은 정의했다.
+다음 회차는 reference 보강과 Step 4 평가 runner 준비에 집중한다.
 
-1. DB·실제 API 사용 범위를 승인받은 뒤 기존 9개 smoke 질문을 재실행한다.
-2. trace ID로 단계별 latency와 fallback 여부를 확인하고 실패 유형을 분류한다.
-3. 결과를 개인정보 없는 evaluation run과 candidate에 연결한다.
-4. 나머지 21개 case의 실행을 확장한다.
-5. Tool별 baseline을 정리한 뒤 실패 결과에 따라 검색 개선 또는 multi-step을 선택한다.
+1. 기존 smoke 중 RAG 후보 3개의 공식 근거·reference·필수 사실·기대 근거 ID를 검수한다.
+2. RAGAS 버전·judge/embedding·실행 비용 범위를 정하고 offline 입력 변환과 runner를 검증한다.
+3. DB·실제 API 사용 범위를 승인받은 뒤 기존 9개 smoke를 재실행하고 RAG 사례에 평가를 연결한다.
+4. trace·metric·수동 점검·SSE 결과를 evaluation run과 candidate에 연결하고 실패를 분류한다.
+5. 나머지 case와 Tool별 baseline을 확장한 뒤 실패 결과에 따라 검색 개선 또는 multi-step을 선택한다.
+
+순차 진행 기록은 [다음 작업 메모](../memo/v2/2026-10-05-ragas-evaluation-baseline-next-steps.md)에 유지한다.
 
 Trace의 HTTP·DB 저장·SSE 전송 확장은 Step 3 잔여 항목으로 유지한다.
 QA 데이터 기준은 `docs/work/2026-09-08-mvp2-3-2-manual-qa-evaluation-dataset-plan.md`를 따른다.
