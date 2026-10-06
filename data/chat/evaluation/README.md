@@ -96,3 +96,9 @@ API key와 환경변수 값
 ```bash
 backend/.venv/bin/python backend/scripts/validate_chat_evaluation_data.py
 ```
+
+2026-10-06 첫 서비스 baseline과 실제 API·DB·화면 E2E 결과는
+[실행 기록](../../../docs/work/2026-10-06-ragas-service-baseline-e2e.md)을 따른다.
+`cases/ragas_service_references_v1.json`은 공식 원문을 agent가 검수한 별도
+reference dataset이며 `human_reviewed=false`를 유지한다. 10월 6일 run은
+기본 15초 baseline과 60초 진단을 분리하며, 실패·제외도 측정 결과에 포함한다.

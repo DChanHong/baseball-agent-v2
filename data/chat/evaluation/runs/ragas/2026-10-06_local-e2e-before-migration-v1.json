@@ -1,0 +1,691 @@
+{
+  "schema_version": 1,
+  "scope": "real_local_chat_api_db_online_e2e",
+  "commit": "805fb31",
+  "test_identity": "ephemeral_synthetic_auth_user",
+  "results": [
+    {
+      "case_id": "chat_game_001",
+      "http_status": 200,
+      "events": [
+        "conversation.created",
+        "message.created",
+        "message.created",
+        "tool.started",
+        "tool.completed",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.completed",
+        "conversation.updated",
+        "done"
+      ],
+      "expected_tool": "find_kbo_game",
+      "observed_tool": "find_kbo_game",
+      "sse_done": true,
+      "sse_duration_ms": 21722.054,
+      "db_completed_matches_sse": true,
+      "response_origin": "fallback",
+      "fallback_reason": "TimeoutError",
+      "retrieved_count": 0,
+      "online_results": [],
+      "online_logged_after_done": null
+    },
+    {
+      "case_id": "chat_stadium_001",
+      "http_status": 200,
+      "events": [
+        "conversation.created",
+        "message.created",
+        "message.created",
+        "tool.started",
+        "tool.completed",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.completed",
+        "conversation.updated",
+        "done"
+      ],
+      "expected_tool": "get_stadium_info",
+      "observed_tool": "get_stadium_info",
+      "sse_done": true,
+      "sse_duration_ms": 9154.284,
+      "db_completed_matches_sse": true,
+      "response_origin": "llm",
+      "fallback_reason": null,
+      "retrieved_count": 0,
+      "online_results": [],
+      "online_logged_after_done": null
+    },
+    {
+      "case_id": "chat_weather_001",
+      "http_status": 200,
+      "events": [
+        "conversation.created",
+        "message.created",
+        "message.created",
+        "tool.started",
+        "tool.completed",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.completed",
+        "conversation.updated",
+        "done"
+      ],
+      "expected_tool": "get_weather_context",
+      "observed_tool": "get_weather_context",
+      "sse_done": true,
+      "sse_duration_ms": 18673.258,
+      "db_completed_matches_sse": true,
+      "response_origin": "llm",
+      "fallback_reason": null,
+      "retrieved_count": 0,
+      "online_results": [],
+      "online_logged_after_done": null
+    },
+    {
+      "case_id": "chat_ticket_001",
+      "http_status": 200,
+      "events": [
+        "conversation.created",
+        "message.created",
+        "message.created",
+        "tool.started",
+        "tool.failed",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.completed",
+        "conversation.updated",
+        "done"
+      ],
+      "expected_tool": "search_ticketing_guide",
+      "observed_tool": null,
+      "sse_done": true,
+      "sse_duration_ms": 11925.895,
+      "db_completed_matches_sse": true,
+      "response_origin": "fallback",
+      "fallback_reason": "tool_execution_failed",
+      "retrieved_count": 0,
+      "online_results": [],
+      "online_logged_after_done": null
+    },
+    {
+      "case_id": "chat_guide_001",
+      "http_status": 200,
+      "events": [
+        "conversation.created",
+        "message.created",
+        "message.created",
+        "tool.started",
+        "tool.failed",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.completed",
+        "conversation.updated",
+        "done"
+      ],
+      "expected_tool": "search_stadium_guide",
+      "observed_tool": null,
+      "sse_done": true,
+      "sse_duration_ms": 5398.529,
+      "db_completed_matches_sse": true,
+      "response_origin": "fallback",
+      "fallback_reason": "tool_execution_failed",
+      "retrieved_count": 0,
+      "online_results": [],
+      "online_logged_after_done": null
+    },
+    {
+      "case_id": "chat_knowledge_001",
+      "http_status": 200,
+      "events": [
+        "conversation.created",
+        "message.created",
+        "message.created",
+        "tool.started",
+        "tool.completed",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.completed",
+        "conversation.updated",
+        "done"
+      ],
+      "expected_tool": "search_baseball_knowledge",
+      "observed_tool": "search_baseball_knowledge",
+      "sse_done": true,
+      "sse_duration_ms": 20508.618,
+      "db_completed_matches_sse": true,
+      "response_origin": "fallback",
+      "fallback_reason": "TimeoutError",
+      "retrieved_count": 5,
+      "online_results": [],
+      "online_logged_after_done": null
+    },
+    {
+      "case_id": "chat_followup_001",
+      "http_status": 200,
+      "events": [
+        "conversation.created",
+        "message.created",
+        "message.created",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.completed",
+        "conversation.updated",
+        "done"
+      ],
+      "expected_tool": null,
+      "observed_tool": null,
+      "sse_done": true,
+      "sse_duration_ms": 3481.378,
+      "db_completed_matches_sse": true,
+      "response_origin": "contextual_direct",
+      "fallback_reason": null,
+      "retrieved_count": 0,
+      "online_results": [],
+      "online_logged_after_done": null
+    },
+    {
+      "case_id": "chat_followup_002",
+      "http_status": 200,
+      "events": [
+        "conversation.created",
+        "message.created",
+        "message.created",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.completed",
+        "conversation.updated",
+        "done"
+      ],
+      "expected_tool": null,
+      "observed_tool": null,
+      "sse_done": true,
+      "sse_duration_ms": 2256.237,
+      "db_completed_matches_sse": true,
+      "response_origin": "contextual_direct",
+      "fallback_reason": null,
+      "retrieved_count": 0,
+      "online_results": [],
+      "online_logged_after_done": null
+    },
+    {
+      "case_id": "chat_followup_003",
+      "http_status": 200,
+      "events": [
+        "conversation.created",
+        "message.created",
+        "message.created",
+        "assistant.delta",
+        "assistant.completed",
+        "conversation.updated",
+        "done"
+      ],
+      "expected_tool": null,
+      "observed_tool": null,
+      "sse_done": true,
+      "sse_duration_ms": 4146.585,
+      "db_completed_matches_sse": true,
+      "response_origin": "contextual_direct",
+      "fallback_reason": null,
+      "retrieved_count": 0,
+      "online_results": [],
+      "online_logged_after_done": null
+    }
+  ],
+  "usage": [
+    {
+      "case_id": "chat_game_001",
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 6058.832,
+      "usage": {
+        "prompt_tokens": 10560,
+        "completion_tokens": 215,
+        "total_tokens": 10775,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 128,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00307
+    },
+    {
+      "case_id": "chat_game_001",
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 14988.566,
+      "usage": {
+        "prompt_tokens": 1261,
+        "completion_tokens": 1278,
+        "total_tokens": 2539,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1152,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00287125
+    },
+    {
+      "case_id": "chat_stadium_001",
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 3570.29,
+      "usage": {
+        "prompt_tokens": 10560,
+        "completion_tokens": 203,
+        "total_tokens": 10763,
+        "prompt_tokens_details": {
+          "cached_tokens": 9984,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 128,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.003046
+    },
+    {
+      "case_id": "chat_stadium_001",
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 5280.512,
+      "usage": {
+        "prompt_tokens": 1161,
+        "completion_tokens": 429,
+        "total_tokens": 1590,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 320,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00114825
+    },
+    {
+      "case_id": "chat_weather_001",
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 3344.894,
+      "usage": {
+        "prompt_tokens": 10559,
+        "completion_tokens": 280,
+        "total_tokens": 10839,
+        "prompt_tokens_details": {
+          "cached_tokens": 9984,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 192,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00319975
+    },
+    {
+      "case_id": "chat_weather_001",
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 14956.019,
+      "usage": {
+        "prompt_tokens": 1325,
+        "completion_tokens": 1724,
+        "total_tokens": 3049,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1536,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00377925
+    },
+    {
+      "case_id": "chat_ticket_001",
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 6031.119,
+      "usage": {
+        "prompt_tokens": 10561,
+        "completion_tokens": 285,
+        "total_tokens": 10846,
+        "prompt_tokens_details": {
+          "cached_tokens": 9984,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 192,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00321025
+    },
+    {
+      "case_id": "chat_ticket_001",
+      "model": "text-embedding-3-small",
+      "http_status": 200,
+      "duration_ms": 5460.411,
+      "usage": {
+        "prompt_tokens": 12,
+        "total_tokens": 12
+      },
+      "estimated_cost_usd": 2.4e-07
+    },
+    {
+      "case_id": "chat_guide_001",
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 4644.642,
+      "usage": {
+        "prompt_tokens": 10564,
+        "completion_tokens": 236,
+        "total_tokens": 10800,
+        "prompt_tokens_details": {
+          "cached_tokens": 9984,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 128,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.003113
+    },
+    {
+      "case_id": "chat_guide_001",
+      "model": "text-embedding-3-small",
+      "http_status": 200,
+      "duration_ms": 495.121,
+      "usage": {
+        "prompt_tokens": 16,
+        "total_tokens": 16
+      },
+      "estimated_cost_usd": 3.2e-07
+    },
+    {
+      "case_id": "chat_knowledge_001",
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 3882.798,
+      "usage": {
+        "prompt_tokens": 10559,
+        "completion_tokens": 212,
+        "total_tokens": 10771,
+        "prompt_tokens_details": {
+          "cached_tokens": 9984,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 128,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00306375
+    },
+    {
+      "case_id": "chat_knowledge_001",
+      "model": "text-embedding-3-small",
+      "http_status": 200,
+      "duration_ms": 1258.517,
+      "usage": {
+        "prompt_tokens": 7,
+        "total_tokens": 7
+      },
+      "estimated_cost_usd": 1.4e-07
+    },
+    {
+      "case_id": "chat_followup_001",
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 3212.277,
+      "usage": {
+        "prompt_tokens": 10632,
+        "completion_tokens": 191,
+        "total_tokens": 10823,
+        "prompt_tokens_details": {
+          "cached_tokens": 9984,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 128,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00304
+    },
+    {
+      "case_id": "chat_followup_002",
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 2052.109,
+      "usage": {
+        "prompt_tokens": 10631,
+        "completion_tokens": 127,
+        "total_tokens": 10758,
+        "prompt_tokens_details": {
+          "cached_tokens": 9984,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 64,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00291175
+    },
+    {
+      "case_id": "chat_followup_003",
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 3863.008,
+      "usage": {
+        "prompt_tokens": 10633,
+        "completion_tokens": 128,
+        "total_tokens": 10761,
+        "prompt_tokens_details": {
+          "cached_tokens": 9984,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 64,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00291425
+    }
+  ],
+  "cleanup": {
+    "synthetic_profile_and_conversations_removed": true,
+    "synthetic_auth_user_removed": true
+  },
+  "auth_me_status": 200,
+  "db_health_status": 200,
+  "request_count": 16,
+  "reserved_upper_estimate_usd": 0.3665543999999999,
+  "online_sample_rate": 1,
+  "generation_output_token_cap": 8192,
+  "run_id": "2026-10-06_local-e2e-before-migration-v1",
+  "service_baseline": false,
+  "run_date": "2026-10-06",
+  "purpose": "runtime_environment_diagnosis",
+  "ragas_version": "0.4.3",
+  "dataset_sha256": "425d86a05a0716daaa9f8f81795d8c1b5125dc3bc06df5a78fa40b3d9b3d0a56",
+  "findings": [
+    "Missing existing migrations 20260909090000 and 20260910090000; stadium guide queries require absent lifecycle columns.",
+    "15-second answer timeout caused game and baseball-knowledge fallback.",
+    "All 9 HTTP streams reached done and DB completed answer matched SSE. No eligible online RAG evaluation submitted."
+  ],
+  "cost_basis": "Estimated standard uncached token rates, pending pricing cross-check; not an invoice",
+  "provenance": {
+    "code_revision": "805fb31",
+    "implementation_worktree_clean_at_start": true,
+    "evaluation_artifacts_added_during_run": true,
+    "dataset_version": "ragas-service-reference-v1",
+    "reference_dataset_sha256": "36048ae436e6b9104c7ffbeb09b29a2699fbb0e6be4bb3f09624baca401c741f",
+    "smoke_dataset_sha256": "425d86a05a0716daaa9f8f81795d8c1b5125dc3bc06df5a78fa40b3d9b3d0a56",
+    "adapter_sha256": "05ad2fddf9cb927eae95d48b247ffc6a16498286d679231b7b4f4fd69601cde1",
+    "uv_lock_sha256": "693f4480ce78858fba8e8260ecb79fb71ded1b704fa627c0ba633f70e244efa1",
+    "routing_system_prompt_sha256": "92158393571b0786af4513fa701dc8d7cbacb2b62f006bdbce3fe6e43277debc",
+    "answer_system_prompt_sha256": "672d5c1d56047faf9e0a5897d79927add3f47ae18466368762ddc603a5d87505",
+    "prompt_language": {
+      "service": "Korean policy",
+      "judge": "RAGAS 0.4.3 default English prompts; Korean questions/contexts/responses"
+    },
+    "metric_classes": {
+      "Faithfulness": {
+        "class": "ragas.metrics.collections.faithfulness.metric.Faithfulness",
+        "package_source_sha256": "475517e1d53e61ad29ff8fb2cee07190be971fafede395bcf7581e8a0d335ef8",
+        "prompt_customization": null
+      },
+      "AnswerRelevancy": {
+        "class": "ragas.metrics.collections.answer_relevancy.metric.AnswerRelevancy",
+        "package_source_sha256": "4417e7484c29c546144dc2294f4ed63711217bc7b276398241ca5d77605e47c6",
+        "prompt_customization": null
+      },
+      "ContextPrecision": {
+        "class": "ragas.metrics.collections.context_precision.metric.ContextPrecision",
+        "package_source_sha256": "7fb625e59816db044a3bce0b12f8a63d579a54b0a95862edcf193c34dfb1deb8",
+        "prompt_customization": null
+      },
+      "ContextRecall": {
+        "class": "ragas.metrics.collections.context_recall.metric.ContextRecall",
+        "package_source_sha256": "c44a020bf34aa9ea9d11adc684657a4527ccc890696d78320544502d41e773f3",
+        "prompt_customization": null
+      }
+    },
+    "retrieval_settings": {
+      "search_stadium_guide": {
+        "embedding_model": "text-embedding-3-small",
+        "default_top_k": 5,
+        "max_top_k": 10,
+        "relevance_threshold": 0.65,
+        "document_types": [
+          "stadium_bag_policy",
+          "stadium_facility_guide",
+          "stadium_seat_guide",
+          "stadium_transport_guide",
+          "stadium_food_guide",
+          "stadium_entry_guide",
+          "stadium_accessibility_guide"
+        ]
+      },
+      "search_ticketing_guide": {
+        "embedding_model": "text-embedding-3-small",
+        "default_top_k": 5,
+        "max_top_k": 10,
+        "relevance_threshold": 0.65,
+        "document_types": [
+          "stadium_ticketing_guide"
+        ]
+      },
+      "search_baseball_knowledge": {
+        "embedding_model": "text-embedding-3-small",
+        "default_top_k": 5,
+        "max_top_k": 10,
+        "relevance_threshold": 0.82,
+        "document_types": [
+          "baseball_rule",
+          "common_play",
+          "latest_kbo_rule"
+        ]
+      }
+    },
+    "instrumentation": {
+      "production_auth_routing_retrieval_generation_persistence_and_online_judge": "real; no dependency overrides or mocked responses",
+      "test_only_spies": [
+        "grounded request capture",
+        "pre-source-notice draft capture",
+        "content-free online log collection",
+        "transport usage collection"
+      ],
+      "isolated_generation_output_token_cap": 8192,
+      "generation_retries": "existing SDK defaults, actual requests counted",
+      "judge_retries": 0,
+      "metric_concurrency": 1,
+      "initial_repetitions": 1,
+      "diagnostic_repetitions": "separate manifests"
+    },
+    "phase_timings": {
+      "http_sse": "measured",
+      "ui_completion": "measured",
+      "provider_request_duration": "recorded when response completed",
+      "full_graph_stage_breakdown": null,
+      "missing_reason": "initial harness did not retain agent trace stages; provider durations are not full graph stage timings"
+    },
+    "pricing": {
+      "checked_at": "2026-10-06",
+      "usd_per_million_tokens": {
+        "gpt-5-mini": {
+          "input": 0.25,
+          "output": 2
+        },
+        "gpt-4o-mini-2024-07-18": {
+          "input": 0.15,
+          "output": 0.6
+        },
+        "text-embedding-3-small": {
+          "input": 0.02,
+          "output": 0
+        }
+      },
+      "cache_discounts_applied": false,
+      "source_urls": [
+        "https://developers.openai.com/api/docs/models/gpt-5-mini",
+        "https://developers.openai.com/api/docs/models/gpt-4o-mini",
+        "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+      ]
+    }
+  },
+  "known_response_usage_cost_estimate_usd": 0.0353682,
+  "missing_usage_request_count": 1,
+  "total_billed_cost_usd": null,
+  "billing_note": "Uncached standard-rate estimate for completed responses only. Cancelled requests may be billed without returned usage; provider invoice is not available."
+}

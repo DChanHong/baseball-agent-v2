@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "dataset_version": "ragas-service-reference-v1",
+  "scope": "initial_three_rag_tools_source_reviewed_by_agent",
+  "references": [
+    {
+      "case_id": "chat_ticket_001",
+      "user_input": "사직 예매 어디서 해?",
+      "expected_tool": "search_ticketing_guide",
+      "reference": "사직야구장에서 열리는 롯데 홈경기는 롯데자이언츠 구단 자체 예매처 ticket.giantsclub.com에서 예매한다.",
+      "required_facts": [
+        "롯데 구단 자체 예매",
+        "ticket.giantsclub.com"
+      ],
+      "forbidden_claims": [
+        "티켓링크를 롯데 공식 예매처로 안내",
+        "실시간 잔여석 단정"
+      ],
+      "sources": [
+        {
+          "url": "https://www.koreabaseball.com/kbo/league/map.aspx",
+          "checked_at": "2026-10-06",
+          "locator": "예매처 → 구단 자체예매 → 롯데 자이언츠",
+          "source_as_of": null
+        }
+      ],
+      "reference_review": {
+        "reviewer": "Codex agent source review",
+        "reviewer_kind": "agent",
+        "reviewed_at": "2026-10-06",
+        "status": "approved",
+        "human_reviewed": false
+      }
+    },
+    {
+      "case_id": "chat_guide_001",
+      "user_input": "고척돔 음식물 반입 가능해?",
+      "expected_tool": "search_stadium_guide",
+      "reference": "고척스카이돔은 행사 성격에 따라 음식물 반입이 제한될 수 있으나 프로야구 경기 때는 음식물 반입이 가능하다. 키움히어로즈 규정에 따라 경기장 재입장 시에는 음식물 반입이 불가능하다.",
+      "required_facts": [
+        "프로야구 경기 시 음식물 반입 가능",
+        "행사 성격에 따라 제한",
+        "재입장 시 음식물 반입 불가"
+      ],
+      "forbidden_claims": [
+        "모든 행사에서 음식물 무조건 허용",
+        "주류 허용 여부를 출처 충돌 없이 확정"
+      ],
+      "sources": [
+        {
+          "url": "https://www.sisul.or.kr/open_content/skydome/community/faq.jsp",
+          "checked_at": "2026-10-06",
+          "locator": "Q.고척스카이돔 내에 음식물 반입이 가능한지 궁금합니다.",
+          "source_as_of": null
+        }
+      ],
+      "reference_review": {
+        "reviewer": "Codex agent source review",
+        "reviewer_kind": "agent",
+        "reviewed_at": "2026-10-06",
+        "status": "approved",
+        "human_reviewed": false
+      },
+      "review_notes": [
+        "음식물만 reference로 승인했다. FAQ의 6도 이하 주류 허용과 키움 공식 SAFE 이미지의 주류반입금지 안내는 충돌하므로 주류 조건을 reference에 포함하지 않았다.",
+        "DB bag policy 초안을 정답으로 승격하지 않고 독립 공식 FAQ를 검수했다."
+      ]
+    },
+    {
+      "case_id": "chat_knowledge_001",
+      "user_input": "보크가 뭐야?",
+      "expected_tool": "search_baseball_knowledge",
+      "reference": "보크는 베이스에 주자가 있는 상황에서 투수의 규칙 위반 행위에 대해 선고한다. 투수의 투구동작 중단이나 세트 포지션에서 완전히 정지하지 않고 투구하는 행위 등이 해당한다. 원칙적으로 볼 데드가 되고 각 주자는 아웃될 위험 없이 한 베이스 진루한다. 다만 타자가 안타·실책·4사구 등으로 1루에 도달하고 다른 주자들도 최소 한 베이스 이상 진루하면 보크와 관계없이 플레이는 계속된다.",
+      "required_facts": [
+        "주자가 있는 상황",
+        "투수 규칙 위반",
+        "원칙적으로 각 주자 한 베이스 안전진루"
+      ],
+      "forbidden_claims": [
+        "보크이면 타자가 자동 아웃",
+        "주자 없는 반칙투구에도 항상 보크",
+        "어떤 경우에도 무조건 볼 데드"
+      ],
+      "sources": [
+        {
+          "url": "https://www.koreabaseball.com/Kbo/Board/Ebook/EbookCategory.aspx",
+          "checked_at": "2026-10-06",
+          "source_as_of": "2026 season",
+          "locator": "2026 공식야구규칙 6.02(a), PDF pages 119–122 / printed pages 95–98",
+          "local_extract_path": "data/baseball_knowledge/raw/extracted_pdf/2026/official_baseball_rules_pages.jsonl",
+          "local_extract_sha256": "a7aac69af118fff904da3fb8c2f646d706df8b0d7a86d0e91ac594024a521fbf"
+        }
+      ],
+      "reference_review": {
+        "reviewer": "Codex agent source review",
+        "reviewer_kind": "agent",
+        "reviewed_at": "2026-10-06",
+        "status": "approved",
+        "human_reviewed": false
+      },
+      "review_notes": [
+        "로컬 보존된 공식 PDF 원문 추출의 6.02 본문·벌칙을 검수했다. 검색 chunk가 선택한 다른 page slice를 정답으로 복사하지 않았다. 온라인 간행물 목록에는 PDF 본문이 노출되지 않아 최신본 재다운로드 대조는 하지 못했다."
+      ]
+    }
+  ]
+}

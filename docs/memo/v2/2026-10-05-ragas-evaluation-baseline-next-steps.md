@@ -134,3 +134,10 @@ metric별 점수·평가 오류·적용 제외 사유
 - [ ] 복합 질문의 단일 Tool 한계가 확인되면 제한된 multi-step/ReAct를 도입한다. max step·timeout·retry·종료 사유를 함께 정의한다.
 - [ ] 실제 token streaming·첫 토큰 시간·CI smoke/regression 자동화를 필요에 맞게 보강한다.
 - [ ] 각 회차의 구현·비교 결과·남은 과제를 이 메모와 MVP2 계획에 갱신하고, 커밋 요청 시 검증 후 기록한다.
+
+## 2026-10-06 실행 업데이트
+
+실제 로컬 API·DB·유료 온라인 평가, 화면 smoke 9개와 초기 RAG 3개 baseline을 실행했다.
+[실행·검수·실패 결과](../../work/2026-10-06-ragas-service-baseline-e2e.md)를 확인한다.
+고척 음식물 근거 부족과 보크 timeout은 미해결 품질 개선 항목이다.
+reference 검수 주체는 agent이며 사람 검수 완료로 해석하지 않는다.

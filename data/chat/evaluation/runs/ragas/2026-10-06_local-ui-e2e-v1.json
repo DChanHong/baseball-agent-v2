@@ -1,0 +1,901 @@
+{
+  "schema_version": 1,
+  "scope": "real_nextjs_ui_chat_api_db_online_e2e",
+  "commit": "805fb31",
+  "test_identity": "ephemeral_synthetic_auth_user",
+  "results": [
+    {
+      "case_id": "chat_game_001",
+      "http_status": 200,
+      "sse_done": true,
+      "assistant_completed": true,
+      "input_enabled_after_response": true,
+      "typing_indicator_removed": true,
+      "question_visible": true,
+      "duration_ms": 11329,
+      "event_names": [
+        "conversation.created",
+        "message.created",
+        "message.created",
+        "tool.started",
+        "tool.completed",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.completed",
+        "conversation.updated",
+        "done"
+      ],
+      "page_error_types": []
+    },
+    {
+      "case_id": "chat_followup_001",
+      "http_status": 200,
+      "sse_done": true,
+      "assistant_completed": true,
+      "input_enabled_after_response": true,
+      "typing_indicator_removed": true,
+      "question_visible": true,
+      "duration_ms": 2327,
+      "event_names": [
+        "conversation.created",
+        "message.created",
+        "message.created",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.completed",
+        "conversation.updated",
+        "done"
+      ],
+      "page_error_types": []
+    },
+    {
+      "case_id": "chat_followup_002",
+      "http_status": 200,
+      "sse_done": true,
+      "assistant_completed": true,
+      "input_enabled_after_response": true,
+      "typing_indicator_removed": true,
+      "question_visible": true,
+      "duration_ms": 2935,
+      "event_names": [
+        "conversation.created",
+        "message.created",
+        "message.created",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.completed",
+        "conversation.updated",
+        "done"
+      ],
+      "page_error_types": []
+    },
+    {
+      "case_id": "chat_followup_003",
+      "http_status": 200,
+      "sse_done": true,
+      "assistant_completed": true,
+      "input_enabled_after_response": true,
+      "typing_indicator_removed": true,
+      "question_visible": true,
+      "duration_ms": 2806,
+      "event_names": [
+        "conversation.created",
+        "message.created",
+        "message.created",
+        "assistant.delta",
+        "assistant.completed",
+        "conversation.updated",
+        "done"
+      ],
+      "page_error_types": []
+    },
+    {
+      "case_id": "chat_stadium_001",
+      "http_status": 200,
+      "sse_done": true,
+      "assistant_completed": true,
+      "input_enabled_after_response": true,
+      "typing_indicator_removed": true,
+      "question_visible": true,
+      "duration_ms": 7902,
+      "event_names": [
+        "conversation.created",
+        "message.created",
+        "message.created",
+        "tool.started",
+        "tool.completed",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.completed",
+        "conversation.updated",
+        "done"
+      ],
+      "page_error_types": []
+    },
+    {
+      "case_id": "chat_weather_001",
+      "http_status": 200,
+      "sse_done": true,
+      "assistant_completed": true,
+      "input_enabled_after_response": true,
+      "typing_indicator_removed": true,
+      "question_visible": true,
+      "duration_ms": 13659,
+      "event_names": [
+        "conversation.created",
+        "message.created",
+        "message.created",
+        "tool.started",
+        "tool.completed",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.completed",
+        "conversation.updated",
+        "done"
+      ],
+      "page_error_types": []
+    },
+    {
+      "case_id": "chat_ticket_001",
+      "http_status": 200,
+      "sse_done": true,
+      "assistant_completed": true,
+      "input_enabled_after_response": true,
+      "typing_indicator_removed": true,
+      "question_visible": true,
+      "duration_ms": 8926,
+      "event_names": [
+        "conversation.created",
+        "message.created",
+        "message.created",
+        "tool.started",
+        "tool.completed",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.completed",
+        "conversation.updated",
+        "done"
+      ],
+      "page_error_types": []
+    },
+    {
+      "case_id": "chat_guide_001",
+      "http_status": 200,
+      "sse_done": true,
+      "assistant_completed": true,
+      "input_enabled_after_response": true,
+      "typing_indicator_removed": true,
+      "question_visible": true,
+      "duration_ms": 5875,
+      "event_names": [
+        "conversation.created",
+        "message.created",
+        "message.created",
+        "tool.started",
+        "tool.completed",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.completed",
+        "conversation.updated",
+        "done"
+      ],
+      "page_error_types": []
+    },
+    {
+      "case_id": "chat_knowledge_001",
+      "http_status": 200,
+      "sse_done": true,
+      "assistant_completed": true,
+      "input_enabled_after_response": true,
+      "typing_indicator_removed": true,
+      "question_visible": true,
+      "duration_ms": 14001,
+      "event_names": [
+        "conversation.created",
+        "message.created",
+        "message.created",
+        "tool.started",
+        "tool.completed",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.delta",
+        "assistant.completed",
+        "conversation.updated",
+        "done"
+      ],
+      "page_error_types": []
+    }
+  ],
+  "online_results": [
+    {
+      "case_id": null,
+      "metric": "faithfulness",
+      "status": "scored",
+      "score": 1.0,
+      "error_code": null,
+      "duration_ms": 7877.118
+    },
+    {
+      "case_id": null,
+      "metric": "faithfulness",
+      "status": "scored",
+      "score": 1.0,
+      "error_code": null,
+      "duration_ms": 10688.515
+    }
+  ],
+  "usage": [
+    {
+      "case_id": null,
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 2807.824,
+      "usage": {
+        "prompt_tokens": 10560,
+        "completion_tokens": 215,
+        "total_tokens": 10775,
+        "prompt_tokens_details": {
+          "cached_tokens": 9984,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 128,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00307
+    },
+    {
+      "case_id": null,
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 7513.365,
+      "usage": {
+        "prompt_tokens": 1261,
+        "completion_tokens": 1114,
+        "total_tokens": 2375,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1024,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00254325
+    },
+    {
+      "case_id": null,
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 2049.748,
+      "usage": {
+        "prompt_tokens": 10632,
+        "completion_tokens": 191,
+        "total_tokens": 10823,
+        "prompt_tokens_details": {
+          "cached_tokens": 9984,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 128,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00304
+    },
+    {
+      "case_id": null,
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 2676.725,
+      "usage": {
+        "prompt_tokens": 10631,
+        "completion_tokens": 255,
+        "total_tokens": 10886,
+        "prompt_tokens_details": {
+          "cached_tokens": 9984,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 192,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00316775
+    },
+    {
+      "case_id": null,
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 2465.575,
+      "usage": {
+        "prompt_tokens": 10633,
+        "completion_tokens": 256,
+        "total_tokens": 10889,
+        "prompt_tokens_details": {
+          "cached_tokens": 9984,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 192,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00317025
+    },
+    {
+      "case_id": null,
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 2163.891,
+      "usage": {
+        "prompt_tokens": 10560,
+        "completion_tokens": 139,
+        "total_tokens": 10699,
+        "prompt_tokens_details": {
+          "cached_tokens": 9984,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 64,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.002918
+    },
+    {
+      "case_id": null,
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 5384.169,
+      "usage": {
+        "prompt_tokens": 1266,
+        "completion_tokens": 608,
+        "total_tokens": 1874,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 512,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.0015325
+    },
+    {
+      "case_id": null,
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 3437.023,
+      "usage": {
+        "prompt_tokens": 10559,
+        "completion_tokens": 247,
+        "total_tokens": 10806,
+        "prompt_tokens_details": {
+          "cached_tokens": 9984,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 128,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00313375
+    },
+    {
+      "case_id": null,
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 9607.842,
+      "usage": {
+        "prompt_tokens": 1325,
+        "completion_tokens": 1064,
+        "total_tokens": 2389,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 896,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00245925
+    },
+    {
+      "case_id": null,
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 3875.816,
+      "usage": {
+        "prompt_tokens": 10561,
+        "completion_tokens": 349,
+        "total_tokens": 10910,
+        "prompt_tokens_details": {
+          "cached_tokens": 9984,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 256,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00333825
+    },
+    {
+      "case_id": null,
+      "model": "text-embedding-3-small",
+      "http_status": 200,
+      "duration_ms": 489.157,
+      "usage": {
+        "prompt_tokens": 12,
+        "total_tokens": 12
+      },
+      "estimated_cost_usd": 2.4e-07
+    },
+    {
+      "case_id": null,
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 4039.58,
+      "usage": {
+        "prompt_tokens": 1542,
+        "completion_tokens": 401,
+        "total_tokens": 1943,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 192,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.0011875
+    },
+    {
+      "case_id": null,
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 2972.026,
+      "usage": {
+        "prompt_tokens": 10564,
+        "completion_tokens": 300,
+        "total_tokens": 10864,
+        "prompt_tokens_details": {
+          "cached_tokens": 9984,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 192,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.003241
+    },
+    {
+      "case_id": null,
+      "model": "gpt-4o-mini-2024-07-18",
+      "http_status": 200,
+      "duration_ms": 2172.115,
+      "usage": {
+        "prompt_tokens": 623,
+        "completion_tokens": 136,
+        "total_tokens": 759,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00017505
+    },
+    {
+      "case_id": null,
+      "model": "text-embedding-3-small",
+      "http_status": 200,
+      "duration_ms": 257.373,
+      "usage": {
+        "prompt_tokens": 16,
+        "total_tokens": 16
+      },
+      "estimated_cost_usd": 3.2e-07
+    },
+    {
+      "case_id": null,
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 2112.624,
+      "usage": {
+        "prompt_tokens": 1116,
+        "completion_tokens": 191,
+        "total_tokens": 1307,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 64,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.000661
+    },
+    {
+      "case_id": null,
+      "model": "gpt-4o-mini-2024-07-18",
+      "http_status": 200,
+      "duration_ms": 4198.304,
+      "usage": {
+        "prompt_tokens": 1593,
+        "completion_tokens": 360,
+        "total_tokens": 1953,
+        "prompt_tokens_details": {
+          "cached_tokens": 1024,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00045494999999999997
+    },
+    {
+      "case_id": null,
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 1976.925,
+      "usage": {
+        "prompt_tokens": 10559,
+        "completion_tokens": 212,
+        "total_tokens": 10771,
+        "prompt_tokens_details": {
+          "cached_tokens": 10496,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 128,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00306375
+    },
+    {
+      "case_id": null,
+      "model": "text-embedding-3-small",
+      "http_status": 200,
+      "duration_ms": 152.053,
+      "usage": {
+        "prompt_tokens": 7,
+        "total_tokens": 7
+      },
+      "estimated_cost_usd": 1.4e-07
+    },
+    {
+      "case_id": null,
+      "model": "gpt-5-mini",
+      "http_status": 200,
+      "duration_ms": 11348.961,
+      "usage": {
+        "prompt_tokens": 11102,
+        "completion_tokens": 1713,
+        "total_tokens": 12815,
+        "prompt_tokens_details": {
+          "cached_tokens": 11008,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1472,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.0062015
+    },
+    {
+      "case_id": null,
+      "model": "gpt-4o-mini-2024-07-18",
+      "http_status": 200,
+      "duration_ms": 4588.435,
+      "usage": {
+        "prompt_tokens": 670,
+        "completion_tokens": 215,
+        "total_tokens": 885,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.0002295
+    },
+    {
+      "case_id": null,
+      "model": "gpt-4o-mini-2024-07-18",
+      "http_status": 200,
+      "duration_ms": 6030.902,
+      "usage": {
+        "prompt_tokens": 11829,
+        "completion_tokens": 556,
+        "total_tokens": 12385,
+        "prompt_tokens_details": {
+          "cached_tokens": 11392,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "estimated_cost_usd": 0.00210795
+    }
+  ],
+  "cleanup": {
+    "synthetic_profile_and_conversations_removed": true,
+    "synthetic_auth_user_removed": true
+  },
+  "auth_me_status": 200,
+  "db_health_status": 200,
+  "answer_timeout_seconds": 15.0,
+  "request_count": 22,
+  "reserved_upper_estimate_usd": 0.4163344,
+  "online_sample_rate": 1,
+  "generation_output_token_cap": 8192,
+  "history_render_verification": [
+    {
+      "case_id": "chat_knowledge_001",
+      "db_answer_rendered_exactly": true,
+      "db_status": "completed"
+    },
+    {
+      "case_id": "chat_guide_001",
+      "db_answer_rendered_exactly": true,
+      "db_status": "completed"
+    },
+    {
+      "case_id": "chat_ticket_001",
+      "db_answer_rendered_exactly": true,
+      "db_status": "completed"
+    },
+    {
+      "case_id": "chat_weather_001",
+      "db_answer_rendered_exactly": true,
+      "db_status": "completed"
+    },
+    {
+      "case_id": "chat_stadium_001",
+      "db_answer_rendered_exactly": true,
+      "db_status": "completed"
+    },
+    {
+      "case_id": "chat_game_001",
+      "db_answer_rendered_exactly": true,
+      "db_status": "completed"
+    },
+    {
+      "case_id": "chat_followup_001",
+      "db_answer_rendered_exactly": true,
+      "db_status": "completed"
+    },
+    {
+      "case_id": "chat_followup_002",
+      "db_answer_rendered_exactly": true,
+      "db_status": "completed"
+    },
+    {
+      "case_id": "chat_followup_003",
+      "db_answer_rendered_exactly": true,
+      "db_status": "completed"
+    }
+  ],
+  "development_bundler": "webpack",
+  "run_id": "2026-10-06_local-ui-e2e-v1",
+  "run_date": "2026-10-06",
+  "service_baseline": false,
+  "provenance": {
+    "code_revision": "805fb31",
+    "implementation_worktree_clean_at_start": true,
+    "evaluation_artifacts_added_during_run": true,
+    "dataset_version": "ragas-service-reference-v1",
+    "reference_dataset_sha256": "36048ae436e6b9104c7ffbeb09b29a2699fbb0e6be4bb3f09624baca401c741f",
+    "smoke_dataset_sha256": "425d86a05a0716daaa9f8f81795d8c1b5125dc3bc06df5a78fa40b3d9b3d0a56",
+    "adapter_sha256": "05ad2fddf9cb927eae95d48b247ffc6a16498286d679231b7b4f4fd69601cde1",
+    "uv_lock_sha256": "693f4480ce78858fba8e8260ecb79fb71ded1b704fa627c0ba633f70e244efa1",
+    "routing_system_prompt_sha256": "92158393571b0786af4513fa701dc8d7cbacb2b62f006bdbce3fe6e43277debc",
+    "answer_system_prompt_sha256": "672d5c1d56047faf9e0a5897d79927add3f47ae18466368762ddc603a5d87505",
+    "prompt_language": {
+      "service": "Korean policy",
+      "judge": "RAGAS 0.4.3 default English prompts; Korean questions/contexts/responses"
+    },
+    "metric_classes": {
+      "Faithfulness": {
+        "class": "ragas.metrics.collections.faithfulness.metric.Faithfulness",
+        "package_source_sha256": "475517e1d53e61ad29ff8fb2cee07190be971fafede395bcf7581e8a0d335ef8",
+        "prompt_customization": null
+      },
+      "AnswerRelevancy": {
+        "class": "ragas.metrics.collections.answer_relevancy.metric.AnswerRelevancy",
+        "package_source_sha256": "4417e7484c29c546144dc2294f4ed63711217bc7b276398241ca5d77605e47c6",
+        "prompt_customization": null
+      },
+      "ContextPrecision": {
+        "class": "ragas.metrics.collections.context_precision.metric.ContextPrecision",
+        "package_source_sha256": "7fb625e59816db044a3bce0b12f8a63d579a54b0a95862edcf193c34dfb1deb8",
+        "prompt_customization": null
+      },
+      "ContextRecall": {
+        "class": "ragas.metrics.collections.context_recall.metric.ContextRecall",
+        "package_source_sha256": "c44a020bf34aa9ea9d11adc684657a4527ccc890696d78320544502d41e773f3",
+        "prompt_customization": null
+      }
+    },
+    "retrieval_settings": {
+      "search_stadium_guide": {
+        "embedding_model": "text-embedding-3-small",
+        "default_top_k": 5,
+        "max_top_k": 10,
+        "relevance_threshold": 0.65,
+        "document_types": [
+          "stadium_bag_policy",
+          "stadium_facility_guide",
+          "stadium_seat_guide",
+          "stadium_transport_guide",
+          "stadium_food_guide",
+          "stadium_entry_guide",
+          "stadium_accessibility_guide"
+        ]
+      },
+      "search_ticketing_guide": {
+        "embedding_model": "text-embedding-3-small",
+        "default_top_k": 5,
+        "max_top_k": 10,
+        "relevance_threshold": 0.65,
+        "document_types": [
+          "stadium_ticketing_guide"
+        ]
+      },
+      "search_baseball_knowledge": {
+        "embedding_model": "text-embedding-3-small",
+        "default_top_k": 5,
+        "max_top_k": 10,
+        "relevance_threshold": 0.82,
+        "document_types": [
+          "baseball_rule",
+          "common_play",
+          "latest_kbo_rule"
+        ]
+      }
+    },
+    "instrumentation": {
+      "production_auth_routing_retrieval_generation_persistence_and_online_judge": "real; no dependency overrides or mocked responses",
+      "test_only_spies": [
+        "grounded request capture",
+        "pre-source-notice draft capture",
+        "content-free online log collection",
+        "transport usage collection"
+      ],
+      "isolated_generation_output_token_cap": 8192,
+      "generation_retries": "existing SDK defaults, actual requests counted",
+      "judge_retries": 0,
+      "metric_concurrency": 1,
+      "initial_repetitions": 1,
+      "diagnostic_repetitions": "separate manifests"
+    },
+    "phase_timings": {
+      "http_sse": "measured",
+      "ui_completion": "measured",
+      "provider_request_duration": "recorded when response completed",
+      "full_graph_stage_breakdown": null,
+      "missing_reason": "initial harness did not retain agent trace stages; provider durations are not full graph stage timings"
+    },
+    "pricing": {
+      "checked_at": "2026-10-06",
+      "usd_per_million_tokens": {
+        "gpt-5-mini": {
+          "input": 0.25,
+          "output": 2
+        },
+        "gpt-4o-mini-2024-07-18": {
+          "input": 0.15,
+          "output": 0.6
+        },
+        "text-embedding-3-small": {
+          "input": 0.02,
+          "output": 0
+        }
+      },
+      "cache_discounts_applied": false,
+      "source_urls": [
+        "https://developers.openai.com/api/docs/models/gpt-5-mini",
+        "https://developers.openai.com/api/docs/models/gpt-4o-mini",
+        "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+      ]
+    }
+  },
+  "known_response_usage_cost_estimate_usd": 0.0456959,
+  "missing_usage_request_count": 0,
+  "total_billed_cost_usd": null,
+  "billing_note": "Uncached standard-rate estimate for completed responses only. Cancelled requests may be billed without returned usage; provider invoice is not available."
+}
