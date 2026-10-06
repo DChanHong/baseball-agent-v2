@@ -197,6 +197,11 @@ Faithfulness·Answer Relevancy·reference 기반 Context Precision/Recall을 세
 지표 factory·입력 adapter·offline 검증을 추가했다.
 reference 검수·judge 설정·실제 입력 수집/runner 저장 연결·baseline 측정은 미완료다.
 
+운영 연결은 [표본 Faithfulness spec](../spec/2026-10-05-online-ragas-faithfulness-spec.md)에 따라
+일반 채팅 SSE 전송 후 RAG 답변 5%를 비동기로 평가하도록 구현했다.
+일일 추정 비용 예약 상한은 $0.10이며 원문은 새 평가 저장소에 보관하지 않는다.
+운영 표본 평가는 검수 reference를 사용하는 네 지표 baseline 완료와 구분한다.
+
 필요한 평가셋:
 
 ```text

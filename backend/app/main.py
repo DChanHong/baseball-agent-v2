@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from typing import Annotated
 
 from fastapi import Depends, FastAPI
@@ -5,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.dependencies import get_online_faithfulness_evaluator
 from app.api.router import api_router
 from app.core.api_response_logging import ApiResponseLoggingMiddleware
 from app.core.config import get_settings
@@ -14,9 +16,20 @@ from app.core.logging import configure_logging
 configure_logging()
 settings = get_settings()
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    try:
+        yield
+    finally:
+        await get_online_faithfulness_evaluator().close()
+        get_online_faithfulness_evaluator.cache_clear()
+
+
 app = FastAPI(
     title="New Baseball API",
     version="0.1.0",
+    lifespan=lifespan,
 )
 app.add_middleware(
     CORSMiddleware,

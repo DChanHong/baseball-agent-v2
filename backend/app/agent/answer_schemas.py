@@ -2,7 +2,14 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    PrivateAttr,
+    field_validator,
+    model_validator,
+)
 
 
 class AnswerEvidence(BaseModel):
@@ -29,10 +36,20 @@ class GroundedAnswerRequest(BaseModel):
     )
 
 
+class AnswerEvaluationInput(BaseModel):
+    """Ephemeral judge input; never part of model output, SSE, or stored metadata."""
+
+    user_input: str
+    response: str
+    tool_name: str
+    contexts: list[str]
+
+
 class GroundedAnswerDraft(BaseModel):
     """Structured final answer returned by the LLM."""
 
     model_config = ConfigDict(extra="forbid")
+    _evaluation_input: AnswerEvaluationInput | None = PrivateAttr(default=None)
 
     answerability: Literal[
         "fully_answerable", "partially_answerable", "insufficient_source"

@@ -1,6 +1,7 @@
 from functools import lru_cache
 from typing import Literal
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -31,6 +32,13 @@ class Settings(BaseSettings):
     ) = "low"
     openai_timeout_seconds: float = 30.0
     openai_answer_timeout_seconds: float = 15.0
+
+    # Sampled post-SSE Faithfulness; durable per-host budget, reset at KST midnight.
+    ragas_online_enabled: bool = True
+    ragas_online_sample_rate: float = Field(default=0.05, ge=0, le=1)
+    ragas_online_daily_budget_usd: float = Field(default=0.10, ge=0, le=10)
+    ragas_online_budget_path: str = "logs/ragas-budget.json"
+    ragas_online_timeout_seconds: float = Field(default=45, gt=0, le=120)
 
     # Hosted Supabase Auth
     supabase_url: str = ""

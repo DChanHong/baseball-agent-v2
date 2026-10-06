@@ -3,6 +3,7 @@
 > 작성일: 2026-10-05
 > 상태: 의존성 설치·지표 factory·입력 adapter·offline 검증 완료 / 실제 baseline 미실행
 > 계약: [평가 지표와 입력](../spec/2026-10-05-ragas-evaluation-contract-spec.md)
+> 후속 변경: [일반 채팅 API 적용](../spec/2026-10-05-online-ragas-faithfulness-spec.md)에서 RAGAS를 runtime dependencies로 이동했다. 현재 설치 명령은 `uv sync --locked`다. 아래 evaluation 그룹 도입 내용은 최초 회차 기록이다.
 
 ## 1. 도입 내용
 
@@ -29,7 +30,7 @@ CLI는 **offline 입력 검증 전용**이다. 입력 JSONL을 검증하고 metr
 
 ```bash
 cd backend
-uv sync --locked --group evaluation
+uv sync --locked
 RAGAS_DO_NOT_TRACK=true .venv/bin/python -m pytest -q tests/api/test_ragas_evaluation.py
 .venv/bin/ruff check scripts/ragas_evaluation.py tests/api/test_ragas_evaluation.py
 .venv/bin/python -m mypy --explicit-package-bases scripts/ragas_evaluation.py

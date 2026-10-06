@@ -5,6 +5,7 @@
 > 범위: MVP2 3.5 Evaluation Baseline의 첫 단계
 > 시작 메모: [다음 작업](../memo/v2/2026-10-05-ragas-evaluation-baseline-next-steps.md)
 > 후속 구현: [라이브러리 도입·offline 검증](../work/2026-10-05-ragas-library-bootstrap.md). 아래 현재 구현은 계약 정의 당시 snapshot이며, 이후 의존성·adapter 구현 범위는 후속 기록을 따른다.
+> 운영 연결: [일반 채팅 API 표본 Faithfulness](2026-10-05-online-ragas-faithfulness-spec.md). 네 지표 baseline 측정 완료와는 구분한다.
 
 ## 1. 목적
 

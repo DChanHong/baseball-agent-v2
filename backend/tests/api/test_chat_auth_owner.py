@@ -4,6 +4,9 @@ from datetime import UTC, date, datetime, time
 from uuid import UUID
 
 import pytest
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
+
 from app.agent.answer_schemas import GroundedAnswerDraft
 from app.agent.routing_schemas import (
     DirectAnswerIntent,
@@ -21,8 +24,6 @@ from app.domains.chat.controller.router import router as chat_router
 from app.domains.chat.controller.schemas import ChatStreamRequest
 from app.domains.chat.service.services import ChatStreamService
 from app.domains.conversation.domain.entities import Conversation, Message
-from fastapi import FastAPI
-from fastapi.testclient import TestClient
 
 PROFILE_ID = UUID("22222222-2222-4222-8222-222222222222")
 AUTH_USER_ID = UUID("11111111-1111-4111-8111-111111111111")
@@ -333,7 +334,9 @@ async def test_chat_stream_uses_selected_game_context_for_follow_up_place() -> N
     first_events = [
         event
         async for event in service.stream(
-            ChatStreamRequest(conversation_id=None, message="롯데 오늘 야구 일정 알려줘"),
+            ChatStreamRequest(
+                conversation_id=None, message="롯데 오늘 야구 일정 알려줘"
+            ),
             current_user=make_current_user(),
         )
     ]
@@ -345,13 +348,11 @@ async def test_chat_stream_uses_selected_game_context_for_follow_up_place() -> N
     assert tool_executor.calls == 1
     assert "8월 14일 롯데 경기는 18:30" in message_repository.saved[-1].content
     assert "한화와 예정되어 있습니다" in message_repository.saved[-1].content
-    assert saved_conversation.metadata["agent_context"]["selected_game"][
-        "stadium_name"
-    ] == "대전 한화생명 볼파크"
     assert (
-        saved_conversation.metadata["agent_context"]["selected_team_id"]
-        == "LOTTE"
+        saved_conversation.metadata["agent_context"]["selected_game"]["stadium_name"]
+        == "대전 한화생명 볼파크"
     )
+    assert saved_conversation.metadata["agent_context"]["selected_team_id"] == "LOTTE"
 
     second_events = [
         event
@@ -373,9 +374,12 @@ async def test_chat_stream_uses_selected_game_context_for_follow_up_place() -> N
         == "DAEJEON"
     )
     assert "대전 한화생명 볼파크" in second_assistant_message.content
-    assert second_assistant_message.metadata["agent_context"]["selected_game"][
-        "stadium_id"
-    ] == "DAEJEON"
+    assert (
+        second_assistant_message.metadata["agent_context"]["selected_game"][
+            "stadium_id"
+        ]
+        == "DAEJEON"
+    )
 
 
 @pytest.mark.asyncio
@@ -458,3 +462,103 @@ def test_chat_endpoint_requires_login_before_streaming() -> None:
 
     assert response.status_code == 401
     assert response.json() == {"detail": "unauthenticated"}
+
+
+@pytest.mark.asyncio
+async def test_api_background_submits_only_after_final_sse_body_and_not_to_metadata():
+    import json
+
+    from app.agent.answer_schemas import AnswerEvaluationInput
+    from app.agent.graph import AgentGraphEvent
+    from app.agent.state import AgentConversationContext, BaseballAgentOutput
+    from app.domains.chat.controller.router import stream_chat
+
+    private = AnswerEvaluationInput(
+        user_input="PRIVATE_QUESTION",
+        response="PRIVATE_PRE_NOTICE",
+        tool_name="search_stadium_guide",
+        contexts=["PRIVATE_CONTEXT"],
+    )
+    draft = GroundedAnswerDraft(
+        answerability="fully_answerable",
+        answer="합성 답변",
+        used_evidence_refs=["E1"],
+        acknowledged_limitations=[],
+    )
+    draft._evaluation_input = private
+
+    class Graph:
+        async def astream(self, graph_input):
+            yield AgentGraphEvent(
+                kind="completed",
+                output=BaseballAgentOutput(
+                    routing_decision=_direct_decision(),
+                    tool_payload=None,
+                    tool_limitations=[],
+                    context=AgentConversationContext(),
+                    answer=draft.answer,
+                    answer_generation=draft,
+                    answer_source="llm",
+                ),
+            )
+
+    sent = []
+    captured = []
+
+    class Evaluator:
+        def submit(self, item):
+            assert sent[-1]["type"] == "http.response.body"
+            assert sent[-1]["more_body"] is False
+            assert b"event: done" in b"".join(v.get("body", b"") for v in sent)
+            captured.append(item)
+
+    messages = FakeMessageRepository()
+    service = ChatStreamService(
+        conversation_repository=FakeConversationRepository(),
+        message_repository=messages,
+        agent_graph=Graph(),
+        session=FakeSession(),
+        online_evaluator=Evaluator(),
+    )
+    request = ChatStreamRequest(conversation_id=None, message="합성 질문")
+    response = await stream_chat(request, service, make_current_user())
+
+    async def send(event):
+        sent.append(event)
+        assert not captured
+
+    async def receive():
+        raise AssertionError("ASGI 2.4 should not receive")
+
+    await response({"type": "http", "asgi": {"spec_version": "2.4"}}, receive, send)
+    assert captured == [private]
+    assert "PRIVATE" not in json.dumps(messages.saved[-1].metadata, ensure_ascii=False)
+    assert draft._evaluation_input is None
+    await service.evaluate_completed_answer()
+    assert len(captured) == 1
+
+
+@pytest.mark.asyncio
+async def test_incomplete_stream_never_submits_evaluation():
+    from unittest.mock import Mock
+
+    from app.agent.answer_schemas import AnswerEvaluationInput
+
+    evaluator = Mock()
+    service = ChatStreamService(
+        conversation_repository=FakeConversationRepository(),
+        message_repository=FakeMessageRepository(),
+        tool_routing_service=FakeRoutingService(),
+        tool_executor=FakeToolExecutor(),
+        session=FakeSession(),
+        online_evaluator=evaluator,
+    )
+    service._pending_evaluation = AnswerEvaluationInput(
+        user_input="PRIVATE_QUESTION",
+        response="PRIVATE_ANSWER",
+        tool_name="search_stadium_guide",
+        contexts=["PRIVATE_CONTEXT"],
+    )
+    await service.evaluate_completed_answer()
+    evaluator.submit.assert_not_called()
+    assert service._pending_evaluation is None

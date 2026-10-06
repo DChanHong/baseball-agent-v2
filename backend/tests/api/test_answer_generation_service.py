@@ -710,3 +710,44 @@ async def test_default_policy_keeps_reasoning_for_rules_and_other_tools(
         tool_limitations=[],
     )
     assert calls == [expected]
+
+
+@pytest.mark.asyncio
+async def test_online_evaluation_captures_pre_notice_bounded_evidence_privately() -> (
+    None
+):
+    chain = FakeAnswerChain(
+        {
+            "answerability": "fully_answerable",
+            "answer": "합성 답변",
+            "used_evidence_refs": ["E1"],
+            "acknowledged_limitations": [],
+        }
+    )
+    service = AnswerGenerationService(
+        chain=chain, model="test-model", capture_evaluation_input=True
+    )
+    draft = await service.execute(
+        message="합성 질문",
+        tool_payload={
+            "name": "search_stadium_guide",
+            "status": "completed",
+            "result": {
+                "items": [
+                    {
+                        "content": "x" * 6100,
+                        "review_status": "needs_review",
+                        "as_of": "2026-10-05",
+                    }
+                ]
+            },
+        },
+        tool_limitations=[],
+    )
+    assert "공식 출처" in draft.answer
+    captured = draft._evaluation_input
+    assert captured is not None
+    assert captured.response == "합성 답변"
+    assert len(json.loads(captured.contexts[0])["content"]) == 6000
+    assert "_evaluation_input" not in draft.model_dump_json()
+    assert "contexts" not in draft.model_json_schema()["properties"]

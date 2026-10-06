@@ -4,6 +4,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
+from starlette.background import BackgroundTask
 
 from app.api.dependencies import get_chat_stream_service, get_current_auth_user
 from app.domains.auth.service.dto import CurrentUserDto
@@ -36,6 +37,7 @@ async def stream_chat(
     return StreamingResponse(
         service.stream(request, current_user=current_user),
         media_type="text/event-stream",
+        background=BackgroundTask(service.evaluate_completed_answer),
         headers={
             "Cache-Control": "no-cache",
             "X-Accel-Buffering": "no",

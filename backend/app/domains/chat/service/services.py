@@ -11,7 +11,9 @@ from zoneinfo import ZoneInfo
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.agent.answer_generation_service import AnswerGenerationService
+from app.agent.answer_schemas import AnswerEvaluationInput
 from app.agent.graph import BaseballAgentGraph
+from app.agent.online_evaluation import OnlineFaithfulnessEvaluator
 from app.agent.routing_service import ToolRoutingService
 from app.agent.state import (
     AgentConversationContext,
@@ -67,6 +69,7 @@ class ChatStreamService:
         tool_routing_service: ToolRoutingService | None = None,
         tool_executor: AgentToolExecutor | None = None,
         answer_generation_service: AnswerGenerationService | None = None,
+        online_evaluator: OnlineFaithfulnessEvaluator | None = None,
         session: AsyncSession,
     ) -> None:
         self._conversation_repository = conversation_repository
@@ -83,6 +86,9 @@ class ChatStreamService:
             )
         self._agent_graph = agent_graph
         self._session = session
+        self._online_evaluator = online_evaluator
+        self._pending_evaluation: AnswerEvaluationInput | None = None
+        self._stream_completed = False
 
     async def stream(
         self,
@@ -92,6 +98,8 @@ class ChatStreamService:
     ) -> AsyncIterator[str]:
         """Execute one chat request and yield encoded SSE event chunks."""
 
+        self._pending_evaluation = None
+        self._stream_completed = False
         try:
             async for event in self._stream_inner(
                 request,
@@ -181,7 +189,9 @@ class ChatStreamService:
         ):
             if graph_event.kind == "tool.started":
                 if graph_event.tool_call_id is None or graph_event.tool_name is None:
-                    raise ValueError("tool.started graph event is missing tool identity")
+                    raise ValueError(
+                        "tool.started graph event is missing tool identity"
+                    )
                 tool_input = graph_event.tool_input or {}
                 yield encode_sse_event(
                     "tool.started",
@@ -316,10 +326,29 @@ class ChatStreamService:
                 )
             ),
         )
+        draft = graph_output.answer_generation
+        if draft is not None:
+            self._pending_evaluation = draft._evaluation_input
+            draft._evaluation_input = None
+
         yield encode_sse_event(
             "done",
             DoneEvent(conversation_id=saved_conversation.id),
         )
+        self._stream_completed = True
+
+    async def evaluate_completed_answer(self) -> None:
+        """Starlette invokes this only after streaming response transmission ends."""
+        pending, self._pending_evaluation = self._pending_evaluation, None
+        if (
+            self._stream_completed
+            and pending is not None
+            and self._online_evaluator is not None
+        ):
+            try:
+                self._online_evaluator.submit(pending)
+            except Exception:  # noqa: BLE001 - evaluation must never fail a chat response
+                logger.warning("ragas_online submission_failed")
 
     async def _get_or_create_conversation(
         self,
@@ -382,7 +411,9 @@ class ChatStreamService:
             sequence_no=sequence_no,
             status=status,
             parent_message_id=parent_message_id,
-            model_name=get_settings().openai_model if role is MessageRole.ASSISTANT else None,
+            model_name=get_settings().openai_model
+            if role is MessageRole.ASSISTANT
+            else None,
             prompt_tokens=None,
             completion_tokens=None,
             total_tokens=None,
@@ -426,6 +457,5 @@ def _build_title(message: str) -> str:
 
 def _chunk_text(text: str, *, chunk_size: int = 24) -> list[str]:
     return [
-        text[index : index + chunk_size]
-        for index in range(0, len(text), chunk_size)
+        text[index : index + chunk_size] for index in range(0, len(text), chunk_size)
     ]

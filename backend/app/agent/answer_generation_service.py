@@ -13,6 +13,7 @@ from langchain_openai import ChatOpenAI
 from pydantic import SecretStr, ValidationError
 
 from app.agent.answer_schemas import (
+    AnswerEvaluationInput,
     AnswerEvidence,
     GroundedAnswerDraft,
     GroundedAnswerRequest,
@@ -52,7 +53,9 @@ class AnswerGenerationService:
         model: str | None = None,
         timeout_seconds: float | None = None,
         reasoning_effort: str | None = None,
+        capture_evaluation_input: bool = False,
     ) -> None:
+        self._capture_evaluation_input = capture_evaluation_input
         if chain is not None and model is not None:
             self._model = model
             self._chain = chain
@@ -145,11 +148,37 @@ class AnswerGenerationService:
         ) as details:
             try:
                 draft = _validate_answer_response(response, request)
+                model_answer = draft.answer
                 draft, notice_added = _finalize_source_notice(draft, request)
                 details["source_notice_added"] = notice_added
             except AnswerContractError as exc:
                 details["error_code"] = exc.code
                 raise
+
+        if (
+            self._capture_evaluation_input
+            and request.tool_name
+            in {
+                "search_stadium_guide",
+                "search_ticketing_guide",
+                "search_baseball_knowledge",
+            }
+            and draft.answerability != "insufficient_source"
+        ):
+            import json
+
+            contexts = [
+                json.dumps(e.payload, ensure_ascii=False, sort_keys=True)
+                for e in request.evidence
+                if e.kind == "retrieved_document" and e.payload.get("content")
+            ]
+            if contexts:
+                draft._evaluation_input = AnswerEvaluationInput(
+                    user_input=message,
+                    response=model_answer,
+                    tool_name=request.tool_name,
+                    contexts=contexts,
+                )
 
         logger.info(
             "answer generation completed model=%s answerability=%s evidence_refs=%s",

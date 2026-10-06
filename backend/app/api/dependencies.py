@@ -1,9 +1,14 @@
+from functools import lru_cache
 from typing import Annotated
 
 from fastapi import Depends, HTTPException, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.agent.answer_generation_service import AnswerGenerationService
+from app.agent.online_evaluation import (
+    DailyEvaluationBudget,
+    OnlineFaithfulnessEvaluator,
+)
 from app.agent.routing_service import ToolRoutingService
 from app.agent.tool_executor import AgentToolExecutor
 from app.core.config import get_settings
@@ -240,9 +245,7 @@ def get_agent_tool_executor(
         find_kbo_game_handler=get_find_kbo_game_tool_handler(session),
         get_stadium_info_handler=get_stadium_info_tool_handler(session),
         search_stadium_guide_handler=get_search_stadium_guide_tool_handler(session),
-        search_ticketing_guide_handler=get_search_ticketing_guide_tool_handler(
-            session
-        ),
+        search_ticketing_guide_handler=get_search_ticketing_guide_tool_handler(session),
         search_baseball_knowledge_handler=get_search_baseball_knowledge_tool_handler(
             session
         ),
@@ -260,6 +263,26 @@ def get_chat_stream_service(
         message_repository=SqlAlchemyMessageRepository(session),
         tool_routing_service=ToolRoutingService(),
         tool_executor=get_agent_tool_executor(session),
-        answer_generation_service=AnswerGenerationService(),
+        answer_generation_service=AnswerGenerationService(
+            capture_evaluation_input=get_settings().ragas_online_enabled,
+        ),
+        online_evaluator=get_online_faithfulness_evaluator(),
         session=session,
+    )
+
+
+@lru_cache
+def get_online_faithfulness_evaluator() -> OnlineFaithfulnessEvaluator:
+    from pathlib import Path
+
+    settings = get_settings()
+    return OnlineFaithfulnessEvaluator(
+        api_key=settings.openai_api_key,
+        enabled=settings.ragas_online_enabled,
+        sample_rate=settings.ragas_online_sample_rate,
+        daily_budget=DailyEvaluationBudget(
+            Path(settings.ragas_online_budget_path),
+            settings.ragas_online_daily_budget_usd,
+        ),
+        timeout_seconds=settings.ragas_online_timeout_seconds,
     )

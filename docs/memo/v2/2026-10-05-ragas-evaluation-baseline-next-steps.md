@@ -22,6 +22,7 @@
 - [RAGAS 평가 지표·입력 계약](../../spec/2026-10-05-ragas-evaluation-contract-spec.md)
 - [RAGAS 라이브러리 도입·offline 검증](../../work/2026-10-05-ragas-library-bootstrap.md)
 - [합성 입력 실제 지표 smoke: 2개 사례·8개 점수](../../work/2026-10-05-ragas-synthetic-metric-demo.md). 실제 judge API 실행 완료, 서비스 baseline은 미측정.
+- [일반 채팅 API 표본 Faithfulness](../../spec/2026-10-05-online-ragas-faithfulness-spec.md): SSE 전송 후 5% 표본·일일 $0.10 예약 상한·원문 미보관으로 연결했다. 합성 통합 테스트 완료, 실제 서비스 baseline·유료 E2E 실행은 미완료.
 - [MVP2 전체 계획](../../planning/002-mvp2-backend-upgrade-plan.md)
 - [속도 개선과 적용 정책](../../work/2026-10-05-answer-latency-reasoning-policy.md)
 - [기존 QA 데이터 계획](../../work/2026-09-08-mvp2-3-2-manual-qa-evaluation-dataset-plan.md)
