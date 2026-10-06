@@ -577,7 +577,7 @@ stream_failed
 
 상세 계약: `docs/spec/2026-10-05-agent-observability-spec.md`.
 작업 기록: `blog/work-logs/2026-10-05-agent-observability-v1.md`.
-블로그 초안: `blog/blog-7-agent-observability-draft.md`.
+블로그 초안: `blog/blog-6-agent-observability-answer-improvement-draft.md`.
 
 ### Step 4. 평가셋과 run 저장
 

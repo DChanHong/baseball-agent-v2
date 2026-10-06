@@ -26,8 +26,7 @@
 - [MVP2 전체 계획](../../planning/002-mvp2-backend-upgrade-plan.md)
 - [속도 개선과 적용 정책](../../work/2026-10-05-answer-latency-reasoning-policy.md)
 - [기존 QA 데이터 계획](../../work/2026-09-08-mvp2-3-2-manual-qa-evaluation-dataset-plan.md)
-- [블로그 7: 관측 구현](../../../blog/blog-7-agent-observability-draft.md)
-- [블로그 8: 로그 기반 개선과 실험](../../../blog/blog-8-answer-limitation-contract-draft.md)
+- [블로그 6: 관측부터 답변 개선까지](../../../blog/blog-6-agent-observability-answer-improvement-draft.md)
 
 ## 2. 바로 다음 작업: 평가 지표 정의
 
