@@ -1,0 +1,1811 @@
+{
+  "$defs": {
+    "Case": {
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "pattern": "^golden_(guide|ticket|knowledge|mixed|scope)_\\d{3}$",
+          "title": "Case Id",
+          "type": "string"
+        },
+        "dataset_version": {
+          "title": "Dataset Version",
+          "type": "string"
+        },
+        "category": {
+          "enum": [
+            "stadium_guide",
+            "ticketing",
+            "baseball_knowledge",
+            "mixed_follow_up",
+            "insufficient_out_of_scope"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "split": {
+          "enum": [
+            "development",
+            "held_out"
+          ],
+          "title": "Split",
+          "type": "string"
+        },
+        "related_case_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Related Case Ids",
+          "type": "array"
+        },
+        "fact_groups": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Fact Groups",
+          "type": "array"
+        },
+        "input": {
+          "$ref": "#/$defs/CaseInput"
+        },
+        "expected": {
+          "$ref": "#/$defs/Expected"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "retrieval_ground_truth": {
+          "$ref": "#/$defs/Retrieval"
+        },
+        "review": {
+          "$ref": "#/$defs/Review"
+        },
+        "evaluation": {
+          "$ref": "#/$defs/Evaluation"
+        },
+        "final_review": {
+          "$ref": "#/$defs/FinalReview"
+        }
+      },
+      "required": [
+        "case_id",
+        "dataset_version",
+        "category",
+        "split",
+        "related_case_ids",
+        "fact_groups",
+        "input",
+        "expected",
+        "evidence",
+        "retrieval_ground_truth",
+        "review",
+        "evaluation",
+        "final_review"
+      ],
+      "title": "Case",
+      "type": "object"
+    },
+    "CaseInput": {
+      "additionalProperties": false,
+      "properties": {
+        "question": {
+          "minLength": 1,
+          "title": "Question",
+          "type": "string"
+        },
+        "today": {
+          "format": "date",
+          "title": "Today",
+          "type": "string"
+        },
+        "timezone": {
+          "const": "Asia/Seoul",
+          "title": "Timezone",
+          "type": "string"
+        },
+        "auth_status": {
+          "const": "authenticated",
+          "title": "Auth Status",
+          "type": "string"
+        },
+        "favorite_team_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Favorite Team Id"
+        },
+        "history": {
+          "items": {
+            "$ref": "#/$defs/Turn"
+          },
+          "title": "History",
+          "type": "array"
+        },
+        "conversation_context": {
+          "additionalProperties": true,
+          "title": "Conversation Context",
+          "type": "object"
+        },
+        "context_mode": {
+          "enum": [
+            "fixed_synthetic_fixture",
+            "fresh_conversation"
+          ],
+          "title": "Context Mode",
+          "type": "string"
+        },
+        "event_scope": {
+          "title": "Event Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "question",
+        "today",
+        "timezone",
+        "auth_status",
+        "favorite_team_id",
+        "history",
+        "conversation_context",
+        "context_mode",
+        "event_scope"
+      ],
+      "title": "CaseInput",
+      "type": "object"
+    },
+    "ChunkCandidate": {
+      "additionalProperties": false,
+      "properties": {
+        "document_id": {
+          "title": "Document Id",
+          "type": "string"
+        },
+        "chunk_id": {
+          "title": "Chunk Id",
+          "type": "string"
+        },
+        "content_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Content Sha256",
+          "type": "string"
+        },
+        "logical_document_id": {
+          "title": "Logical Document Id",
+          "type": "null"
+        },
+        "revision_id": {
+          "title": "Revision Id",
+          "type": "null"
+        },
+        "relevance_grade": {
+          "anyOf": [
+            {
+              "enum": [
+                0,
+                1,
+                2
+              ],
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Relevance Grade"
+        },
+        "label_status": {
+          "enum": [
+            "agent_reviewed_local",
+            "source_review_pending"
+          ],
+          "title": "Label Status",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "evidence_spans": {
+          "items": {
+            "$ref": "#/$defs/ChunkSpan"
+          },
+          "title": "Evidence Spans",
+          "type": "array"
+        },
+        "passes_expected_filter": {
+          "title": "Passes Expected Filter",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "document_id",
+        "chunk_id",
+        "content_sha256",
+        "logical_document_id",
+        "revision_id",
+        "relevance_grade",
+        "label_status",
+        "reason",
+        "evidence_spans",
+        "passes_expected_filter"
+      ],
+      "title": "ChunkCandidate",
+      "type": "object"
+    },
+    "ChunkSpan": {
+      "additionalProperties": false,
+      "properties": {
+        "fact_index": {
+          "minimum": 0,
+          "title": "Fact Index",
+          "type": "integer"
+        },
+        "start": {
+          "minimum": 0,
+          "title": "Start",
+          "type": "integer"
+        },
+        "end": {
+          "exclusiveMinimum": 0,
+          "title": "End",
+          "type": "integer"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "support": {
+          "enum": [
+            "full",
+            "partial"
+          ],
+          "title": "Support",
+          "type": "string"
+        }
+      },
+      "required": [
+        "fact_index",
+        "start",
+        "end",
+        "text",
+        "support"
+      ],
+      "title": "ChunkSpan",
+      "type": "object"
+    },
+    "DbValidation": {
+      "additionalProperties": false,
+      "properties": {
+        "environment": {
+          "const": "local_supabase",
+          "title": "Environment",
+          "type": "string"
+        },
+        "snapshot_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Snapshot Sha256",
+          "type": "string"
+        },
+        "checked_at": {
+          "format": "date",
+          "title": "Checked At",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "not_applicable",
+            "corpus_empty",
+            "source_review_pending_corpus_empty"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "actual_matching_chunk_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Actual Matching Chunk Ids",
+          "type": "array"
+        },
+        "missing_retrieval_fact_indexes": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Missing Retrieval Fact Indexes",
+          "type": "array"
+        },
+        "unresolved_source_fact_indexes": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Unresolved Source Fact Indexes",
+          "type": "array"
+        },
+        "note": {
+          "title": "Note",
+          "type": "string"
+        }
+      },
+      "required": [
+        "environment",
+        "snapshot_sha256",
+        "checked_at",
+        "status",
+        "actual_matching_chunk_ids",
+        "missing_retrieval_fact_indexes",
+        "unresolved_source_fact_indexes",
+        "note"
+      ],
+      "title": "DbValidation",
+      "type": "object"
+    },
+    "Evaluation": {
+      "additionalProperties": false,
+      "properties": {
+        "run_status": {
+          "const": "not_run",
+          "title": "Run Status",
+          "type": "string"
+        },
+        "ragas_input_scope": {
+          "title": "Ragas Input Scope",
+          "type": "string"
+        },
+        "metric_policy": {
+          "enum": [
+            "conditional_rag",
+            "agent_behavior_only",
+            "pending_multi_tool_adapter"
+          ],
+          "title": "Metric Policy",
+          "type": "string"
+        },
+        "rank_metrics_ready": {
+          "const": false,
+          "title": "Rank Metrics Ready",
+          "type": "boolean"
+        },
+        "baseline_ready": {
+          "const": false,
+          "title": "Baseline Ready",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "run_status",
+        "ragas_input_scope",
+        "metric_policy",
+        "rank_metrics_ready",
+        "baseline_ready"
+      ],
+      "title": "Evaluation",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "title": "Source Id",
+          "type": "string"
+        },
+        "locator": {
+          "title": "Locator",
+          "type": "string"
+        },
+        "supports_fact_indexes": {
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "title": "Supports Fact Indexes",
+          "type": "array"
+        },
+        "pdf_pages": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Pdf Pages",
+          "type": "array"
+        }
+      },
+      "required": [
+        "source_id",
+        "locator",
+        "supports_fact_indexes",
+        "pdf_pages"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "Expected": {
+      "additionalProperties": false,
+      "properties": {
+        "in_scope": {
+          "title": "In Scope",
+          "type": "boolean"
+        },
+        "tool_name": {
+          "anyOf": [
+            {
+              "enum": [
+                "search_stadium_guide",
+                "search_ticketing_guide",
+                "search_baseball_knowledge"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Tool Name"
+        },
+        "filter_constraints": {
+          "additionalProperties": true,
+          "title": "Filter Constraints",
+          "type": "object"
+        },
+        "top_k": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Top K"
+        },
+        "query_policy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Query Policy"
+        },
+        "allowed_behaviors": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Allowed Behaviors",
+          "type": "array"
+        },
+        "answerability": {
+          "enum": [
+            "source_answerable",
+            "policy_only",
+            "pending_source_review"
+          ],
+          "title": "Answerability",
+          "type": "string"
+        },
+        "reference_answer": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Reference Answer"
+        },
+        "required_facts": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Required Facts",
+          "type": "array"
+        },
+        "forbidden_claims": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Forbidden Claims",
+          "type": "array"
+        },
+        "conditions_and_exceptions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Conditions And Exceptions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "in_scope",
+        "tool_name",
+        "filter_constraints",
+        "top_k",
+        "query_policy",
+        "allowed_behaviors",
+        "answerability",
+        "reference_answer",
+        "required_facts",
+        "forbidden_claims",
+        "conditions_and_exceptions"
+      ],
+      "title": "Expected",
+      "type": "object"
+    },
+    "FactLabel": {
+      "additionalProperties": false,
+      "properties": {
+        "fact_index": {
+          "minimum": 0,
+          "title": "Fact Index",
+          "type": "integer"
+        },
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "missing",
+            "not_retrieval_fact",
+            "unverified_corpus",
+            "source_review_pending"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "supporting_chunk_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Supporting Chunk Ids",
+          "type": "array"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "fact_index",
+        "status",
+        "supporting_chunk_ids",
+        "reason"
+      ],
+      "title": "FactLabel",
+      "type": "object"
+    },
+    "FinalReview": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "agent_checked",
+            "source_blocked"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "reviewed_at": {
+          "format": "date",
+          "title": "Reviewed At",
+          "type": "string"
+        },
+        "reviewer_kind": {
+          "const": "agent",
+          "title": "Reviewer Kind",
+          "type": "string"
+        },
+        "human_reviewed": {
+          "const": false,
+          "title": "Human Reviewed",
+          "type": "boolean"
+        },
+        "exploratory_candidate": {
+          "title": "Exploratory Candidate",
+          "type": "boolean"
+        },
+        "corpus_gap_preserved": {
+          "const": true,
+          "title": "Corpus Gap Preserved",
+          "type": "boolean"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Notes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "reviewed_at",
+        "reviewer_kind",
+        "human_reviewed",
+        "exploratory_candidate",
+        "corpus_gap_preserved",
+        "notes"
+      ],
+      "title": "FinalReview",
+      "type": "object"
+    },
+    "HistoricalRevisionHint": {
+      "additionalProperties": false,
+      "properties": {
+        "document_id": {
+          "title": "Document Id",
+          "type": "string"
+        },
+        "chunk_id": {
+          "title": "Chunk Id",
+          "type": "string"
+        },
+        "record_path": {
+          "title": "Record Path",
+          "type": "string"
+        },
+        "body_verified": {
+          "const": false,
+          "title": "Body Verified",
+          "type": "boolean"
+        },
+        "active_in_current_db": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Active In Current Db"
+        },
+        "note": {
+          "title": "Note",
+          "type": "string"
+        }
+      },
+      "required": [
+        "document_id",
+        "chunk_id",
+        "record_path",
+        "body_verified",
+        "active_in_current_db",
+        "note"
+      ],
+      "title": "HistoricalRevisionHint",
+      "type": "object"
+    },
+    "PoolScope": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "policy_or_context_only",
+            "knowledge_chunk_file_unavailable",
+            "all_local_stadium_document_types"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "chunk_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Chunk Ids",
+          "type": "array"
+        },
+        "exhaustive_for_scope": {
+          "title": "Exhaustive For Scope",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind",
+        "chunk_ids",
+        "exhaustive_for_scope"
+      ],
+      "title": "PoolScope",
+      "type": "object"
+    },
+    "ProductionCandidatePool": {
+      "additionalProperties": false,
+      "properties": {
+        "snapshot_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Snapshot Sha256",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "not_applicable",
+            "pending_fact_level_review",
+            "agent_reviewed_metadata_and_facts",
+            "source_review_pending"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "chunk_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Chunk Ids",
+          "type": "array"
+        },
+        "scope": {
+          "title": "Scope",
+          "type": "string"
+        },
+        "note": {
+          "title": "Note",
+          "type": "string"
+        }
+      },
+      "required": [
+        "snapshot_sha256",
+        "status",
+        "chunk_ids",
+        "scope",
+        "note"
+      ],
+      "title": "ProductionCandidatePool",
+      "type": "object"
+    },
+    "ProductionChunkLabel": {
+      "additionalProperties": false,
+      "properties": {
+        "chunk_id": {
+          "title": "Chunk Id",
+          "type": "string"
+        },
+        "document_id": {
+          "title": "Document Id",
+          "type": "string"
+        },
+        "logical_document_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Logical Document Id"
+        },
+        "revision_number": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Revision Number"
+        },
+        "document_type": {
+          "title": "Document Type",
+          "type": "string"
+        },
+        "observed_content_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Observed Content Sha256",
+          "type": "string"
+        },
+        "relevance_grade": {
+          "anyOf": [
+            {
+              "enum": [
+                0,
+                1,
+                2
+              ],
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Relevance Grade"
+        },
+        "passes_expected_filter": {
+          "title": "Passes Expected Filter",
+          "type": "boolean"
+        },
+        "evidence_spans": {
+          "items": {
+            "$ref": "#/$defs/ProductionFactSpan"
+          },
+          "title": "Evidence Spans",
+          "type": "array"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "chunk_id",
+        "document_id",
+        "logical_document_id",
+        "revision_number",
+        "document_type",
+        "observed_content_sha256",
+        "relevance_grade",
+        "passes_expected_filter",
+        "evidence_spans",
+        "reason"
+      ],
+      "title": "ProductionChunkLabel",
+      "type": "object"
+    },
+    "ProductionCorpusCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "checked_at": {
+          "format": "date",
+          "title": "Checked At",
+          "type": "string"
+        },
+        "environment": {
+          "const": "production_supabase",
+          "title": "Environment",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "connection_failed",
+            "read_complete"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "document_count": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Document Count"
+        },
+        "chunk_count": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Chunk Count"
+        },
+        "snapshot_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Snapshot Sha256"
+        },
+        "diagnostics": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Diagnostics",
+          "type": "array"
+        },
+        "read_completed": {
+          "title": "Read Completed",
+          "type": "boolean"
+        },
+        "writes_performed": {
+          "const": false,
+          "title": "Writes Performed",
+          "type": "boolean"
+        },
+        "note": {
+          "title": "Note",
+          "type": "string"
+        }
+      },
+      "required": [
+        "checked_at",
+        "environment",
+        "status",
+        "document_count",
+        "chunk_count",
+        "snapshot_sha256",
+        "diagnostics",
+        "read_completed",
+        "writes_performed",
+        "note"
+      ],
+      "title": "ProductionCorpusCheck",
+      "type": "object"
+    },
+    "ProductionCorpusSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "environment": {
+          "const": "production_supabase",
+          "title": "Environment",
+          "type": "string"
+        },
+        "checked_at": {
+          "format": "date",
+          "title": "Checked At",
+          "type": "string"
+        },
+        "read_method": {
+          "const": "PostgREST GET only",
+          "title": "Read Method",
+          "type": "string"
+        },
+        "consistency": {
+          "const": "two_identical_complete_reads_non_atomic",
+          "title": "Consistency",
+          "type": "string"
+        },
+        "document_count": {
+          "minimum": 0,
+          "title": "Document Count",
+          "type": "integer"
+        },
+        "chunk_count": {
+          "minimum": 0,
+          "title": "Chunk Count",
+          "type": "integer"
+        },
+        "active_document_count": {
+          "minimum": 0,
+          "title": "Active Document Count",
+          "type": "integer"
+        },
+        "embedded_chunk_count": {
+          "minimum": 0,
+          "title": "Embedded Chunk Count",
+          "type": "integer"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "manifest": {
+          "additionalProperties": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "title": "Manifest",
+          "type": "object"
+        },
+        "hash_scope": {
+          "title": "Hash Scope",
+          "type": "string"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Limitations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "environment",
+        "checked_at",
+        "read_method",
+        "consistency",
+        "document_count",
+        "chunk_count",
+        "active_document_count",
+        "embedded_chunk_count",
+        "sha256",
+        "manifest",
+        "hash_scope",
+        "limitations"
+      ],
+      "title": "ProductionCorpusSnapshot",
+      "type": "object"
+    },
+    "ProductionFactLabel": {
+      "additionalProperties": false,
+      "properties": {
+        "fact_index": {
+          "minimum": 0,
+          "title": "Fact Index",
+          "type": "integer"
+        },
+        "status": {
+          "enum": [
+            "supported",
+            "partial",
+            "missing",
+            "not_retrieval_fact",
+            "unverified_corpus",
+            "source_review_pending"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "supporting_chunk_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Supporting Chunk Ids",
+          "type": "array"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "filtered_status": {
+          "enum": [
+            "supported",
+            "partial",
+            "missing",
+            "not_retrieval_fact",
+            "source_review_pending"
+          ],
+          "title": "Filtered Status",
+          "type": "string"
+        },
+        "filtered_supporting_chunk_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Filtered Supporting Chunk Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "fact_index",
+        "status",
+        "supporting_chunk_ids",
+        "reason",
+        "filtered_status",
+        "filtered_supporting_chunk_ids"
+      ],
+      "title": "ProductionFactLabel",
+      "type": "object"
+    },
+    "ProductionFactSpan": {
+      "additionalProperties": false,
+      "properties": {
+        "fact_index": {
+          "minimum": 0,
+          "title": "Fact Index",
+          "type": "integer"
+        },
+        "start": {
+          "minimum": 0,
+          "title": "Start",
+          "type": "integer"
+        },
+        "end": {
+          "exclusiveMinimum": 0,
+          "title": "End",
+          "type": "integer"
+        },
+        "span_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Span Sha256",
+          "type": "string"
+        },
+        "support": {
+          "enum": [
+            "full",
+            "partial"
+          ],
+          "title": "Support",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "fact_index",
+        "start",
+        "end",
+        "span_sha256",
+        "support",
+        "reason"
+      ],
+      "title": "ProductionFactSpan",
+      "type": "object"
+    },
+    "ProductionRelevanceReview": {
+      "additionalProperties": false,
+      "properties": {
+        "snapshot_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Snapshot Sha256",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "agent_reviewed",
+            "source_review_pending",
+            "not_applicable"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "pool_scope": {
+          "enum": [
+            "policy_or_fixed_context_only",
+            "all_current_knowledge_chunks_across_document_types",
+            "all_active_same_stadium_and_shared_guide_chunks"
+          ],
+          "title": "Pool Scope",
+          "type": "string"
+        },
+        "reviewed_chunk_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reviewed Chunk Ids",
+          "type": "array"
+        },
+        "chunks": {
+          "items": {
+            "$ref": "#/$defs/ProductionChunkLabel"
+          },
+          "title": "Chunks",
+          "type": "array"
+        },
+        "fact_labels": {
+          "items": {
+            "$ref": "#/$defs/ProductionFactLabel"
+          },
+          "title": "Fact Labels",
+          "type": "array"
+        },
+        "corpus_coverage": {
+          "enum": [
+            "full",
+            "partial",
+            "missing",
+            "source_review_pending",
+            "not_applicable"
+          ],
+          "title": "Corpus Coverage",
+          "type": "string"
+        },
+        "filtered_coverage": {
+          "enum": [
+            "full",
+            "partial",
+            "missing",
+            "source_review_pending",
+            "not_applicable"
+          ],
+          "title": "Filtered Coverage",
+          "type": "string"
+        },
+        "risk_notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Risk Notes",
+          "type": "array"
+        },
+        "human_reviewed": {
+          "const": false,
+          "title": "Human Reviewed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "snapshot_sha256",
+        "status",
+        "pool_scope",
+        "reviewed_chunk_ids",
+        "chunks",
+        "fact_labels",
+        "corpus_coverage",
+        "filtered_coverage",
+        "risk_notes",
+        "human_reviewed"
+      ],
+      "title": "ProductionRelevanceReview",
+      "type": "object"
+    },
+    "Retrieval": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "not_applicable",
+            "local_corpus_unavailable",
+            "agent_reviewed_local_pending_db",
+            "agent_reviewed_local_db_corpus_empty"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "local_candidate_chunks": {
+          "items": {
+            "$ref": "#/$defs/ChunkCandidate"
+          },
+          "title": "Local Candidate Chunks",
+          "type": "array"
+        },
+        "expected_topic_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Expected Topic Ids",
+          "type": "array"
+        },
+        "local_coverage": {
+          "title": "Local Coverage",
+          "type": "string"
+        },
+        "db_corpus_verified": {
+          "title": "Db Corpus Verified",
+          "type": "boolean"
+        },
+        "corpus_gap_note": {
+          "title": "Corpus Gap Note",
+          "type": "string"
+        },
+        "fact_labels": {
+          "items": {
+            "$ref": "#/$defs/FactLabel"
+          },
+          "title": "Fact Labels",
+          "type": "array"
+        },
+        "pool_scope": {
+          "$ref": "#/$defs/PoolScope"
+        },
+        "historical_revision_hints": {
+          "items": {
+            "$ref": "#/$defs/HistoricalRevisionHint"
+          },
+          "title": "Historical Revision Hints",
+          "type": "array"
+        },
+        "db_validation": {
+          "$ref": "#/$defs/DbValidation"
+        },
+        "production_candidate_pool": {
+          "$ref": "#/$defs/ProductionCandidatePool"
+        },
+        "production_relevance_review": {
+          "$ref": "#/$defs/ProductionRelevanceReview"
+        }
+      },
+      "required": [
+        "status",
+        "local_candidate_chunks",
+        "expected_topic_ids",
+        "local_coverage",
+        "db_corpus_verified",
+        "corpus_gap_note",
+        "fact_labels",
+        "pool_scope",
+        "historical_revision_hints",
+        "db_validation",
+        "production_candidate_pool",
+        "production_relevance_review"
+      ],
+      "title": "Retrieval",
+      "type": "object"
+    },
+    "Review": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "agent_reviewed_candidate",
+            "needs_source_review"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "reviewer_kind": {
+          "const": "agent",
+          "title": "Reviewer Kind",
+          "type": "string"
+        },
+        "reviewed_at": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Reviewed At"
+        },
+        "human_reviewed": {
+          "const": false,
+          "title": "Human Reviewed",
+          "type": "boolean"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "reviewer_kind",
+        "reviewed_at",
+        "human_reviewed",
+        "notes"
+      ],
+      "title": "Review",
+      "type": "object"
+    },
+    "RuntimeCorpusSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "environment": {
+          "const": "local_supabase",
+          "title": "Environment",
+          "type": "string"
+        },
+        "project_id": {
+          "const": "new-baseball",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "checked_at": {
+          "format": "date",
+          "title": "Checked At",
+          "type": "string"
+        },
+        "transaction_read_only": {
+          "const": true,
+          "title": "Transaction Read Only",
+          "type": "boolean"
+        },
+        "document_count": {
+          "const": 0,
+          "title": "Document Count",
+          "type": "integer"
+        },
+        "chunk_count": {
+          "const": 0,
+          "title": "Chunk Count",
+          "type": "integer"
+        },
+        "active_document_count": {
+          "const": 0,
+          "title": "Active Document Count",
+          "type": "integer"
+        },
+        "embedded_chunk_count": {
+          "const": 0,
+          "title": "Embedded Chunk Count",
+          "type": "integer"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "hash_scope": {
+          "title": "Hash Scope",
+          "type": "string"
+        },
+        "query_scope": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Query Scope",
+          "type": "array"
+        },
+        "status": {
+          "const": "verified_empty",
+          "title": "Status",
+          "type": "string"
+        },
+        "content_manifest": {
+          "additionalProperties": {
+            "items": {},
+            "type": "array"
+          },
+          "title": "Content Manifest",
+          "type": "object"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Limitations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "environment",
+        "project_id",
+        "checked_at",
+        "transaction_read_only",
+        "document_count",
+        "chunk_count",
+        "active_document_count",
+        "embedded_chunk_count",
+        "sha256",
+        "hash_scope",
+        "query_scope",
+        "status",
+        "content_manifest",
+        "limitations"
+      ],
+      "title": "RuntimeCorpusSnapshot",
+      "type": "object"
+    },
+    "Snapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "repository_files_not_database",
+          "title": "Kind",
+          "type": "string"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/$defs/SnapshotFile"
+          },
+          "title": "Files",
+          "type": "array"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "files",
+        "sha256"
+      ],
+      "title": "Snapshot",
+      "type": "object"
+    },
+    "SnapshotFile": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "title": "SnapshotFile",
+      "type": "object"
+    },
+    "Source": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "title": "Source Id",
+          "type": "string"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Url"
+        },
+        "locator": {
+          "title": "Locator",
+          "type": "string"
+        },
+        "checked_at": {
+          "format": "date",
+          "title": "Checked At",
+          "type": "string"
+        },
+        "source_as_of": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Source As Of"
+        },
+        "verification_status": {
+          "enum": [
+            "web_verified",
+            "historical_raw_verified",
+            "official_pdf_verified",
+            "repository_verified",
+            "unverified_dynamic_page",
+            "unverified_empty_or_timeout",
+            "browser_verified",
+            "synthetic_fixture_verified"
+          ],
+          "title": "Verification Status",
+          "type": "string"
+        },
+        "local_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Local Path"
+        },
+        "content_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Content Sha256"
+        },
+        "hash_note": {
+          "title": "Hash Note",
+          "type": "string"
+        },
+        "verification_notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Verification Notes",
+          "type": "array"
+        },
+        "page_text_sha256": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Page Text Sha256",
+          "type": "object"
+        }
+      },
+      "required": [
+        "source_id",
+        "url",
+        "locator",
+        "checked_at",
+        "source_as_of",
+        "verification_status",
+        "local_path",
+        "content_sha256",
+        "hash_note"
+      ],
+      "title": "Source",
+      "type": "object"
+    },
+    "Turn": {
+      "additionalProperties": false,
+      "properties": {
+        "role": {
+          "enum": [
+            "user",
+            "assistant"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "content": {
+          "minLength": 1,
+          "title": "Content",
+          "type": "string"
+        }
+      },
+      "required": [
+        "role",
+        "content"
+      ],
+      "title": "Turn",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "dataset_version": {
+      "title": "Dataset Version",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date",
+      "title": "Created At",
+      "type": "string"
+    },
+    "status": {
+      "const": "candidate_draft",
+      "title": "Status",
+      "type": "string"
+    },
+    "human_reviewed": {
+      "const": false,
+      "title": "Human Reviewed",
+      "type": "boolean"
+    },
+    "frozen": {
+      "const": false,
+      "title": "Frozen",
+      "type": "boolean"
+    },
+    "split_status": {
+      "const": "proposed_group_split_not_frozen",
+      "title": "Split Status",
+      "type": "string"
+    },
+    "case_count": {
+      "const": 50,
+      "title": "Case Count",
+      "type": "integer"
+    },
+    "category_counts": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Category Counts",
+      "type": "object"
+    },
+    "split_counts": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Split Counts",
+      "type": "object"
+    },
+    "code_revision": {
+      "title": "Code Revision",
+      "type": "string"
+    },
+    "scope": {
+      "const": "synthetic_public_source_candidate_authoring_and_readonly_local_and_production_corpus_review",
+      "title": "Scope",
+      "type": "string"
+    },
+    "evaluation_executed": {
+      "const": false,
+      "title": "Evaluation Executed",
+      "type": "boolean"
+    },
+    "runtime_corpus_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Runtime Corpus Hash",
+      "type": "string"
+    },
+    "runtime_corpus_snapshot": {
+      "$ref": "#/$defs/RuntimeCorpusSnapshot"
+    },
+    "production_corpus_check": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ProductionCorpusCheck"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "production_corpus_snapshot": {
+      "$ref": "#/$defs/ProductionCorpusSnapshot"
+    },
+    "source_snapshot_status": {
+      "title": "Source Snapshot Status",
+      "type": "string"
+    },
+    "local_corpus_snapshot": {
+      "$ref": "#/$defs/Snapshot"
+    },
+    "sources": {
+      "items": {
+        "$ref": "#/$defs/Source"
+      },
+      "title": "Sources",
+      "type": "array"
+    },
+    "cases": {
+      "items": {
+        "$ref": "#/$defs/Case"
+      },
+      "maxItems": 50,
+      "minItems": 50,
+      "title": "Cases",
+      "type": "array"
+    },
+    "review_todo": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Review Todo",
+      "type": "array"
+    },
+    "content_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Content Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "dataset_version",
+    "created_at",
+    "status",
+    "human_reviewed",
+    "frozen",
+    "split_status",
+    "case_count",
+    "category_counts",
+    "split_counts",
+    "code_revision",
+    "scope",
+    "evaluation_executed",
+    "runtime_corpus_hash",
+    "runtime_corpus_snapshot",
+    "production_corpus_snapshot",
+    "source_snapshot_status",
+    "local_corpus_snapshot",
+    "sources",
+    "cases",
+    "review_todo",
+    "content_sha256"
+  ],
+  "title": "Dataset",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

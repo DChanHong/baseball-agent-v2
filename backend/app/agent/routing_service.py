@@ -23,6 +23,9 @@ class ToolRoutingService:
         self,
         chain: Any | None = None,
         model: str | None = None,
+        http_async_client: Any | None = None,
+        max_output_tokens: int | None = None,
+        max_retries: int | None = None,
     ) -> None:
         if chain is not None and model is not None:
             self._model = model
@@ -35,6 +38,9 @@ class ToolRoutingService:
             model=self._model,
             api_key=settings.openai_api_key,
             timeout=settings.openai_timeout_seconds,
+            http_async_client=http_async_client,
+            max_output_tokens=max_output_tokens,
+            max_retries=max_retries,
         )
 
     async def execute(
@@ -58,9 +64,7 @@ class ToolRoutingService:
         )
 
         try:
-            response = await self._chain.ainvoke(
-                {"request": request.model_dump_json()}
-            )
+            response = await self._chain.ainvoke({"request": request.model_dump_json()})
         except Exception:
             logger.exception("tool routing failed model=%s", self._model)
             raise
@@ -93,6 +97,9 @@ def _build_routing_chain(
     model: str,
     api_key: str,
     timeout: float,
+    http_async_client: Any | None = None,
+    max_output_tokens: int | None = None,
+    max_retries: int | None = None,
 ):
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -104,6 +111,15 @@ def _build_routing_chain(
         model=model,
         api_key=api_key,
         timeout=timeout,
+        **{
+            key: value
+            for key, value in {
+                "http_async_client": http_async_client,
+                "max_tokens": max_output_tokens,
+                "max_retries": max_retries,
+            }.items()
+            if value is not None
+        },
     )
     return prompt | chat_model.with_structured_output(
         ToolRoutingDecision,

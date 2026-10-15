@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+from collections.abc import Callable
 from datetime import date
 from functools import lru_cache
 from pathlib import Path
@@ -54,8 +55,14 @@ class AnswerGenerationService:
         timeout_seconds: float | None = None,
         reasoning_effort: str | None = None,
         capture_evaluation_input: bool = False,
+        evaluation_observer: Callable[[GroundedAnswerRequest, str | None], None]
+        | None = None,
+        http_async_client: Any | None = None,
+        max_output_tokens: int | None = None,
+        max_retries: int | None = None,
     ) -> None:
         self._capture_evaluation_input = capture_evaluation_input
+        self._evaluation_observer = evaluation_observer
         if chain is not None and model is not None:
             self._model = model
             self._chain = chain
@@ -79,6 +86,9 @@ class AnswerGenerationService:
             api_key=settings.openai_api_key,
             timeout=settings.openai_timeout_seconds,
             reasoning_effort=self._reasoning_effort,
+            http_async_client=http_async_client,
+            max_output_tokens=max_output_tokens,
+            max_retries=max_retries,
         )
         self._conservative_chain = None
         if (
@@ -91,6 +101,9 @@ class AnswerGenerationService:
                 api_key=settings.openai_api_key,
                 timeout=settings.openai_timeout_seconds,
                 reasoning_effort="medium",
+                http_async_client=http_async_client,
+                max_output_tokens=max_output_tokens,
+                max_retries=max_retries,
             )
 
     async def execute(
@@ -105,6 +118,8 @@ class AnswerGenerationService:
             tool_payload=tool_payload,
             tool_limitations=tool_limitations,
         )
+        if self._evaluation_observer is not None:
+            self._evaluation_observer(request.model_copy(deep=True), None)
         logger.info(
             "answer generation started model=%s tool_name=%s evidence_count=%d",
             self._model,
@@ -149,6 +164,10 @@ class AnswerGenerationService:
             try:
                 draft = _validate_answer_response(response, request)
                 model_answer = draft.answer
+                if self._evaluation_observer is not None:
+                    self._evaluation_observer(
+                        request.model_copy(deep=True), model_answer
+                    )
                 draft, notice_added = _finalize_source_notice(draft, request)
                 details["source_notice_added"] = notice_added
             except AnswerContractError as exc:
@@ -379,6 +398,9 @@ def _build_answer_generation_chain(
     api_key: str,
     timeout: float,
     reasoning_effort: str | None = None,
+    http_async_client: Any | None = None,
+    max_output_tokens: int | None = None,
+    max_retries: int | None = None,
 ):
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -391,6 +413,15 @@ def _build_answer_generation_chain(
         api_key=SecretStr(api_key),
         timeout=timeout,
         reasoning_effort=reasoning_effort,
+        **{
+            key: value
+            for key, value in {
+                "http_async_client": http_async_client,
+                "max_tokens": max_output_tokens,
+                "max_retries": max_retries,
+            }.items()
+            if value is not None
+        },
     )
     return prompt | chat_model.with_structured_output(
         GroundedAnswerDraft,

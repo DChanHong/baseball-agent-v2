@@ -1,0 +1,158 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "synthetic": {
+      "const": true,
+      "default": true,
+      "title": "Synthetic",
+      "type": "boolean"
+    },
+    "adapter_version": {
+      "const": "golden-graph-capture-v1",
+      "default": "golden-graph-capture-v1",
+      "title": "Adapter Version",
+      "type": "string"
+    },
+    "case_id": {
+      "title": "Case Id",
+      "type": "string"
+    },
+    "dataset_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Dataset Sha256",
+      "type": "string"
+    },
+    "execution_scope": {
+      "const": "in_process_agent_graph",
+      "default": "in_process_agent_graph",
+      "title": "Execution Scope",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "completed",
+        "timeout",
+        "error"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "duration_ms": {
+      "minimum": 0,
+      "title": "Duration Ms",
+      "type": "number"
+    },
+    "observed_tool": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Observed Tool"
+    },
+    "observed_input": {
+      "additionalProperties": true,
+      "title": "Observed Input",
+      "type": "object"
+    },
+    "tool_status": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tool Status"
+    },
+    "response_origin": {
+      "default": "template",
+      "enum": [
+        "llm",
+        "fallback",
+        "template",
+        "contextual_direct"
+      ],
+      "title": "Response Origin",
+      "type": "string"
+    },
+    "model_response": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Model Response"
+    },
+    "final_response": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Final Response"
+    },
+    "retrieval_items": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Retrieval Items",
+      "type": "array"
+    },
+    "generation_evidence": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Generation Evidence",
+      "type": "array"
+    },
+    "reason_code": {
+      "anyOf": [
+        {
+          "enum": [
+            "turn_timeout",
+            "graph_error",
+            "missing_completed_event"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reason Code"
+    }
+  },
+  "required": [
+    "case_id",
+    "dataset_sha256",
+    "status",
+    "duration_ms"
+  ],
+  "title": "Capture",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

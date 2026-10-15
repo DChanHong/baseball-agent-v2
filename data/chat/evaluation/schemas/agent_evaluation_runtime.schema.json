@@ -1,0 +1,267 @@
+{
+  "$defs": {
+    "ModelPrice": {
+      "additionalProperties": false,
+      "properties": {
+        "input_usd_per_million": {
+          "exclusiveMinimum": 0,
+          "title": "Input Usd Per Million",
+          "type": "number"
+        },
+        "output_usd_per_million": {
+          "minimum": 0,
+          "title": "Output Usd Per Million",
+          "type": "number"
+        },
+        "source_url": {
+          "title": "Source Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "input_usd_per_million",
+        "output_usd_per_million",
+        "source_url"
+      ],
+      "title": "ModelPrice",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "run_id": {
+      "pattern": "^[a-z0-9_-]+$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "budget_usd": {
+      "exclusiveMinimum": 0,
+      "maximum": 2.5,
+      "title": "Budget Usd",
+      "type": "number"
+    },
+    "budget_authorized": {
+      "const": true,
+      "default": true,
+      "title": "Budget Authorized",
+      "type": "boolean"
+    },
+    "live_execution_enabled": {
+      "default": false,
+      "title": "Live Execution Enabled",
+      "type": "boolean"
+    },
+    "execution_scope": {
+      "default": "authenticated_api",
+      "enum": [
+        "authenticated_api",
+        "readonly_agent_graph"
+      ],
+      "title": "Execution Scope",
+      "type": "string"
+    },
+    "api_base_url": {
+      "const": "http://127.0.0.1:4000",
+      "title": "Api Base Url",
+      "type": "string"
+    },
+    "dataset_path": {
+      "title": "Dataset Path",
+      "type": "string"
+    },
+    "split": {
+      "enum": [
+        "development",
+        "held_out",
+        "all"
+      ],
+      "title": "Split",
+      "type": "string"
+    },
+    "attempts_per_case": {
+      "const": 1,
+      "default": 1,
+      "title": "Attempts Per Case",
+      "type": "integer"
+    },
+    "concurrency": {
+      "const": 1,
+      "default": 1,
+      "title": "Concurrency",
+      "type": "integer"
+    },
+    "online_evaluation_enabled": {
+      "const": false,
+      "default": false,
+      "title": "Online Evaluation Enabled",
+      "type": "boolean"
+    },
+    "api_response_logging_enabled": {
+      "const": false,
+      "default": false,
+      "title": "Api Response Logging Enabled",
+      "type": "boolean"
+    },
+    "provider_retries": {
+      "const": 0,
+      "default": 0,
+      "title": "Provider Retries",
+      "type": "integer"
+    },
+    "judge_retries": {
+      "const": 0,
+      "default": 0,
+      "title": "Judge Retries",
+      "type": "integer"
+    },
+    "routing_model": {
+      "const": "gpt-5-mini",
+      "title": "Routing Model",
+      "type": "string"
+    },
+    "answer_model": {
+      "const": "gpt-5-mini",
+      "title": "Answer Model",
+      "type": "string"
+    },
+    "answer_reasoning_effort": {
+      "const": "low",
+      "title": "Answer Reasoning Effort",
+      "type": "string"
+    },
+    "knowledge_answer_reasoning_effort": {
+      "const": "medium",
+      "title": "Knowledge Answer Reasoning Effort",
+      "type": "string"
+    },
+    "answer_timeout_seconds": {
+      "const": 15,
+      "default": 15,
+      "title": "Answer Timeout Seconds",
+      "type": "integer"
+    },
+    "provider_timeout_seconds": {
+      "const": 30,
+      "default": 30,
+      "title": "Provider Timeout Seconds",
+      "type": "integer"
+    },
+    "turn_timeout_seconds": {
+      "const": 60,
+      "default": 60,
+      "title": "Turn Timeout Seconds",
+      "type": "integer"
+    },
+    "judge_timeout_seconds": {
+      "const": 30,
+      "default": 30,
+      "title": "Judge Timeout Seconds",
+      "type": "integer"
+    },
+    "judge_model": {
+      "const": "gpt-4o-mini-2024-07-18",
+      "title": "Judge Model",
+      "type": "string"
+    },
+    "embedding_model": {
+      "const": "text-embedding-3-small",
+      "title": "Embedding Model",
+      "type": "string"
+    },
+    "routing_max_output_tokens": {
+      "exclusiveMinimum": 0,
+      "maximum": 2048,
+      "title": "Routing Max Output Tokens",
+      "type": "integer"
+    },
+    "answer_max_output_tokens": {
+      "exclusiveMinimum": 0,
+      "maximum": 4096,
+      "title": "Answer Max Output Tokens",
+      "type": "integer"
+    },
+    "judge_max_output_tokens": {
+      "exclusiveMinimum": 0,
+      "maximum": 2048,
+      "title": "Judge Max Output Tokens",
+      "type": "integer"
+    },
+    "max_provider_requests": {
+      "exclusiveMinimum": 0,
+      "maximum": 1024,
+      "title": "Max Provider Requests",
+      "type": "integer"
+    },
+    "max_request_bytes": {
+      "exclusiveMinimum": 0,
+      "maximum": 128000,
+      "title": "Max Request Bytes",
+      "type": "integer"
+    },
+    "ledger_path": {
+      "title": "Ledger Path",
+      "type": "string"
+    },
+    "prices_checked_at": {
+      "title": "Prices Checked At",
+      "type": "string"
+    },
+    "prices": {
+      "additionalProperties": {
+        "$ref": "#/$defs/ModelPrice"
+      },
+      "title": "Prices",
+      "type": "object"
+    },
+    "database_write_authorized": {
+      "default": false,
+      "title": "Database Write Authorized",
+      "type": "boolean"
+    },
+    "authentication_mode": {
+      "enum": [
+        "dedicated_synthetic_account_not_configured",
+        "dedicated_synthetic_account"
+      ],
+      "title": "Authentication Mode",
+      "type": "string"
+    },
+    "fixture_policy": {
+      "const": "original_last_turn_fixed_compact_context",
+      "title": "Fixture Policy",
+      "type": "string"
+    }
+  },
+  "required": [
+    "run_id",
+    "budget_usd",
+    "api_base_url",
+    "dataset_path",
+    "split",
+    "routing_model",
+    "answer_model",
+    "answer_reasoning_effort",
+    "knowledge_answer_reasoning_effort",
+    "judge_model",
+    "embedding_model",
+    "routing_max_output_tokens",
+    "answer_max_output_tokens",
+    "judge_max_output_tokens",
+    "max_provider_requests",
+    "max_request_bytes",
+    "ledger_path",
+    "prices_checked_at",
+    "prices",
+    "authentication_mode",
+    "fixture_policy"
+  ],
+  "title": "EvaluationRuntime",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}
