@@ -1,0 +1,132 @@
+{
+  "human_reviewed": false,
+  "scope": "reading_view_not_evaluation_input",
+  "examples": [
+    {
+      "case_id": "golden_guide_003",
+      "question": "사직구장 지하철 몇 호선 타고 어느 역에서 내려?",
+      "context": {},
+      "reference_answer": "롯데 공식 안내는 부산 도시철도 3호선 사직역 또는 종합운동장역을 안내한다.",
+      "required_facts": [
+        "부산 3호선",
+        "사직역 또는 종합운동장역"
+      ],
+      "forbidden_claims": [
+        "부산 2호선 안내",
+        "실시간 운행·도보 소요시간 보장"
+      ],
+      "sources": [
+        {
+          "source_id": "sajik_transport",
+          "locator": "오시는 길 > 지하철",
+          "url": "https://www.giantsclub.com/html/?pcode=207"
+        }
+      ],
+      "human_reviewed": false
+    },
+    {
+      "case_id": "golden_ticket_001",
+      "question": "사직 예매 어디서 해?",
+      "context": {},
+      "reference_answer": "롯데 자체 예매(ticket.giantsclub.com)에서 해당 구단 홈경기를 확인한다.",
+      "required_facts": [
+        "LOTTE 홈경기 공식 예매처: 롯데 자체 예매",
+        "ticket.giantsclub.com"
+      ],
+      "forbidden_claims": [
+        "구장만 보고 다른 홈팀 예매처 안내",
+        "실시간 잔여석·예매 오픈 시각 생성"
+      ],
+      "sources": [
+        {
+          "source_id": "kbo_ticket",
+          "locator": "예매처 > LOTTE",
+          "url": "https://www.koreabaseball.com/kbo/league/map.aspx"
+        }
+      ],
+      "human_reviewed": false
+    },
+    {
+      "case_id": "golden_knowledge_006",
+      "question": "3루 주자가 먼저 홈 밟았는데 마지막 아웃이 포스아웃이면 점수야?",
+      "context": {},
+      "reference_answer": "제3아웃이 포스아웃이면 먼저 홈을 밟았더라도 득점이 인정되지 않는다.",
+      "required_facts": [
+        "제3아웃 포스아웃은 득점 불인정"
+      ],
+      "forbidden_claims": [
+        "홈을 먼저 밟으면 항상 득점"
+      ],
+      "sources": [
+        {
+          "source_id": "rules_2026",
+          "locator": "5.08(a) 부기 (2)",
+          "url": "https://6ptotvmi5753.edge.naverncp.com/KBO_FILE/ebook/pdf/2026_%EC%95%BC%EA%B5%AC%EA%B7%9C%EC%B9%99.pdf"
+        }
+      ],
+      "human_reviewed": false
+    },
+    {
+      "case_id": "golden_mixed_003",
+      "question": "그 경기 몇 시에 시작해?",
+      "context": {
+        "selected_game": {
+          "game_date": "2026-10-14",
+          "start_time": "18:30:00",
+          "away_team_id": "LG",
+          "home_team_id": "LOTTE",
+          "away_team_name": "LG 트윈스",
+          "home_team_name": "롯데 자이언츠",
+          "stadium_id": "SAJIK",
+          "stadium_name": "사직야구장",
+          "game_status": "scheduled"
+        },
+        "selected_team_id": "LOTTE",
+        "last_tool_name": "find_kbo_game"
+      },
+      "reference_answer": "고정된 합성 경기 문맥의 시작 시각인 18시 30분을 안내한다.",
+      "required_facts": [
+        "선택 경기 18:30",
+        "Tool 재호출 없이 context 사용"
+      ],
+      "forbidden_claims": [
+        "새로운 날짜 경기 조회",
+        "합성 경기 fixture를 실제 일정으로 표현"
+      ],
+      "sources": [
+        {
+          "source_id": "followup_contract",
+          "locator": "selected_game_time 분기",
+          "url": null
+        },
+        {
+          "source_id": "golden_mixed_003_fixture",
+          "locator": "selected_game.start_time",
+          "url": null
+        }
+      ],
+      "human_reviewed": false
+    },
+    {
+      "case_id": "golden_scope_005",
+      "question": "야구 말고 내일 살 주식 하나 추천해줘",
+      "context": {},
+      "reference_answer": null,
+      "required_facts": [
+        "야구 서비스 범위 밖 안내"
+      ],
+      "forbidden_claims": [
+        "투자 종목 추천",
+        "야구 Tool 호출"
+      ],
+      "sources": [
+        {
+          "source_id": "scope_contract",
+          "locator": "야구 범위 제한",
+          "url": null
+        }
+      ],
+      "human_reviewed": false
+    }
+  ]
+}
